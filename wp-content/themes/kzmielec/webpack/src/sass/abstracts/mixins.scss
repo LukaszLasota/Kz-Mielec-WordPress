@@ -46,9 +46,9 @@
 
   @mixin gradient{
     text-transform: uppercase;
-    -webkit-background: linear-gradient(to right, #008089 0%, #002432 100%);
-    -moz-background: linear-gradient(to right, #008089 0%, #002432 100%);
-    background: linear-gradient(to right, #008089 0%, #002432 100%);
+    -webkit-background: linear-gradient(to right, #000 0%, #333 100%);
+    -moz-background: linear-gradient(to right, #000 0%, #333 100%);
+    background: linear-gradient(to right, #000 0%, #333 100%);
 	  -webkit-text-fill-color: transparent;
 	  text-fill-color: transparent;
     -webkit-background-clip: text;

@@ -17,24 +17,23 @@
 			"gradients": [
 				{
 				  "slug": "gradient-to-left-bottom",
-				  "gradient": "linear-gradient(to left bottom, #008089 0%, #002432 100%)",
+				  "gradient": "linear-gradient(to left bottom, #000 0%, #333 100%)",
 				  "name": "Gradient to Left Bottom"
 				},
 				{
 				  "slug": "gradient-to-bottom",
-				  "gradient": "linear-gradient(to bottom, #008089 0%, #002432 100%)",
+				  "gradient": "linear-gradient(to bottom, #000 0%, #333 100%)",
 				  "name": "Gradient to Bottom"
 				},
 				{
 				  "slug": "gradient-90-deg",
-				  "gradient": "linear-gradient(90deg,#008089 0,#002432)",
+				  "gradient": "linear-gradient(90deg, #000 0%, #333 100%)",
 				  "name": "Gradient 90 deg"
 				}
 			],
 			"palette": [
-				
 				{
-					"color": "#f9f9f9",
+					"color": "#ffffff",
 					"name": "Base",
 					"slug": "base"
 				},
@@ -44,7 +43,7 @@
 					"slug": "base-2"
 				},
 				{
-					"color": "#008089",
+					"color": "#000000",
 					"name": "Site Color",
 					"slug": "site-color"
 				}
@@ -54,28 +53,38 @@
 			"fluid": true,
 			"fontFamilies": [
 				{
-					"fontFamily": "'Raleway', sans-serif",
-					"name": "Raleway",
-					"slug": "raleway",
+					"fontFamily": "'Cinzel', serif",
+					"name": "Cinzel",
+					"slug": "cinzel",
 					"fontFace": [
 						{
-							"fontFamily": "Raleway",
+							"fontFamily": "Cinzel",
 							"fontWeight": "400",
 							"fontStyle": "normal",
 							"fontDisplay": "swap",
 							"src": [
-								"file:./assets/webfont/raleway-v37-latin-ext.woff2",
-								"file:./assets/webfont/raleway-v37-latin.woff2"
+								"file:./assets/webfont/cinzel-v26-latin-ext.woff2",
+								"file:./assets/webfont/cinzel-v26-latin.woff2"
 							]
 						},
 						{
-							"fontFamily": "Raleway",
+							"fontFamily": "Cinzel",
 							"fontWeight": "700",
 							"fontStyle": "normal",
 							"fontDisplay": "swap",
 							"src": [
-								"file:./assets/webfont/raleway-v37-latin-ext.woff2",
-								"file:./assets/webfont/raleway-v37-latin.woff2"
+								"file:./assets/webfont/cinzel-v26-latin-ext.woff2",
+								"file:./assets/webfont/cinzel-v26-latin.woff2"
+							]
+						},
+						{
+							"fontFamily": "Cinzel",
+							"fontWeight": "900",
+							"fontStyle": "normal",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/webfont/cinzel-v26-latin-ext.woff2",
+								"file:./assets/webfont/cinzel-v26-latin.woff2"
 							]
 						}
 					]
@@ -140,7 +149,7 @@
 	},
 	"styles": {
 		"typography": {
-			"fontFamily": "var(--wp--preset--font-family--raleway)"
+			"fontFamily": "var(--wp--preset--font-family--cinzel)"
 		},
 		"blocks": {
 			"custom-block-package/accordion-item": {
@@ -152,5 +161,4 @@
 			}
 		}
 	}
-
 }
