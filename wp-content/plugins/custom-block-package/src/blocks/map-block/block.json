@@ -1,0 +1,59 @@
+{
+    "apiVersion": 3,
+    "name": "custom-block-package/map-block",
+    "title": "Blok mapy",
+    "category": "custom-blocks-from-scratch",
+    "icon": "location-alt",
+    "description": "Blok mapu zbudowanu przu użyciu Leaflet.js.",
+    "supports": {
+    "html": false,
+        "color": {
+        "text": true,
+        "link": true
+        },
+        "spacing": {
+            "margin": true,  
+            "padding": true, 
+            "blockGap": true
+        },
+        "align": true,
+        "customClassName": true,
+        "anchor": true
+  },
+    "attributes": {
+        "anchor": {
+            "type": "string"
+        },
+        "latitude": {
+            "type": "number",
+            "default": 50.031562
+        },
+        "longitude": {
+            "type": "number",
+            "default": 21.997937
+        },
+        "zoom": {
+            "type": "number",
+            "default": 16
+        },
+        "containerHeight": {
+            "type": "number",
+            "default": 300
+        },
+        "popupText": {
+            "type": "string",
+            "default": "Nasza lokalizacja"
+        }
+    },
+    "editorScript": "file:./index.js",
+    "viewScript": "file:./frontend.js",
+    "editorStyle": [
+        "my-block-leaflet-style",
+        "file:./index.css"
+    ],
+    "viewStyle": [
+        "file:./style-index.css",
+        "my-block-leaflet-style"
+    ],
+    "render": "file:./render.php"
+}

@@ -1,0 +1,88 @@
+
+.footer {
+    background: $BG;
+    padding: 50px 0 70px;
+
+    .footer__container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .footer__menu, .footer__contact {
+        display: flex;
+        justify-content: center;
+        flex-basis: calc(33.333% - 30px);
+        margin-bottom: 20px;
+
+        @media (max-width: 768px) {
+            flex-basis: 50%;
+            justify-content: start;
+        }
+
+        @media (max-width: 600px) {
+            flex-basis: 100%;
+        }
+
+        h2, h4, .widgettitle {
+            color: white;
+            padding: 1.5rem 0.25rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+
+            li {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: auto;
+                padding: 2px 0;
+
+                a {
+                    font-size: 1.1rem;
+                    display: inline-block;
+                    color: white;
+                    text-decoration: none;
+                    text-transform: uppercase;
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        width: 0;
+                        height: 2px;
+                        background: #fff;
+                        transition: width 0.3s;
+                    }
+
+                    &:hover::after {
+                        width: 100%;
+                        transition: width 0.3s;
+                    }
+
+                }
+                img {
+                    width: 24px;
+                    height: 24px;
+                    object-fit: contain;
+                    flex-shrink: 0;
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    h5, p {
+        color: black;
+    }
+}

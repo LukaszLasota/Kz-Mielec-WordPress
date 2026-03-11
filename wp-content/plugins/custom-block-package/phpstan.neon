@@ -1,0 +1,29 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 6
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    paths:
+        - index.php
+        - app/
+        - src/blocks/dynamic-images/render.php
+        - src/blocks/image-text/render.php
+        - src/blocks/map-block/render.php
+        - src/blocks/meeting-list/render.php
+        - src/blocks/section-block/render.php
+    excludePaths:
+        - vendor/
+        - node_modules/
+        - build/
+    ignoreErrors:
+        # WordPress render.php templates receive $attributes as array<string, mixed>
+        - identifier: missingType.iterableValue
+        # ACF get_field() - no stubs available
+        -
+            message: '#Function get_field not found#'
+            paths:
+                - src/blocks/meeting-list/render.php
+        # rest_sanitize_boolean template type
+        - identifier: argument.templateType

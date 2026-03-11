@@ -1,0 +1,3 @@
+/**
+ * Contact Section Pattern Script
+ */

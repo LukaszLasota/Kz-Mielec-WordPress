@@ -1,0 +1,176 @@
+.accordion__item {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: #fff;
+
+    // Stack items without gaps — collapse shared borders.
+    & + & {
+        border-top: none;
+    }
+
+    &:first-child {
+        border-radius: 4px 4px 0 0;
+    }
+
+    &:last-child {
+        border-radius: 0 0 4px 4px;
+    }
+
+    &:only-child {
+        border-radius: 4px;
+    }
+
+    &.accordion__item--active {
+        .accordion__title::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+    }
+
+    .accordion__title-text {
+        margin: 0;
+        padding: 0;
+        font-size: 1.4rem;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+
+        // Reset gradient from theme's global h3 styles.
+        -webkit-text-fill-color: initial;
+        text-fill-color: initial;
+        -webkit-background-clip: initial;
+        background-clip: initial;
+        background: none;
+
+        @media (max-width: 600px) {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+    }
+
+    .accordion__title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        cursor: pointer;
+        padding: 1.2rem 3rem 1.2rem 1.5rem;
+        background: rgba(0, 0, 0, 0.03);
+        border: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+
+        @media (max-width: 600px) {
+            padding: 0.8rem 2.5rem 0.8rem 0.8rem;
+        }
+        font-size: inherit;
+        font-weight: inherit;
+        font-family: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        color: var(--wp--preset--color--site-color, #212529);
+
+        &::after {
+            content: '';
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23008089' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center;
+            transition: transform 0.3s ease;
+
+            @media (max-width: 600px) {
+                width: 26px;
+                height: 26px;
+                right: 0.6rem;
+                background-size: 14px 14px;
+            }
+        }
+
+        &:hover {
+            opacity: 0.7;
+        }
+
+        // WCAG 2.4.7: visible focus indicator for keyboard users.
+        &:focus-visible {
+            outline: 3px solid var(--wp--preset--color--site-color, #000);
+            outline-offset: -3px;
+        }
+    }
+
+    .accordion__content {
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.4s ease-in-out;
+
+        &[hidden] {
+            display: block;
+            max-height: 0;
+            padding: 0;
+        }
+
+        &--box {
+            padding: 1.5rem 2.5rem 2.5rem;
+
+            @media (max-width: 600px) {
+                padding: 1rem 1.2rem 1.5rem;
+            }
+
+            // Layout only — typography inherited from theme.
+            p {
+                text-align: justify;
+
+                @media (max-width: 500px) {
+                    text-align: left;
+                }
+
+                @media (max-width: 600px) {
+                    font-size: 0.95rem;
+                }
+            }
+
+            ul {
+                padding-left: 0;
+                padding-bottom: 1rem;
+
+                li {
+                    padding: 5px;
+                    margin-left: 20px;
+                    list-style-type: none;
+                }
+
+                @media (max-width: 600px) {
+                    font-size: 0.95rem;
+                }
+            }
+
+            // "CZYTAJ DALEJ (PDF)" links styled as buttons.
+            a {
+                display: inline-block;
+                padding: 0.6rem 1.4rem;
+                background: #343a40;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+                font-size: 1rem;
+                font-weight: 500;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                margin-top: 0.5rem;
+                transition: background 0.2s ease;
+
+                &:hover {
+                    background: #23272b;
+                }
+
+                &:focus-visible {
+                    outline: 3px solid var(--wp--preset--color--site-color, #000);
+                    outline-offset: 2px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/WordPress/gutenberg/trunk/schemas/json/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/section-block",
+  "title": "Blok sekcji",
+  "category": "custom-blocks-from-scratch",
+  "description": "Blok dla sekcji",
+  "textdomain": "custom-block-package",
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "tagName": {
+      "type": "string",
+      "default": "div"
+    },
+    "backgroundImage": {
+      "type": "string",
+      "default": ""
+    },
+    "blockWidth": {
+      "type": "string",
+      "default": ""
+    },
+    "columnsMobile": {
+      "type": "number",
+      "default": 1
+    },
+    "columnsSmallTablet": {
+      "type": "number",
+      "default": 2
+    },
+    "columnsLargeTablet": {
+      "type": "number",
+      "default": 3
+    },
+    "columnsDesktop": {
+      "type": "number",
+      "default": 4
+    },
+    "gridGap": {
+      "type": "number",
+      "default": 10
+    },
+    "justifyItems": {
+      "type": "string",
+      "default": ""
+    },
+    "justifyContent": {
+      "type": "string",
+      "default": ""
+    },
+    "alignContent": {
+      "type": "string",
+      "default": ""
+    },
+    "layoutType": {
+      "type": "string",
+      "default": "none"
+    },
+    "flexWrap": {
+      "type": "string",
+      "default": ""
+    },
+    "flexDirection": {
+      "type": "string",
+      "default": ""
+    },
+    "alignItems": {
+      "type": "string",
+      "default": ""
+    },
+    "gradient": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "color": {
+      "text": true,
+      "background": true,
+      "gradients": true,
+      "link": true
+    },
+    "align": true,
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "fontWeight": true,
+      "textTransform": true,
+      "letterSpacing": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    },
+    "customClassName": true,
+    "anchor": true
+  },
+  "render": "file:./render.php",
+  "editorScript": "file:./index.js",
+  "viewStyle": "file:./style-index.css",
+  "editorStyle": "file:./index.css"
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/dynamic-images",
+  "title": "Blok z trzema obrazami",
+  "category": "custom-blocks-from-scratch",
+  "icon": "format-image",
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "imgDesktopID": {
+      "type": "number",
+      "default": 0
+    },
+    "imgDesktopURL": {
+      "type": "string",
+      "default": ""
+    },
+    "imgTabletID": {
+      "type": "number",
+      "default": 0
+    },
+    "imgTabletURL": {
+      "type": "string",
+      "default": ""
+    },
+    "imgMobileID": {
+      "type": "number",
+      "default": 0
+    },
+    "imgMobileURL": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "description": "Blok z wyborem obrazów dla desktopu, tabletu i telefonu z ukrytym nagłówkiem H1.",
+  "supports": {
+    "anchor": true
+  },
+  "editorScript": "file:./index.js",
+  "viewStyle": "file:./style-index.css",
+  "editorStyle": "file:./index.css",
+  "render": "file:./render.php"
+}

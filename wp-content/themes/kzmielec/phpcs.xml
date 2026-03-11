@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<ruleset name="Church Theme Coding Standards">
+    <description>WordPress Coding Standards for Church theme</description>
+
+    <!-- Check PHP files only -->
+    <arg name="extensions" value="php"/>
+
+    <!-- Show progress -->
+    <arg value="sp"/>
+
+    <!-- Show colors -->
+    <arg name="colors"/>
+
+    <!-- Check all PHP files -->
+    <file>./App</file>
+    <file>./functions.php</file>
+    <file>./header.php</file>
+    <file>./footer.php</file>
+    <file>./index.php</file>
+    <file>./front-page.php</file>
+    <file>./archive.php</file>
+    <file>./page.php</file>
+    <file>./single.php</file>
+    <file>./template-parts</file>
+    <file>./patterns</file>
+
+    <!-- Exclude vendor and build directories -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/webpack/*</exclude-pattern>
+    <exclude-pattern>*/assets/*</exclude-pattern>
+
+    <!-- Use WordPress Coding Standards -->
+    <rule ref="WordPress">
+        <!-- Allow short array syntax [] instead of array() for modern PHP -->
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+
+        <!-- Allow camelCase for methods (OOP style) -->
+        <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid"/>
+
+        <!-- Exclude file naming rules - using PSR-4 autoloading which requires PascalCase.php -->
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+    </rule>
+
+    <!-- Exclude file doc comments - PSR-4 classes don't require them -->
+    <rule ref="Squiz.Commenting.FileComment">
+        <severity>0</severity>
+    </rule>
+
+    <!-- Exclude commented code warnings for TODO sections -->
+    <rule ref="Squiz.PHP.CommentedOutCode">
+        <severity>0</severity>
+    </rule>
+
+    <!-- Enforce PSR-4 autoloading -->
+    <rule ref="PSR1.Classes.ClassDeclaration"/>
+
+    <!-- Minimum WordPress version -->
+    <config name="minimum_supported_wp_version" value="5.9"/>
+
+    <!-- PHP version compatibility -->
+    <config name="testVersion" value="8.0-"/>
+</ruleset>

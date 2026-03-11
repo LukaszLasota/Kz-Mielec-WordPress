@@ -1,0 +1,102 @@
+/*!**********************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/patterns/contact-section/style.scss ***!
+  \**********************************************************************************************************************************/
+/**
+ * Contact Section Pattern Styles
+ */
+.pattern-contact-section {
+  padding: 0 30px 100px;
+}
+@media (max-width: 768px) {
+  .pattern-contact-section {
+    padding: 0 15px 60px;
+  }
+}
+.pattern-contact-section h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 95px 10px;
+}
+@media (max-width: 1024px) {
+  .pattern-contact-section h2 {
+    padding: 80px 10px;
+  }
+}
+@media (max-width: 600px) {
+  .pattern-contact-section h2 {
+    padding: 70px 10px;
+  }
+}
+.pattern-contact-section h3 {
+  font-size: 1.75rem;
+  font-weight: 400;
+  text-align: center;
+  padding-bottom: 2%;
+}
+@media (max-width: 600px) {
+  .pattern-contact-section h3 {
+    font-size: 1.4rem;
+  }
+}
+.pattern-contact-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 10px 0;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+.pattern-contact-section a {
+  color: #fff;
+}
+.pattern-contact-section a:hover {
+  opacity: 0.8;
+}
+.pattern-contact-section textarea {
+  height: 150px;
+}
+.pattern-contact-section .forminator-guttenberg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.pattern-contact-section .form-section {
+  width: 100%;
+}
+.pattern-contact-section .forminator-ui.forminator-custom-form[data-design=default] {
+  width: 90%;
+}
+@media (min-width: 768px) {
+  .pattern-contact-section .forminator-ui.forminator-custom-form[data-design=default] {
+    width: 80%;
+  }
+}
+@media (min-width: 1200px) {
+  .pattern-contact-section .forminator-ui.forminator-custom-form[data-design=default] {
+    width: 60%;
+  }
+}
+.pattern-contact-section .forminator-ui.forminator-custom-form[data-design=default] input {
+  border-radius: 5px;
+}
+.pattern-contact-section .forminator-button-submit {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.pattern-contact-section .forminator-button-submit:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.pattern-contact-section:where(.has-background) {
+  padding: 0 30px 100px;
+}
+@media (max-width: 768px) {
+  .pattern-contact-section:where(.has-background) {
+    padding: 0 15px 60px;
+  }
+}
+
+/*# sourceMappingURL=contact-section-style.css.map*/

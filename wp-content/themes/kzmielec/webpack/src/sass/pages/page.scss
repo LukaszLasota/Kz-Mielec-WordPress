@@ -1,0 +1,146 @@
+.news {
+    width: 100%;
+ 	max-width: var(--wp--custom--content-width-desktop);
+	margin: 0 auto;
+ 	padding: 5rem 1rem 1rem;
+
+	@media (max-width: 767px) {
+		padding: 4rem 1.5rem 1rem;
+	}
+
+    &__card {
+        width: 100%;
+        margin-bottom: var(--masonry-gap, 25px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        border: 1px solid $color-green;
+        overflow: hidden;
+    }
+    &__image {
+        width: 100%;
+    }
+
+    &__body{
+        margin: 5px 25px 30px;
+    }
+    &__link{
+        display: block;
+        color: $color-black;
+        text-decoration: none;
+    }
+    &__title{
+        font-size: 1.5rem;     
+    }
+    &__text {
+        font-size: 1.0rem;
+      
+    }
+
+    
+    &__pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 40px 0 50px;
+
+        &--container {
+            display: flex;
+            align-content: center;
+            justify-content: space-between;
+            align-items: center;
+
+            &__item {
+                display: block;
+            }
+
+            a,
+            .current {
+                position: relative;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                padding: 8px 15px;
+                border: 1px solid $color-main;
+                border-radius: 5px;
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 700;
+                color: $color-black;
+                background-color: $body-color;
+                transition: color 0.6s ease, border-color 0.6s ease;
+                margin: 0 5px;
+                overflow: hidden;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--wp--preset--gradient--gradient-to-left-bottom);
+                    opacity: 0;
+                    transition: opacity 0.8s ease;
+                    z-index: 0;
+                }
+
+                &:hover::before {
+                    opacity: 1;
+                }
+
+                &:hover {
+                    color: white;
+                }
+
+                > * {
+                    position: relative;
+                    z-index: 1;
+                }
+            }
+
+            .current {
+                background: $BG-D;
+                color: $body-color;
+                border-color: $color-main;
+                pointer-events: none;
+            }
+
+            .pagination__control {
+                display: flex;
+                align-items: center;
+                font-size: 1rem;
+                font-weight: 700;
+                text-transform: uppercase;
+
+                &--desktop {
+                    display: inline;
+                }
+
+                &--mobile {
+                    display: none; 
+                }
+            }
+        }
+
+        @media (max-width: 767px) {
+            .news__pagination--container {
+                flex-direction: row; 
+            }
+
+            .pagination__control--desktop {
+                display: none;
+            }
+
+            .pagination__control--mobile {
+                display: inline; 
+            }
+
+            a,
+            .current {
+                font-size: 0.9rem;
+                padding: 6px 10px;
+            }
+        }
+    }
+}

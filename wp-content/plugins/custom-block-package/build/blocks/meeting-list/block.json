@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/meeting-custom-list",
+  "title": "Nasze spotkania",
+  "icon": "calendar-alt",
+  "category": "custom-blocks-from-scratch",
+  "description": "Blok wyświetlający listę niestandardowych postów typu spotkania.",
+  "keywords": [
+    "meetings",
+    "events",
+    "list"
+  ],
+  "version": "1",
+  "textdomain": "custom-block-package",
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "numberposts": {
+      "type": "number",
+      "default": -1
+    },
+    "blockTitle": {
+      "type": "string",
+      "default": "Nasze spotkania"
+    }
+  },
+  "supports": {
+    "color": {
+      "text": true,
+      "background": true,
+      "gradients": true,
+      "link": true
+    },
+    "align": [
+      "wide",
+      "full"
+    ],
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "fontWeight": true,
+      "textTransform": true,
+      "letterSpacing": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true,
+      "blockGap": true
+    },
+    "anchor": true,
+    "customClassName": true
+  },
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
+  "editorStyle": "file:./index.css",
+  "viewStyle": "file:./style-index.css",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,18 @@
+@use './style.scss';
+
+.select-button {
+    background-color: #007cba;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    &:hover {
+        color: white !important;
+    }
+}
+
+.about-one a {
+    pointer-events: none;
+}

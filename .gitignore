@@ -1,0 +1,39 @@
+# WordPress config (contains credentials)
+wp-config.php
+wp-config-ddev.php
+
+# Uploads
+wp-content/uploads/
+
+# Default themes & plugins
+wp-content/themes/twenty*/
+wp-content/plugins/akismet/
+wp-content/plugins/hello.php
+
+# Old site
+stara_strona/
+
+# Dependencies
+node_modules/
+vendor/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# DDEV
+.ddev/
+
+# Database dumps
+*.sql
+*.sql.gz
+
+# Wordfence
+wordfence-waf.php
+
+# Misc
+htaccess.htaccess

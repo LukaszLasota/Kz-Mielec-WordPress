@@ -1,0 +1,14 @@
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    color: #0b0c0c !important;
+    background: #fd0 !important;
+    border-color: #fd0 !important;
+    box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+    text-decoration: none;
+    outline: 3px solid transparent;
+    span {
+        color: #0b0c0c !important;
+    }
+    i, .icon {
+        background-color: #0b0c0c !important;
+    }
+}

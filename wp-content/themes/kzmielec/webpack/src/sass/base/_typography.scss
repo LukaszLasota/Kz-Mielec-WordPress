@@ -1,0 +1,25 @@
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+// Global Typography for Pages and Posts
+.single-post__content-container, .page__content-container {
+
+	width: 100%;
+ 	max-width: var(--wp--custom--content-width-desktop);
+	margin: 0 auto;
+	padding: 80px 1.25rem;
+	display: block;
+
+	@media (max-width: 600px) {
+		padding: 30px 1.2rem;
+	}
+
+	@include content-typography;
+}
