@@ -1,0 +1,38 @@
+.page-hero > section {
+	padding-bottom: 80px;
+
+	@media (max-width: 600px) {
+		padding-bottom: 60px;
+	}
+
+	// First block: full-width hero banner.
+	> *:first-child {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+
+	// 80px gap between hero and content.
+	> *:nth-child(2) {
+		margin-top: 80px;
+
+		@media (max-width: 600px) {
+			margin-top: 60px;
+		}
+	}
+
+	// Remaining blocks: contained width matching page__content-container.
+	> *:not(:first-child) {
+		width: 100%;
+		max-width: var(--wp--custom--content-width-desktop);
+		margin-inline: auto;
+		padding-inline: 1.25rem;
+
+		@media (max-width: 600px) {
+			padding-inline: 1.2rem;
+		}
+	}
+
+	@include content-typography;
+}

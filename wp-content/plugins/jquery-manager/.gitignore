@@ -1,0 +1,120 @@
+
+# Created by https://www.gitignore.io/api/macos,windows,composer,wordpress
+# Edit at https://www.gitignore.io/?templates=macos,windows,composer,wordpress
+
+### Composer ###
+composer.phar
+/vendor/*
+!vendor/collizo4sky/
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+### WordPress ###
+*.log
+wp-config.php
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/mu-plugins/
+wp-content/wp-cache-config.php
+wp-content/plugins/hello.php
+
+/.htaccess
+/license.txt
+/readme.html
+/sitemap.xml
+/sitemap.xml.gz
+
+
+# End of https://www.gitignore.io/api/macos,windows,composer,wordpress
+
+# WP-CLI
+config.yml
+PHAR_BUILD_VERSION
+/cache
+/packages
+/*.phar
+/codesniffer
+/PHP_Codesniffer-VariableAnalysis
+.*.swp
+*.log
+
+# PHPUnit
+/.ant_targets
+/.idea
+/.php_cs
+/.php_cs.cache
+/build/documentation
+/build/logfiles
+/build/phar
+/build/phar-scoped
+/build/phpdox
+/build/*.phar
+/build/*.phar.asc
+/build/binary-phar-autoload.php
+/cache.properties
+/tests/end-to-end/*.diff
+/tests/end-to-end/*.exp
+/tests/end-to-end/*.log
+/tests/end-to-end/*.out
+/tests/end-to-end/*.php
+.phpunit.result.cache

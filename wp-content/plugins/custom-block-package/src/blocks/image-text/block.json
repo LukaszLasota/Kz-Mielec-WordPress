@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "custom-block-package/image-text",
+    "title": "Obraz i tekst",
+    "icon": "media-document",
+    "category": "custom-blocks-from-scratch",
+    "description": "Blok z obrazem i tekstem",
+    "keywords": ["image", "text"],
+    "version": "1",
+    "textdomain": "custom-block-package",
+    "attributes": {
+        "anchor": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string",
+            "default": ""
+        },
+        "imgID": {
+            "type": "number",
+            "default": 0
+        },
+        "fullWidth": {
+            "type": "boolean",
+            "default": false
+        },
+        "postURL": {
+            "type": "object",
+            "default": {
+                "url": "",
+                "opensInNewTab": false
+            }
+        }
+    },
+    "supports": {
+        "anchor": true
+    },
+    "editorScript": "file:./index.js",
+    "viewStyle": "file:./style-index.css",
+    "editorStyle": "file:./index.css",
+    "render": "file:./render.php"
+}

@@ -1,0 +1,60 @@
+/**
+ *  Hello section Pattern Styles
+ */
+
+.pattern-hello-section-main-page {
+	width: 50%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	justify-items: center;
+
+	@media (max-width: 1024px) {
+		width: 100%;
+	}
+
+	&__image img {
+		max-height: 300px;
+		width: auto;
+		aspect-ratio: 1;
+	}
+
+	&__title, &__text {
+		width: 100%;
+		font-size: 1.2rem;
+	}
+
+	/**
+	* Group block link wrapper styles
+	* Applied when Group block has a link URL set
+	*/
+	.wp-block-group__link {
+		display: flex;
+		flex-direction: inherit;
+		flex-wrap: inherit;
+		justify-content: inherit;
+		align-items: inherit;
+		gap: inherit;
+		width: 100%;
+		height: 100%;
+		text-decoration: none;
+		color: inherit;
+		padding: 40px 30px;
+
+		&:hover {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		&:visited {
+			color: inherit;
+		}
+	}
+}
+
+.pattern-hello-section-main-page:where(.wp-block-group.has-background){
+	padding: 0;
+}
+
+

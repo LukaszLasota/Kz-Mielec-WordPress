@@ -1,0 +1,29 @@
+.single-post{
+    &__header{
+        width: 100%;
+	    max-width: var(--wp--custom--content-width-desktop);
+        margin-inline: auto;        
+    }
+
+    &__title {
+        padding: 20px 20px 30px;
+        margin-bottom: 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        -webkit-background: var(--wp--preset--gradient--gradient-90-deg);
+        -moz-background: var(--wp--preset--gradient--gradient-90-deg);
+        background: var(--wp--preset--gradient--gradient-90-deg);
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        font-weight: 400;
+        font-size: 2rem;
+        
+        width: 100%;
+        @media (max-width: 800px){
+            font-size: 1.6rem;
+            padding: 50px 0;
+        }
+        
+    }
+}

@@ -1,0 +1,105 @@
+/**
+ * Contact Section Pattern Styles
+ */
+
+.pattern-contact-section {
+    padding: 0 30px 100px;
+
+    @media (max-width: 768px) {
+        padding: 0 15px 60px;
+    }
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 95px 10px;
+
+        @media (max-width: 1024px) {
+            padding: 80px 10px;
+        }
+
+        @media (max-width: 600px) {
+            padding: 70px 10px;
+        }
+    }
+
+    h3 {
+        font-size: 1.75rem;
+        font-weight: 400;
+        text-align: center;
+        padding-bottom: 2%;
+
+        @media (max-width: 600px) {
+            font-size: 1.4rem;
+        }
+    }
+
+    p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 10px 0;
+        text-align: center;
+        overflow-wrap: break-word;
+    }
+
+    a {
+        color: #fff;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    textarea {
+        height: 150px;
+    }
+
+    // Forminator form wrapper
+    .forminator-guttenberg {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-section {
+        width: 100%;
+    }
+    
+    .forminator-ui.forminator-custom-form[data-design="default"] {
+        width: 90%;
+
+        @media (min-width: 768px) {
+            width: 80%;
+        }
+
+        @media (min-width: 1200px) {
+            width: 60%;
+        }
+
+        input {
+            border-radius: 5px;
+        }
+    }
+
+    // Submit button - Bootstrap secondary style
+    .forminator-button-submit {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+
+        &:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+    }
+}
+
+.pattern-contact-section:where(.has-background) {
+    padding: 0 30px 100px;
+
+    @media (max-width: 768px) {
+        padding: 0 15px 60px;
+    }
+}

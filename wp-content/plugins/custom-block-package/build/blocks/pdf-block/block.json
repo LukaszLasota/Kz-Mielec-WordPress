@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/pdf-block",
+  "title": "PDF Block",
+  "icon": "custom-blocks-from-scratch",
+  "category": "custom-blocks-from-scratch",
+  "description": "Dodaj pdf który wyświetli się na stronie.",
+  "keywords": [
+    "pdf"
+  ],
+  "version": "1",
+  "textdomain": "pdf-block",
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "pdfUrl": {
+      "type": "string"
+    },
+    "pdfID": {
+      "type": "number"
+    },
+    "pdfTitle": {
+      "type": "string"
+    },
+    "btnTitle": {
+      "type": "string"
+    },
+    "showDownload": {
+      "type": "boolean"
+    },
+    "viewerHeight": {
+      "type": "number"
+    },
+    "viewerWidth": {
+      "type": "number"
+    }
+  },
+  "supports": {
+    "anchor": true
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "viewStyle": "file:./style-index.css"
+}

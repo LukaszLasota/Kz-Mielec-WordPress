@@ -1,0 +1,21 @@
+.wp-block-custom-block-package-dynamic-images {
+    border: 1px dashed #ccc;
+    padding: 1rem;
+    background-color: #fafafa;
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }

@@ -1,0 +1,23 @@
+/*!***************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/sass/editor.scss ***!
+  \***************************************************************************************************************/
+.editor-styles-wrapper {
+  font-size: 1.2rem;
+}
+.editor-styles-wrapper h1 {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.editor-styles-wrapper h3 {
+  font-size: 1.6rem;
+}
+.editor-styles-wrapper p, .editor-styles-wrapper a {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+.editor-styles-wrapper ul, .editor-styles-wrapper li {
+  font-size: 1.2rem;
+}
+
+/*# sourceMappingURL=editor.css.map*/

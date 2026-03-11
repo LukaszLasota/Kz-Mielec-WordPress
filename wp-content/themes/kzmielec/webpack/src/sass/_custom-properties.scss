@@ -1,0 +1,11 @@
+/**
+ * Custom CSS Properties from theme.json
+ *
+ * These variables should match the values in theme.json
+ * Path: theme.json -> settings.custom
+ */
+
+:root {
+	// Content widths (from theme.json)
+	--wp--custom--content-width-desktop: 1300px;
+}

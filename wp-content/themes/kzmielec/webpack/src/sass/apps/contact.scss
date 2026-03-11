@@ -1,0 +1,82 @@
+.contact{
+    padding-bottom: 100px;
+    h2{
+        font-size: 2rem;
+        font-weight: 400;
+        padding: 95px 10px;
+       
+        @media (max-width: 600px){
+            padding: 70px 10px;
+        }
+
+        @media (max-width: 1024px){
+            padding: 80px 10px;
+        }
+
+    }
+    h3 {
+        font-size: 1.75rem;
+        font-weight: 400;
+        padding-bottom: 2%;
+        @media (max-width: 600px){
+            font-size: 1.4rem;
+        }
+        
+    }
+    p{
+        font-size: 1.2rem;
+        margin: 10px 0;
+        word-break: break-all;
+        @media (max-width: 600px){
+            font-size: 1.2rem;
+        }
+    }
+    a{
+        color: white;
+    }
+    textarea{
+        height: 150px;
+    }
+
+    .block-editor-block-list__block, .forminator-guttenberg, .form-box{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .form-box{
+            div{
+                h3 {
+                    width: 100%;
+                }
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    }
+
+    .forminator-ui.forminator-custom-form[data-design=default]{
+        width: 90%;
+        @media (min-width: 768px){
+            width: 80%;
+        }
+        @media (min-width: 1200px){
+            width: 60%;
+        }
+        input {
+            border-radius: 5px;
+        }
+       
+    }
+    .forminator-ui#forminator-module-419.forminator-design--default .forminator-button-submit {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .forminator-ui#forminator-module-419.forminator-design--default .forminator-button-submit:hover {
+        background-color: #5a6268;
+        border-color: #545b62
+    }
+    
+}
