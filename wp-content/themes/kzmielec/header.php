@@ -6,7 +6,7 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/raleway-v37-latin-ext.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/cinzel-v26-latin-ext.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
 	<?php wp_head(); ?>
 </head>
 
