@@ -450,7 +450,6 @@ body {
   font-style: normal;
   color: #000;
   margin: 0;
-  height: 200vh;
 }
 
 img {
@@ -741,7 +740,7 @@ figure {
   background-color: transparent;
   border: 0;
   margin: 0;
-  padding: 20px;
+  padding: 8px;
 }
 .hamburger__sr-only {
   border: 0;
@@ -778,7 +777,7 @@ figure {
 }
 @media (max-width: 480px) {
   .hamburger {
-    padding: 15px;
+    padding: 5px;
   }
 }
 
@@ -793,7 +792,7 @@ figure {
 }
 @media (max-width: 480px) {
   .three {
-    width: 25%;
+    width: 20%;
   }
 }
 
@@ -1311,6 +1310,7 @@ a:focus-visible i, a:focus-visible .icon, button:focus-visible i, button:focus-v
 }
 .footer .footer__copyright p {
   margin: 0;
+  text-align: center;
 }
 .footer .footer__copyright a {
   color: #fff;
@@ -1328,12 +1328,12 @@ a:focus-visible i, a:focus-visible .icon, button:focus-visible i, button:focus-v
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
-.footer .footer__image {
+.footer .footer__social img {
   width: 32px;
   height: 32px;
 }
 @media (max-width: 800px) {
-  .footer .footer__image {
+  .footer .footer__social img {
     width: 50px;
     height: 50px;
   }
