@@ -14,11 +14,11 @@
 	width: 100%;
  	max-width: var(--wp--custom--content-width-desktop);
 	margin: 0 auto;
-	padding: 80px 1.25rem;
+	padding: 80px 0.7812rem;
 	display: block;
 
 	@media (max-width: 600px) {
-		padding: 30px 1.2rem;
+		padding: 30px 0.75rem;
 	}
 
 	@include content-typography;

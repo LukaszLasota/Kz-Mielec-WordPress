@@ -6,6 +6,9 @@
  */
 
 :root {
-	// Content widths (from theme.json)
-	--wp--custom--content-width-desktop: 1300px;
+	// Content widths (matching old kzmielec theme)
+	--wp--custom--content-width-mobile: 100%;
+	--wp--custom--content-width-tablet: 85%;
+	--wp--custom--content-width-desktop: 70%;
+	--wp--custom--content-width-large-desktop: 60%;
 }

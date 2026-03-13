@@ -17,11 +17,11 @@
         text-fill-color: transparent;
         -webkit-background-clip: text;
         font-weight: 400;
-        font-size: 2rem;
+        font-size: 1.25rem;
         
         width: 100%;
-        @media (max-width: 800px){
-            font-size: 1.6rem;
+        @media (max-width: $bp-tablet){
+            font-size: 1rem;
             padding: 50px 0;
         }
         

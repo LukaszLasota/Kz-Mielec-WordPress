@@ -27,10 +27,10 @@
 		width: 100%;
 		max-width: var(--wp--custom--content-width-desktop);
 		margin-inline: auto;
-		padding-inline: 1.25rem;
+		padding-inline: 0.7812rem;
 
 		@media (max-width: 600px) {
-			padding-inline: 1.2rem;
+			padding-inline: 0.75rem;
 		}
 	}
 
