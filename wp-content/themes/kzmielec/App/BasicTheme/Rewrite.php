@@ -1,12 +1,12 @@
 <?php
 
-namespace Church\BasicTheme;
+namespace Kzmielec\BasicTheme;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class Rewrite

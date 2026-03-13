@@ -1,8 +1,8 @@
 <?php
 /**
- * Church Theme - Main functions file
+ * kzmielec Theme - Main functions file
  *
- * @package Church
+ * @package Kzmielec
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,4 +13,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_template_directory() . '/vendor/autoload.php';
 
 // Bootstrap theme.
-new Church\Theme();
+new Kzmielec\Theme();

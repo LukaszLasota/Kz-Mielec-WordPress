@@ -6,17 +6,17 @@
  * WARNING: Only enable this if you trust all users who can upload media.
  * SVG files can contain malicious JavaScript code.
  *
- * @package Church
+ * @package Kzmielec
  */
 
-namespace Church\Core;
+namespace Kzmielec\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
-use Church\Interfaces\FilterHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\FilterHookInterface;
 
 /**
  * Class SvgSupport
@@ -121,7 +121,7 @@ class SvgSupport implements ActionHookInterface, FilterHookInterface {
 		$clean_svg = $sanitizer->sanitize( $content );
 
 		if ( false === $clean_svg ) {
-			$file['error'] = __( 'This SVG file could not be sanitized and was rejected.', 'church' );
+			$file['error'] = __( 'This SVG file could not be sanitized and was rejected.', 'kzmielec' );
 			return $file;
 		}
 

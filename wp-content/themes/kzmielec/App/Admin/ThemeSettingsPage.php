@@ -2,18 +2,18 @@
 /**
  * ThemeSettingsPage class
  *
- * Registers the top-level "Ustawienia motywu" admin menu page.
+ * Registers the top-level "Theme Settings" admin menu page.
  *
- * @package Church\Admin
+ * @package Kzmielec\Admin
  */
 
-namespace Church\Admin;
+namespace Kzmielec\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class ThemeSettingsPage
@@ -25,7 +25,7 @@ class ThemeSettingsPage implements ActionHookInterface {
 	/**
 	 * Menu slug used by subpages as parent_slug.
 	 */
-	public const MENU_SLUG = 'church-settings';
+	public const MENU_SLUG = 'kzmielec-settings';
 
 	/**
 	 * Constructor.
@@ -68,8 +68,8 @@ class ThemeSettingsPage implements ActionHookInterface {
 	public function render_page(): void {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Ustawienia motywu', 'church' ); ?></h1>
-			<p><?php esc_html_e( 'Wybierz podstronę z menu po lewej stronie.', 'church' ); ?></p>
+			<h1><?php esc_html_e( 'Ustawienia motywu', 'kzmielec' ); ?></h1>
+			<p><?php esc_html_e( 'Wybierz podstronę z menu po lewej stronie.', 'kzmielec' ); ?></p>
 		</div>
 		<?php
 	}

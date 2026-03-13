@@ -4,16 +4,16 @@
  *
  * Handles custom logo settings page in WordPress admin.
  *
- * @package Church\Admin
+ * @package Kzmielec\Admin
  */
 
-namespace Church\Admin;
+namespace Kzmielec\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class LogoSettings
@@ -57,10 +57,10 @@ class LogoSettings implements ActionHookInterface {
 	public function add_logo_settings_page(): void {
 		add_submenu_page(
 			ThemeSettingsPage::MENU_SLUG,
-			'Logo Strony',
+			'Ustawienia logo',
 			'Logo',
 			'manage_options',
-			'church-logo',
+			'kzmielec-logo',
 			array( $this, 'display_logo_settings_page' )
 		);
 	}
@@ -73,7 +73,7 @@ class LogoSettings implements ActionHookInterface {
 	public function display_logo_settings_page(): void {
 		// Check user capabilities.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'church' ) );
+			wp_die( esc_html__( 'Nie masz wystarczających uprawnień, aby uzyskać dostęp do tej strony.', 'kzmielec' ) );
 		}
 
 		// Handle form submission.
@@ -98,7 +98,7 @@ class LogoSettings implements ActionHookInterface {
 	private function handle_form_submission(): void {
 		// Verify nonce.
 		if ( ! isset( $_POST[ self::NONCE_NAME ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION ) ) {
-			wp_die( esc_html__( 'Security check failed. Please try again.', 'church' ) );
+			wp_die( esc_html__( 'Weryfikacja bezpieczeństwa nie powiodła się. Spróbuj ponownie.', 'kzmielec' ) );
 		}
 
 		// Sanitize and validate input.
@@ -113,7 +113,7 @@ class LogoSettings implements ActionHookInterface {
 		add_settings_error(
 			'my_custom_logo',
 			'logo_saved',
-			__( 'Logo zostało zapisane.', 'church' ),
+			__( 'Logo zostało zapisane.', 'kzmielec' ),
 			'updated'
 		);
 	}
@@ -134,7 +134,7 @@ class LogoSettings implements ActionHookInterface {
 
 			<img id="logo-preview"
 				src="<?php echo esc_url( $image_url ); ?>"
-				alt="<?php esc_attr_e( 'Logo Preview', 'church' ); ?>"
+				alt="<?php esc_attr_e( 'Podgląd logo', 'kzmielec' ); ?>"
 				style="max-width: 300px; max-height: 300px; display: block; margin-bottom: 20px;"
 			/>
 
@@ -157,13 +157,13 @@ class LogoSettings implements ActionHookInterface {
 					<button type="button"
 							id="upload-btn"
 							class="button button-secondary">
-						<?php esc_html_e( 'Wybierz Logo', 'church' ); ?>
+						<?php esc_html_e( 'Wybierz Logo', 'kzmielec' ); ?>
 					</button>
 
 					<button type="submit"
 							name="submit_image_selector"
 							class="button button-primary">
-						<?php esc_html_e( 'Zapisz', 'church' ); ?>
+						<?php esc_html_e( 'Zapisz', 'kzmielec' ); ?>
 					</button>
 				</p>
 			</form>
@@ -179,17 +179,18 @@ class LogoSettings implements ActionHookInterface {
 	 */
 	public function enqueue_media_uploader( string $hook ): void {
 		// Only load on our settings page.
-		if ( 'ustawienia-motywu_page_church-logo' !== $hook ) {
+		if ( 'ustawienia-motywu_page_kzmielec-logo' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_media();
 
-		/**
-		 * TODO: Enqueue logo.js script after moving it to correct location.
-		 *
-		 * File needs to be moved from webpack/src/js/logo/ to assets/js/vendor/
-		 * Current path is inaccessible via URL.
-		 */
+		wp_enqueue_script(
+			'kzmielec-logo-uploader',
+			get_template_directory_uri() . '/assets/js/logo.js',
+			array(),
+			(string) filemtime( get_template_directory() . '/assets/js/logo.js' ),
+			true
+		);
 	}
 }

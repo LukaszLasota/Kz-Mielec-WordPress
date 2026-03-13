@@ -1,12 +1,12 @@
 <?php
 
-namespace Church\Widgets;
+namespace Kzmielec\Widgets;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class RegisterWidgets
@@ -28,7 +28,7 @@ class RegisterWidgets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function register_add_action(): void {
-		add_action( 'widgets_init', array( $this, 'church_widgets_init' ) );
+		add_action( 'widgets_init', array( $this, 'kzmielec_widgets_init' ) );
 	}
 
 	/**
@@ -36,12 +36,12 @@ class RegisterWidgets implements ActionHookInterface {
 	 *
 	 * @return void
 	 */
-	public function church_widgets_init(): void {
+	public function kzmielec_widgets_init(): void {
 		register_sidebar(
 			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 1', 'church' ),
+				'name'          => esc_html__( 'Menu stopka - Nagłówek 1', 'kzmielec' ),
 				'id'            => 'footer-header-1',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'church' ),
+				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</section>',
 				'before_title'  => '<h4>',
@@ -51,9 +51,9 @@ class RegisterWidgets implements ActionHookInterface {
 
 		register_sidebar(
 			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 2', 'church' ),
+				'name'          => esc_html__( 'Menu stopka - Nagłówek 2', 'kzmielec' ),
 				'id'            => 'footer-header-2',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'church' ),
+				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</section>',
 				'before_title'  => '<h4>',
@@ -63,11 +63,35 @@ class RegisterWidgets implements ActionHookInterface {
 
 		register_sidebar(
 			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 3', 'church' ),
+				'name'          => esc_html__( 'Menu stopka - Nagłówek 3', 'kzmielec' ),
 				'id'            => 'footer-header-3',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'church' ),
+				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget'  => '</section>',
+				'before_title'  => '<h4>',
+				'after_title'   => '</h4>',
+			)
+		);
+
+		register_sidebar(
+			array(
+				'name'          => esc_html__( 'Stopka - tekst', 'kzmielec' ),
+				'id'            => 'footer-text',
+				'description'   => esc_html__( 'Tekst w stopce (np. copyright).', 'kzmielec' ),
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h4>',
+				'after_title'   => '</h4>',
+			)
+		);
+
+		register_sidebar(
+			array(
+				'name'          => esc_html__( 'Stopka - social media', 'kzmielec' ),
+				'id'            => 'footer-social',
+				'description'   => esc_html__( 'Ikony social media w stopce.', 'kzmielec' ),
+				'before_widget' => '<div id="%1$s" class="widget %2$s">',
+				'after_widget'  => '</div>',
 				'before_title'  => '<h4>',
 				'after_title'   => '</h4>',
 			)

@@ -4,16 +4,16 @@
  *
  * Handles registration and enqueueing of theme assets (CSS and JavaScript).
  *
- * @package Church\BasicTheme
+ * @package Kzmielec\BasicTheme
  */
 
-namespace Church\BasicTheme;
+namespace Kzmielec\BasicTheme;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class RegisterAssets
@@ -62,9 +62,8 @@ class RegisterAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function register_add_action(): void {
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_church_assets' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'register_church_admin_assets' ) );
-		// Masonry is now bundled via webpack - no need to enqueue WP scripts.
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_kzmielec_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_kzmielec_admin_assets' ) );
 	}
 
 	/**
@@ -150,8 +149,8 @@ class RegisterAssets implements ActionHookInterface {
 	 *
 	 * @return void
 	 */
-	public function register_church_admin_assets(): void {
-		$this->enqueue_asset( 'style', 'church-admin-style', "/assets/css/backend{$this->suffix}.css" );
+	public function register_kzmielec_admin_assets(): void {
+		$this->enqueue_asset( 'style', 'kzmielec-admin-style', "/assets/css/backend{$this->suffix}.css" );
 	}
 
 	/**
@@ -161,19 +160,19 @@ class RegisterAssets implements ActionHookInterface {
 	 *
 	 * @return void
 	 */
-	public function register_church_assets(): void {
+	public function register_kzmielec_assets(): void {
 		// Frontend JavaScript.
-		$this->enqueue_asset( 'script', 'church-script', "/assets/js/frontend{$this->suffix}.js" );
+		$this->enqueue_asset( 'script', 'kzmielec-script', "/assets/js/frontend{$this->suffix}.js" );
 
 		// Frontend styles.
-		$this->enqueue_asset( 'style', 'church-styles', "/assets/css/frontend{$this->suffix}.css" );
+		$this->enqueue_asset( 'style', 'kzmielec-styles', "/assets/css/frontend{$this->suffix}.css" );
 
 		// Print styles.
-		$this->enqueue_asset( 'style', 'church-print-styles', "/assets/css/print{$this->suffix}.css", array(), true, 'print' );
+		$this->enqueue_asset( 'style', 'kzmielec-print-styles', "/assets/css/print{$this->suffix}.css", array(), true, 'print' );
 
 		// Localize script for AJAX.
 		wp_localize_script(
-			'church-script',
+			'kzmielec-script',
 			'redlist',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -181,25 +180,4 @@ class RegisterAssets implements ActionHookInterface {
 		);
 	}
 
-	/**
-	 * Enqueue Masonry library and settings.
-	 *
-	 * Loads Masonry only on blog pages, archives, and search results.
-	 * Uses WordPress bundled Masonry library.
-	 *
-	 * @return void
-	 */
-	public function enqueue_masonry_settings(): void {
-		// Load only on blog listing pages to optimize performance.
-		if ( ! is_home() && ! is_archive() && ! is_search() ) {
-			return;
-		}
-
-		// Enqueue WordPress bundled libraries.
-		// imagesLoaded is required for reliable image handling.
-		wp_enqueue_script( 'imagesloaded' );
-		wp_enqueue_script( 'masonry' );
-
-		// Masonry initialization is lazy-loaded via dynamic import in frontend.ts.
-	}
 }

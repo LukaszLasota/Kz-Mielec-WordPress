@@ -5,16 +5,16 @@
  * Automatically detects and enqueues pattern-specific CSS/JS files
  * only when patterns are used on the page.
  *
- * @package Church
+ * @package Kzmielec
  */
 
-namespace Church\Core;
+namespace Kzmielec\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class PatternAssets
