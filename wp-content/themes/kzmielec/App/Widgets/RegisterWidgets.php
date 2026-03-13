@@ -1,4 +1,11 @@
 <?php
+/**
+ * RegisterWidgets class
+ *
+ * Handles WordPress widget area registration.
+ *
+ * @package Kzmielec\Widgets
+ */
 
 namespace Kzmielec\Widgets;
 

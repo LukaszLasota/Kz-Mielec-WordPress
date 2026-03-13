@@ -62,8 +62,8 @@ class BeliefSettings implements ActionHookInterface {
 	public function add_settings_page(): void {
 		add_submenu_page(
 			ThemeSettingsPage::MENU_SLUG,
-			'Strony wiary',
-			'Strony wiary',
+			__( 'Strony wiary', 'kzmielec' ),
+			__( 'Strony wiary', 'kzmielec' ),
 			'manage_options',
 			'kzmielec-belief',
 			array( $this, 'display_settings_page' )
@@ -77,7 +77,7 @@ class BeliefSettings implements ActionHookInterface {
 	 */
 	public function display_settings_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Nie masz wystarczajacych uprawnien, aby uzyskac dostep do tej strony.', 'kzmielec' ) );
+			wp_die( esc_html__( 'Nie masz wystarczających uprawnień, aby uzyskać dostęp do tej strony.', 'kzmielec' ) );
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified in handle_form_submission().
@@ -95,7 +95,7 @@ class BeliefSettings implements ActionHookInterface {
 	 */
 	private function handle_form_submission(): void {
 		if ( ! isset( $_POST[ self::NONCE_NAME ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ self::NONCE_NAME ] ) ), self::NONCE_ACTION ) ) {
-			wp_die( esc_html__( 'Weryfikacja bezpieczenstwa nie powiodla sie. Sprobuj ponownie.', 'kzmielec' ) );
+			wp_die( esc_html__( 'Weryfikacja bezpieczeństwa nie powiodła się. Spróbuj ponownie.', 'kzmielec' ) );
 		}
 
 		$page_ids = array();
@@ -109,7 +109,7 @@ class BeliefSettings implements ActionHookInterface {
 		add_settings_error(
 			'kzmielec_belief',
 			'belief_saved',
-			__( 'Strony wiary zostaly zapisane.', 'kzmielec' ),
+			__( 'Strony wiary zostały zapisane.', 'kzmielec' ),
 			'updated'
 		);
 	}
@@ -137,7 +137,7 @@ class BeliefSettings implements ActionHookInterface {
 
 			<?php settings_errors( 'kzmielec_belief' ); ?>
 
-			<p><?php esc_html_e( 'Wybierz strony, ktore beda wyswietlane w nawigacji kolowej na stronach wiary. Kolejnosc ma znaczenie.', 'kzmielec' ); ?></p>
+			<p><?php esc_html_e( 'Wybierz strony, które będą wyświetlane w nawigacji kołowej na stronach wiary. Kolejność ma znaczenie.', 'kzmielec' ); ?></p>
 
 			<form method="post" action="">
 				<?php wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME ); ?>
@@ -168,7 +168,11 @@ class BeliefSettings implements ActionHookInterface {
 					<?php // Show remaining pages (not yet selected). ?>
 					<?php if ( $all_pages ) : ?>
 						<?php foreach ( $all_pages as $page ) : ?>
-							<?php if ( in_array( $page->ID, $displayed_ids, true ) ) continue; ?>
+							<?php
+							if ( in_array( $page->ID, $displayed_ids, true ) ) {
+								continue;
+							}
+							?>
 							<p>
 								<label>
 									<input type="checkbox"

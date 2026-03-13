@@ -64,7 +64,7 @@ class BeliefMetaBox implements ActionHookInterface {
 	public function add_meta_box(): void {
 		add_meta_box(
 			'belief_overlay_icon_meta',
-			'Ikona nakladki (strona wiary)',
+			__( 'Ikona nakładki (strona wiary)', 'kzmielec' ),
 			array( $this, 'render_meta_box' ),
 			'page',
 			'side',
@@ -153,32 +153,50 @@ class BeliefMetaBox implements ActionHookInterface {
 
 		wp_enqueue_media();
 
+		wp_localize_script(
+			'media-upload',
+			'kzmielecBeliefMeta',
+			array(
+				'selectTitle' => __( 'Wybierz ikonę nakładki', 'kzmielec' ),
+				'useImage'    => __( 'Użyj tego obrazu', 'kzmielec' ),
+			)
+		);
+
 		wp_add_inline_script(
-			'jquery',
+			'media-upload',
 			"
-			jQuery(document).ready(function($) {
+			document.addEventListener('DOMContentLoaded', function() {
 				var frame;
-				$('#belief-icon-upload').on('click', function(e) {
+				var uploadBtn = document.getElementById('belief-icon-upload');
+				var removeBtn = document.getElementById('belief-icon-remove');
+				var input     = document.getElementById('belief_overlay_icon');
+				var preview   = document.getElementById('belief-icon-preview');
+
+				if (!uploadBtn) return;
+
+				uploadBtn.addEventListener('click', function(e) {
 					e.preventDefault();
 					if (frame) { frame.open(); return; }
 					frame = wp.media({
-						title: 'Wybierz ikone nakladki',
-						button: { text: 'Uzyj tego obrazu' },
+						title: kzmielecBeliefMeta.selectTitle,
+						button: { text: kzmielecBeliefMeta.useImage },
 						multiple: false
 					});
 					frame.on('select', function() {
 						var attachment = frame.state().get('selection').first().toJSON();
-						$('#belief_overlay_icon').val(attachment.id);
-						$('#belief-icon-preview').attr('src', attachment.url).show();
-						$('#belief-icon-remove').show();
+						input.value = attachment.id;
+						preview.src = attachment.url;
+						preview.style.display = 'block';
+						removeBtn.style.display = '';
 					});
 					frame.open();
 				});
-				$('#belief-icon-remove').on('click', function(e) {
+
+				removeBtn.addEventListener('click', function(e) {
 					e.preventDefault();
-					$('#belief_overlay_icon').val('');
-					$('#belief-icon-preview').hide();
-					$(this).hide();
+					input.value = '';
+					preview.style.display = 'none';
+					this.style.display = 'none';
 				});
 			});
 			"

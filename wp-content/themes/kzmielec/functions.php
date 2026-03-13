@@ -1,6 +1,6 @@
 <?php
 /**
- * kzmielec Theme - Main functions file
+ * Kzmielec Theme - Main functions file
  *
  * @package Kzmielec
  */

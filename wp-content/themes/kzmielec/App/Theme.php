@@ -51,7 +51,6 @@ class Theme {
 	private array $admin_components = array(
 		Admin\ThemeSettingsPage::class,
 		Admin\LogoSettings::class,
-		Admin\SocialSettings::class,
 		Admin\BeliefSettings::class,
 		Admin\BeliefMetaBox::class,
 		Core\SvgSupport::class,

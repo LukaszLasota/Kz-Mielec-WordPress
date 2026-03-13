@@ -50,8 +50,8 @@ class ThemeSettingsPage implements ActionHookInterface {
 	 */
 	public function add_menu_page(): void {
 		add_menu_page(
-			'Ustawienia motywu',
-			'Ustawienia motywu',
+			__( 'Ustawienia motywu', 'kzmielec' ),
+			__( 'Ustawienia motywu', 'kzmielec' ),
 			'manage_options',
 			self::MENU_SLUG,
 			array( $this, 'render_page' ),

@@ -57,7 +57,7 @@ class LogoSettings implements ActionHookInterface {
 	public function add_logo_settings_page(): void {
 		add_submenu_page(
 			ThemeSettingsPage::MENU_SLUG,
-			'Ustawienia logo',
+			__( 'Ustawienia logo', 'kzmielec' ),
 			'Logo',
 			'manage_options',
 			'kzmielec-logo',
@@ -178,8 +178,8 @@ class LogoSettings implements ActionHookInterface {
 	 * @return void
 	 */
 	public function enqueue_media_uploader( string $hook ): void {
-		// Only load on our settings page.
-		if ( 'ustawienia-motywu_page_kzmielec-logo' !== $hook ) {
+		// Only load on our settings page (hook suffix contains the submenu slug).
+		if ( false === strpos( $hook, 'kzmielec-logo' ) ) {
 			return;
 		}
 

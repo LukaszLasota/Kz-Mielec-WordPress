@@ -179,5 +179,4 @@ class RegisterAssets implements ActionHookInterface {
 			)
 		);
 	}
-
 }

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Rewrite class
+ *
+ * Handles WordPress rewrite rules customization.
+ *
+ * @package Kzmielec\BasicTheme
+ */
 
 namespace Kzmielec\BasicTheme;
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Menu class
+ *
+ * Handles WordPress menu registration.
+ *
+ * @package Kzmielec\BasicTheme
+ */
 
 namespace Kzmielec\BasicTheme;
 

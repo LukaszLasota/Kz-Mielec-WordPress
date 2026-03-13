@@ -1,4 +1,11 @@
 <?php
+/**
+ * Setup class
+ *
+ * Handles WordPress theme setup and feature registration.
+ *
+ * @package Kzmielec\BasicTheme
+ */
 
 namespace Kzmielec\BasicTheme;
 

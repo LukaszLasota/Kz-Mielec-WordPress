@@ -47,11 +47,11 @@ $allowed_img = array(
 	),
 );
 
-$menu_items = array();
+$menu_items  = array();
 $current_url = trailingslashit( home_url( sanitize_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) ) ) );
 if ( has_nav_menu( 'primary' ) ) {
-	$locations  = get_nav_menu_locations();
-	$menu_obj   = wp_get_nav_menu_object( $locations['primary'] );
+	$locations = get_nav_menu_locations();
+	$menu_obj  = wp_get_nav_menu_object( $locations['primary'] );
 	if ( $menu_obj ) {
 		$menu_items = wp_get_nav_menu_items( $menu_obj->term_id );
 	}
@@ -78,9 +78,10 @@ if ( has_nav_menu( 'primary' ) ) {
 		<nav class="nav" id="primary-menu" aria-label="<?php esc_attr_e( 'Nawigacja glowna', 'kzmielec' ); ?>">
 			<?php if ( $menu_items ) : ?>
 				<ul class="nav__ul">
-					<?php foreach ( $menu_items as $item ) :
+					<?php
+					foreach ( $menu_items as $item ) :
 						$is_current = ( trailingslashit( $item->url ) === $current_url );
-					?>
+						?>
 						<li class="nav__li"><a href="<?php echo esc_url( $item->url ); ?>"<?php echo $is_current ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $item->title ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
@@ -117,7 +118,7 @@ if ( has_nav_menu( 'primary' ) ) {
 						?>
 						<li class="nav__li"><a href="<?php echo esc_url( $item->url ); ?>" tabindex="-1"><?php echo esc_html( $item->title ); ?></a></li>
 						<?php
-						$i++;
+						++$i;
 					endforeach;
 					?>
 				</ul>
