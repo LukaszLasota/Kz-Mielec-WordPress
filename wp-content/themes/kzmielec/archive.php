@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 ?>
-<main>
+<main id="primary" class="site-main">
 	<h1 class="archive-title"><?php echo esc_html( get_the_archive_title() ); ?></h1>
 	<?php get_template_part( 'template-parts/content', 'posts' ); ?>
 </main>

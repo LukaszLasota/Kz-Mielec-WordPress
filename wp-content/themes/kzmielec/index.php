@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main>
+<main id="primary" class="site-main">
 	<div class="editor-content">
 		<?php
 		$posts_page_id = get_option( 'page_for_posts' );
