@@ -1,88 +1,65 @@
+// ===========================================
+// Footer
+// ===========================================
 
 .footer {
-    background: $BG;
-    padding: 50px 0 70px;
+    background: #454040; // zblizone do starego #4f4b4b, kontrast z #fff = 5.06:1 (AA pass)
+    width: 100%;
+    padding: 0;
+    margin: 0;
 
-    .footer__container {
+    .footer__inner {
+        width: 100%;
+        max-width: $max-width;
+        margin: 0 auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 15px;
+        align-items: center;
+        padding: 5px 10px;
+
+        @media (max-width: $bp-tablet) {
+            justify-content: center;
+        }
     }
 
-    .footer__menu, .footer__contact {
+    .footer__copyright {
+        padding: 5px;
+        color: #fff;
+        font-size: 1rem;
+
+        p {
+            margin: 0;
+        }
+
+        a {
+            color: #fff;
+        }
+    }
+
+    .footer__social {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
-        flex-basis: calc(33.333% - 30px);
-        margin-bottom: 20px;
+        align-items: center;
 
-        @media (max-width: 768px) {
-            flex-basis: 50%;
-            justify-content: start;
-        }
+        a {
+            cursor: pointer;
 
-        @media (max-width: 600px) {
-            flex-basis: 100%;
-        }
-
-        h2, h4, .widgettitle {
-            color: white;
-            padding: 1.5rem 0.25rem;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            line-height: 1.2;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-
-            li {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                height: auto;
-                padding: 2px 0;
-
-                a {
-                    font-size: 1.1rem;
-                    display: inline-block;
-                    color: white;
-                    text-decoration: none;
-                    text-transform: uppercase;
-
-                    &::after {
-                        content: '';
-                        display: block;
-                        width: 0;
-                        height: 2px;
-                        background: #fff;
-                        transition: width 0.3s;
-                    }
-
-                    &:hover::after {
-                        width: 100%;
-                        transition: width 0.3s;
-                    }
-
-                }
-                img {
-                    width: 24px;
-                    height: 24px;
-                    object-fit: contain;
-                    flex-shrink: 0;
-                    margin-right: 8px;
-                }
+            &:focus-visible {
+                outline: 2px solid #fff;
+                outline-offset: 2px;
             }
         }
     }
-}
 
-.modal {
-    h5, p {
-        color: black;
+    .footer__image {
+        width: 32px;
+        height: 32px;
+
+        @media (max-width: $bp-tablet) {
+            width: 50px;
+            height: 50px;
+        }
     }
 }
