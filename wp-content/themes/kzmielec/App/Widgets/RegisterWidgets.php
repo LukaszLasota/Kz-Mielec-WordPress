@@ -39,42 +39,6 @@ class RegisterWidgets implements ActionHookInterface {
 	public function kzmielec_widgets_init(): void {
 		register_sidebar(
 			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 1', 'kzmielec' ),
-				'id'            => 'footer-header-1',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
-				'before_widget' => '<section id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</section>',
-				'before_title'  => '<h4>',
-				'after_title'   => '</h4>',
-			)
-		);
-
-		register_sidebar(
-			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 2', 'kzmielec' ),
-				'id'            => 'footer-header-2',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
-				'before_widget' => '<section id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</section>',
-				'before_title'  => '<h4>',
-				'after_title'   => '</h4>',
-			)
-		);
-
-		register_sidebar(
-			array(
-				'name'          => esc_html__( 'Menu stopka - Nagłówek 3', 'kzmielec' ),
-				'id'            => 'footer-header-3',
-				'description'   => esc_html__( 'Dodaj widgety tutaj.', 'kzmielec' ),
-				'before_widget' => '<section id="%1$s" class="widget %2$s">',
-				'after_widget'  => '</section>',
-				'before_title'  => '<h4>',
-				'after_title'   => '</h4>',
-			)
-		);
-
-		register_sidebar(
-			array(
 				'name'          => esc_html__( 'Stopka - tekst', 'kzmielec' ),
 				'id'            => 'footer-text',
 				'description'   => esc_html__( 'Tekst w stopce (np. copyright).', 'kzmielec' ),
