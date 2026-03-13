@@ -2,10 +2,10 @@
     width: 100%;
  	max-width: var(--wp--custom--content-width-desktop);
 	margin: 0 auto;
- 	padding: 5rem 1rem 1rem;
+ 	padding: 3.125rem 0.625rem 0.625rem;
 
 	@media (max-width: 767px) {
-		padding: 4rem 1.5rem 1rem;
+		padding: 2.5rem 0.9375rem 0.625rem;
 	}
 
     &__card {
@@ -29,10 +29,10 @@
         text-decoration: none;
     }
     &__title{
-        font-size: 1.5rem;     
+        font-size: 0.9375rem;     
     }
     &__text {
-        font-size: 1.0rem;
+        font-size: 0.625rem;
       
     }
 
@@ -64,7 +64,7 @@
                 border: 1px solid $color-main;
                 border-radius: 5px;
                 text-decoration: none;
-                font-size: 1rem;
+                font-size: 0.625rem;
                 font-weight: 700;
                 color: $color-black;
                 background-color: $body-color;
@@ -109,7 +109,7 @@
             .pagination__control {
                 display: flex;
                 align-items: center;
-                font-size: 1rem;
+                font-size: 0.625rem;
                 font-weight: 700;
                 text-transform: uppercase;
 
@@ -138,7 +138,7 @@
 
             a,
             .current {
-                font-size: 0.9rem;
+                font-size: 0.5625rem;
                 padding: 6px 10px;
             }
         }
