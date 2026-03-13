@@ -4,16 +4,16 @@
  *
  * Handles third-party plugin asset optimization.
  *
- * @package Church\Core
+ * @package Kzmielec\Core
  */
 
-namespace Church\Core;
+namespace Kzmielec\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class PerformanceOptimizer

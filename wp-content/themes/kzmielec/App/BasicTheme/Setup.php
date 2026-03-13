@@ -1,12 +1,12 @@
 <?php
 
-namespace Church\BasicTheme;
+namespace Kzmielec\BasicTheme;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
 
 /**
  * Class Setup
@@ -28,7 +28,7 @@ class Setup implements ActionHookInterface {
 	 * @return void
 	 */
 	public function register_add_action(): void {
-		add_action( 'after_setup_theme', array( $this, 'church_setup' ) );
+		add_action( 'after_setup_theme', array( $this, 'kzmielec_setup' ) );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class Setup implements ActionHookInterface {
 	 *
 	 * @return void
 	 */
-	public function church_setup(): void {
+	public function kzmielec_setup(): void {
 		add_theme_support( 'menus' );
 
 		add_theme_support( 'post-thumbnails' );

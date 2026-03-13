@@ -1,6 +1,6 @@
 <?php
 
-namespace Church\Interfaces;
+namespace Kzmielec\Interfaces;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

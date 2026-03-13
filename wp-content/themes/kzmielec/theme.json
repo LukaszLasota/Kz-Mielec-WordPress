@@ -59,27 +59,7 @@
 					"fontFace": [
 						{
 							"fontFamily": "Cinzel",
-							"fontWeight": "400",
-							"fontStyle": "normal",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/webfont/cinzel-v26-latin-ext.woff2",
-								"file:./assets/webfont/cinzel-v26-latin.woff2"
-							]
-						},
-						{
-							"fontFamily": "Cinzel",
-							"fontWeight": "700",
-							"fontStyle": "normal",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/webfont/cinzel-v26-latin-ext.woff2",
-								"file:./assets/webfont/cinzel-v26-latin.woff2"
-							]
-						},
-						{
-							"fontFamily": "Cinzel",
-							"fontWeight": "900",
+							"fontWeight": "400 900",
 							"fontStyle": "normal",
 							"fontDisplay": "swap",
 							"src": [

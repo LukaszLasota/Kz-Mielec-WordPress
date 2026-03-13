@@ -6,17 +6,17 @@
  * Users can add a link URL in the block's Advanced settings, and the entire
  * group becomes clickable.
  *
- * @package Church
+ * @package Kzmielec
  */
 
-namespace Church\Core;
+namespace Kzmielec\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Church\Interfaces\ActionHookInterface;
-use Church\Interfaces\FilterHookInterface;
+use Kzmielec\Interfaces\ActionHookInterface;
+use Kzmielec\Interfaces\FilterHookInterface;
 
 /**
  * Class GroupLinkSupport
@@ -91,11 +91,11 @@ class GroupLinkSupport implements ActionHookInterface, FilterHookInterface {
 							wp.element.createElement(
 								PanelBody,
 								{
-									title: __('Link Settings', 'church'),
+									title: __('Link Settings', 'kzmielec'),
 									initialOpen: false
 								},
 								wp.element.createElement(TextControl, {
-									label: __('Link URL', 'church'),
+									label: __('Link URL', 'kzmielec'),
 									value: linkUrl,
 									onChange: (value) => {
 										setAttributes({
@@ -105,7 +105,7 @@ class GroupLinkSupport implements ActionHookInterface, FilterHookInterface {
 											}
 										});
 									},
-									help: __('Make this entire group clickable. Enter a URL (e.g., /about or https://example.com)', 'church')
+									help: __('Make this entire group clickable. Enter a URL (e.g., /about or https://example.com)', 'kzmielec')
 								})
 							)
 						)
@@ -115,7 +115,7 @@ class GroupLinkSupport implements ActionHookInterface, FilterHookInterface {
 
 			addFilter(
 				'editor.BlockEdit',
-				'church/group-link-control',
+				'kzmielec/group-link-control',
 				withLinkControl
 			);
 

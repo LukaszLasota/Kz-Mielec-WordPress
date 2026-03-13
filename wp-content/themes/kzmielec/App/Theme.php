@@ -4,10 +4,10 @@
  *
  * Central initialization point for all theme components.
  *
- * @package Church
+ * @package Kzmielec
  */
 
-namespace Church;
+namespace Kzmielec;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,20 +38,22 @@ class Theme {
 		Core\PatternAssets::class,
 		Core\GroupLinkSupport::class,
 		Core\PerformanceOptimizer::class,
-		Admin\MasonrySettings::class,
 	);
 
 	/**
 	 * Admin-only components.
 	 *
 	 * These are loaded only when is_admin() is true to optimize frontend performance.
-	 * Order matters: ThemeSettingsPage must be before its subpages (Logo, Masonry).
+	 * Order matters: ThemeSettingsPage must be before its subpages.
 	 *
 	 * @var array<string>
 	 */
 	private array $admin_components = array(
 		Admin\ThemeSettingsPage::class,
 		Admin\LogoSettings::class,
+		Admin\SocialSettings::class,
+		Admin\BeliefSettings::class,
+		Admin\BeliefMetaBox::class,
 		Core\SvgSupport::class,
 	);
 
