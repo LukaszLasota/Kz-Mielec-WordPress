@@ -7,13 +7,6 @@
 			"defaultDuotone": false,
 			"defaultPalette": true,
 			"defaultGradients": false,
-			"duotone": [
-				{
-					"colors": ["#111111", "#ffffff"],
-					"slug": "duotone-1",
-					"name": "Black and white"
-				}
-			],
 			"gradients": [
 				{
 				  "slug": "gradient-to-left-bottom",
@@ -24,11 +17,6 @@
 				  "slug": "gradient-to-bottom",
 				  "gradient": "linear-gradient(to bottom, #000 0%, #333 100%)",
 				  "name": "Gradient to Bottom"
-				},
-				{
-				  "slug": "gradient-90-deg",
-				  "gradient": "linear-gradient(90deg, #000 0%, #333 100%)",
-				  "name": "Gradient 90 deg"
 				}
 			],
 			"palette": [
@@ -36,11 +24,6 @@
 					"color": "#ffffff",
 					"name": "Base",
 					"slug": "base"
-				},
-				{
-					"color": "#ffffff",
-					"name": "Base / Two",
-					"slug": "base-2"
 				},
 				{
 					"color": "#000000",
