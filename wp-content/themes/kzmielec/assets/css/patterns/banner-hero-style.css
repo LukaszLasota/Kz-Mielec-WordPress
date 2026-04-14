@@ -1,0 +1,56 @@
+/*!******************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/patterns/banner-hero/style.scss ***!
+  \******************************************************************************************************************************/
+/**
+ * Banner Hero Pattern
+ *
+ * Full-width hero with responsive photo, motto overlay and scroll arrow.
+ * Optimized for LCP (fetchpriority, no lazy-load on hero) and CLS (aspect-ratio).
+ */
+.pattern-banner-hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.pattern-banner-hero__image {
+  position: relative;
+  width: 100%;
+  padding-top: 80px;
+  aspect-ratio: 1998/1073;
+}
+@media (max-width: 480px) {
+  .pattern-banner-hero__image {
+    aspect-ratio: 673/926;
+    padding-top: 60px;
+  }
+}
+.pattern-banner-hero__photo {
+  width: 100%;
+  margin: 0;
+}
+.pattern-banner-hero__photo picture {
+  display: block;
+  width: 100%;
+}
+.pattern-banner-hero__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.pattern-banner-hero__motto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  margin: 0;
+  pointer-events: none;
+}
+.pattern-banner-hero__motto img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/*# sourceMappingURL=banner-hero-style.css.map*/

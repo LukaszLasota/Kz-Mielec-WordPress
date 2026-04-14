@@ -41,12 +41,39 @@ function getPatternEntries() {
 	return entries;
 }
 
+/**
+ * Auto-discover block style variation entries from webpack/src/block-styles/ directory.
+ * Each .scss file compiles to assets/block-styles/[name].css
+ *
+ * @returns {Object} Block style entry points
+ */
+function getBlockStyleEntries() {
+	const blockStyleDir = path.resolve(__dirname, 'src/block-styles');
+	const entries = {};
+
+	if (!fs.existsSync(blockStyleDir)) {
+		return entries;
+	}
+
+	fs.readdirSync(blockStyleDir).forEach(file => {
+		if (!file.endsWith('.scss')) {
+			return;
+		}
+
+		const name = file.replace('.scss', '');
+		entries[`block-styles/${name}`] = path.join(blockStyleDir, file);
+	});
+
+	return entries;
+}
+
 module.exports = {
 	entry: {
 		'frontend': path.resolve(__dirname, './src/frontend.ts'),
 		'editor': path.resolve(__dirname, './src/editor.ts'),
 		'print': path.resolve(__dirname, './src/print.ts'),
 		...getPatternEntries(),
+		...getBlockStyleEntries(),
 	},
 	plugins: [],
 	resolve: {

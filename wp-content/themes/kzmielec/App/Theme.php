@@ -36,6 +36,7 @@ class Theme {
 		BasicTheme\Rewrite::class,
 		Widgets\RegisterWidgets::class,
 		Core\PatternAssets::class,
+		Core\BlockStyles::class,
 		Core\GroupLinkSupport::class,
 		Core\PerformanceOptimizer::class,
 	);

@@ -108,7 +108,11 @@
 			"content-width-desktop": "70%",
 			"content-width-large-desktop": "60%"
 		},
-		"useRootPaddingAwareAlignments": true
+		"useRootPaddingAwareAlignments": true,
+		"layout": {
+			"contentSize": "1200px",
+			"wideSize": "100%"
+		}
 	},
 	"styles": {
 		"typography": {

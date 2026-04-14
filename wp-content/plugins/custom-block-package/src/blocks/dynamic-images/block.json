@@ -36,11 +36,58 @@
     "heading": {
       "type": "string",
       "default": ""
+    },
+    "overlayDesktopID": {
+      "type": "number",
+      "default": 0
+    },
+    "overlayDesktopURL": {
+      "type": "string",
+      "default": ""
+    },
+    "overlayTabletID": {
+      "type": "number",
+      "default": 0
+    },
+    "overlayTabletURL": {
+      "type": "string",
+      "default": ""
+    },
+    "overlayMobileID": {
+      "type": "number",
+      "default": 0
+    },
+    "overlayMobileURL": {
+      "type": "string",
+      "default": ""
+    },
+    "overlayAlt": {
+      "type": "string",
+      "default": ""
     }
   },
+  "textdomain": "custom-block-package",
   "description": "Blok z wyborem obrazów dla desktopu, tabletu i telefonu z ukrytym nagłówkiem H1.",
   "supports": {
-    "anchor": true
+    "anchor": true,
+    "align": true,
+    "alignWide": true,
+    "color": {
+      "background": true,
+      "text": false,
+      "gradients": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true,
+      "blockGap": true
+    },
+    "dimensions": {
+      "minHeight": true
+    },
+    "position": {
+      "sticky": true
+    }
   },
   "editorScript": "file:./index.js",
   "viewStyle": "file:./style-index.css",

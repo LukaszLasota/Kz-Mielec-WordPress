@@ -9,10 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header(); ?>
 
-<main id="primary" class="site-main">
-	<section>
-		<?php the_content(); ?>
-	</section>
+<main id="primary" class="site-main is-layout-constrained">
+	<?php the_content(); ?>
 </main>
 
 <?php

@@ -3,6 +3,7 @@
  * Dynamic Images Block Render Template
  *
  * Generates a <picture> element with responsive sources for desktop, tablet, and mobile.
+ * Optionally renders overlay images per breakpoint using CSS media queries.
  *
  * @package CustomBlockPackage
  *
@@ -17,7 +18,12 @@ $img_desktop_id = isset( $attributes['imgDesktopID'] ) ? (int) $attributes['imgD
 $img_tablet_id  = isset( $attributes['imgTabletID'] ) ? (int) $attributes['imgTabletID'] : 0;
 $img_mobile_id  = isset( $attributes['imgMobileID'] ) ? (int) $attributes['imgMobileID'] : 0;
 
-// Fetch image data for each breakpoint.
+// Overlay image IDs.
+$overlay_desktop_id = isset( $attributes['overlayDesktopID'] ) ? (int) $attributes['overlayDesktopID'] : 0;
+$overlay_tablet_id  = isset( $attributes['overlayTabletID'] ) ? (int) $attributes['overlayTabletID'] : 0;
+$overlay_mobile_id  = isset( $attributes['overlayMobileID'] ) ? (int) $attributes['overlayMobileID'] : 0;
+
+// Fetch background image data for each breakpoint.
 $desktop_data   = $img_desktop_id ? wp_get_attachment_image_src( $img_desktop_id, 'full' ) : null;
 $desktop_srcset = $img_desktop_id ? (string) wp_get_attachment_image_srcset( $img_desktop_id, 'full' ) : '';
 $desktop_sizes  = $img_desktop_id ? (string) wp_get_attachment_image_sizes( $img_desktop_id, 'full' ) : '';
@@ -34,11 +40,18 @@ if ( ! $desktop_data && ! $tablet_data && ! $mobile_data ) {
 	return;
 }
 
+// Fetch overlay image data per breakpoint.
+$overlay_desktop_data = $overlay_desktop_id ? wp_get_attachment_image_src( $overlay_desktop_id, 'full' ) : null;
+$overlay_tablet_data  = $overlay_tablet_id ? wp_get_attachment_image_src( $overlay_tablet_id, 'full' ) : null;
+$overlay_mobile_data  = $overlay_mobile_id ? wp_get_attachment_image_src( $overlay_mobile_id, 'full' ) : null;
+
+$has_overlay = $overlay_desktop_data || $overlay_tablet_data || $overlay_mobile_data;
+$overlay_alt = isset( $attributes['overlayAlt'] ) ? trim( (string) $attributes['overlayAlt'] ) : '';
+
 // Heading for SEO and accessibility (visually hidden).
 $heading = isset( $attributes['heading'] ) ? trim( (string) $attributes['heading'] ) : '';
 
-// If heading is set it acts as the text alternative for the image (decorative pattern).
-// Otherwise use the alt text from the WordPress media library.
+// Alt text: if heading is set, image is decorative. Otherwise use media library alt.
 $alt_image_id = $img_desktop_id ? $img_desktop_id : ( $img_tablet_id ? $img_tablet_id : $img_mobile_id );
 $alt_text     = $heading ? '' : ( $alt_image_id ? (string) get_post_meta( $alt_image_id, '_wp_attachment_image_alt', true ) : '' );
 
@@ -46,9 +59,7 @@ $alt_text     = $heading ? '' : ( $alt_image_id ? (string) get_post_meta( $alt_i
 $fallback_data   = $desktop_data ? $desktop_data : ( $tablet_data ? $tablet_data : $mobile_data );
 $fallback_srcset = $desktop_srcset ? $desktop_srcset : ( $tablet_srcset ? $tablet_srcset : $mobile_srcset );
 $fallback_sizes  = $desktop_sizes ? $desktop_sizes : ( $tablet_sizes ? $tablet_sizes : $mobile_sizes );
-?>
 
-<?php
 $wrapper_extra = array();
 if ( ! empty( $attributes['anchor'] ) ) {
 	$wrapper_extra['id'] = $attributes['anchor'];
@@ -99,4 +110,39 @@ if ( ! empty( $attributes['anchor'] ) ) {
 			<?php endif; ?>
 		/>
 	</picture>
+
+	<?php if ( $has_overlay ) : ?>
+		<div class="wp-block-custom-block-package-dynamic-images__overlay">
+			<?php if ( $overlay_desktop_data ) : ?>
+				<img
+					class="dynamic-images-overlay dynamic-images-overlay--desktop"
+					src="<?php echo esc_url( $overlay_desktop_data[0] ); ?>"
+					alt="<?php echo esc_attr( $overlay_alt ); ?>"
+					width="<?php echo intval( $overlay_desktop_data[1] ); ?>"
+					height="<?php echo intval( $overlay_desktop_data[2] ); ?>"
+					loading="lazy"
+				/>
+			<?php endif; ?>
+			<?php if ( $overlay_tablet_data ) : ?>
+				<img
+					class="dynamic-images-overlay dynamic-images-overlay--tablet"
+					src="<?php echo esc_url( $overlay_tablet_data[0] ); ?>"
+					alt="<?php echo esc_attr( $overlay_alt ); ?>"
+					width="<?php echo intval( $overlay_tablet_data[1] ); ?>"
+					height="<?php echo intval( $overlay_tablet_data[2] ); ?>"
+					loading="lazy"
+				/>
+			<?php endif; ?>
+			<?php if ( $overlay_mobile_data ) : ?>
+				<img
+					class="dynamic-images-overlay dynamic-images-overlay--mobile"
+					src="<?php echo esc_url( $overlay_mobile_data[0] ); ?>"
+					alt="<?php echo esc_attr( $overlay_alt ); ?>"
+					width="<?php echo intval( $overlay_mobile_data[1] ); ?>"
+					height="<?php echo intval( $overlay_mobile_data[2] ); ?>"
+					loading="lazy"
+				/>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
 </div>

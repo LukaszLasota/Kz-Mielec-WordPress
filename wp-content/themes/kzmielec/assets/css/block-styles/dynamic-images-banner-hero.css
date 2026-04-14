@@ -1,0 +1,21 @@
+/*!*******************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/block-styles/dynamic-images-banner-hero.scss ***!
+  \*******************************************************************************************************************************************/
+.wp-block-custom-block-package-dynamic-images.is-style-banner-hero {
+  width: 100%;
+}
+.wp-block-custom-block-package-dynamic-images.is-style-banner-hero .wp-block-custom-block-package-dynamic-images__overlay {
+  width: min(120%, 100vw);
+}
+@media (max-width: 800px) {
+  .wp-block-custom-block-package-dynamic-images.is-style-banner-hero .wp-block-custom-block-package-dynamic-images__overlay {
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  .wp-block-custom-block-package-dynamic-images.is-style-banner-hero .wp-block-custom-block-package-dynamic-images__overlay {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=dynamic-images-banner-hero.css.map*/

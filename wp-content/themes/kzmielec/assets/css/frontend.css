@@ -473,18 +473,13 @@ a:active {
 
 figure {
   margin: 0;
+  overflow-x: clip;
 }
 
 .wrapper {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-@media (max-width: 800px) {
-  .site-main {
-    padding-top: 100px;
-  }
 }
 
 .section-head {

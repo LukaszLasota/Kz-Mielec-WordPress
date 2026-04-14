@@ -46,6 +46,7 @@ a:active {
 
 figure {
     margin: 0;
+    overflow-x: clip;
 }
 
 // Main page wrapper
@@ -53,13 +54,6 @@ figure {
     width: 100%;
     max-width: $max-width;
     margin: 0 auto;
-}
-
-// Content wrapper
-.site-main {
-    @media (max-width: $bp-tablet) {
-        padding-top: 100px; // offset for fixed header on mobile
-    }
 }
 
 // Section heading with line through

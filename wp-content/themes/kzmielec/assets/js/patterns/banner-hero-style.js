@@ -17,13 +17,12 @@
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-/*!************************!*\
-  !*** ./src/backend.ts ***!
-  \************************/
+/*!*********************************************!*\
+  !*** ./src/patterns/banner-hero/style.scss ***!
+  \*********************************************/
 __webpack_require__.r(__webpack_exports__);
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './sass/backend.scss'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-
+// extracted by mini-css-extract-plugin
 
 /******/ })()
 ;
-//# sourceMappingURL=backend.js.map?3713a77e53036e0ca582
+//# sourceMappingURL=banner-hero-style.js.map?cc6f2cecfa66b341d1ad

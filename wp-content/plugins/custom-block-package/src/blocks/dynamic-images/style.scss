@@ -1,19 +1,85 @@
 .wp-block-custom-block-package-dynamic-images {
-    picture, img, source {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
+	position: relative;
 
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-  }
+	picture, img, source {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	picture {
+		margin: 0 auto;
+	}
+
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	// Utility: padding-top only on desktop (matches sticky header height).
+	&.has-desktop-padding-top {
+		@media (min-width: 801px) {
+			padding-top: 80px;
+		}
+
+		@media (max-width: 800px) {
+			padding-top: 5px;
+		}
+	}
+
+	// Overlay container — centered on the background image.
+	&__overlay {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+		pointer-events: none;
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+
+		@media (max-width: 480px) {
+			display: none;
+		}
+	}
+
+	// Show/hide overlay images per breakpoint.
+	// Only the overlay matching the current viewport is displayed.
+	.dynamic-images-overlay {
+		display: none;
+
+		&--desktop {
+			display: block;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.dynamic-images-overlay--desktop {
+			display: none;
+		}
+		.dynamic-images-overlay--tablet {
+			display: block;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.dynamic-images-overlay--desktop,
+		.dynamic-images-overlay--tablet {
+			display: none;
+		}
+		.dynamic-images-overlay--mobile {
+			display: block;
+		}
+	}
+}
