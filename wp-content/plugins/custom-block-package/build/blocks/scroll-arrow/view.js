@@ -1,0 +1,1 @@
+document.querySelectorAll(".scroll-arrow").forEach(e=>{e.addEventListener("click",t=>{const r=e.getAttribute("href");if(!r)return;const o=document.querySelector(r);o&&(t.preventDefault(),o.scrollIntoView({behavior:"smooth",block:"start"}))})});

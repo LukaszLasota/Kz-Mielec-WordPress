@@ -1,0 +1,80 @@
+// Scroll Arrow Block
+//
+// Production reference (html5blank-stable):
+//   .black-circle: 60x60, #000, border-radius 100%, flex centered
+//   Arrow image: 365x365 PNG, fills the circle via max-width: 100%
+//   Default margin: 80px auto 160px
+//   Mobile 480px: 50px auto 100px
+//
+// Note: margin uses !important to override WordPress is-layout-constrained
+// which sets margin-block: 0 on direct children.
+
+.wp-block-custom-block-package-scroll-arrow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	// stylelint-disable-next-line declaration-no-important
+	margin-top: 80px !important;
+	// stylelint-disable-next-line declaration-no-important
+	margin-bottom: 160px !important;
+
+	@media (max-width: 480px) {
+		// stylelint-disable-next-line declaration-no-important
+		margin-top: 50px !important;
+		// stylelint-disable-next-line declaration-no-important
+		margin-bottom: 100px !important;
+	}
+
+	.scroll-arrow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		width: 60px;
+		height: 60px;
+		border-radius: 100%;
+		background: #000;
+		color: #fff;
+		text-decoration: none;
+		transition: opacity 0.3s ease;
+
+		&:hover {
+			opacity: 0.7;
+		}
+
+		&:focus-visible {
+			outline: 2px solid #000;
+			outline-offset: 4px;
+		}
+
+		figure {
+			margin: 0;
+			padding: 0;
+			line-height: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+		}
+
+		// Placeholder when no image is set.
+		&--placeholder {
+			font-size: 1.5rem;
+		}
+	}
+
+	.scroll-arrow__hint {
+		width: 100%;
+		text-align: center;
+		font-size: 0.8rem;
+		color: #999;
+		margin-top: 0.5rem;
+	}
+}

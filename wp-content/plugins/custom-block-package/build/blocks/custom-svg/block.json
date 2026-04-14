@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/custom-svg",
+  "title": "Custom SVG Block",
+  "category": "media",
+  "icon": "format-image",
+  "description": "Blok do wstawiania plików SVG inline",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "left",
+      "center",
+      "right",
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "textdomain": "custom-block-package",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "attributes": {
+    "svgId": {
+      "type": "number",
+      "default": 0
+    },
+    "svgUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "svgContent": {
+      "type": "string",
+      "default": ""
+    },
+    "svgWidth": {
+      "type": "string",
+      "default": ""
+    },
+    "svgHeight": {
+      "type": "string",
+      "default": ""
+    },
+    "svgFill": {
+      "type": "string",
+      "default": ""
+    },
+    "svgStroke": {
+      "type": "string",
+      "default": ""
+    },
+    "preserveAspectRatio": {
+      "type": "boolean",
+      "default": true
+    },
+    "applyColorToAllElements": {
+      "type": "boolean",
+      "default": false
+    },
+    "wrapWithLink": {
+      "type": "boolean",
+      "default": false
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "linkTarget": {
+      "type": "string",
+      "default": "_self"
+    },
+    "linkRel": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "render": "file:./render.php"
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/scroll-arrow",
+  "title": "Strzałka nawigacyjna",
+  "category": "custom-blocks-from-scratch",
+  "icon": "arrow-down-alt",
+  "description": "Czarne kółko ze strzałką — nawigacja między sekcjami z płynnym scrollem.",
+  "textdomain": "custom-block-package",
+  "supports": {
+    "anchor": true,
+    "align": true,
+    "spacing": {
+      "margin": true
+    }
+  },
+  "attributes": {
+    "targetId": {
+      "type": "string",
+      "default": ""
+    },
+    "direction": {
+      "type": "string",
+      "default": "down",
+      "enum": ["down", "up"]
+    },
+    "ariaLabel": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "viewStyle": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}
