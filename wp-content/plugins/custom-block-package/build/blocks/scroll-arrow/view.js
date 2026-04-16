@@ -1,1 +1,28 @@
-document.querySelectorAll(".scroll-arrow").forEach(e=>{e.addEventListener("click",t=>{const r=e.getAttribute("href");if(!r)return;const o=document.querySelector(r);o&&(t.preventDefault(),o.scrollIntoView({behavior:"smooth",block:"start"}))})});
+/******/ (() => { // webpackBootstrap
+/*!*****************************************!*\
+  !*** ./src/blocks/scroll-arrow/view.js ***!
+  \*****************************************/
+/**
+ * Scroll Arrow — smooth scroll on click.
+ *
+ * Loaded only on the frontend via viewScript when the block is on the page.
+ */
+document.querySelectorAll('.scroll-arrow').forEach(arrow => {
+  arrow.addEventListener('click', e => {
+    const href = arrow.getAttribute('href');
+    if (!href) {
+      return;
+    }
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+/******/ })()
+;
+//# sourceMappingURL=view.js.map

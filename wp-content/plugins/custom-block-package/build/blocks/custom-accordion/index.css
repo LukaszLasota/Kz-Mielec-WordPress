@@ -1,1 +1,24 @@
-.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout{gap:0}.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout>.block-editor-block-list__block{margin-bottom:0;margin-top:0}.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout>.block-editor-block-list__block+.block-editor-block-list__block .accordion__item{border-top:none}.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout>.block-editor-block-list__block:first-child .accordion__item{border-radius:4px 4px 0 0}.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout>.block-editor-block-list__block:last-child .accordion__item{border-radius:0 0 4px 4px}.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout>.block-editor-block-list__block:only-child .accordion__item{border-radius:4px}
+/*!****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/custom-accordion/editor.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************/
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout {
+  gap: 0;
+}
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout > .block-editor-block-list__block {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout > .block-editor-block-list__block + .block-editor-block-list__block .accordion__item {
+  border-top: none;
+}
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout > .block-editor-block-list__block:first-child .accordion__item {
+  border-radius: 4px 4px 0 0;
+}
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout > .block-editor-block-list__block:last-child .accordion__item {
+  border-radius: 0 0 4px 4px;
+}
+.wp-block-custom-block-package-custom-accordion .block-editor-block-list__layout > .block-editor-block-list__block:only-child .accordion__item {
+  border-radius: 4px;
+}
+
+/*# sourceMappingURL=index.css.map*/

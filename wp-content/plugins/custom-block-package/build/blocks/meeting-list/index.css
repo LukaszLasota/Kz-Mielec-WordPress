@@ -1,1 +1,78 @@
-.wp-block-custom-block-package-meeting-custom-list{width:100%}.wp-block-custom-block-package-meeting-custom-list .meetings h2{background:var(--wp--preset--gradient--gradient-to-left-bottom);background-image:var(--wp--preset--gradient--gradient-to-left-bottom);font-size:2rem;font-weight:400;letter-spacing:2px;line-height:1.4;text-align:center;text-transform:uppercase;width:100%;-webkit-text-fill-color:transparent;text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;padding:95px 10px}@media(max-width:1024px){.wp-block-custom-block-package-meeting-custom-list .meetings h2{padding:80px 10px}}@media(max-width:600px){.wp-block-custom-block-package-meeting-custom-list .meetings h2{padding:70px 10px}}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards{display:grid;font-size:1.1rem;gap:0;grid-template-columns:repeat(4,1fr);line-height:150%;width:100%}@media(max-width:1200px){.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:768px){.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards{grid-template-columns:1fr}}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-back{display:none}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-inner{box-sizing:border-box;padding:20px}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front{align-items:center;display:flex;flex-direction:column;justify-content:center;text-align:center}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front h3{font-size:1.7rem;font-weight:400}.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front p{margin:5px}
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/meeting-list/index.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.wp-block-custom-block-package-meeting-custom-list {
+  width: 100%;
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings h2 {
+  font-size: 2rem;
+  line-height: 1.4;
+  font-weight: 400;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 2px;
+  background: var(--wp--preset--gradient--gradient-to-left-bottom);
+  background-image: var(--wp--preset--gradient--gradient-to-left-bottom);
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding: 95px 10px;
+}
+@media (max-width: 1024px) {
+  .wp-block-custom-block-package-meeting-custom-list .meetings h2 {
+    padding: 80px 10px;
+  }
+}
+@media (max-width: 600px) {
+  .wp-block-custom-block-package-meeting-custom-list .meetings h2 {
+    padding: 70px 10px;
+  }
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  width: 100%;
+  font-size: 1.1rem;
+  line-height: 150%;
+}
+@media (max-width: 1200px) {
+  .wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards {
+    grid-template-columns: 1fr;
+  }
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-back {
+  display: none;
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-inner {
+  padding: 20px;
+  box-sizing: border-box;
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front h3 {
+  font-weight: 400;
+  font-size: 1.7rem;
+}
+.wp-block-custom-block-package-meeting-custom-list .meetings .flipping-cards__card-front p {
+  margin: 5px;
+}
+
+/*# sourceMappingURL=index.css.map*/

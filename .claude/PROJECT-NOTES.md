@@ -12,6 +12,10 @@
 
 ---
 
+> **Komendy DDEV:** Dokumentacja custom komend build/watch w osobnym pliku → [DDEV-COMMANDS.md](DDEV-COMMANDS.md)
+
+---
+
 ## MOTYW WORDPRESS
 
 ### Informacje podstawowe
