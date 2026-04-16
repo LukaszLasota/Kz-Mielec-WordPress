@@ -2,7 +2,7 @@
 /**
  * Scroll Arrow Block Render Template
  *
- * Renders a circular scroll-to button with the arrow image from the theme.
+ * Renders a circular scroll-to button with the arrow image from the plugin.
  * Direction (down/up) selects the corresponding arrow image.
  * Smooth scroll handled by view.js.
  *

@@ -5,7 +5,7 @@
  * This file handles the server-side rendering of the SVG block.
  * It sanitizes SVG content for security and applies attributes from the block editor.
  *
- * @package wlc/custom-svg
+ * @package CustomBlockPackage
  */
 
 // SVG sanitization helper function.
