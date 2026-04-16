@@ -48,6 +48,7 @@ class BlockStyles implements ActionHookInterface {
 	 */
 	public function register_block_styles(): void {
 		$this->register_dynamic_images_styles();
+		$this->register_heading_styles();
 	}
 
 	/**
@@ -73,6 +74,37 @@ class BlockStyles implements ActionHookInterface {
 				'custom-block-package/dynamic-images',
 				array(
 					'handle' => 'dynamic-images-banner-hero',
+					'src'    => get_template_directory_uri() . $css_path,
+					'path'   => $full_path,
+					'ver'    => (string) filemtime( $full_path ),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Register style variations for the core/heading block.
+	 *
+	 * @return void
+	 */
+	private function register_heading_styles(): void {
+		register_block_style(
+			'core/heading',
+			array(
+				'name'  => 'section-line',
+				'label' => __( 'Z linią', 'kzmielec' ),
+			)
+		);
+
+		$asset_suffix = $this->get_asset_suffix();
+		$css_path     = '/assets/css/block-styles/heading-section-line' . $asset_suffix . '.css';
+		$full_path    = get_template_directory() . $css_path;
+
+		if ( file_exists( $full_path ) ) {
+			wp_enqueue_block_style(
+				'core/heading',
+				array(
+					'handle' => 'heading-section-line',
 					'src'    => get_template_directory_uri() . $css_path,
 					'path'   => $full_path,
 					'ver'    => (string) filemtime( $full_path ),

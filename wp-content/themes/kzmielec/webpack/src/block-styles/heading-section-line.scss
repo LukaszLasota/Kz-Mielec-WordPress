@@ -1,0 +1,44 @@
+// Heading "Z linią" — section divider with horizontal line through center.
+//
+// Production: .section-head with letter-spacing 150% inside 60% wrapper.
+// Our wrapper is 1200px so we scale letter-spacing down proportionally.
+// Uses display:flex + ::before/::after for lines — no <span> needed.
+
+.wp-block-heading.is-style-section-line {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	font-size: 2rem;
+	font-weight: normal;
+	letter-spacing: 2.5rem;
+	text-transform: uppercase;
+	margin-top: 30px;
+	margin-bottom: 60px;
+
+	&::before,
+	&::after {
+		content: "";
+		flex: 1;
+		height: 1px;
+		background: #000;
+	}
+
+	&::before {
+		margin-right: 20px;
+	}
+
+	&::after {
+		margin-left: 20px;
+	}
+
+	@media (max-width: 480px) {
+		font-size: 2.8rem;
+		letter-spacing: 1.1px;
+
+		&::before,
+		&::after {
+			display: none;
+		}
+	}
+}
