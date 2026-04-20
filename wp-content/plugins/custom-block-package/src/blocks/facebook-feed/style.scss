@@ -1,0 +1,180 @@
+.wp-block-custom-block-package-facebook-feed {
+	width: 100%;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	box-sizing: border-box;
+	contain: layout paint;
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	.facebook-feed__scroll {
+		height: var(--cbp-fb-height, 700px);
+		max-height: var(--cbp-fb-height, 700px);
+		min-height: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+		overscroll-behavior: contain;
+		contain: strict;
+		border: 1px solid #e4e6eb;
+		border-radius: 8px;
+		background: #fff;
+		-webkit-overflow-scrolling: touch;
+
+		// Scrollbar styling (WebKit).
+		&::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f0f2f5;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #bcc0c4;
+			border-radius: 4px;
+
+			&:hover {
+				background: #8a8d91;
+			}
+		}
+	}
+
+	.facebook-feed__empty {
+		text-align: center;
+		padding: 2rem;
+		color: #555;
+
+		a {
+			color: #1877f2;
+			text-decoration: underline;
+			margin-left: 0.5em;
+
+			&:hover,
+			&:focus-visible {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.facebook-feed__grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		padding: 1rem;
+	}
+
+	&.has-columns-2 .facebook-feed__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	&.has-columns-3 .facebook-feed__grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	// On narrow containers, collapse to 1 column.
+	@media (max-width: 500px) {
+		&.has-columns-2 .facebook-feed__grid,
+		&.has-columns-3 .facebook-feed__grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	// Max-width scales with columns — 2 cols = wider container.
+	&.has-columns-2 {
+		max-width: 900px;
+	}
+
+	&.has-columns-3 {
+		max-width: 1200px;
+	}
+
+	.facebook-feed__post {
+		display: flex;
+		flex-direction: column;
+		background: #fff;
+		border: 1px solid #e4e6eb;
+		border-radius: 8px;
+		overflow: hidden;
+		transition: box-shadow 0.3s ease;
+
+		&:hover {
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		}
+	}
+
+	.facebook-feed__image-link {
+		display: block;
+		line-height: 0;
+	}
+
+	.facebook-feed__image {
+		width: 100%;
+		height: auto;
+		display: block;
+		aspect-ratio: 16 / 9;
+		object-fit: cover;
+	}
+
+	.facebook-feed__body {
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		flex: 1;
+	}
+
+	.facebook-feed__date {
+		font-size: 0.85rem;
+		color: #65676b;
+	}
+
+	.facebook-feed__message {
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: #1c1e21;
+
+		p {
+			margin: 0 0 0.5em;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.facebook-feed__link {
+		margin-top: auto;
+		align-self: flex-start;
+		color: #1877f2;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.9rem;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+
+	.facebook-feed__sentinel {
+		height: 1px;
+		width: 100%;
+	}
+
+	.facebook-feed__loading {
+		display: none;
+		text-align: center;
+		padding: 1rem;
+		color: #65676b;
+		font-size: 0.9rem;
+	}
+
+	&.is-loading .facebook-feed__loading {
+		display: block;
+	}
+}

@@ -27,12 +27,25 @@ define( 'UP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once UP_PLUGIN_DIR . 'app/Autoloader.php';
 
 // Initialize plugin classes.
-use CustomBlockPackage\Blocks\RegisterBlocks;
+use CustomBlockPackage\Admin\FacebookSettings;
 use CustomBlockPackage\Assets\AssetsManager;
+use CustomBlockPackage\Blocks\RegisterBlocks;
 use CustomBlockPackage\Cache\BlockCache;
+use CustomBlockPackage\Cron\FacebookFeedCron;
+use CustomBlockPackage\Rest\FacebookFeedController;
 
 new RegisterBlocks();
 new AssetsManager();
+new FacebookFeedCron();
+new FacebookFeedController();
+
+if ( is_admin() ) {
+	new FacebookSettings();
+}
+
+// Facebook feed cron activation/deactivation.
+register_activation_hook( __FILE__, array( FacebookFeedCron::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( FacebookFeedCron::class, 'deactivate' ) );
 
 // Invalidate block caches on post save.
 add_action(

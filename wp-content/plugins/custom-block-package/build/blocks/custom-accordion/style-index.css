@@ -1,10 +1,1 @@
-/*!***************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/custom-accordion/style.scss ***!
-  \***************************************************************************************************************************************************************************************************************************************************************/
-.wp-block-custom-block-package-custom-accordion {
-  padding: 50px 0 20px;
-  max-width: var(--wp--custom--content-width-desktop, 1200px);
-  margin-inline: auto;
-}
-
-/*# sourceMappingURL=style-index.css.map*/
+.wp-block-custom-block-package-custom-accordion{margin-inline:auto;max-width:var(--wp--custom--content-width-desktop,1200px);padding:50px 0 20px}

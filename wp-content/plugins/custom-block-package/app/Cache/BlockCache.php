@@ -35,6 +35,13 @@ class BlockCache {
 	public const MEETING_LIST_PREFIX = 'meeting_v4_';
 
 	/**
+	 * Cache key prefix for the Facebook feed block.
+	 *
+	 * @var string
+	 */
+	public const FACEBOOK_FEED_PREFIX = 'cbp_facebook_feed_v1_';
+
+	/**
 	 * Default cache TTL in seconds (30 minutes).
 	 *
 	 * @var int

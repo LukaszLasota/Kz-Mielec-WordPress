@@ -1,16 +1,1 @@
-/*!*************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/accordion-item/index.scss ***!
-  \*************************************************************************************************************************************************************************************************************************************************************/
-.accordion__item .accordion__content {
-  overflow: visible;
-  max-height: none;
-  display: block;
-}
-.accordion__item .accordion__title {
-  cursor: default;
-}
-.accordion__item .accordion__title::after {
-  display: none;
-}
-
-/*# sourceMappingURL=index.css.map*/
+.accordion__item .accordion__content{display:block;max-height:none;overflow:visible}.accordion__item .accordion__title{cursor:default}.accordion__item .accordion__title:after{display:none}

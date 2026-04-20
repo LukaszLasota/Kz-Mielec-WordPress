@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/facebook-feed",
+  "title": "Feed z Facebooka",
+  "category": "custom-blocks-from-scratch",
+  "icon": "facebook-alt",
+  "description": "Automatycznie pobiera ostatnie posty ze strony Facebook i wyświetla je na stronie.",
+  "textdomain": "custom-block-package",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "postsCount": {
+      "type": "number",
+      "default": 5
+    },
+    "showImages": {
+      "type": "boolean",
+      "default": true
+    },
+    "showDate": {
+      "type": "boolean",
+      "default": true
+    },
+    "columns": {
+      "type": "number",
+      "default": 1
+    },
+    "containerHeight": {
+      "type": "number",
+      "default": 700
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "viewStyle": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
+}
