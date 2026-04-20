@@ -133,7 +133,20 @@ class FacebookFeedController {
 			if ( $created ) {
 				$timestamp = strtotime( $created );
 				if ( false !== $timestamp ) {
-					$date_formatted = wp_date( $date_format, $timestamp );
+					$now  = time();
+					$diff = $now - $timestamp;
+
+					if ( $diff < MINUTE_IN_SECONDS ) {
+						$date_formatted = __( 'przed chwilą', 'custom-block-package' );
+					} elseif ( $diff < WEEK_IN_SECONDS ) {
+						$date_formatted = sprintf(
+							/* translators: %s: relative time */
+							__( '%s temu', 'custom-block-package' ),
+							human_time_diff( $timestamp, $now )
+						);
+					} else {
+						$date_formatted = wp_date( $date_format, $timestamp );
+					}
 				}
 			}
 			?>

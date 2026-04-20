@@ -70,6 +70,11 @@ class FacebookFeedService {
 	public const OPTION_BACKUP_POSTS = 'cbp_fb_backup_posts';
 
 	/**
+	 * Option key for cached page info (name, picture, followers).
+	 */
+	public const OPTION_PAGE_INFO = 'cbp_fb_page_info';
+
+	/**
 	 * Default cache TTL: 2 hours.
 	 */
 	public const DEFAULT_TTL = 2 * HOUR_IN_SECONDS;
@@ -161,6 +166,15 @@ class FacebookFeedService {
 		update_option( self::OPTION_LAST_SYNC, time() );
 		update_option( self::OPTION_LAST_ERROR, '' );
 
+		// Mock page info for testing the header UI.
+		update_option(
+			self::OPTION_PAGE_INFO,
+			array(
+				'name'    => 'Kościół Zielonoświątkowy Zbór w Mielcu',
+				'picture' => 'https://picsum.photos/seed/fbpage/200/200',
+			)
+		);
+
 		return true;
 	}
 
@@ -203,7 +217,66 @@ class FacebookFeedService {
 		update_option( self::OPTION_LAST_SYNC, time() );
 		update_option( self::OPTION_LAST_ERROR, '' );
 
+		// Also refresh page info (name, picture).
+		$this->refresh_page_info( $page_id, $token );
+
 		return true;
+	}
+
+	/**
+	 * Fetch and cache page info (name, picture URL).
+	 *
+	 * @param string $page_id Facebook page ID or username.
+	 * @param string $token   Page access token.
+	 * @return void
+	 */
+	private function refresh_page_info( string $page_id, string $token ): void {
+		$url = sprintf(
+			'https://graph.facebook.com/%s/%s',
+			self::API_VERSION,
+			rawurlencode( $page_id )
+		);
+
+		$url = add_query_arg(
+			array(
+				'fields'       => 'name,picture.type(large)',
+				'access_token' => $token,
+			),
+			$url
+		);
+
+		$response = wp_remote_get( $url, array( 'timeout' => 10 ) );
+
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return;
+		}
+
+		$data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( ! is_array( $data ) ) {
+			return;
+		}
+
+		$info = array(
+			'name'    => isset( $data['name'] ) ? (string) $data['name'] : '',
+			'picture' => isset( $data['picture']['data']['url'] ) ? (string) $data['picture']['data']['url'] : '',
+		);
+
+		update_option( self::OPTION_PAGE_INFO, $info );
+	}
+
+	/**
+	 * Get cached page info.
+	 *
+	 * @return array{name: string, picture: string}
+	 */
+	public function get_page_info(): array {
+		$info = get_option( self::OPTION_PAGE_INFO, array() );
+
+		return array(
+			'name'    => is_array( $info ) && isset( $info['name'] ) ? (string) $info['name'] : '',
+			'picture' => is_array( $info ) && isset( $info['picture'] ) ? (string) $info['picture'] : '',
+		);
 	}
 
 	/**

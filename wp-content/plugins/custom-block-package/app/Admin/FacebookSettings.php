@@ -57,6 +57,120 @@ class FacebookSettings {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
+		add_action( 'admin_notices', array( $this, 'render_error_notice' ) );
+		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
+	}
+
+	/**
+	 * Show an admin notice on all admin pages when the last API call failed.
+	 *
+	 * @return void
+	 */
+	public function render_error_notice(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$error = (string) get_option( FacebookFeedService::OPTION_LAST_ERROR, '' );
+		if ( '' === $error ) {
+			return;
+		}
+
+		$settings_url = admin_url( 'admin.php?page=' . self::MENU_SLUG );
+		?>
+		<div class="notice notice-error">
+			<p>
+				<strong><?php esc_html_e( 'Facebook Feed — błąd połączenia:', 'custom-block-package' ); ?></strong>
+				<code><?php echo esc_html( $error ); ?></code>
+			</p>
+			<p>
+				<a href="<?php echo esc_url( $settings_url ); ?>" class="button button-secondary">
+					<?php esc_html_e( 'Otwórz ustawienia Facebook Feed', 'custom-block-package' ); ?>
+				</a>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Register dashboard widget showing feed status.
+	 *
+	 * @return void
+	 */
+	public function add_dashboard_widget(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		wp_add_dashboard_widget(
+			'cbp_fb_dashboard',
+			__( 'Facebook Feed — status', 'custom-block-package' ),
+			array( $this, 'render_dashboard_widget' )
+		);
+	}
+
+	/**
+	 * Render dashboard widget content.
+	 *
+	 * @return void
+	 */
+	public function render_dashboard_widget(): void {
+		$service      = new FacebookFeedService();
+		$total        = $service->get_total_count();
+		$last_sync    = (int) get_option( FacebookFeedService::OPTION_LAST_SYNC, 0 );
+		$last_err     = (string) get_option( FacebookFeedService::OPTION_LAST_ERROR, '' );
+		$page_id      = (string) get_option( FacebookFeedService::OPTION_PAGE_ID, '' );
+		$token        = (string) get_option( FacebookFeedService::OPTION_ACCESS_TOKEN, '' );
+		$settings_url = admin_url( 'admin.php?page=' . self::MENU_SLUG );
+		?>
+		<ul style="margin: 0;">
+			<li>
+				<strong><?php esc_html_e( 'Strona FB:', 'custom-block-package' ); ?></strong>
+				<?php echo $page_id ? esc_html( $page_id ) : '<em>' . esc_html__( 'nie skonfigurowana', 'custom-block-package' ) . '</em>'; ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Token:', 'custom-block-package' ); ?></strong>
+				<?php if ( $token ) : ?>
+					<span style="color: #46b450;">●</span> <?php esc_html_e( 'ustawiony', 'custom-block-package' ); ?>
+				<?php else : ?>
+					<span style="color: #dc3232;">●</span> <?php esc_html_e( 'brak', 'custom-block-package' ); ?>
+				<?php endif; ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Posty w cache:', 'custom-block-package' ); ?></strong>
+				<?php echo esc_html( (string) $total ); ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Ostatnia synchronizacja:', 'custom-block-package' ); ?></strong>
+				<?php
+				if ( $last_sync > 0 ) {
+					echo esc_html(
+						sprintf(
+							/* translators: %s: relative time */
+							__( '%s temu', 'custom-block-package' ),
+							human_time_diff( $last_sync, time() )
+						)
+					);
+				} else {
+					esc_html_e( 'nigdy', 'custom-block-package' );
+				}
+				?>
+			</li>
+		</ul>
+
+		<?php if ( '' !== $last_err ) : ?>
+			<div style="background: #fbeaea; border-left: 4px solid #dc3232; padding: 8px 12px; margin-top: 12px;">
+				<strong style="color: #dc3232;"><?php esc_html_e( 'Błąd:', 'custom-block-package' ); ?></strong>
+				<code style="display: block; margin-top: 4px; word-break: break-all;"><?php echo esc_html( $last_err ); ?></code>
+			</div>
+		<?php endif; ?>
+
+		<p style="margin-top: 12px;">
+			<a href="<?php echo esc_url( $settings_url ); ?>" class="button button-primary">
+				<?php esc_html_e( 'Przejdź do ustawień', 'custom-block-package' ); ?>
+			</a>
+		</p>
+		<?php
 	}
 
 	/**
