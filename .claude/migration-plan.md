@@ -571,11 +571,29 @@ $attributes = [
 | **Stanowiska kościoła** | **Strony WP** | Prosty tekst, rzadko zmieniane, różne layouty |
 | **Google Maps czy Leaflet?** | **Leaflet** | Darmowy, bez API key |
 | **jQuery?** | **Nie** | Czysty JS, CSS scroll-behavior |
-| **Instagram feed?** | **Plugin Smash Balloon** | Już działa |
+| **Instagram feed?** | **Plugin Smash Balloon** | Konto IG nie powiązane z FB Page w Meta Business Suite — bez powiązania nie da się użyć Page Tokenu. Smash Balloon ma własny flow autoryzacji |
+| **Facebook feed?** | **Custom block (custom-block-package/facebook-feed)** | Zastąpił iframe Facebook Page Plugin (zacinający się). Server-side fetch, cache, infinite scroll. Dokumentacja: [FACEBOOK-FEED.md](FACEBOOK-FEED.md) |
 | **SCSS shared mixins?** | **Skopiowane do wtyczki** | Eliminacja relatywnej ścieżki |
 | **Hierarchia stron?** | **Flat (bez parent)** | Strony równorzędne, logika "grupy wiary" w stronie opcji motywu |
 
 ---
 
-**Ostatnia aktualizacja:** 2026-03-11
+**Ostatnia aktualizacja:** 2026-04-21
 **Autor:** Claude (AI Assistant)
+
+---
+
+## Aktualizacja 2026-04-21
+
+**Wdrożone od ostatniej aktualizacji:**
+
+- **scroll-arrow** block — czarne kółko ze strzałką (smooth scroll do anchor), zastąpiło 5 hardcoded użyć z starego motywu
+- **custom-svg** block — skopiowany z plugin WLC Custom Blocks (pokerology), uniwersalny blok SVG
+- **dynamic-images / banner-hero** — block style variation w motywie, banner główny strony
+- **core/heading / section-line** — block style variation, nagłówki sekcji z linią
+- **facebook-feed** block + cała infrastruktura (Service, Cron, REST, Admin) — pełna dokumentacja w [FACEBOOK-FEED.md](FACEBOOK-FEED.md)
+- **DDEV custom commands** — `theme:dev`, `theme:watch`, `theme:prod`, `plugin:build`, `build:all`, `watch:all` ([DDEV-COMMANDS.md](DDEV-COMMANDS.md))
+- **Token Facebook** — wygenerowany never-expiring Page Token (procedura w [INSTRUKCJA-TOKEN-FB.md](INSTRUKCJA-TOKEN-FB.md))
+- **PSR-4 directories**: `app/Services/`, `app/Cron/`, `app/Rest/`, `app/Admin/` w pluginie
+
+**Status Instagram:** zostaje na Smash Balloon Instagram Feed. Powód: konto IG zbor_w_mielcu nie jest powiązane z FB Page Kzmielec w Meta Business Suite. Bez powiązania nie da się użyć Page Tokenu dla IG. Wymagałoby działania pastora (przełączenie IG na Business + powiązanie z FB Page).

@@ -1,18 +1,76 @@
-# NOTATKI PROJEKTU - EMAUS RZESZÓW
+# NOTATKI PROJEKTU — KZMIELEC
 
 ## Informacje ogólne
 
-- **Nazwa projektu:** Emaus Rzeszów - WordPress
-- **Typ:** Strona internetowa kościoła/parafii
-- **Platforma:** WordPress
-- **Środowisko lokalne:** DDEV (wcześniej Local by Flywheel)
-- **Ścieżka WSL:** `/home/lukasz/projects/emaus/`
-- **Ścieżka Windows (kopia źródłowa):** `c:\Users\LLASOTA\Local Sites\emaus\app\public\`
-- **URL lokalny:** https://emaus.ddev.site
+- **Nazwa projektu:** Kościół Zielonoświątkowy Zbór w Mielcu (kzmielec.pl)
+- **Typ:** Strona internetowa kościoła
+- **Platforma:** WordPress 6.x
+- **Środowisko lokalne:** DDEV
+- **Ścieżka WSL:** `/home/lukasz/projects/kzmielec/`
+- **URL lokalny:** https://kzmielec.ddev.site
+- **URL produkcji:** https://kzmielec.pl
+- **GitHub:** https://github.com/LukaszLasota/Kz-Mielec-WordPress
+
+Migracja ze starego motywu `html5blank-stable` na nowy custom motyw `kzmielec` (oparty o motyw Church z projektu Emaus). Nowa strona = WordPress + Gutenberg blocks zamiast hardcoded HTML.
 
 ---
 
-> **Komendy DDEV:** Dokumentacja custom komend build/watch w osobnym pliku → [DDEV-COMMANDS.md](DDEV-COMMANDS.md)
+## Dokumentacja w tym katalogu
+
+| Plik | Opis |
+|------|------|
+| [DDEV-COMMANDS.md](DDEV-COMMANDS.md) | Custom komendy DDEV (build/watch theme + plugin) |
+| [FACEBOOK-FEED.md](FACEBOOK-FEED.md) | Pełna dokumentacja implementacji Facebook Feed (block + service + cache + cron + REST) |
+| [INSTRUKCJA-TOKEN-FB.md](INSTRUKCJA-TOKEN-FB.md) | Instrukcja krok-po-kroku dla admina FB Page (do wysłania pastorowi) |
+| [migration-plan.md](migration-plan.md) | Plan migracji z html5blank-stable do nowego motywu |
+| [theme-old-docs.md](theme-old-docs.md) | Dokumentacja starego motywu (referencja) |
+| [project-config.md](project-config.md) | Konfiguracja hostingu, dane logowania |
+| INSTRUCTIONS.md | Zasady współpracy z Claude |
+
+---
+
+## Komponenty zaimplementowane
+
+### Plugin custom-block-package (gutenberg blocks)
+
+Architektura PSR-4, namespace `CustomBlockPackage`. Wszystkie bloki w `src/blocks/`, wszystkie klasy w `app/`.
+
+**Bloki:**
+- `accordion-item` / `custom-accordion` — accordion (rozwijane sekcje)
+- `dynamic-images` — responsywne obrazy z overlay (banner hero)
+- `image-text` — układ obraz + tekst
+- `map-block` — mapa Leaflet z markerem
+- `meeting-list` — lista nabożeństw (z CPT)
+- `pdf-block` — embed PDF
+- `section-block` — flex/grid container
+- `custom-svg` — wstawianie inline SVG
+- `scroll-arrow` — czarne kółko ze strzałką (smooth scroll do anchor)
+- `facebook-feed` — feed z FB przez Graph API z infinite scroll
+
+**Klasy (app/):**
+- `Blocks/RegisterBlocks` — auto-discovery bloków z `build/blocks/`
+- `Assets/AssetsManager` — Leaflet, Glide.js, arrow images
+- `Cache/BlockCache` — transient cache (NEWS_SLIDER_PREFIX, MEETING_LIST_PREFIX, FACEBOOK_FEED_PREFIX)
+- `Services/FacebookFeedService` — Facebook Graph API client
+- `Cron/FacebookFeedCron` — WP Cron refresh feedu co 2h
+- `Rest/FacebookFeedController` — REST endpoint dla infinite scroll
+- `Admin/FacebookSettings` — admin page + dashboard widget + admin notice
+
+### Motyw kzmielec
+
+- **Block patterns:** `banner-hero`, `contact-section`, `hello-section-main-page`
+- **Block style variations:** `dynamic-images / banner-hero`, `core/heading / section-line`
+- **Theme components (App/):**
+  - `BasicTheme/Setup` — theme supports
+  - `BasicTheme/Menu` — nav menu
+  - `BasicTheme/RegisterAssets` — webpack assets
+  - `BasicTheme/RegisterWidgets` — widget areas
+  - `Core/PatternAssets` — auto-load CSS/JS dla patterns
+  - `Core/BlockStyles` — registracja block style variations
+  - `Core/SvgSupport` — SVG upload
+  - `Core/PerformanceOptimizer` — preload, lazy load
+  - `Core/GroupLinkSupport` — `<a>` na `wp:group`
+  - `Admin/ThemeSettingsPage` + subpages
 
 ---
 
