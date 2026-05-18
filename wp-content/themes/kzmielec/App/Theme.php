@@ -53,6 +53,7 @@ class Theme {
 		Admin\ThemeSettingsPage::class,
 		Admin\LogoSettings::class,
 		Admin\BeliefSettings::class,
+		Admin\BeliefPageMeta::class,
 		Admin\BeliefMetaBox::class,
 		Core\SvgSupport::class,
 	);

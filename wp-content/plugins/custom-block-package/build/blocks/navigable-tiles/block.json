@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "custom-block-package/navigable-tiles",
+  "title": "Kafelki nawigacyjne",
+  "category": "custom-blocks-from-scratch",
+  "icon": "grid-view",
+  "description": "Kafelki nawigacyjne z CPT meetings lub stron wiary.",
+  "textdomain": "custom-block-package",
+  "supports": {
+    "anchor": true,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "anchor": {
+      "type": "string"
+    },
+    "dataSource": {
+      "type": "string",
+      "default": "beliefs",
+      "enum": [
+        "meetings",
+        "beliefs"
+      ]
+    },
+    "columns": {
+      "type": "number",
+      "default": 4
+    },
+    "showDayHour": {
+      "type": "boolean",
+      "default": false
+    },
+    "highlightCurrent": {
+      "type": "boolean",
+      "default": true
+    },
+    "sectionTitle": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "viewStyle": "file:./style-index.css",
+  "render": "file:./render.php"
+}

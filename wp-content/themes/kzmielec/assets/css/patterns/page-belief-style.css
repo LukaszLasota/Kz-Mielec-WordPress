@@ -1,0 +1,63 @@
+/*!******************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/patterns/page-belief/style.scss ***!
+  \******************************************************************************************************************************/
+.page-belief .page-belief__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+.page-belief .page-belief__hero-image {
+  position: relative;
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1rem;
+}
+.page-belief .page-belief__hero-image .page-belief__hero-bg {
+  position: absolute;
+  inset: 5%;
+  background: #000;
+  border-radius: 50%;
+  z-index: 0;
+}
+.page-belief .page-belief__hero-image .page-belief__hero-image--one,
+.page-belief .page-belief__hero-image .page-belief__hero-image--two {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+.page-belief .page-belief__hero-image .page-belief__hero-image--two {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.page-belief .page-belief__hero-image:hover .page-belief__hero-image--two {
+  opacity: 1;
+}
+.page-belief .page-belief__title {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  margin: 0;
+}
+.page-belief .page-belief__content {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.page-belief .page-belief__separator {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-belief .page-belief__hero-image--two {
+    transition: none;
+  }
+}
+
+/*# sourceMappingURL=page-belief-style.css.map*/

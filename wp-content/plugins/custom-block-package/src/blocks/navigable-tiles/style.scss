@@ -1,0 +1,151 @@
+// Navigable Tiles — meetings + beliefs.
+//
+// Matches old production design (.vb__item pattern with hover swap).
+// WCAG 2.1 AA compliant: focus-visible, aria-current, prefers-reduced-motion.
+
+.wp-block-custom-block-package-navigable-tiles {
+	width: 100%;
+
+	.navigable-tiles__heading {
+		text-align: center;
+		margin: 0 0 2rem;
+	}
+
+	.navigable-tiles__grid {
+		display: grid;
+		grid-template-columns: repeat(var(--cbp-tiles-columns, 4), minmax(0, 1fr));
+		gap: 2rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	&.has-columns-1 .navigable-tiles__grid { --cbp-tiles-columns: 1; }
+	&.has-columns-2 .navigable-tiles__grid { --cbp-tiles-columns: 2; }
+	&.has-columns-3 .navigable-tiles__grid { --cbp-tiles-columns: 3; }
+	&.has-columns-4 .navigable-tiles__grid { --cbp-tiles-columns: 4; }
+	&.has-columns-5 .navigable-tiles__grid { --cbp-tiles-columns: 5; }
+	&.has-columns-6 .navigable-tiles__grid { --cbp-tiles-columns: 6; }
+
+	@media (max-width: 1024px) {
+		.navigable-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	}
+
+	@media (max-width: 768px) {
+		.navigable-tiles__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+
+	@media (max-width: 480px) {
+		.navigable-tiles__grid { grid-template-columns: 1fr; }
+	}
+
+	.navigable-tiles__item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		min-width: 0;
+	}
+
+	.navigable-tiles__link {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-decoration: none;
+		color: inherit;
+		min-height: 88px;
+		min-width: 88px;
+		padding: 0.5rem;
+		border-radius: 4px;
+		transition: opacity 0.2s ease;
+
+		&:hover {
+			opacity: 0.9;
+		}
+
+		&:focus-visible {
+			outline: 3px solid currentColor;
+			outline-offset: 4px;
+		}
+	}
+
+	.navigable-tiles__image {
+		position: relative;
+		display: block;
+		width: 100%;
+		max-width: 200px;
+		aspect-ratio: 1 / 1;
+		margin-bottom: 1rem;
+	}
+
+	.navigable-tiles__image--one,
+	.navigable-tiles__image--two {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.navigable-tiles__image--two {
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	// Hover and focus swap (keyboard accessibility).
+	.navigable-tiles__link:hover .navigable-tiles__image--two,
+	.navigable-tiles__link:focus-visible .navigable-tiles__image--two {
+		opacity: 1;
+	}
+
+	// Black circle BG only for beliefs (matches old production).
+	&.has-source-beliefs .navigable-tiles__image--black {
+		position: absolute;
+		inset: 5%;
+		background: #000;
+		border-radius: 50%;
+		z-index: -1;
+	}
+
+	&.has-source-beliefs .navigable-tiles__image {
+		position: relative;
+		z-index: 0;
+	}
+
+	.navigable-tiles__title {
+		font-size: 1.25rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: 400;
+	}
+
+	.navigable-tiles__meta {
+		display: block;
+		margin-top: 0.5rem;
+		font-size: 0.9rem;
+		color: #555;
+	}
+
+	// "You are here" state.
+	.navigable-tiles__item.is-current {
+		.navigable-tiles__link {
+			cursor: default;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+		.navigable-tiles__title {
+			font-weight: 600;
+		}
+	}
+
+	// Reduced motion respect.
+	@media (prefers-reduced-motion: reduce) {
+		.navigable-tiles__image--two,
+		.navigable-tiles__link {
+			transition: none;
+		}
+	}
+}

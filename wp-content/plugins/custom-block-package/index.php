@@ -62,3 +62,29 @@ add_action(
 		BlockCache::flush( BlockCache::MEETING_LIST_PREFIX );
 	}
 );
+
+// Invalidate navigable-tiles cache on relevant changes.
+add_action(
+	'save_post_meetings',
+	static function (): void {
+		BlockCache::flush( BlockCache::NAVIGABLE_TILES_PREFIX );
+	}
+);
+add_action(
+	'save_post_page',
+	static function (): void {
+		BlockCache::flush( BlockCache::NAVIGABLE_TILES_PREFIX );
+	}
+);
+add_action(
+	'update_option_kzmielec_belief_pages',
+	static function (): void {
+		BlockCache::flush( BlockCache::NAVIGABLE_TILES_PREFIX );
+	}
+);
+add_action(
+	'add_option_kzmielec_belief_pages',
+	static function (): void {
+		BlockCache::flush( BlockCache::NAVIGABLE_TILES_PREFIX );
+	}
+);
