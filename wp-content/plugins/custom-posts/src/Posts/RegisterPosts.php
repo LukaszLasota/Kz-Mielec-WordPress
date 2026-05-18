@@ -50,6 +50,6 @@ class RegisterPosts {
 			];
 		};
 
-		new CptBuilder( 'meetings', $labels, 5, false );
+		new CptBuilder( 'meetings', $labels, 5, 'zaplanuj-wizyte' );
 	}
 }

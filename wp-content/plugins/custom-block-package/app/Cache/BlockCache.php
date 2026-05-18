@@ -42,6 +42,13 @@ class BlockCache {
 	public const FACEBOOK_FEED_PREFIX = 'cbp_facebook_feed_v1_';
 
 	/**
+	 * Cache key prefix for the navigable tiles block.
+	 *
+	 * @var string
+	 */
+	public const NAVIGABLE_TILES_PREFIX = 'cbp_navigable_tiles_v1_';
+
+	/**
 	 * Default cache TTL in seconds (30 minutes).
 	 *
 	 * @var int
