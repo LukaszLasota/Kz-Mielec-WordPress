@@ -28,6 +28,7 @@ require_once UP_PLUGIN_DIR . 'app/Autoloader.php';
 
 // Initialize plugin classes.
 use CustomBlockPackage\Admin\FacebookSettings;
+use CustomBlockPackage\Admin\MeetingMeta;
 use CustomBlockPackage\Assets\AssetsManager;
 use CustomBlockPackage\Blocks\RegisterBlocks;
 use CustomBlockPackage\Cache\BlockCache;
@@ -41,6 +42,7 @@ new FacebookFeedController();
 
 if ( is_admin() ) {
 	new FacebookSettings();
+	new MeetingMeta();
 }
 
 // Facebook feed cron activation/deactivation.
