@@ -162,6 +162,12 @@ class MeetingMeta {
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_FIELD );
 		?>
+		<style>
+			#meeting_details .inside p { margin-bottom: 1.25rem; }
+			#meeting_details .inside label { display: block; margin-bottom: 0.5rem; }
+			#meeting_details .inside label strong { font-size: 0.9375rem; }
+			#meeting_details .inside .description { display: block; margin-bottom: 0.5rem; }
+		</style>
 		<p>
 			<label for="cbp_meeting_day_hour"><strong><?php esc_html_e( 'Dzień i godzina', 'custom-block-package' ); ?></strong></label>
 			<input type="text" id="cbp_meeting_day_hour" name="cbp_meeting_day_hour" value="<?php echo esc_attr( $day_hour ); ?>" class="widefat" placeholder="<?php esc_attr_e( 'np. Niedziela 10:30', 'custom-block-package' ); ?>">
@@ -173,7 +179,8 @@ class MeetingMeta {
 		</p>
 
 		<p>
-			<label><strong><?php esc_html_e( 'Hover image', 'custom-block-package' ); ?></strong></label>
+			<label><strong><?php esc_html_e( 'Obraz po najechaniu', 'custom-block-package' ); ?></strong></label>
+			<span class="description"><?php esc_html_e( 'Obraz nakładki, który znika po najechaniu myszką.', 'custom-block-package' ); ?></span>
 			<input type="hidden" id="cbp_meeting_hover_image" name="cbp_meeting_hover_image" value="<?php echo esc_attr( (string) $hover_image_id ); ?>">
 			<span class="cbp-meeting-hover-preview" style="display:block;margin:6px 0;">
 				<?php if ( $hover_image_url ) : ?>

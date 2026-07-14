@@ -131,7 +131,8 @@ class BeliefPageMeta implements ActionHookInterface {
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_FIELD );
 		?>
 		<p>
-			<label><strong><?php esc_html_e( 'Hover image', 'kzmielec' ); ?></strong></label>
+			<label><strong><?php esc_html_e( 'Obraz po najechaniu', 'kzmielec' ); ?></strong></label>
+			<span class="description" style="display:block;margin-bottom:0.5rem;"><?php esc_html_e( 'Obraz nakładki, który znika po najechaniu myszką.', 'kzmielec' ); ?></span>
 			<input type="hidden" id="kzmielec_belief_hover_image" name="kzmielec_belief_hover_image" value="<?php echo esc_attr( (string) $hover_image_id ); ?>">
 			<span class="kzmielec-belief-hover-preview" style="display:block;margin:6px 0;">
 				<?php if ( $hover_image_url ) : ?>
