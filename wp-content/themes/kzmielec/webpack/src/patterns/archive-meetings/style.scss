@@ -28,17 +28,17 @@
 	$serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
 
 	.archive-meetings__item {
-		max-width: 1100px;
+		max-width: 68.75rem; // 1100px
 		margin: 8rem auto;
 		padding: 0 1rem;
 
 		// Offset anchor jumps (down-arrow) so the sticky menu doesn't cover the
 		// target image. Mobile (<=800px) has no sticky menu, so only a small gap.
-		scroll-margin-top: 20px;
+		scroll-margin-top: 1.25rem; // 20px
 
 		@media (min-width: 801px) {
 			// Sticky menu is 122px tall on desktop; clear it plus a small gap.
-			scroll-margin-top: 140px;
+			scroll-margin-top: 8.75rem; // 140px
 		}
 	}
 
@@ -55,11 +55,11 @@
 	.archive-meetings__hero-image {
 		position: relative;
 		display: block;
-		width: 214px;
+		width: 13.375rem; // 214px
 		aspect-ratio: 1;
 		border-radius: 50%;
 		overflow: hidden;
-		margin-bottom: 15px;
+		margin-bottom: 0.9375rem; // 15px
 
 		.archive-meetings__image--one,
 		.archive-meetings__image--two {
@@ -90,7 +90,7 @@
 		font-size: 1.5rem;
 		text-align: center;
 		color: #000;
-		margin: 15px 0 0;
+		margin: 0.9375rem 0 0; // 15px
 	}
 
 	.archive-meetings__meta {
@@ -98,12 +98,12 @@
 		font-size: 1.25rem;
 		color: #000;
 		text-align: center;
-		margin: 8px 0 0;
+		margin: 0.5rem 0 0; // 8px
 	}
 
 	.archive-meetings__content {
 		font-family: $serif;
-		font-size: 1.125rem;
+		font-size: 1.25rem; // 20px — matches homepage
 		line-height: 1.4;
 		text-align: justify;
 		color: #000;
@@ -127,8 +127,8 @@
 		// 100px/140px vertical margins between meetings. Reproduce that here
 		// (the block's default 80/160 is slightly off).
 		.wp-block-custom-block-package-scroll-arrow {
-			margin-top: 100px !important;
-			margin-bottom: 140px !important;
+			margin-top: 6.25rem !important; // 100px
+			margin-bottom: 8.75rem !important; // 140px
 		}
 	}
 
