@@ -62,7 +62,7 @@ class NavigableTilesService {
 				continue;
 			}
 
-			$anchor   = (string) get_post_meta( $post_id, MeetingMeta::META_ANCHOR, true );
+			$anchor   = (string) get_post_field( 'post_name', $post_id );
 			$day_hour = (string) get_post_meta( $post_id, MeetingMeta::META_DAY_HOUR, true );
 			$hover_id = (int) get_post_meta( $post_id, MeetingMeta::META_HOVER_IMAGE, true );
 			$base_id  = (int) get_post_thumbnail_id( $post_id );

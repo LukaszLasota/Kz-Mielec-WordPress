@@ -19,6 +19,8 @@ get_header();
 
 <main id="primary" class="site-main is-layout-constrained archive-meetings pattern-archive-meetings">
 
+	<h1 class="archive-meetings__sr-heading"><?php esc_html_e( 'Zaplanuj wizytę', 'kzmielec' ); ?></h1>
+
 	<?php
 	$archive_query = new \WP_Query(
 		array(
@@ -51,7 +53,7 @@ get_header();
 			$GLOBALS['post'] = $post_obj; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			setup_postdata( $post_obj );
 
-			$anchor         = (string) get_post_meta( $meeting_id, MeetingMeta::META_ANCHOR, true );
+			$anchor         = $post_obj->post_name;
 			$day_hour       = (string) get_post_meta( $meeting_id, MeetingMeta::META_DAY_HOUR, true );
 			$hover_image_id = (int) get_post_meta( $meeting_id, MeetingMeta::META_HOVER_IMAGE, true );
 			$base_image     = get_the_post_thumbnail(
@@ -76,7 +78,8 @@ get_header();
 
 			$next_anchor = '';
 			if ( isset( $collected_meetings[ $index + 1 ] ) ) {
-				$next_anchor = (string) get_post_meta( $collected_meetings[ $index + 1 ], MeetingMeta::META_ANCHOR, true );
+				$next_post   = get_post( $collected_meetings[ $index + 1 ] );
+				$next_anchor = $next_post instanceof \WP_Post ? $next_post->post_name : '';
 			}
 			?>
 
@@ -128,7 +131,7 @@ get_header();
 	<div class="archive-meetings__back-top">
 		<?php
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
-		echo do_blocks( '<!-- wp:custom-block-package/scroll-arrow {"targetId":"zero","direction":"up","ariaLabel":"Wróć na górę"} /-->' );
+		echo do_blocks( '<!-- wp:custom-block-package/scroll-arrow {"targetId":"zero","direction":"up"} /-->' );
 		?>
 	</div>
 

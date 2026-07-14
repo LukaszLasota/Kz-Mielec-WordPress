@@ -36,11 +36,6 @@ class MeetingMeta {
 	public const META_PLACE = '_meeting_place';
 
 	/**
-	 * Meta key: anchor ID for cross-page links.
-	 */
-	public const META_ANCHOR = '_meeting_anchor';
-
-	/**
 	 * Nonce action name.
 	 */
 	private const NONCE_ACTION = 'cbp_meeting_meta_save';
@@ -55,7 +50,9 @@ class MeetingMeta {
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'register_meta_fields' ) );
-		add_action( 'add_meta_boxes_meetings', array( $this, 'add_meta_box' ) );
+		// Priority 1 on the generic hook registers this box before Yoast SEO
+		// (which uses add_meta_boxes), so it renders above the Yoast box.
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 1 );
 		add_action( 'save_post_meetings', array( $this, 'save_meta' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
@@ -108,31 +105,25 @@ class MeetingMeta {
 				)
 			)
 		);
-		register_post_meta(
-			'meetings',
-			self::META_ANCHOR,
-			array_merge(
-				$common,
-				array(
-					'type'    => 'string',
-					'default' => '',
-				)
-			)
-		);
 	}
 
 	/**
 	 * Register meta box.
 	 *
+	 * @param string $post_type Current post type.
 	 * @return void
 	 */
-	public function add_meta_box(): void {
+	public function add_meta_box( string $post_type ): void {
+		if ( 'meetings' !== $post_type ) {
+			return;
+		}
+
 		add_meta_box(
 			'meeting_details',
 			__( 'Szczegóły spotkania', 'custom-block-package' ),
 			array( $this, 'render_meta_box' ),
 			'meetings',
-			'side',
+			'normal',
 			'high'
 		);
 	}
@@ -166,7 +157,6 @@ class MeetingMeta {
 		$hover_image_id = (int) get_post_meta( $post->ID, self::META_HOVER_IMAGE, true );
 		$day_hour       = (string) get_post_meta( $post->ID, self::META_DAY_HOUR, true );
 		$place          = (string) get_post_meta( $post->ID, self::META_PLACE, true );
-		$anchor         = (string) get_post_meta( $post->ID, self::META_ANCHOR, true );
 
 		$hover_image_url = $hover_image_id ? (string) wp_get_attachment_image_url( $hover_image_id, 'thumbnail' ) : '';
 
@@ -180,12 +170,6 @@ class MeetingMeta {
 		<p>
 			<label for="cbp_meeting_place"><strong><?php esc_html_e( 'Miejsce', 'custom-block-package' ); ?></strong></label>
 			<input type="text" id="cbp_meeting_place" name="cbp_meeting_place" value="<?php echo esc_attr( $place ); ?>" class="widefat" placeholder="<?php esc_attr_e( 'np. ul. Przemysłowa 2', 'custom-block-package' ); ?>">
-		</p>
-
-		<p>
-			<label for="cbp_meeting_anchor"><strong><?php esc_html_e( 'Anchor ID', 'custom-block-package' ); ?></strong></label>
-			<input type="text" id="cbp_meeting_anchor" name="cbp_meeting_anchor" value="<?php echo esc_attr( $anchor ); ?>" class="widefat" placeholder="10">
-			<span class="description"><?php esc_html_e( 'Liczba lub identyfikator do linku /zaplanuj-wizyte/#anchor', 'custom-block-package' ); ?></span>
 		</p>
 
 		<p>
@@ -259,12 +243,10 @@ class MeetingMeta {
 
 		$day_hour = isset( $_POST['cbp_meeting_day_hour'] ) ? sanitize_text_field( wp_unslash( $_POST['cbp_meeting_day_hour'] ) ) : '';
 		$place    = isset( $_POST['cbp_meeting_place'] ) ? sanitize_text_field( wp_unslash( $_POST['cbp_meeting_place'] ) ) : '';
-		$anchor   = isset( $_POST['cbp_meeting_anchor'] ) ? sanitize_html_class( wp_unslash( $_POST['cbp_meeting_anchor'] ) ) : '';
 		$hover    = isset( $_POST['cbp_meeting_hover_image'] ) ? absint( $_POST['cbp_meeting_hover_image'] ) : 0;
 
 		update_post_meta( $post_id, self::META_DAY_HOUR, $day_hour );
 		update_post_meta( $post_id, self::META_PLACE, $place );
-		update_post_meta( $post_id, self::META_ANCHOR, $anchor );
 		update_post_meta( $post_id, self::META_HOVER_IMAGE, $hover );
 	}
 }
