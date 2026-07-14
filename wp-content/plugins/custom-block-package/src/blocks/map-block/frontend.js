@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { getTileProvider } from './tile-providers';
 
 function initMap(mapElement) {
     const latitude = parseFloat(mapElement.dataset.lat);
@@ -7,14 +8,20 @@ function initMap(mapElement) {
     const popupText = mapElement.dataset.popup || 'Nasza lokalizacja';
     const iconUrl = mapElement.dataset.iconUrl;
     const shadowUrl = mapElement.dataset.shadowUrl;
+    const tileStyle = mapElement.dataset.tileStyle;
 
     if (isNaN(latitude) || isNaN(longitude)) return;
 
     const map = L.map(mapElement).setView([latitude, longitude], zoom);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    // Tile style chosen in the editor; grayscale/contrast applied via CSS vars.
+    const provider = getTileProvider(tileStyle);
+    L.tileLayer(provider.url, provider.options).addTo(map);
+
+    // Optional labels/roads overlay (e.g. satellite hybrid with street names).
+    if (provider.overlay) {
+        L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(map);
+    }
 
     // Configure marker icon from PHP-generated paths
     const markerOptions = {};

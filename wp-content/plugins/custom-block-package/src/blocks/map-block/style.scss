@@ -1,3 +1,19 @@
+// Spacing above the map, matching the old production rhythm
+// (contact info had a ~50px gap before the map at the section bottom).
+.map-block-wrapper {
+    margin-block: 50px 80px;
+
+    @media (max-width: 600px) {
+        margin-block: 30px 50px;
+    }
+}
+
 .map-container {
     width: 100%;
+
+    // Desaturation/contrast driven by editor controls (CSS vars set inline on
+    // the container). Only the tile pane is filtered, so the marker keeps color.
+    .leaflet-tile-pane {
+        filter: grayscale(var(--map-grayscale, 40%)) contrast(var(--map-contrast, 105%));
+    }
 }

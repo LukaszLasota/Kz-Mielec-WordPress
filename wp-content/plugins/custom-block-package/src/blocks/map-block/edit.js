@@ -1,17 +1,20 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl, RangeControl } from '@wordpress/components';
+import { PanelBody, TextControl, RangeControl, SelectControl } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import L from 'leaflet';
 import markerIconUrl from './images/marker-icon.png';
 import markerShadowUrl from './images/marker-shadow.png';
+import { TILE_PROVIDERS, getTileProvider } from './tile-providers';
 import './index.scss';
 
 const Edit = ({ attributes, setAttributes }) => {
-    const { latitude, longitude, zoom, containerHeight, popupText } = attributes;
+    const { latitude, longitude, zoom, containerHeight, popupText, tileStyle, grayscale, contrast } = attributes;
     const mapContainer = useRef(null);
     const mapInstance = useRef(null);
     const marker = useRef(null);
+    const tileLayer = useRef(null);
+    const overlayLayer = useRef(null);
 
     const blockProps = useBlockProps();
 
@@ -34,9 +37,11 @@ const Edit = ({ attributes, setAttributes }) => {
         if (!mapInstance.current) {
             mapInstance.current = L.map(mapContainer.current).setView([latitude, longitude], zoom);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            }).addTo(mapInstance.current);
+            const provider = getTileProvider(tileStyle);
+            tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
+            if (provider.overlay) {
+                overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
+            }
 
             marker.current = L.marker([latitude, longitude], { draggable: true }).addTo(mapInstance.current);
             marker.current.bindPopup(popupText);
@@ -50,8 +55,22 @@ const Edit = ({ attributes, setAttributes }) => {
             mapInstance.current.setZoom(zoom);
             marker.current.setLatLng([latitude, longitude]);
             marker.current.setPopupContent(popupText);
+
+            // Swap tile + overlay layers when the style changes.
+            const provider = getTileProvider(tileStyle);
+            if (tileLayer.current) {
+                mapInstance.current.removeLayer(tileLayer.current);
+            }
+            if (overlayLayer.current) {
+                mapInstance.current.removeLayer(overlayLayer.current);
+                overlayLayer.current = null;
+            }
+            tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
+            if (provider.overlay) {
+                overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
+            }
         }
-    }, [latitude, longitude, zoom, popupText]);
+    }, [latitude, longitude, zoom, popupText, tileStyle]);
 
     // Cleanup map instance on unmount
     useEffect(() => {
@@ -97,6 +116,31 @@ const Edit = ({ attributes, setAttributes }) => {
                         onChange={(value) => setAttributes({ popupText: value })}
                     />
                 </PanelBody>
+                <PanelBody title={__('Wygląd mapy', 'custom-block-package')} initialOpen={false}>
+                    <SelectControl
+                        label={__('Styl mapy', 'custom-block-package')}
+                        value={tileStyle}
+                        options={Object.keys(TILE_PROVIDERS).map((key) => ({
+                            label: TILE_PROVIDERS[key].label,
+                            value: key,
+                        }))}
+                        onChange={(value) => setAttributes({ tileStyle: value })}
+                    />
+                    <RangeControl
+                        label={__('Odbarwienie (grayscale %)', 'custom-block-package')}
+                        value={grayscale}
+                        onChange={(value) => setAttributes({ grayscale: value })}
+                        min={0}
+                        max={100}
+                    />
+                    <RangeControl
+                        label={__('Kontrast (%)', 'custom-block-package')}
+                        value={contrast}
+                        onChange={(value) => setAttributes({ contrast: value })}
+                        min={50}
+                        max={200}
+                    />
+                </PanelBody>
             </InspectorControls>
             <div
                 {...blockProps}
@@ -113,6 +157,8 @@ const Edit = ({ attributes, setAttributes }) => {
                         height: '100%',
                         width: '100%',
                         position: 'relative',
+                        '--map-grayscale': `${grayscale}%`,
+                        '--map-contrast': `${contrast}%`,
                     }}
                 ></div>
             </div>

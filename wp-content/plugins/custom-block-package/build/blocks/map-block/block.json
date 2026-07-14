@@ -38,11 +38,35 @@
     },
     "containerHeight": {
       "type": "number",
-      "default": 300
+      "default": 400
     },
     "popupText": {
       "type": "string",
       "default": "Nasza lokalizacja"
+    },
+    "tileStyle": {
+      "type": "string",
+      "default": "voyager",
+      "enum": [
+        "standard",
+        "voyager",
+        "positron",
+        "dark",
+        "satellite",
+        "satelliteLabels",
+        "terrain",
+        "esriTopo",
+        "esriGray",
+        "humanitarian"
+      ]
+    },
+    "grayscale": {
+      "type": "number",
+      "default": 40
+    },
+    "contrast": {
+      "type": "number",
+      "default": 105
     }
   },
   "editorScript": "file:./index.js",
