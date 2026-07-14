@@ -25,5 +25,3 @@ parameters:
             message: '#Function get_field not found#'
             paths:
                 - src/blocks/meeting-list/render.php
-        # rest_sanitize_boolean template type
-        - identifier: argument.templateType

@@ -11,7 +11,8 @@
  * @var string $content    Inner blocks HTML.
  */
 
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; }
 
 $accordion_title = isset( $attributes['title'] ) ? $attributes['title'] : '';
 $content_id      = wp_unique_id( 'accordion-content-' );

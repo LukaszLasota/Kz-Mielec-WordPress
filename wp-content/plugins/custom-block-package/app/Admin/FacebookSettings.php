@@ -306,7 +306,7 @@ class FacebookSettings {
 									human_time_diff( $last_sync, time() )
 								)
 							);
-							echo ' <code>' . esc_html( wp_date( 'Y-m-d H:i', $last_sync ) ) . '</code>';
+							echo ' <code>' . esc_html( (string) wp_date( 'Y-m-d H:i', $last_sync ) ) . '</code>';
 						} else {
 							esc_html_e( 'Never', 'custom-block-package' );
 						}

@@ -59,6 +59,9 @@
 		</properties>
 	</rule>
 
+	<!-- Only ever scan PHP — never touch JS/CSS even if a dir is passed as arg. -->
+	<arg name="extensions" value="php"/>
+
 	<!-- Tabs for indentation -->
 	<arg name="tab-width" value="4"/>
 

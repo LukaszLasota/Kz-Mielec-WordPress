@@ -94,21 +94,23 @@ if ( ! empty( $attributes['anchor'] ) ) {
 			/>
 		<?php endif; ?>
 
-		<img
-			src="<?php echo esc_url( $fallback_data[0] ); ?>"
-			alt="<?php echo esc_attr( $alt_text ); ?>"
-			width="<?php echo intval( $fallback_data[1] ); ?>"
-			height="<?php echo intval( $fallback_data[2] ); ?>"
-			loading="eager"
-			fetchpriority="high"
-			decoding="async"
-			<?php if ( $fallback_srcset ) : ?>
-				srcset="<?php echo esc_attr( $fallback_srcset ); ?>"
-			<?php endif; ?>
-			<?php if ( $fallback_sizes ) : ?>
-				sizes="<?php echo esc_attr( $fallback_sizes ); ?>"
-			<?php endif; ?>
-		/>
+		<?php if ( is_array( $fallback_data ) ) : ?>
+			<img
+				src="<?php echo esc_url( (string) $fallback_data[0] ); ?>"
+				alt="<?php echo esc_attr( $alt_text ); ?>"
+				width="<?php echo intval( $fallback_data[1] ); ?>"
+				height="<?php echo intval( $fallback_data[2] ); ?>"
+				loading="eager"
+				fetchpriority="high"
+				decoding="async"
+				<?php if ( $fallback_srcset ) : ?>
+					srcset="<?php echo esc_attr( $fallback_srcset ); ?>"
+				<?php endif; ?>
+				<?php if ( $fallback_sizes ) : ?>
+					sizes="<?php echo esc_attr( $fallback_sizes ); ?>"
+				<?php endif; ?>
+			/>
+		<?php endif; ?>
 	</picture>
 
 	<?php if ( $has_overlay ) : ?>
