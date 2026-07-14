@@ -19,10 +19,6 @@ get_header();
 
 <main id="primary" class="site-main is-layout-constrained archive-meetings pattern-archive-meetings">
 
-	<h2 class="wp-block-heading is-style-section-line">
-		<?php esc_html_e( 'Zaplanuj wizytę', 'kzmielec' ); ?>
-	</h2>
-
 	<?php
 	$archive_query = new \WP_Query(
 		array(

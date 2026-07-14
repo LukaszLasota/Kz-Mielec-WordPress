@@ -3,7 +3,7 @@
   \***********************************************************************************************************************************/
 .archive-meetings .archive-meetings__item {
   max-width: 800px;
-  margin: 3rem auto;
+  margin: 6rem auto;
   padding: 0 1rem;
   scroll-margin-top: 80px;
 }
@@ -11,16 +11,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .archive-meetings .archive-meetings__hero-image {
   position: relative;
   display: block;
-  width: 200px;
+  width: 250px;
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: 15px;
 }
 .archive-meetings .archive-meetings__hero-image .archive-meetings__image--one,
 .archive-meetings .archive-meetings__hero-image .archive-meetings__image--two {
@@ -42,11 +42,10 @@
   opacity: 0;
 }
 .archive-meetings .archive-meetings__title {
-  font-size: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 1.3125rem;
   text-align: center;
-  margin: 0;
+  color: #000;
+  margin: 15px 0 0;
 }
 .archive-meetings .archive-meetings__meta {
   text-align: center;
@@ -55,11 +54,18 @@
   margin-top: 0.5rem;
 }
 .archive-meetings .archive-meetings__content {
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.3125rem;
+  line-height: 1.4;
+  text-align: justify;
+  color: #000;
 }
 .archive-meetings .archive-meetings__content p {
   margin-bottom: 1rem;
+}
+@media (max-width: 480px) {
+  .archive-meetings .archive-meetings__content {
+    text-align: left;
+  }
 }
 .archive-meetings .archive-meetings__separator {
   display: flex;
