@@ -1,23 +1,24 @@
-// Apply frontend typography styles to Gutenberg editor content area.
+// Editor-only typography (loaded via add_editor_style, does not affect the
+// frontend). Sizes are bumped up from the old 0.75rem/12px for comfortable editing.
 .editor-styles-wrapper {
-	font-size: 0.75rem;
+	font-size: 1.25rem;
 
 	h1 {
-		font-size: 1.25rem;
+		font-size: 2rem;
 		letter-spacing: 2px;
 		text-transform: uppercase;
 	}
 
 	h3 {
-		font-size: 1rem;
+		font-size: 1.5rem;
 	}
 
 	p, a {
-		font-size: 0.75rem;
+		font-size: 1.25rem;
 		line-height: 1.5;
 	}
 
 	ul, li {
-		font-size: 0.75rem;
+		font-size: 1.25rem;
 	}
 }

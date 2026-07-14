@@ -445,7 +445,7 @@ html {
 }
 
 body {
-  font: 300 1rem/1.4 "Cinzel", serif;
+  font: 300 1rem/1.4 Georgia, "Times New Roman", "Liberation Serif", serif;
   font-weight: normal;
   font-style: normal;
   color: #000;
@@ -1030,6 +1030,11 @@ figure {
 
 .home .site-main.is-layout-constrained > *:not(:first-child) {
   padding-inline: 1rem;
+}
+
+.home .site-main p.has-text-align-center {
+  font-size: 1.25rem;
+  line-height: 1.4;
 }
 
 .belief {

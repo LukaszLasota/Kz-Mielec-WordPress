@@ -116,7 +116,7 @@
 	},
 	"styles": {
 		"typography": {
-			"fontFamily": "var(--wp--preset--font-family--cinzel)"
+			"fontFamily": "Georgia, 'Times New Roman', 'Liberation Serif', serif"
 		},
 		"blocks": {
 			"custom-block-package/accordion-item": {
