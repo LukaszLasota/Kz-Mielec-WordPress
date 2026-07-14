@@ -31,6 +31,9 @@
   --wp--custom--content-width-tablet: 85%;
   --wp--custom--content-width-desktop: 1200px;
   --wp--custom--content-width-large-desktop: 1200px;
+  --fs-heading: 2rem;
+  --fs-title: 1.5rem;
+  --fs-body: 1.25rem;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -1033,7 +1036,7 @@ figure {
 }
 
 .home .site-main p.has-text-align-center {
-  font-size: 1.25rem;
+  font-size: var(--fs-body, 1.25rem);
   line-height: 1.4;
 }
 

@@ -18,7 +18,7 @@
 	--cbp-overlay-bg: #000;
 	--cbp-overlay-opacity: 0.6;
 	--cbp-icon-width: 80%;         // % of tile → scales automatically on tablet/mobile
-	--cbp-title-size: 1.3125rem;   // 21px at 16px root
+	--cbp-title-size: var(--fs-title, 1.5rem);   // 24px — shared type scale
 	--cbp-title-leading: 1.4;
 	--cbp-transition: 0.5s linear;
 
@@ -140,7 +140,12 @@
 		font-size: var(--cbp-title-size);
 		line-height: var(--cbp-title-leading);
 		font-weight: 400;
-		margin: 5px;
+		margin: 0.3125rem; // 5px
+	}
+
+	// Extra breathing room between the circular image and the title.
+	.navigable-tiles__title {
+		margin-block-start: 1rem;
 	}
 
 	.navigable-tiles__title .navigable-tiles__link {

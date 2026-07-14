@@ -9,7 +9,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	font-size: 2rem;            // 32px — matches production (3.2rem @ 62.5% root)
+	font-size: var(--fs-heading, 2rem); // 32px — matches production (3.2rem @ 62.5% root)
 	font-weight: normal;
 	letter-spacing: 2px;        // production desktop value
 	text-transform: uppercase;

@@ -16,6 +16,6 @@
 // Contact info under "Znajdź nas". Local paragraphs default to 16px; production
 // renders these at 19px (.find__paragraph). Match it.
 .home .site-main p.has-text-align-center {
-	font-size: 1.25rem; // 20px
+	font-size: var(--fs-body, 1.25rem); // 20px
 	line-height: 1.4;
 }

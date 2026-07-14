@@ -87,7 +87,7 @@
 
 	.archive-meetings__title {
 		font-family: $serif;
-		font-size: 1.5rem;
+		font-size: var(--fs-title, 1.5rem); // 24px
 		text-align: center;
 		color: #000;
 		margin: 0.9375rem 0 0; // 15px
@@ -95,7 +95,7 @@
 
 	.archive-meetings__meta {
 		font-family: $serif;
-		font-size: 1.25rem;
+		font-size: var(--fs-body, 1.25rem); // 20px
 		color: #000;
 		text-align: center;
 		margin: 0.5rem 0 0; // 8px
@@ -103,7 +103,7 @@
 
 	.archive-meetings__content {
 		font-family: $serif;
-		font-size: 1.25rem; // 20px — matches homepage
+		font-size: var(--fs-body, 1.25rem); // 20px
 		line-height: 1.4;
 		text-align: justify;
 		color: #000;
