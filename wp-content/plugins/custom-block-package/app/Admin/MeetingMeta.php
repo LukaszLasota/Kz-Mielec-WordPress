@@ -179,7 +179,7 @@ class MeetingMeta {
 
 		<p>
 			<label for="cbp_meeting_place"><strong><?php esc_html_e( 'Miejsce', 'custom-block-package' ); ?></strong></label>
-			<input type="text" id="cbp_meeting_place" name="cbp_meeting_place" value="<?php echo esc_attr( $place ); ?>" class="widefat" placeholder="ul. Dąbrowskiego 1a">
+			<input type="text" id="cbp_meeting_place" name="cbp_meeting_place" value="<?php echo esc_attr( $place ); ?>" class="widefat" placeholder="<?php esc_attr_e( 'np. ul. Przemysłowa 2', 'custom-block-package' ); ?>">
 		</p>
 
 		<p>

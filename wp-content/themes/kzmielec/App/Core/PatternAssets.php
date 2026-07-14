@@ -46,6 +46,12 @@ class PatternAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function enqueue_pattern_assets(): void {
+		// Template-driven patterns: some templates print a pattern-* class in PHP
+		// (not in post content), so detect them by conditional tag here.
+		if ( function_exists( 'is_post_type_archive' ) && is_post_type_archive( 'meetings' ) ) {
+			$this->enqueue_pattern( 'archive-meetings' );
+		}
+
 		global $post;
 
 		if ( ! $post || empty( $post->post_content ) ) {

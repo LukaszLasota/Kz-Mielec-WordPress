@@ -49,6 +49,10 @@ get_header();
 				continue;
 			}
 
+			// Set the global post so the_title()/the_content() resolve to THIS
+			// meeting. setup_postdata() alone does not update $GLOBALS['post'],
+			// which previously left every item showing the last meeting's title.
+			$GLOBALS['post'] = $post_obj; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			setup_postdata( $post_obj );
 
 			$anchor         = (string) get_post_meta( $meeting_id, MeetingMeta::META_ANCHOR, true );
