@@ -103,10 +103,10 @@
 			"width": true
 		},
 		"custom": {
-			"content-width-mobile": "90%",
-			"content-width-tablet": "80%",
-			"content-width-desktop": "70%",
-			"content-width-large-desktop": "60%"
+			"content-width-mobile": "100%",
+			"content-width-tablet": "85%",
+			"content-width-desktop": "1200px",
+			"content-width-large-desktop": "1200px"
 		},
 		"useRootPaddingAwareAlignments": true,
 		"layout": {

@@ -6,9 +6,11 @@
  */
 
 :root {
-	// Content widths (matching old kzmielec theme)
+	// Content widths. Desktop uses a fixed max-width (matches theme.json
+	// contentSize: 1200px) so content stays readable on large screens instead
+	// of growing with the viewport. Used as max-width on content containers.
 	--wp--custom--content-width-mobile: 100%;
 	--wp--custom--content-width-tablet: 85%;
-	--wp--custom--content-width-desktop: 70%;
-	--wp--custom--content-width-large-desktop: 60%;
+	--wp--custom--content-width-desktop: 1200px;
+	--wp--custom--content-width-large-desktop: 1200px;
 }

@@ -29,8 +29,8 @@
 :root {
   --wp--custom--content-width-mobile: 100%;
   --wp--custom--content-width-tablet: 85%;
-  --wp--custom--content-width-desktop: 70%;
-  --wp--custom--content-width-large-desktop: 60%;
+  --wp--custom--content-width-desktop: 1200px;
+  --wp--custom--content-width-large-desktop: 1200px;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -366,7 +366,7 @@ template {
   }
 }
 .single-post__content-container h1, .single-post__content-container h2, .single-post__content-container h3, .page__content-container h1, .page__content-container h2, .page__content-container h3 {
-  padding: 20px 0 20px;
+  padding-block: 20px;
   text-transform: uppercase;
   -webkit-background: linear-gradient(to right, #000 0%, #333 100%);
   -moz-background: linear-gradient(to right, #000 0%, #333 100%);
@@ -382,12 +382,12 @@ template {
 @media (max-width: 800px) {
   .single-post__content-container h1, .single-post__content-container h2, .single-post__content-container h3, .page__content-container h1, .page__content-container h2, .page__content-container h3 {
     font-size: 1rem;
-    padding: 50px 0;
+    padding-block: 50px;
   }
 }
 .single-post__content-container h3, .page__content-container h3 {
   font-size: 1rem;
-  padding: 25px 0;
+  padding-block: 25px;
   margin: 5px 0 15px;
 }
 .single-post__content-container p, .single-post__content-container a, .single-post__content-container p a, .page__content-container p, .page__content-container a, .page__content-container p a {
@@ -963,13 +963,14 @@ figure {
   margin-inline: auto;
   padding-inline: 0.7812rem;
 }
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .page-hero > section > *:not(:first-child) {
-    padding-inline: 0.75rem;
+    max-width: 100%;
+    padding-inline: 1rem;
   }
 }
 .page-hero > section h1, .page-hero > section h2, .page-hero > section h3 {
-  padding: 20px 0 20px;
+  padding-block: 20px;
   text-transform: uppercase;
   -webkit-background: linear-gradient(to right, #000 0%, #333 100%);
   -moz-background: linear-gradient(to right, #000 0%, #333 100%);
@@ -985,12 +986,12 @@ figure {
 @media (max-width: 800px) {
   .page-hero > section h1, .page-hero > section h2, .page-hero > section h3 {
     font-size: 1rem;
-    padding: 50px 0;
+    padding-block: 50px;
   }
 }
 .page-hero > section h3 {
   font-size: 1rem;
-  padding: 25px 0;
+  padding-block: 25px;
   margin: 5px 0 15px;
 }
 .page-hero > section p, .page-hero > section a, .page-hero > section p a {
@@ -1025,6 +1026,10 @@ figure {
   padding: 5px;
   margin-left: 20px;
   list-style-type: none;
+}
+
+.home .site-main.is-layout-constrained > *:not(:first-child) {
+  padding-inline: 1rem;
 }
 
 .belief {
