@@ -49,11 +49,30 @@ class BlockCache {
 	public const NAVIGABLE_TILES_PREFIX = 'cbp_navigable_tiles_v1_';
 
 	/**
-	 * Default cache TTL in seconds (30 minutes).
+	 * Backwards-compatible constant. Prefer BlockCache::ttl() for new code.
 	 *
 	 * @var int
 	 */
-	public const TTL = 30 * MINUTE_IN_SECONDS;
+	public const TTL = 30 * 60;
+
+	/**
+	 * Cache TTL — 0 in non-production environments to effectively disable cache.
+	 *
+	 * @return int
+	 */
+	public static function ttl(): int {
+		return self::enabled() ? 30 * MINUTE_IN_SECONDS : 0;
+	}
+
+	/**
+	 * Whether transient cache is enabled. Off on local/dev/staging, on in production.
+	 *
+	 * @return bool
+	 */
+	public static function enabled(): bool {
+		$env = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
+		return 'production' === $env;
+	}
 
 	/**
 	 * Build a cache key from a prefix and block attributes.

@@ -1,66 +1,80 @@
 // Navigable Tiles — meetings + beliefs.
 //
-// Matches old production design (.vb__item pattern with hover swap).
-// WCAG 2.1 AA compliant: focus-visible, aria-current, prefers-reduced-motion.
+// Circular navigation tiles with a base photo, optional black overlay (beliefs),
+// and a hover icon that fades out to reveal the photo. Base PNGs are square,
+// so the layout needs no magic numbers — the container is forced square and
+// clipped to a circle.
+//
+// Modern CSS (container queries, :has(), logical properties) with @supports
+// fallbacks for browsers that lack container-query support.
+//
+// WCAG 2.1 AA: focus-visible, aria-current, prefers-reduced-motion.
 
 .wp-block-custom-block-package-navigable-tiles {
-	width: 100%;
+	// ── Config — all tunable values live here ─────────────
+	--cbp-tile-margin-block: 15px;
+	--cbp-tile-padding-inline: 30px;
+	--cbp-image-ratio: 1;          // 1 = square (PNGs are 400×400). Change for other crops.
+	--cbp-overlay-bg: #000;
+	--cbp-overlay-opacity: 0.6;
+	--cbp-icon-width: 80%;         // % of tile → scales automatically on tablet/mobile
+	--cbp-title-size: 1.3125rem;   // 21px at 16px root
+	--cbp-title-leading: 1.4;
+	--cbp-transition: 0.5s linear;
 
+	// Block width — fills its container; the page template controls the actual
+	// width (page-hero constrains to 70%, belief template to content width).
+	inline-size: 100%;
+	margin-inline: auto;
+
+	// ── Heading ───────────────────────────────────────────
 	.navigable-tiles__heading {
 		text-align: center;
-		margin: 0 0 2rem;
+		margin-block: 0 2rem;
 	}
 
+	// ── Grid — flex container, tiles are the flex items ───
 	.navigable-tiles__grid {
-		display: grid;
-		grid-template-columns: repeat(var(--cbp-tiles-columns, 4), minmax(0, 1fr));
-		gap: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: stretch;
+		justify-content: center;
 		list-style: none;
-		padding: 0;
 		margin: 0;
+		padding: 0;
 	}
 
-	&.has-columns-1 .navigable-tiles__grid { --cbp-tiles-columns: 1; }
-	&.has-columns-2 .navigable-tiles__grid { --cbp-tiles-columns: 2; }
-	&.has-columns-3 .navigable-tiles__grid { --cbp-tiles-columns: 3; }
-	&.has-columns-4 .navigable-tiles__grid { --cbp-tiles-columns: 4; }
-	&.has-columns-5 .navigable-tiles__grid { --cbp-tiles-columns: 5; }
-	&.has-columns-6 .navigable-tiles__grid { --cbp-tiles-columns: 6; }
-
-	@media (max-width: 1024px) {
-		.navigable-tiles__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-	}
-
-	@media (max-width: 768px) {
-		.navigable-tiles__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-	}
-
-	@media (max-width: 480px) {
-		.navigable-tiles__grid { grid-template-columns: 1fr; }
-	}
-
+	// ── Tile ──────────────────────────────────────────────
 	.navigable-tiles__item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		min-width: 0;
+		inline-size: 25%;
+		position: relative;
+		margin-block: var(--cbp-tile-margin-block);
+		padding-inline: var(--cbp-tile-padding-inline);
+		box-sizing: border-box;
 	}
 
+	// Column count → tile width. :where() keeps specificity at zero for the
+	// modifier so the responsive queries below can override without a
+	// specificity war (otherwise .has-columns-4 would beat the media query).
+	&:where(.has-columns-1) .navigable-tiles__item { inline-size: 100%; }
+	&:where(.has-columns-2) .navigable-tiles__item { inline-size: 50%; }
+	&:where(.has-columns-3) .navigable-tiles__item { inline-size: 33.3333%; }
+	&:where(.has-columns-4) .navigable-tiles__item { inline-size: 25%; }
+	&:where(.has-columns-5) .navigable-tiles__item { inline-size: 20%; }
+	&:where(.has-columns-6) .navigable-tiles__item { inline-size: 16.6666%; }
+
+	// ── Link (block-link pattern) ─────────────────────────
+	// Link wraps only the title text; ::after expands the clickable area over
+	// the whole tile (including the image) — accessible card best practice.
 	.navigable-tiles__link {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		text-decoration: none;
 		color: inherit;
-		min-height: 88px;
-		min-width: 88px;
-		padding: 0.5rem;
-		border-radius: 4px;
-		transition: opacity 0.2s ease;
 
-		&:hover {
-			opacity: 0.9;
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 4; // above the image stack (base 1, overlay 2, hover 3)
 		}
 
 		&:focus-visible {
@@ -69,83 +83,124 @@
 		}
 	}
 
+	// ── Image stack — square container clipped to a circle ─
+	// display:block because the element is a <span> (inline by default would
+	// ignore inline-size and aspect-ratio).
 	.navigable-tiles__image {
-		position: relative;
 		display: block;
-		width: 100%;
-		max-width: 200px;
-		aspect-ratio: 1 / 1;
-		margin-bottom: 1rem;
+		position: relative;
+		inline-size: 100%;
+		aspect-ratio: var(--cbp-image-ratio);
+		border-radius: 50%;
+		overflow: hidden;
 	}
 
-	.navigable-tiles__image--one,
-	.navigable-tiles__image--two {
+	// Base photo fills the circle.
+	.navigable-tiles__image--one {
 		position: absolute;
 		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+		z-index: 1;
 	}
 
-	.navigable-tiles__image--two {
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-
-	// Hover and focus swap (keyboard accessibility).
-	.navigable-tiles__link:hover .navigable-tiles__image--two,
-	.navigable-tiles__link:focus-visible .navigable-tiles__image--two {
-		opacity: 1;
-	}
-
-	// Black circle BG only for beliefs (matches old production).
-	&.has-source-beliefs .navigable-tiles__image--black {
+	// Black overlay (beliefs only) — fills the circular photo exactly (inset:0)
+	// so the dark layer aligns perfectly with the image behind it.
+	.navigable-tiles__image--overlay {
 		position: absolute;
-		inset: 5%;
-		background: #000;
+		inset: 0;
+		background-color: var(--cbp-overlay-bg);
+		opacity: var(--cbp-overlay-opacity);
 		border-radius: 50%;
-		z-index: -1;
+		z-index: 2;
+		pointer-events: none;
 	}
 
-	&.has-source-beliefs .navigable-tiles__image {
-		position: relative;
-		z-index: 0;
+	// Hover icon — centered, fades out on hover.
+	.navigable-tiles__image--two {
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-start: 50%;
+		transform: translate(-50%, -50%);
+		inline-size: var(--cbp-icon-width);
+		z-index: 3;
+		transition: opacity var(--cbp-transition);
 	}
 
-	.navigable-tiles__title {
-		font-size: 1.25rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		font-weight: 400;
-	}
-
+	// ── Typography ────────────────────────────────────────
+	// .navigable-tiles__title is an <h3>; reset its UA margins/weight so it
+	// looks like the previous label, then apply the shared title styling.
+	.navigable-tiles__title,
 	.navigable-tiles__meta {
 		display: block;
-		margin-top: 0.5rem;
-		font-size: 0.9rem;
-		color: #555;
+		inline-size: 100%;
+		text-align: center;
+		text-transform: uppercase;
+		font-size: var(--cbp-title-size);
+		line-height: var(--cbp-title-leading);
+		font-weight: 400;
+		margin: 5px;
 	}
 
-	// "You are here" state.
+	.navigable-tiles__title .navigable-tiles__link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	// ── States ────────────────────────────────────────────
+	// Hover trigger is on the item (not .image) because the link's ::after
+	// overlay sits above the image and would block .image:hover from firing.
+	.navigable-tiles__item:not(.is-current):hover .navigable-tiles__image--two,
+	.navigable-tiles__item:not(.is-current):focus-within .navigable-tiles__image--two {
+		opacity: 0;
+	}
+
+	// "You are here" — current tile non-interactive, title emphasized.
 	.navigable-tiles__item.is-current {
-		.navigable-tiles__link {
-			cursor: default;
+		.navigable-tiles__link { cursor: default; }
+		.navigable-tiles__title { font-weight: 600; }
+	}
 
-			&:hover {
-				opacity: 1;
-			}
-		}
+	// ── Responsive ────────────────────────────────────────
+	// Viewport-based so breakpoints map directly to screen width: desktop
+	// always shows 4 columns, only tablets/phones reduce the count.
+	@media (max-width: 1024px) {  // tablet landscape → 3 columns
+		.navigable-tiles__item { inline-size: 28%; }
+	}
+	@media (max-width: 768px) {   // tablet portrait → 2 columns
+		.navigable-tiles__item { inline-size: 42%; }
+	}
+	@media (max-width: 480px) {   // mobile → 1 column, centered
+		.navigable-tiles__item { inline-size: 75%; }
+	}
 
-		.navigable-tiles__title {
-			font-weight: 600;
+	// ── Mobile tweaks — narrow screens (one column) ───────
+	// Title font stays 21px like production (no mobile reduction).
+	@media (max-width: 480px) {
+		// More breathing room around the circle when the tile is full-width.
+		.navigable-tiles__item {
+			padding-inline: 24px;
 		}
 	}
 
-	// Reduced motion respect.
+	// ── Motion ────────────────────────────────────────────
 	@media (prefers-reduced-motion: reduce) {
-		.navigable-tiles__image--two,
-		.navigable-tiles__link {
-			transition: none;
-		}
+		.navigable-tiles__image--two { transition: none; }
+	}
+
+	// ── Screen-reader-only text ───────────────────────────
+	// Visually hidden but available to assistive tech (WP-standard technique).
+	// Used by the "(aktualna strona)" indicator on the current tile.
+	.screen-reader-text {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 }

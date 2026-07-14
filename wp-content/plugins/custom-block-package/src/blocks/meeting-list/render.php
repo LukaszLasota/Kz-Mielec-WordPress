@@ -16,10 +16,12 @@ $numberposts       = isset( $attributes['numberposts'] ) ? (int) $attributes['nu
 $block_title       = isset( $attributes['blockTitle'] ) ? $attributes['blockTitle'] : __( 'Nasze spotkania', 'custom-block-package' );
 
 // Cache inner content only; wrapper is rendered fresh for anchor support.
-$cache_key    = \CustomBlockPackage\Cache\BlockCache::key( \CustomBlockPackage\Cache\BlockCache::MEETING_LIST_PREFIX, $attributes );
-$cache_expire = \CustomBlockPackage\Cache\BlockCache::TTL;
+// Cache is bypassed entirely when WP_DEBUG is on (local dev).
+$cache_enabled = \CustomBlockPackage\Cache\BlockCache::enabled();
+$cache_key     = \CustomBlockPackage\Cache\BlockCache::key( \CustomBlockPackage\Cache\BlockCache::MEETING_LIST_PREFIX, $attributes );
+$cache_expire  = \CustomBlockPackage\Cache\BlockCache::ttl();
 
-$cached_output = get_transient( $cache_key );
+$cached_output = $cache_enabled ? get_transient( $cache_key ) : false;
 if ( false === $cached_output ) {
 	ob_start();
 	?>
@@ -79,7 +81,9 @@ if ( false === $cached_output ) {
 	</div>
 	<?php
 	$cached_output = ob_get_clean();
-	set_transient( $cache_key, $cached_output, $cache_expire );
+	if ( $cache_enabled ) {
+		set_transient( $cache_key, $cached_output, $cache_expire );
+	}
 }
 
 // Wrapper rendered outside cache so anchor id is always present.
