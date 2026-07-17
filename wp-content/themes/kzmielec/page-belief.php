@@ -80,6 +80,7 @@ get_header();
 		</div>
 
 		<div id="belief-nav">
+			<h2 class="page-belief__sr-heading"><?php esc_html_e( 'W co i jak wierzymy', 'kzmielec' ); ?></h2>
 			<?php
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
 			echo do_blocks( '<!-- wp:custom-block-package/navigable-tiles {"dataSource":"beliefs","columns":4,"highlightCurrent":true,"className":"pattern-page-belief"} /-->' );

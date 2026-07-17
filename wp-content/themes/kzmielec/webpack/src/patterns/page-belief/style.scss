@@ -2,6 +2,20 @@
 // Loaded via PatternAssets when class "pattern-page-belief" detected.
 
 .page-belief {
+	// Visually-hidden heading before the nav tiles — keeps a proper h1→h2→h3
+	// document outline without a visible heading.
+	.page-belief__sr-heading {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
 	// Section label above the hero (matches production: centred, uppercase,
 	// no divider lines). A <p>, not a heading, so the page title stays the h1.
 	.page-belief__section-heading {
