@@ -52,6 +52,12 @@ class PatternAssets implements ActionHookInterface {
 			$this->enqueue_pattern( 'archive-meetings' );
 		}
 
+		// Belief subpages inject the pattern-page-belief block via the template
+		// (not stored in post content), so detect them by their page template.
+		if ( function_exists( 'is_page_template' ) && is_page_template( 'page-belief.php' ) ) {
+			$this->enqueue_pattern( 'page-belief' );
+		}
+
 		global $post;
 
 		if ( ! $post || empty( $post->post_content ) ) {

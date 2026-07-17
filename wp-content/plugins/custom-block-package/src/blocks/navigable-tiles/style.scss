@@ -161,10 +161,10 @@
 		opacity: 0;
 	}
 
-	// "You are here" — current tile non-interactive, title emphasized.
+	// "You are here" — current tile is non-interactive (title stays regular
+	// weight; the missing hover icon already signals the current page).
 	.navigable-tiles__item.is-current {
 		.navigable-tiles__link { cursor: default; }
-		.navigable-tiles__title { font-weight: 600; }
 	}
 
 	// ── Responsive ────────────────────────────────────────
