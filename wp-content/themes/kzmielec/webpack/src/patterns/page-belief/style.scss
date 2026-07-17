@@ -2,6 +2,17 @@
 // Loaded via PatternAssets when class "pattern-page-belief" detected.
 
 .page-belief {
+	// Section label above the hero (matches production: centred, uppercase,
+	// no divider lines). A <p>, not a heading, so the page title stays the h1.
+	.page-belief__section-heading {
+		font-size: var(--fs-heading, 2rem);
+		font-weight: 400;
+		text-transform: uppercase;
+		text-align: center;
+		letter-spacing: 2px;
+		margin: 2rem 0;
+	}
+
 	.page-belief__hero {
 		display: flex;
 		flex-direction: column;
@@ -14,8 +25,8 @@
 	.page-belief__hero-image {
 		position: relative;
 		display: block;
-		width: 12.5rem; // 200px
-		height: 12.5rem;
+		width: 15rem; // 240px — matches the nav tile size
+		height: 15rem;
 		border-radius: 50%;
 		overflow: hidden;
 		margin-bottom: 1rem;

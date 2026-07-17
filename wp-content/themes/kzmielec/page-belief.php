@@ -45,9 +45,7 @@ get_header();
 			: '';
 		?>
 
-		<h2 class="wp-block-heading is-style-section-line">
-			<?php esc_html_e( 'W co i jak wierzymy', 'kzmielec' ); ?>
-		</h2>
+		<p class="page-belief__section-heading"><?php esc_html_e( 'W co i jak wierzymy', 'kzmielec' ); ?></p>
 
 		<div class="page-belief__hero">
 			<span class="page-belief__hero-image" aria-hidden="true">
