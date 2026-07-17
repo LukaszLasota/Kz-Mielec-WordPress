@@ -109,6 +109,7 @@
             // Layout only — typography inherited from theme.
             p {
                 text-align: justify;
+                margin-bottom: 1rem; // stack paragraphs with breathing room
 
                 @media (max-width: 500px) {
                     text-align: left;
@@ -120,18 +121,23 @@
             }
 
             ul {
-                padding-left: 0;
+                list-style: disc;
+                padding-left: 1.5rem;
                 padding-bottom: 1rem;
 
                 li {
-                    padding: 5px;
-                    margin-left: 20px;
-                    list-style-type: none;
+                    margin-bottom: 0.5rem;
                 }
 
                 @media (max-width: 600px) {
                     font-size: 0.95rem;
                 }
+            }
+
+            // Download buttons (wp:button) centred under the text.
+            .wp-block-buttons {
+                justify-content: center;
+                margin-top: 1rem;
             }
 
             // "CZYTAJ DALEJ (PDF)" links styled as buttons.
