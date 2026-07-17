@@ -7,7 +7,7 @@
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 2px;
-  margin: 2rem 0;
+  margin: 1.875rem 0 3.75rem;
 }
 .page-belief .page-belief__hero {
   display: flex;
@@ -56,9 +56,21 @@
   margin: 0;
 }
 .page-belief .page-belief__content {
-  max-width: 800px;
+  max-width: 68.75rem;
   margin: 2rem auto;
   padding: 0 1rem;
+  font-size: var(--fs-body, 1.25rem);
+  line-height: 1.4;
+  text-align: justify;
+  color: #000;
+}
+.page-belief .page-belief__content p {
+  margin-bottom: 0.1rem;
+}
+@media (max-width: 480px) {
+  .page-belief .page-belief__content {
+    text-align: left;
+  }
 }
 .page-belief .page-belief__separator {
   display: flex;

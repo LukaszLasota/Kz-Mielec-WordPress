@@ -10,7 +10,7 @@
 		text-transform: uppercase;
 		text-align: center;
 		letter-spacing: 2px;
-		margin: 2rem 0;
+		margin: 1.875rem 0 3.75rem; // 30px / 60px — matches old theme .section-head-one
 	}
 
 	.page-belief__hero {
@@ -67,10 +67,24 @@
 		margin: 0;
 	}
 
+	// Body copy — same treatment as the meetings archive (serif 20px, justified,
+	// black, wide column).
 	.page-belief__content {
-		max-width: 800px;
+		max-width: 68.75rem; // 1100px — matches the archive width
 		margin: 2rem auto;
 		padding: 0 1rem;
+		font-size: var(--fs-body, 1.25rem); // 20px
+		line-height: 1.4;
+		text-align: justify;
+		color: #000;
+
+		p {
+			margin-bottom: 0.1rem;
+		}
+
+		@media (max-width: 480px) {
+			text-align: left;
+		}
 	}
 
 	.page-belief__separator {
