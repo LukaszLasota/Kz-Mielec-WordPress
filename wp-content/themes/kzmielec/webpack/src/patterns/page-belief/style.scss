@@ -17,7 +17,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin: 2rem 0;
+		padding-top: 7.5rem; // 120px above the hero — matches production .vb__item
+		margin: 0 0 2rem;
 	}
 
 	// Hero tile — matches the nav tiles / production: photo fills the circle,
@@ -25,8 +26,8 @@
 	.page-belief__hero-image {
 		position: relative;
 		display: block;
-		width: 15rem; // 240px — matches the nav tile size
-		height: 15rem;
+		width: 13.3125rem; // 213px — matches production hero
+		height: 13.3125rem;
 		border-radius: 50%;
 		overflow: hidden;
 		margin-bottom: 1rem;
