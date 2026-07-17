@@ -37,7 +37,7 @@ class BeliefSettings implements ActionHookInterface {
 	/**
 	 * Parent menu slug (ThemeSettingsPage).
 	 */
-	private const PARENT_SLUG = 'kzmielec-theme-settings';
+	private const PARENT_SLUG = 'kzmielec-settings';
 
 	/**
 	 * Nonce action.

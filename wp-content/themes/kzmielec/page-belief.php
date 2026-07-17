@@ -70,8 +70,14 @@ get_header();
 
 		<div class="page-belief__separator">
 			<?php
+			$belief_nav_label = esc_js( __( 'Przewiń do nawigacji wiary', 'kzmielec' ) );
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- block output.
-			echo do_blocks( '<!-- wp:custom-block-package/scroll-arrow {"targetId":"belief-nav","direction":"down","ariaLabel":"Przewiń do nawigacji wiary"} /-->' );
+			echo do_blocks(
+				sprintf(
+					'<!-- wp:custom-block-package/scroll-arrow {"targetId":"belief-nav","direction":"down","ariaLabel":"%s"} /-->',
+					$belief_nav_label
+				)
+			);
 			?>
 		</div>
 
