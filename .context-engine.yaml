@@ -1,0 +1,42 @@
+# Code Context Engine — reguły indeksowania dla projektu kzmielec.
+# Docroot = root repo (pełny WordPress, NIE Bedrock). Rdzeń WP i cudze pluginy
+# są zacommitowane w gicie, więc trzeba je wykluczyć RĘCZNIE — inaczej indeks
+# puchnie (~16 tys. chunków), OOM-uje i zawiesza WSL. Indeksujemy tylko nasz
+# kod: motyw kzmielec + pluginy custom-block-package / custom-posts (~164 pliki).
+indexer:
+  ignore:
+    # --- rdzeń WordPressa (zacommitowany, 2873 plików — NIE nasz kod) ---
+    - wp-admin/
+    - wp-includes/
+    - "wp-*.php"
+    - xmlrpc.php
+    - index.php
+    - wp-content/index.php
+    # --- third-party pluginy (578 MB — to był OOM na pokerology). ---
+    # Nasze CBP/custom-posts NIE są tu wykluczone (indeksowane osobno przez --path).
+    - wp-content/plugins/autoptimize/
+    - wp-content/plugins/instagram-feed/
+    - wp-content/plugins/jquery-manager/
+    - wp-content/plugins/wordfence/
+    - wp-content/plugins/wordpress-seo/
+    - wp-content/plugins/wp-super-cache/
+    - wp-content/plugins/index.php
+    # --- cudze motywy (stary html5blank-stable ZOSTAJE indeksowany — referencja migracji) ---
+    - wp-content/themes/twentytwentyfive/
+    - wp-content/themes/index.php
+    # --- media / cache / stara strona / dumpy bazy ---
+    - wp-content/uploads/
+    - wp-content/cache/
+    - wp-content/upgrade/
+    - stara_strona/
+    - "*.sql"
+    # --- zależności i build (output, nie źródło) ---
+    - node_modules/
+    - "*/node_modules/"
+    - vendor/
+    - "*/vendor/"
+    - "*/build/"
+    - "*/assets/"
+    - "*.min.js"
+    - "*.min.css"
+    - .git/
