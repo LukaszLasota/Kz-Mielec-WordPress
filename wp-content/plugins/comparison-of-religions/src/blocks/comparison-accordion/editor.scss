@@ -1,0 +1,28 @@
+// Editor-only styles — applied via .cor-editor-preview class set in edit.js.
+//
+// In the block editor, the accordion is rendered via ServerSideRender (SSR)
+// which outputs the same HTML as the frontend. However, we want all panels
+// to be visible (expanded) in the editor so the user can see all content
+// without clicking. The chevron and toggle behavior are disabled.
+
+.cor-editor-preview {
+	// Force all accordion panels open (override the [hidden] attribute
+	// and any collapsed state that might be set by frontend.js).
+	.cor-accordion__panel {
+		display: block !important;
+		max-height: none !important;
+		opacity: 1 !important;
+		overflow: visible !important;
+	}
+
+	// Hide the chevron arrow since panels can't be toggled in the editor.
+	.cor-accordion__trigger::after {
+		display: none;
+	}
+
+	// Prevent hover effects and make the trigger non-interactive.
+	.cor-accordion__trigger {
+		cursor: default;
+		pointer-events: none;
+	}
+}

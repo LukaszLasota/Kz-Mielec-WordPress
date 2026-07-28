@@ -1,0 +1,14 @@
+{
+	"name": "comparison-of-religions",
+	"version": "1.0.0",
+	"description": "Comparison of religious denominations — accordion block with CPT data",
+	"author": "Lukasz Lasota",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^27.9.0"
+	}
+}

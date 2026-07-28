@@ -1,0 +1,24 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 6
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    paths:
+        - index.php
+        - uninstall.php
+        - app/
+        - tools/
+        - src/blocks/comparison-accordion/render.php
+    excludePaths:
+        - vendor/
+        - node_modules/
+        - build/
+    ignoreErrors:
+        # WordPress render.php templates receive $attributes as array<string, mixed>
+        - identifier: missingType.iterableValue
+        # wp_insert_post() PHPDoc says int but can return WP_Error with wp_error=true default
+        -
+            identifier: function.impossibleType
+            path: tools/import-html-data.php

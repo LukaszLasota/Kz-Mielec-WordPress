@@ -1,0 +1,27 @@
+{
+	"name": "lukaszlasota/comparison-of-religions",
+	"description": "Porownanie wyznan - akordeon z danymi CPT",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"require-dev": {
+		"phpstan/phpstan": "^2.0",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"wp-coding-standards/wpcs": "^3.0",
+		"phpcsstandards/phpcsutils": "^1.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"phpstan": "phpstan analyse --memory-limit=512M",
+		"phpcs": "phpcs",
+		"phpcbf": "phpcbf",
+		"check": [
+			"@phpstan",
+			"@phpcs"
+		]
+	}
+}

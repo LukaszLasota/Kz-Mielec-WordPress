@@ -1,0 +1,54 @@
+/* Admin styles for the Churches repeater meta box.
+   Loaded only on the comparison_topic edit screen (see ChurchesMetaBox.php). */
+
+.cor-meta-box {
+	padding: 10px 0;
+}
+
+.cor-meta-box__field {
+	margin-bottom: 12px;
+}
+
+.cor-meta-box__field label {
+	display: block;
+	margin-bottom: 4px;
+}
+
+.cor-church-row {
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 12px;
+	margin-bottom: 12px;
+	background: #f9f9f9;
+}
+
+.cor-church-row__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.cor-church-row__fields label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.cor-church-row__fields input,
+.cor-church-row__fields textarea {
+	margin-top: 4px;
+}
+
+.cor-remove-church {
+	color: #a00 !important;
+	border-color: #a00 !important;
+}
+
+.cor-remove-church:hover {
+	background: #a00 !important;
+	color: #fff !important;
+}
+
+#cor-add-church {
+	margin-top: 8px;
+}
