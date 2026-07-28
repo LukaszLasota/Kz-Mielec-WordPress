@@ -36,11 +36,16 @@ Thumbs.db
 wordfence-waf.php
 wp-content/wflogs/
 
-# Cache (WP Super Cache, Autoptimize)
+# Cache drop-ins & runtime data (LiteSpeed Cache, legacy WP Super Cache/Autoptimize)
 wp-content/cache/
 wp-content/advanced-cache.php
+wp-content/object-cache.php
 wp-content/autoptimize_404_handler.php
 wp-content/wp-cache-config.php
+# LiteSpeed Cache runtime data & .htaccess backups (per-machine, plugin-generated)
+wp-content/litespeed/
+.htaccess.bk
+.litespeed_conf.dat
 
 # Misc
 htaccess.htaccess
