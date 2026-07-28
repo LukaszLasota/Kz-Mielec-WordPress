@@ -1,6 +1,13 @@
+// ── Design tokens — named so repeated values live in one place ──
+$acc-line: #000; // border colour
+$acc-border: 2px solid $acc-line;
+$acc-btn-bg: #343a40; // "Czytaj dalej" download-button background
+$acc-btn-bg-hover: #23272b;
+$acc-btn-text: #fff;
+
 .accordion__item {
     // Match the old theme (.collapse): 2px black border, square corners.
-    border: 2px solid #000;
+    border: $acc-border;
 
     // Stack items without doubling the shared borders.
     & + & {
@@ -134,18 +141,39 @@
                 }
             }
 
+            // Images (e.g. history photos) centred, with breathing room above/below.
+            figure {
+                margin: 2rem auto;
+                text-align: center;
+            }
+
+            img {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            figcaption {
+                margin-top: 0.5rem;
+                text-align: center;
+                font-style: italic;
+            }
+
             // Download buttons (wp:button) centred under the text.
+            // Extra bottom gap separates stacked entries (e.g. the several
+            // Rozporządzenia / Oświadczenia) so they read as distinct sections.
             .wp-block-buttons {
                 justify-content: center;
                 margin-top: 1rem;
+                margin-bottom: 2.5rem;
             }
 
             // "CZYTAJ DALEJ (PDF)" links styled as buttons.
             a {
                 display: inline-block;
                 padding: 0.6rem 1.4rem;
-                background: #343a40;
-                color: #fff;
+                background: $acc-btn-bg;
+                color: $acc-btn-text;
                 text-decoration: none;
                 border-radius: 4px;
                 font-size: 1rem;
@@ -156,7 +184,7 @@
                 transition: background 0.2s ease;
 
                 &:hover {
-                    background: #23272b;
+                    background: $acc-btn-bg-hover;
                 }
 
                 &:focus-visible {

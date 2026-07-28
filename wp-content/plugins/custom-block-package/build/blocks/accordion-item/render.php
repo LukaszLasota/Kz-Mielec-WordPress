@@ -25,7 +25,7 @@ if ( ! empty( $attributes['anchor'] ) ) {
 }
 ?>
 <div <?php echo get_block_wrapper_attributes( $wrapper_extra ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns pre-escaped HTML. ?>>
-	<h3 class="accordion__title-text">
+	<h2 class="accordion__title-text">
 		<button
 			class="accordion__title"
 			aria-expanded="false"
@@ -33,7 +33,7 @@ if ( ! empty( $attributes['anchor'] ) ) {
 		>
 			<?php echo wp_kses_post( $accordion_title ); ?>
 		</button>
-	</h3>
+	</h2>
 	<div class="accordion__content" id="<?php echo esc_attr( $content_id ); ?>" hidden>
 		<div class="accordion__content--box">
 			<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Inner blocks are already escaped by WordPress. ?>
