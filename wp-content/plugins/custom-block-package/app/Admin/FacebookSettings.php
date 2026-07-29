@@ -76,11 +76,23 @@ class FacebookSettings {
 			return;
 		}
 
+		// If the feed still has posts to serve (cache/backup), a failed refresh is
+		// not a hard outage — show a dismissible warning rather than a red banner.
+		// A genuinely empty feed stays an error. Both are dismissible so the admin
+		// can always close them; a successful refresh clears the state entirely.
+		$service   = new FacebookFeedService();
+		$has_posts = $service->get_total_count() > 0;
+
+		$class = $has_posts ? 'notice-warning' : 'notice-error';
+		$intro = $has_posts
+			? __( 'Facebook Feed — ostatnie odświeżenie nie powiodło się (wyświetlane są zapisane posty):', 'custom-block-package' )
+			: __( 'Facebook Feed — błąd połączenia:', 'custom-block-package' );
+
 		$settings_url = admin_url( 'admin.php?page=' . self::MENU_SLUG );
 		?>
-		<div class="notice notice-error">
+		<div class="notice <?php echo esc_attr( $class ); ?> is-dismissible">
 			<p>
-				<strong><?php esc_html_e( 'Facebook Feed — błąd połączenia:', 'custom-block-package' ); ?></strong>
+				<strong><?php echo esc_html( $intro ); ?></strong>
 				<code><?php echo esc_html( $error ); ?></code>
 			</p>
 			<p>

@@ -65,6 +65,17 @@ class FacebookFeedService {
 	public const OPTION_LAST_ERROR = 'cbp_fb_last_error';
 
 	/**
+	 * Option key for the consecutive fetch-failure counter (debounces blips).
+	 */
+	public const OPTION_FAIL_COUNT = 'cbp_fb_fail_count';
+
+	/**
+	 * Consecutive failures required before surfacing an error to admins.
+	 * A single transient timeout is swallowed while cached posts still serve.
+	 */
+	public const FAIL_THRESHOLD = 2;
+
+	/**
 	 * Option key for backup posts (never expires, used as fallback).
 	 */
 	public const OPTION_BACKUP_POSTS = 'cbp_fb_backup_posts';
@@ -165,6 +176,7 @@ class FacebookFeedService {
 		update_option( self::OPTION_BACKUP_POSTS, $posts );
 		update_option( self::OPTION_LAST_SYNC, time() );
 		update_option( self::OPTION_LAST_ERROR, '' );
+		update_option( self::OPTION_FAIL_COUNT, 0 );
 
 		// Mock page info for testing the header UI.
 		update_option(
@@ -195,14 +207,14 @@ class FacebookFeedService {
 		$response = $this->call_api( $page_id, $token );
 
 		if ( is_wp_error( $response ) ) {
-			update_option( self::OPTION_LAST_ERROR, $response->get_error_message() );
+			$this->record_failure( $response->get_error_message() );
 			return false;
 		}
 
 		$posts = $this->parse_response( $response );
 
 		if ( empty( $posts ) ) {
-			update_option( self::OPTION_LAST_ERROR, __( 'API returned no posts.', 'custom-block-package' ) );
+			$this->record_failure( __( 'API returned no posts.', 'custom-block-package' ) );
 			return false;
 		}
 
@@ -216,11 +228,29 @@ class FacebookFeedService {
 		update_option( self::OPTION_BACKUP_POSTS, $posts );
 		update_option( self::OPTION_LAST_SYNC, time() );
 		update_option( self::OPTION_LAST_ERROR, '' );
+		update_option( self::OPTION_FAIL_COUNT, 0 );
 
 		// Also refresh page info (name, picture).
 		$this->refresh_page_info( $page_id, $token );
 
 		return true;
+	}
+
+	/**
+	 * Record a fetch failure, surfacing an error to admins only after
+	 * FAIL_THRESHOLD consecutive failures. A single network blip is swallowed
+	 * so the feed keeps serving cached/backup posts without alarming the admin.
+	 *
+	 * @param string $message Human-readable failure reason.
+	 * @return void
+	 */
+	private function record_failure( string $message ): void {
+		$count = (int) get_option( self::OPTION_FAIL_COUNT, 0 ) + 1;
+		update_option( self::OPTION_FAIL_COUNT, $count );
+
+		if ( $count >= self::FAIL_THRESHOLD ) {
+			update_option( self::OPTION_LAST_ERROR, $message );
+		}
 	}
 
 	/**
@@ -245,7 +275,7 @@ class FacebookFeedService {
 			$url
 		);
 
-		$response = wp_remote_get( $url, array( 'timeout' => 10 ) );
+		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return;
@@ -345,7 +375,7 @@ class FacebookFeedService {
 		$response = wp_remote_get(
 			$url,
 			array(
-				'timeout'     => 10,
+				'timeout'     => 15,
 				'redirection' => 3,
 				'headers'     => array(
 					'Accept' => 'application/json',
