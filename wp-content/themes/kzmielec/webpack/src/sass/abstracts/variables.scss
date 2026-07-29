@@ -4,6 +4,10 @@ $color-link: #000;
 $color-green: #000;
 $color-main: #000;
 
+// Accessible link/button blue — WCAG 2.1 AA (5.25:1 on white). Used to override
+// third-party widgets whose default blue fails contrast (e.g. Instagram feed).
+$color-accessible-blue: #1568d8;
+
 $max-width: 1200px;
 
 $bp-desktop: 1400px;

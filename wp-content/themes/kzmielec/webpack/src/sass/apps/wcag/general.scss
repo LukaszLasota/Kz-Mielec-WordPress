@@ -1,3 +1,12 @@
+// WCAG 2.1 AA — Smash Balloon Instagram feed ships a "Follow on Instagram"
+// button with white text on #408bd1 (3.6:1, fails). The <a> has no class or
+// inline style, so scope through its wrapper (.sbi_follow_btn). Only this one
+// anchor carries the blue background — post links are untouched. !important is
+// needed to win over the plugin's own stylesheet.
+.sbi_follow_btn a {
+    background-color: $color-accessible-blue !important; // white on this = 5.25:1
+}
+
 // Skip-to-content link — visible only on :focus
 .skip-link {
     position: absolute;

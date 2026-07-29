@@ -1282,6 +1282,10 @@ figure {
     margin: 90px 20px 120px;
   }
 }
+.sbi_follow_btn a {
+  background-color: #1568d8 !important;
+}
+
 .skip-link {
   position: absolute;
   top: -100%;

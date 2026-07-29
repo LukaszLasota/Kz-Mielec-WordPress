@@ -1,0 +1,7 @@
+// ── Global design tokens for custom-block-package blocks ──
+// Import into a block's SCSS with:  @import '../../scss/abstracts/variables';
+
+// Facebook brand blue, darkened to meet WCAG 2.1 AA contrast on white.
+// Raw brand blue (#1877f2) is only 4.23:1 on white — fails AA (needs 4.5:1).
+$fb-blue: #1568d8; // 5.25:1 on white — link text + button background
+$fb-blue-hover: #1160c4; // 6.01:1 on white — darker hover state

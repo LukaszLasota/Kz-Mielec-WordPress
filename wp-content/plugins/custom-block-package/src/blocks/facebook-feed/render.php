@@ -132,6 +132,8 @@ $page_info    = $service->get_page_info();
 							class="facebook-feed__image-link"
 							target="_blank"
 							rel="noopener noreferrer"
+							aria-hidden="true"
+							tabindex="-1"
 						>
 							<img
 								src="<?php echo esc_url( $image ); ?>"
