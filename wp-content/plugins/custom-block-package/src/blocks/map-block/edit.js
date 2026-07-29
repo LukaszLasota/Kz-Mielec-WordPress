@@ -15,6 +15,7 @@ const Edit = ({ attributes, setAttributes }) => {
     const marker = useRef(null);
     const tileLayer = useRef(null);
     const overlayLayer = useRef(null);
+    const cleanupDragFix = useRef(null);
 
     const blockProps = useBlockProps();
 
@@ -50,6 +51,35 @@ const Edit = ({ attributes, setAttributes }) => {
                 const { lat, lng } = e.target.getLatLng();
                 setAttributes({ latitude: lat, longitude: lng });
             });
+
+            // Fix drag getting "stuck" in the block editor: the editor canvas
+            // (iframed / Gutenberg pointer handling) can swallow the mouseup that
+            // ends a Leaflet drag, so the map keeps panning after the button is
+            // released or the pointer has left the map. Abort any in-progress
+            // drag on pointer release or when leaving the map — public API only,
+            // so panning still works normally (pan while held, stop on release).
+            const map = mapInstance.current;
+            const abortDrag = () => {
+                const draggable = map.dragging && map.dragging._draggable;
+                if (draggable && draggable._moving) {
+                    map.dragging.disable();
+                    map.dragging.enable();
+                }
+            };
+            const container = map.getContainer();
+            const docs = [container.ownerDocument, window.document];
+            container.addEventListener('mouseleave', abortDrag);
+            docs.forEach((doc) => {
+                doc.addEventListener('mouseup', abortDrag);
+                doc.addEventListener('pointerup', abortDrag);
+            });
+            cleanupDragFix.current = () => {
+                container.removeEventListener('mouseleave', abortDrag);
+                docs.forEach((doc) => {
+                    doc.removeEventListener('mouseup', abortDrag);
+                    doc.removeEventListener('pointerup', abortDrag);
+                });
+            };
         } else {
             mapInstance.current.setView([latitude, longitude]);
             mapInstance.current.setZoom(zoom);
@@ -75,6 +105,10 @@ const Edit = ({ attributes, setAttributes }) => {
     // Cleanup map instance on unmount
     useEffect(() => {
         return () => {
+            if (cleanupDragFix.current) {
+                cleanupDragFix.current();
+                cleanupDragFix.current = null;
+            }
             if (mapInstance.current) {
                 mapInstance.current.remove();
                 mapInstance.current = null;
