@@ -4,7 +4,7 @@
 Plugin Name: Smash Balloon Instagram Feed
 Plugin URI: https://smashballoon.com/instagram-feed
 Description: Display beautifully clean, customizable, and responsive Instagram feeds.
-Version: 6.10.0
+Version: 6.11.4
 Requires PHP: 7.4
 Author: Smash Balloon
 Author URI: https://smashballoon.com/
@@ -41,7 +41,6 @@ if (version_compare(PHP_VERSION, '7.4', '<')) {
 use InstagramFeed\Builder\SBI_Db;
 use InstagramFeed\Builder\SBI_Feed_Saver;
 use InstagramFeed\Builder\SBI_Source;
-use InstagramFeed\Helpers\SB_Instagram_Tracking;
 use InstagramFeed\Integrations\FeedAnalytics;
 use InstagramFeed\Services\ServiceContainer;
 use InstagramFeed\Vendor\Smashballoon\Framework\Packages\Blocks\RecommendedBlocks;
@@ -54,11 +53,18 @@ if (!defined('SBI_PLUGIN_NAME')) {
 	define('SBI_PLUGIN_NAME', 'Instagram Feed Free');
 }
 if (!defined('SBIVER')) {
-	define('SBIVER', '6.10.0');
+	define('SBIVER', '6.11.4');
+}
+if ( ! defined( 'SBI_SMASH_USAGE_TRACKING_API_URL' ) ) {
+	define( 'SBI_SMASH_USAGE_TRACKING_API_URL', 'https://usage.smashballoon.com/api' );
 }
 // Db version.
 if (!defined('SBI_DBVERSION')) {
 	define('SBI_DBVERSION', '2.4');
+}
+// Bump when a release invalidates cached feed data. See sbi_cache_invalidation_registry().
+if (!defined('SBI_CACHE_VERSION')) {
+	define('SBI_CACHE_VERSION', '1');
 }
 
 // Upload folder name for local image files for posts.
@@ -142,6 +148,20 @@ if (!function_exists('sb_instagram_feed_init')) {
 		}
 
 		require SBI_PLUGIN_DIR . 'vendor/autoload.php';
+
+		// Initialize the deactivation feedback survey.
+		if (class_exists('\InstagramFeed\Vendor\Smashballoon\Framework\Packages\Feedback\FeedbackManager')) {
+			\InstagramFeed\Vendor\Smashballoon\Framework\Packages\Feedback\FeedbackManager::init([
+				'plugin_slug'        => 'instagram-feed',
+				'plugin_name'        => 'Smash Balloon Instagram Feed',
+				'plugin_version'     => SBIVER,
+				'plugin_file'        => SBI_PLUGIN_DIR . 'instagram-feed.php',
+				'support_url'        => 'https://smashballoon.com/support/?utm_campaign=instagram-free&utm_source=settings&utm_medium=support',
+				'enable_help_widget' => true,
+				'help_url'           => 'https://smashballoon.com/docs/instagram/',
+			]);
+		}
+
 		require_once trailingslashit(SBI_PLUGIN_DIR) . 'inc/if-functions.php';
 		require_once trailingslashit(SBI_PLUGIN_DIR) . 'inc/class-sb-instagram-api-connect.php';
 		require_once trailingslashit(SBI_PLUGIN_DIR) . 'inc/class-sb-instagram-cache.php';
@@ -169,7 +189,7 @@ if (!function_exists('sb_instagram_feed_init')) {
 		$sbi_notices = SBNotices::instance('instagram-feed');
 
 		$sbi_blocks = new SB_Instagram_Blocks();
-		new SB_Instagram_Tracking();
+		$smash_usage_tracking = new \InstagramFeed\UsageTracking\SmashUsageTracking();
 
 		// Boot all services.
 		$service_container = new ServiceContainer();
@@ -246,7 +266,7 @@ if (!function_exists('sb_instagram_feed_init')) {
 
 		$sbi_support_tool = new InstagramFeed\Admin\SBI_Support_Tool();
 
-		InstagramFeed\Integrations\Elementor\SBI_Elementor_Base::instance();
+		InstagramFeed\Integrations\Elementor\SBI_Elementor_Base::register();
 		$sbi_divi_handler = new InstagramFeed\Integrations\Divi\SBI_Divi_Handler();
 
 		require_once trailingslashit(SBI_PLUGIN_DIR) . 'admin/SBI_Callout.php';
@@ -365,10 +385,14 @@ if (!function_exists('sb_instagram_feed_init')) {
 		global $wp_roles;
 		$wp_roles->add_cap('administrator', 'manage_instagram_feed_options');
 
-		// set usage tracking to false if fresh install.
-		$usage_tracking = sbi_get_option('sbi_usage_tracking', false);
+		// set usage tracking to false if fresh install. Skip when the Pro plugin is active: it shares
+		// this option and defaults tracking on, so seeding a disabled record here would silently turn it off.
+		$usage_tracking = sbi_get_option( 'sbi_usage_tracking', false );
+		$sbi_network_active = is_multisite() ? (array) get_site_option( 'active_sitewide_plugins', array() ) : array();
+		$sbi_pro_active = in_array( 'instagram-feed-pro/instagram-feed.php', (array) get_option( 'active_plugins', array() ), true )
+			|| isset( $sbi_network_active['instagram-feed-pro/instagram-feed.php'] );
 
-		if (!is_array($usage_tracking)) {
+		if ( ! is_array( $usage_tracking ) && ! $sbi_pro_active ) {
 			$usage_tracking = array(
 				'enabled' => false,
 				'last_send' => 0
@@ -420,6 +444,7 @@ if (!function_exists('sb_instagram_feed_init')) {
 		wp_clear_scheduled_hook('sb_instagram_cron_job');
 		wp_clear_scheduled_hook('sb_instagram_feed_issue_email');
 		wp_clear_scheduled_hook('sbi_notification_update');
+		wp_clear_scheduled_hook( \InstagramFeed\UsageTracking\Config::CRON_HOOK );
 		InstagramFeed\Admin\SBI_Support_Tool::delete_temp_user();
 	}
 
@@ -975,6 +1000,78 @@ if (!function_exists('sb_instagram_feed_init')) {
 	add_action('wp_loaded', 'sbi_check_for_db_updates');
 
 	/**
+	 * Keyed by cache version. Reasons are surfaced in the action log when a clear fires.
+	 */
+	function sbi_cache_invalidation_registry()
+	{
+		return apply_filters('sbi_cache_invalidation_registry', array(
+			'1' => 'SMASH-1105: trial-reel filter needs fresh is_shared_to_feed field',
+		));
+	}
+
+	/**
+	 * Auto-clears feed caches on upgrade. Hooked to wp_loaded; short-circuits on version match.
+	 */
+	function sbi_check_for_cache_invalidations()
+	{
+		$stored_version = get_option('sbi_cache_version', null);
+
+		// Null = fresh install OR pre-this-release upgrade. Probe the cache table to disambiguate.
+		if ($stored_version === null) {
+			global $wpdb;
+			$cache_table   = $wpdb->prefix . 'sbi_feed_caches';
+			$has_any_cache = (bool) $wpdb->get_var("SELECT 1 FROM $cache_table LIMIT 1");
+
+			if (!$has_any_cache) {
+				update_option('sbi_cache_version', SBI_CACHE_VERSION);
+				return;
+			}
+
+			$stored_version = '0';
+		}
+
+		if (version_compare((string) $stored_version, SBI_CACHE_VERSION, '>=')) {
+			return;
+		}
+
+		if (!apply_filters('sbi_auto_clear_cache_on_upgrade', true, (string) $stored_version, SBI_CACHE_VERSION)) {
+			update_option('sbi_cache_version', SBI_CACHE_VERSION);
+			return;
+		}
+
+		// Concurrent-request guard.
+		if (get_transient('sbi_cache_invalidation_lock')) {
+			return;
+		}
+		set_transient('sbi_cache_invalidation_lock', time(), 60);
+
+		// Bump before clear so a mid-flight fatal doesn't loop on every page load.
+		update_option('sbi_cache_version', SBI_CACHE_VERSION);
+
+		sbi_clear_all_feed_caches();
+
+		global $sb_instagram_posts_manager;
+		if (isset($sb_instagram_posts_manager) && method_exists($sb_instagram_posts_manager, 'add_action_log')) {
+			$registry = sbi_cache_invalidation_registry();
+			$reasons  = array();
+			if (is_array($registry)) {
+				foreach ($registry as $ver => $reason) {
+					if (version_compare((string) $stored_version, (string) $ver, '<')) {
+						$reasons[] = $ver . ': ' . $reason;
+					}
+				}
+			}
+			$sb_instagram_posts_manager->add_action_log(
+				'Auto-cleared caches on upgrade (' . $stored_version . ' → ' . SBI_CACHE_VERSION . '). '
+				. implode(' | ', $reasons)
+			);
+		}
+
+		delete_transient('sbi_cache_invalidation_lock');
+	}
+	add_action('wp_loaded', 'sbi_check_for_cache_invalidations');
+
+	/**
 	 * Deletes saved data for the plugin unless setting to preserve
 	 * settings is enabled
 	 *
@@ -1091,7 +1188,20 @@ if (!function_exists('sb_instagram_feed_init')) {
 
 		delete_option('sb_instagram_errors');
 		delete_option('sbi_usage_tracking_config');
-		delete_option('sbi_usage_tracking');
+		// Usage-tracking consent, site token and telemetry are shared with the Pro plugin. Only remove
+		// them when Pro is not active, otherwise deleting the free plugin would reset Pro's consent.
+		$sbi_network_active = is_multisite() ? (array) get_site_option( 'active_sitewide_plugins', array() ) : array();
+		$sbi_pro_active = in_array( 'instagram-feed-pro/instagram-feed.php', (array) get_option( 'active_plugins', array() ), true )
+			|| isset( $sbi_network_active['instagram-feed-pro/instagram-feed.php'] );
+		if ( ! $sbi_pro_active ) {
+			delete_option( 'sbi_usage_tracking' );
+			delete_option( 'sbi_smash_usage_tracking' );
+			delete_option( 'sbi_smash_usage_tracking_site_token' );
+			delete_option( 'sbi_smash_usage_tracking_schedule' );
+			delete_option( 'sbi_smash_usage_events' );
+			delete_option( 'sbi_smash_usage_active_dates' );
+			delete_option( 'sbi_smash_usage_session_durations' );
+		}
 		delete_option('sbi_oembed_token');
 		delete_option('sbi_top_api_calls');
 		delete_option('sbi_rating_notice');
@@ -1116,6 +1226,9 @@ if (!function_exists('sb_instagram_feed_init')) {
 		$wp_roles->remove_cap('administrator', 'manage_instagram_feed_options');
 		wp_clear_scheduled_hook('sbi_feed_update');
 		wp_clear_scheduled_hook('sbi_usage_tracking_cron');
+		// Literal hook name: the Config class is not autoloaded during uninstall (the autoloader only
+		// registers on the 'init' hook, which does not fire on the uninstall request).
+		wp_clear_scheduled_hook( 'sbi_free_smash_usage_tracking_cron' );
 
 		delete_option('sb_instagram_feed_notices');
 		delete_option('sb_instagram_feed_group_notices');

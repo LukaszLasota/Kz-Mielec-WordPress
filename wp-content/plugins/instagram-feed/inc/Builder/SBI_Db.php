@@ -361,6 +361,22 @@ class SBI_Db
 		return $feeds_elementor;
 	}
 
+	/**
+	 * Query feeds list for the modern Elementor widget.
+	 *
+	 * Returns feed objects with id and feed_name properties,
+	 * suitable for localized script data.
+	 *
+	 * @since 6.5.0
+	 *
+	 * @return array
+	 */
+	public static function elementor_feeds_list() {
+		global $wpdb;
+		$feeds_table_name = $wpdb->prefix . 'sbi_feeds';
+		return $wpdb->get_results( "SELECT id, feed_name FROM $feeds_table_name" );
+	}
+
 
 	/**
 	 * Count the sbi_feeds table
@@ -887,6 +903,12 @@ class SBI_Db
 		delete_option('sb_instagram_errors');
 		delete_option('sbi_usage_tracking_config');
 		delete_option('sbi_usage_tracking');
+		delete_option( 'sbi_smash_usage_tracking' );
+		delete_option( 'sbi_smash_usage_tracking_site_token' );
+		delete_option( 'sbi_smash_usage_tracking_schedule' );
+		delete_option( 'sbi_smash_usage_events' );
+		delete_option( 'sbi_smash_usage_active_dates' );
+		delete_option( 'sbi_smash_usage_session_durations' );
 		delete_option('sbi_oembed_token');
 		delete_option('sbi_top_api_calls');
 		delete_option('sbi_rating_notice');
@@ -899,6 +921,7 @@ class SBI_Db
 		$wp_roles->remove_cap('administrator', 'manage_instagram_feed_options');
 		wp_clear_scheduled_hook('sbi_feed_update');
 		wp_clear_scheduled_hook('sbi_usage_tracking_cron');
+		wp_clear_scheduled_hook( \InstagramFeed\UsageTracking\Config::CRON_HOOK );
 	}
 
 	/**

@@ -611,7 +611,7 @@ class SBI_Notifications
 
 			switch ($type) {
 				case 'review':
-					$sbi_open_feedback_url = 'https://smashballoon.com/feedback/?plugin=instagram-lite';
+					$sbi_open_feedback_url = 'https://smashballoon.com/feedback/?plugin=instagram-lite&utm_campaign=instagram-free&utm_source=notifications&utm_medium=feedback';
 					$review_consent = get_option('sbi_review_consent');
 					if (!$review_consent) {
 						$error_args = array(
@@ -823,6 +823,7 @@ class SBI_Notifications
 			$sbi_notices->remove_notice('review_step_2_all_pages');
 		} elseif ($id === 'discount') {
 			update_user_meta(get_current_user_id(), 'sbi_ignore_new_user_sale_notice', 'always');
+			update_user_meta(get_current_user_id(), 'sb_notice_discount_dismissed', true);
 
 			$current_month_number = (int)date('n', sbi_get_current_time());
 			$not_early_in_the_year = ($current_month_number > 5);

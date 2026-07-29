@@ -2,283 +2,191 @@
 
 namespace InstagramFeed\Integrations\Elementor;
 
-use InstagramFeed\Builder\SBI_Feed_Builder;
-use InstagramFeed\Helpers\Util;
+use InstagramFeed\Vendor\Smashballoon\Framework\Packages\Blocks\RecommendedElementorWidgets;
+use InstagramFeed\Vendor\Smashballoon\Framework\Packages\Blocks\SB_Feed_Blocks_Registry;
+use InstagramFeed\Vendor\Smashballoon\Framework\Packages\Blocks\SB_Block_Utils;
+use InstagramFeed\Vendor\Smashballoon\Framework\Packages\Blocks\SB_Elementor_Editor_Assets;
+use InstagramFeed\Builder\SBI_Db;
 
-// Exit if accessed directly.
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
-/**
- * Class SBI_Elementor_Base
- *
- * @since 6.2.9
- */
 class SBI_Elementor_Base
 {
 	/**
-	 * Plugin version.
+	 * Singleton instance.
 	 *
-	 * @since 6.2.9
-	 * @access public
-	 *
-	 * @var string The plugin version.
-	 */
-	const VERSION = SBIVER;
-
-	/**
-	 * Minimum Elementor version.
-	 *
-	 * @since 6.2.9
-	 * @access public
-	 *
-	 * @var string Minimum Elementor version required to run the plugin.
-	 */
-	const MINIMUM_ELEMENTOR_VERSION = '3.6.0';
-
-	/**
-	 * Minimum PHP version.
-	 *
-	 * @since 6.2.9
-	 * @access public
-	 *
-	 * @var string Minimum PHP version required to run the plugin.
-	 */
-	const MINIMUM_PHP_VERSION = '5.6';
-	/**
-	 * Name Space.
-	 *
-	 * @since 6.2.9
-	 * @access public
-	 *
-	 * @var string The name space of the plugin.
-	 */
-	const NAME_SPACE = 'InstagramFeed.Integrations.Elementor.';
-	/**
-	 * Instance.
-	 *
-	 * @since 6.2.9
-	 * @access private
-	 *
-	 * @var SBI_Elementor_Base The single instance of the class.
+	 * @var SBI_Elementor_Base|null
 	 */
 	private static $instance = null;
 
 	/**
-	 * Instance.
+	 * Get (and lazily construct) the singleton instance.
 	 *
-	 * Ensures only one instance of the class is loaded or can be loaded.
-	 *
-	 * @return SBI_Elementor_Base An instance of the class.
-	 * @since 6.2.9
-	 * @access public
+	 * @return SBI_Elementor_Base
 	 */
-	public static function instance()
+	public static function register()
 	{
-		if (!self::is_compatible()) {
-			return;
-		}
-
-		if (!isset(self::$instance) && !self::$instance instanceof SBI_Elementor_Base) {
-			self::$instance = new SBI_Elementor_Base();
-			self::$instance->apply_hooks();
+		if (null === self::$instance) {
+			self::$instance = new self();
+			self::$instance->init();
 		}
 		return self::$instance;
 	}
 
 	/**
-	 * Compatibility check.
+	 * Backward-compat alias for register(). Kept because instagram-feed.php
+	 * still calls SBI_Elementor_Base::instance() on plugin bootstrap.
 	 *
-	 * Check if the current environment is compatible with the plugin.
-	 *
-	 * @return bool True if the plugin can run, false otherwise.
-	 * @since 6.2.9
+	 * @return SBI_Elementor_Base
 	 */
-	public static function is_compatible()
+	public static function instance()
 	{
-		// Check if Elementor is installed and activated.
-		if (!did_action('elementor/loaded')) {
-			return false;
-		}
-
-		// Check for required Elementor version.
-		if (!version_compare(ELEMENTOR_VERSION, self::MINIMUM_ELEMENTOR_VERSION, '>=')) {
-			return false;
-		}
-
-		// Check for required PHP version.
-		if (version_compare(PHP_VERSION, self::MINIMUM_PHP_VERSION, '<')) {
-			return false;
-		}
-
-		return true;
+		return self::register();
 	}
 
 	/**
-	 * Apply hooks.
+	 * Wire the Elementor integration once WordPress has fired `init`.
 	 *
-	 * @since 6.2.9
-	 * @access private
+	 * @return void
 	 */
-	private function apply_hooks()
+	private function init()
 	{
-		add_action('elementor/frontend/after_register_scripts', array($this, 'register_frontend_scripts'));
-		add_action('elementor/frontend/after_register_styles', array($this, 'register_frontend_styles'), 10);
-		add_action('elementor/frontend/after_enqueue_styles', array($this, 'enqueue_frontend_styles'), 10);
-
-		add_action('elementor/controls/register', array($this, 'register_controls'));
-		add_action('elementor/widgets/register', array($this, 'register_widgets'));
-		add_action('elementor/elements/categories_registered', array($this, 'add_smashballon_categories'));
+		if (doing_action('init') || did_action('init')) {
+			$this->init_elementor_integration();
+		} else {
+			add_action('init', array( $this, 'init_elementor_integration' ), 4);
+		}
 	}
 
 	/**
-	 * Add Smash Balloon categories.
+	 * Register Elementor widgets, scripts, and preview-iframe hooks.
 	 *
-	 * Add the Smash Balloon category to the Elementor widget categories.
-	 *
-	 * @param object $elements_manager The Elementor elements manager.
-	 * @since 6.2.9
-	 * @access public
+	 * @return void
 	 */
-	public function add_smashballon_categories($elements_manager)
+	public function init_elementor_integration()
 	{
-		$elements_manager->add_category(
-			'smash-balloon',
-			[
-				'title' => esc_html__('Smash Balloon', 'instagram-feed'),
-				'icon' => 'fa fa-plug',
-			]
-		);
+		if (! did_action('elementor/loaded')) {
+			return;
+		}
+
+		$recommended = new RecommendedElementorWidgets('instagram');
+		$recommended->setup();
+
+		$registry = SB_Feed_Blocks_Registry::instance();
+		$registry->register_elementor_widget(array(
+			'blockId'    => 'instagram',
+			'widgetName' => 'sb-instagram-feed',
+			'globalVar'  => 'sbiElementorData',
+			'feedInitFn' => 'sbi_init',
+		));
+
+		add_action('elementor/widgets/register', array( $this, 'register_widgets' ));
+		add_action('elementor/frontend/after_register_scripts', array( $this, 'register_frontend_scripts' ));
+		add_action('elementor/elements/categories_registered', array( $this, 'add_smashballoon_categories' ));
+		add_action('elementor/editor/after_enqueue_scripts', array( $this, 'enqueue_editor_scripts' ));
+		add_action('elementor/preview/enqueue_scripts', array( $this, 'enqueue_preview_feed_assets' ));
+		// Belt-and-suspenders: also hook the standard wp_enqueue_scripts and
+		// gate on Elementor's preview-mode helper, in case the dedicated
+		// preview hook fires after our window.
+		add_action('wp_enqueue_scripts', array( $this, 'enqueue_preview_feed_assets' ), 5);
 	}
 
 	/**
-	 * Register widgets.
+	 * Register the modern and legacy Elementor widgets.
 	 *
-	 * Register the Elementor widgets.
-	 *
-	 * @since 6.2.9
-	 * @access public
+	 * @param \Elementor\Widgets_Manager $widgets_manager Elementor widget manager.
+	 * @return void
 	 */
 	public function register_widgets($widgets_manager)
 	{
+		$widgets_manager->register(new SBI_Modern_Elementor_Widget());
 		$widgets_manager->register(new SBI_Elementor_Widget());
-
-		$installed_plugins = SBI_Feed_Builder::get_smashballoon_plugins_info();
-		unset($installed_plugins['instagram']);
-
-		foreach ($installed_plugins as $plugin) {
-			if (!$plugin['installed']) {
-				$plugin_class = str_replace('.', '\\', self::NAME_SPACE) . $plugin['class'];
-				$widgets_manager->register(new $plugin_class());
-			}
-		}
-
-		do_action('sbi_elementor_widgets_registered');
 	}
 
 	/**
-	 * Register controls.
+	 * Register frontend scripts and localize the Elementor widget data.
 	 *
-	 * Register the Elementor controls.
-	 *
-	 * @since 6.2.9
-	 * @access public
-	 */
-	public function register_controls($controls_manager)
-	{
-		$controls_manager->register(new SBI_Feed_Elementor_Control());
-	}
-
-	/**
-	 * Register frontend scripts.
-	 *
-	 * Register the frontend scripts.
-	 *
-	 * @since 6.2.9
-	 * @access public
+	 * @return void
 	 */
 	public function register_frontend_scripts()
 	{
-		$upload = wp_upload_dir();
-		$resized_url = trailingslashit($upload['baseurl']) . trailingslashit(SBI_UPLOADS_NAME);
+		sb_instagram_scripts_enqueue();
 
-		$js_options = array(
-			'font_method' => 'svg',
-			'placeholder' => trailingslashit(SBI_PLUGIN_URL) . 'img/placeholder.png',
-			'resized_url' => $resized_url,
-			'ajax_url' => admin_url('admin-ajax.php'),
+		$feeds = SBI_Db::elementor_feeds_list();
+
+		$data = array(
+			'feeds'         => ! empty($feeds) ? $feeds : array(),
+			'feed_url'      => admin_url('admin.php?page=sbi-feed-builder'),
+			'is_pro_active' => sbi_is_pro_version(),
 		);
 
-		// legacy settings.
-		$path = Util::sbi_legacy_css_enabled() ? 'js/legacy/' : 'js/';
+		wp_localize_script('sbi_scripts', 'sbiElementorData', $data);
 
-		wp_register_script(
-			'sbiscripts',
-			SBI_PLUGIN_URL . $path . 'sbi-scripts.min.js',
-			array('jquery'),
-			SBIVER,
-			true
-		);
-		wp_localize_script('sbiscripts', 'sb_instagram_js_options', $js_options);
+		SB_Feed_Blocks_Registry::instance()->enqueue_elementor_assets();
+	}
 
-		$data_handler = array(
-			'smashPlugins' => SBI_Feed_Builder::get_smashballoon_plugins_info(),
-			'nonce' => wp_create_nonce('sbi-admin'),
-			'ajax_handler' => admin_url('admin-ajax.php'),
-		);
-
-		wp_register_script(
-			'elementor-handler',
-			SBI_PLUGIN_URL . 'admin/assets/js/elementor-handler.js',
-			array('jquery'),
-			SBIVER,
-			true
-		);
-
-		wp_localize_script('elementor-handler', 'sbHandler', $data_handler);
-
-
-		wp_register_script(
-			'elementor-preview',
-			SBI_PLUGIN_URL . 'admin/assets/js/elementor-preview.js',
-			array('jquery'),
-			SBIVER,
-			true
+	/**
+	 * Add the Smash Balloon category to the Elementor widget panel.
+	 *
+	 * @param \Elementor\Elements_Manager $elements_manager Elementor elements manager.
+	 * @return void
+	 */
+	public function add_smashballoon_categories($elements_manager)
+	{
+		$elements_manager->add_category(
+			SB_Block_Utils::CATEGORY_SLUG,
+			array(
+				'title' => esc_html__('Smash Balloon', 'instagram-feed'),
+				'icon'  => 'fa fa-plug',
+			)
 		);
 	}
 
 	/**
-	 * Register frontend styles.
+	 * Enqueue shared editor styles in the Elementor editor.
 	 *
-	 * Register the frontend styles.
-	 *
-	 * @since 6.2.9
-	 * @access public
+	 * @return void
 	 */
-	public function register_frontend_styles()
+	public function enqueue_editor_scripts()
 	{
-		// legacy settings
-		$path = Util::sbi_legacy_css_enabled() ? 'css/legacy/' : 'css/';
-
-		wp_register_style(
-			'sbistyles',
-			SBI_PLUGIN_URL . $path . 'sbi-styles.min.css',
-			array(),
-			SBIVER
-		);
+		SB_Elementor_Editor_Assets::enqueue_shared_elementor_styles(SBIVER);
 	}
 
 	/**
-	 * Enqueue frontend styles.
+	 * Force-enqueue the feed CSS/JS inside the Elementor preview iframe.
 	 *
-	 * Enqueue the frontend styles.
+	 * The legacy SBI_Elementor_Widget renders via do_shortcode() which only
+	 * registers sbi_scripts/sbi_styles by default. Elementor processes widget
+	 * render after wp_head fires inside the preview iframe, so the shortcode's
+	 * late enqueue never lands in the page. Hook elementor/preview/enqueue_scripts
+	 * and force-enqueue here so the feed initializes inside the iframe even
+	 * when only the legacy widget is on the page.
 	 *
-	 * @since 6.2.9
-	 * @access public
+	 * @return void
 	 */
-	public function enqueue_frontend_styles()
+	public function enqueue_preview_feed_assets()
 	{
-		wp_enqueue_style('sbistyles');
+		if (! class_exists('\Elementor\Plugin') || empty(\Elementor\Plugin::instance()->preview)) {
+			return;
+		}
+		if (! \Elementor\Plugin::instance()->preview->is_preview_mode()) {
+			return;
+		}
+		sb_instagram_scripts_enqueue(true);
+
+		// The framework's sb-elementor-editor.js wires sbi_init() to the
+		// 'frontend/element_ready/sb-instagram-feed.default' hook for the
+		// modern widget. The legacy SBI_Elementor_Widget registers under
+		// the name 'sbi-widget', so that hook never fires for it. Bridge
+		// it with a small dedicated script.
+		wp_enqueue_script(
+			'sbi-elementor-preview',
+			trailingslashit(SBI_PLUGIN_URL) . 'js/sbi-elementor-preview.js',
+			array( 'sbi_scripts' ),
+			SBIVER,
+			true
+		);
 	}
 }

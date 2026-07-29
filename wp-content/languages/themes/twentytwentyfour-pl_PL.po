@@ -60,11 +60,11 @@ msgstr "Lista wpisów bez obrazków, 1 kolumna"
 msgid "I’m <em>Leia Acosta</em>, a passionate photographer who finds inspiration in capturing the fleeting beauty of life."
 msgstr "Jestem <em>Leia Acosta</em>, pasjonatka fotografii, która znajduje inspirację w uchwyceniu ulotnego piękna życia."
 
-#: functions.php:200
+#: functions.php:188
 msgid "A collection of full page layouts."
 msgstr "Kolekcja układów pełnych stron."
 
-#: functions.php:199
+#: functions.php:187
 msgctxt "Block pattern category"
 msgid "Pages"
 msgstr "Strony"
@@ -401,7 +401,7 @@ msgstr "Instagram"
 msgid "Contact"
 msgstr "Kontakt"
 
-#: functions.php:51
+#: functions.php:47
 msgid "Pill"
 msgstr "Pigułka"
 
@@ -480,19 +480,19 @@ msgctxt "Call to Action button text"
 msgid "About us"
 msgstr "O nas"
 
-#: functions.php:28
+#: functions.php:24
 msgid "Arrow icon"
 msgstr "Ikonka strzałki"
 
-#: functions.php:74
+#: functions.php:70
 msgid "Checkmark"
 msgstr "Znacznik wyboru"
 
-#: functions.php:93
+#: functions.php:89
 msgid "With arrow"
 msgstr "Ze strzałką"
 
-#: functions.php:111
+#: functions.php:107
 msgid "With asterisk"
 msgstr "Z gwiazdką"
 

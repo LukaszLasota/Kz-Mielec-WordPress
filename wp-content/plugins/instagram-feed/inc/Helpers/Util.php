@@ -3,7 +3,6 @@
 namespace InstagramFeed\Helpers;
 
 use DateTime;
-use InstagramFeed\Vendor\Brumann\Polyfill\Unserialize;
 
 /**
  * @since 6.1.2
@@ -22,7 +21,17 @@ class Util
 
 	public static function isIFPage()
 	{
-		return get_current_screen() !== null && !empty($_GET['page']) && strpos($_GET['page'], 'sbi-') !== false;
+		$plugin_pages = array(
+			'sb-instagram-feed',
+			'sbi-feed-builder',
+			'sbi-settings',
+			'sbi-oembeds-manager',
+			'sbi-extensions-manager',
+			'sbi-about-us',
+			'sbi-support',
+		);
+		$current_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+		return in_array($current_page, $plugin_pages, true);
 	}
 
 	/**
@@ -242,8 +251,12 @@ class Util
 	/**
 	 * Safely unserialize data
 	 *
-	 * @param $data
-	 * @return mixed
+	 * Uses native PHP unserialize with allowed_classes option for security.
+	 * This prevents object injection attacks by disallowing class instantiation.
+	 *
+	 * @param mixed $data Data to unserialize
+	 * @return mixed Unserialized data
+	 * @since 6.1.2
 	 */
 	public static function safe_unserialize($data)
 	{
@@ -251,7 +264,9 @@ class Util
 			return $data;
 		}
 
-		$data = Unserialize::unserialize($data, ['allowed_classes' => false]);
+		// Use native PHP 7.0+ unserialize with allowed_classes option
+		// This is safe since minimum PHP version is 7.4
+		$data = unserialize($data, ['allowed_classes' => false]);
 		return $data;
 	}
 }

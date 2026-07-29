@@ -2,8 +2,8 @@
 Contributors: smashballoon, craig-at-smash-balloon, am, smub
 Tags: Instagram, Instagram feed, Instagram photos, Instagram widget, Instagram gallery
 Requires at least: 4.1
-Tested up to: 6.8
-Stable tag: 6.10.0
+Tested up to: 7.0
+Stable tag: 6.11.4
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@ Formerly "Instagram Feed". Display clean, customizable, and responsive Instagram
 
 As the most powerful and easiest to use Instagram plugin for WordPress, Smash Balloon Social Photo Feed helps you create, customize and embed Instagram feeds on your website in just a few clicks! Absolutely no coding needed.
 
-https://www.youtube.com/watch?v=517rApIqzbw
+https://vimeo.com/1166356243
 
 Designed for both WordPress beginners and advanced users, you can use Social Photo Feed to seamlessly integrate your Instagram widgets and keep your site effortlessly updated.
 
@@ -307,6 +307,34 @@ For more FAQs related to the Instagram Feed plugin please visit the [FAQ section
 6. Just copy and paste the shortcode into any page, post or widget on your site. You can also use the block editor with our handy Instagram Feed block.
 
 == Changelog ==
+
+= 6.11.4 =
+* New - Photos, Videos, and Reels filter toggles are now available in Instagram Feed Free.
+* Fix - Instagram images now honor the intended image quality, and the Thumbnail feed size now uses the cached thumbnail file.
+* Fix - Resolved an editor typography issue on WordPress versions below 7.0 caused by legacy block iframe styles.
+* Fix - Additional plugin hardening.
+
+= 6.11.3 =
+* Fix - Notices now stay dismissed once closed, including on sites with multiple administrators.
+
+= 6.11.2 =
+* Fix - Additional plugin hardening.
+
+= 6.11.1 =
+* New - Added a Help widget to the feed builder for in-app access to documentation and support.
+* Fix - The legacy Instagram Feed block now renders a live preview correctly inside the WP 7.0+ iframed block editor, and the legacy Elementor widget now renders correctly inside the Elementor preview.
+* Fix - The Elementor widget title is now translatable.
+
+= 6.11.0 =
+* New - Added a modern Gutenberg block and Elementor widget for the Instagram feed. Existing feeds using the legacy block continue to render without reconfiguration.
+* Tweak - Compatibility with WP 7.
+* Fix - Plugin no longer removes the WordPress footer on plugin admin pages.
+* Fix - Captions with multiple paragraphs no longer render duplicate anchor tags in screen-reader text.
+* Fix - Instagram Trial Reels (test posts shown only to non-followers) are no longer included in feeds.
+
+= 6.10.1 =
+* Tweak - Added optional deactivation feedback survey to help us improve the plugin.
+* Tweak - Various PHP 8.4 compatibility enhancements.
 
 = 6.10.0 =
 * New - Added support for Instagram's Media API. This will future-proof the plugin and prevent issues with Instagram deprecating the 'thumbnail_url' from the oEmbed API.

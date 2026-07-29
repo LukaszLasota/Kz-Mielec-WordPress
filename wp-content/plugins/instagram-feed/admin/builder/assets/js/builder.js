@@ -99,7 +99,6 @@ sbiBuilder = new Vue({
                 'welcome',
                 'selectFeed'
             ],
-            footerWidget: false,
 
             // welcome, selectFeed
             pageScreen: 'welcome',
@@ -373,6 +372,9 @@ sbiBuilder = new Vue({
         if (sbiStorage?.setCurrentStep !== undefined) {
             self.currentOnboardingWizardStep = 1;
             sbiStorage.removeItem("setCurrentStep");
+            if ( typeof window.sbiSmashUsageRecordEvent === 'function' ) {
+                window.sbiSmashUsageRecordEvent( 'setup_wizard_started' );
+            }
         }
 
     },
@@ -3113,6 +3115,9 @@ sbiBuilder = new Vue({
 
             if (self.currentOnboardingWizardStep < self.onboardingWizardContent.steps.length) {
                 self.currentOnboardingWizardStep += 1;
+                if ( typeof window.sbiSmashUsageRecordEvent === 'function' ) {
+                    window.sbiSmashUsageRecordEvent( 'setup_wizard_step_completed' );
+                }
             }
         },
 
@@ -3139,12 +3144,17 @@ sbiBuilder = new Vue({
                     self.onboardingSuccessMessagesDisplay.push(self.onboardingSuccessMessages.feedPlugins.replace('#', settingsKeys[stInd]));
                 } else if (st?.id === 'reviews') {
                     self.onboardingSuccessMessagesDisplay.push('Reviews Feed ' + self.genericText.installed);
+                } else if (st?.id === 'wpchat') {
+                    self.onboardingSuccessMessagesDisplay.push('WPChat ' + self.genericText.installed);
                 } else if (st?.type === 'install_plugins') {
                     self.onboardingSuccessMessagesDisplay.push('<span class="sb-onboarding-wizard-succes-name"> ' + st?.pluginName + '</span> ' + self.genericText.installed);
                 }
             })
             setTimeout(function () {
                 self.onboardingWizardDone = 'true';
+                if ( typeof window.sbiSmashUsageRecordEvent === 'function' ) {
+                    window.sbiSmashUsageRecordEvent( 'setup_wizard_completed' );
+                }
             }, 100)
             sbiBuilder.$forceUpdate();
         },
@@ -3224,6 +3234,14 @@ sbiBuilder = new Vue({
 
         },
 
+        hasActiveInstallPlugins: function () {
+            const self = this,
+                pluginsList = self.onboardingWizardStepContent['install-plugins']?.pluginsList || [];
+            return pluginsList.some(function (plugin) {
+                return plugin?.uncheck !== true && self.currentOnboardingWizardActiveSettings[plugin?.data?.id] !== undefined;
+            });
+        },
+
         checkActiveOnboardingWizardSettings: function () {
             const self = this,
                 currentStepContentSteps = self.onboardingWizardContent.steps;
@@ -3245,6 +3263,9 @@ sbiBuilder = new Vue({
         },
 
         dismissOnboardingWizard: function () {
+            if ( typeof window.sbiSmashUsageRecordEvent === 'function' ) {
+                window.sbiSmashUsageRecordEvent( 'setup_wizard_abandoned' );
+            }
             const self = this,
                 dismissWizardData = {
                     action: 'sbi_feed_saver_manager_dismiss_wizard'

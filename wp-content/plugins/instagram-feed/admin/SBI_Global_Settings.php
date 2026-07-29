@@ -28,6 +28,7 @@ use SB_Instagram_GDPR_Integrations;
 use function json_decode;
 use function sbi_is_pro_version;
 use function stripslashes;
+use InstagramFeed\UsageTracking\Config as SmashTrackingConfig;
 
 class SBI_Global_Settings
 {
@@ -63,7 +64,7 @@ class SBI_Global_Settings
 		}
 
 		add_action('admin_menu', [$this, 'register_menu']);
-		add_filter('admin_footer_text', [$this, 'remove_admin_footer_text']);
+		add_action('in_admin_header', [$this, 'maybe_remove_admin_footer']);
 
 		add_action('wp_ajax_sbi_save_settings', [$this, 'sbi_save_settings']);
 		add_action('wp_ajax_sbi_activate_license', [$this, 'sbi_activate_license']);
@@ -170,20 +171,27 @@ class SBI_Global_Settings
 		$sbi_settings['email_notification'] = sanitize_text_field($advanced['email_notification']);
 		$sbi_settings['email_notification_addresses'] = sanitize_text_field($advanced['email_notification_addresses']);
 
-		$usage_tracking = get_option('sbi_usage_tracking', array('last_send' => 0, 'enabled' => sbi_is_pro_version()));
-		if (isset($advanced['email_notification_addresses'])) {
-			$usage_tracking['enabled'] = false;
-			if (isset($advanced['usage_tracking'])) {
-				if (!is_array($usage_tracking)) {
-					$usage_tracking = array(
-						'enabled' => $advanced['usage_tracking'],
-						'last_send' => 0,
-					);
-				} else {
-					$usage_tracking['enabled'] = $advanced['usage_tracking'];
-				}
+		if ( isset( $advanced['usage_tracking'] ) ) {
+			$tracking_enabled = (bool) $advanced['usage_tracking'];
+			$usage_tracking   = get_option(
+				'sbi_usage_tracking',
+				array(
+					'enabled'   => SmashTrackingConfig::DEFAULT_ENABLED,
+					'last_send' => 0,
+				)
+			);
+			$last_send        = is_array( $usage_tracking ) && isset( $usage_tracking['last_send'] ) ? $usage_tracking['last_send'] : 0;
+			update_option(
+				'sbi_usage_tracking',
+				array(
+					'enabled'   => $tracking_enabled,
+					'last_send' => $last_send,
+				),
+				false
+			);
+			if ( ! $tracking_enabled ) {
+				wp_clear_scheduled_hook( SmashTrackingConfig::CRON_HOOK );
 			}
-			update_option('sbi_usage_tracking', $usage_tracking, false);
 		}
 
 		// Update the sbi_style_settings option that contains data for translation and advanced tabs
@@ -278,53 +286,7 @@ class SBI_Global_Settings
 	 */
 	public function clear_stored_caches()
 	{
-
-		global $wpdb;
-
-		$cache_table_name = $wpdb->prefix . 'sbi_feed_caches';
-
-		$sql = "
-		UPDATE $cache_table_name
-		SET cache_value = ''
-		WHERE cache_key NOT IN ( 'posts_backup', 'header_backup' );";
-		$wpdb->query($sql);
-
-		// Delete all SBI transients
-		$table_name = $wpdb->prefix . "options";
-		$wpdb->query("
-                    DELETE
-                    FROM $table_name
-                    WHERE `option_name` LIKE ('%\_transient\_sbi\_%')
-                    ");
-		$wpdb->query("
-                    DELETE
-                    FROM $table_name
-                    WHERE `option_name` LIKE ('%\_transient\_timeout\_sbi\_%')
-                    ");
-		$wpdb->query("
-			        DELETE
-			        FROM $table_name
-			        WHERE `option_name` LIKE ('%\_transient\_&sbi\_%')
-			        ");
-		$wpdb->query("
-			        DELETE
-			        FROM $table_name
-			        WHERE `option_name` LIKE ('%\_transient\_timeout\_&sbi\_%')
-			        ");
-		$wpdb->query("
-                    DELETE
-                    FROM $table_name
-                    WHERE `option_name` LIKE ('%\_transient\_\$sbi\_%')
-                    ");
-		$wpdb->query("
-                    DELETE
-                    FROM $table_name
-                    WHERE `option_name` LIKE ('%\_transient\_timeout\_\$sbi\_%')
-                    ");
-
-		SB_Instagram_Cache::clear_legacy(true);
-
-		sb_instagram_clear_page_caches();
+		sbi_clear_all_feed_caches();
 	}
 
 	/**
@@ -420,7 +382,7 @@ class SBI_Global_Settings
 			$license_key = sanitize_key(get_option('sbi_license_key'));
 		}
 
-		$upgrade_url = sprintf('https://smashballoon.com/instagram-feed/pricing/?license_key=%s&upgrade=true&utm_campaign=instagram-free&utm_source=settings&utm_medium=upgrade-license', $license_key);
+		$upgrade_url = sprintf('https://smashballoon.com/instagram-feed/instagram-lite-upgrade/?license_key=%s&upgrade=true&utm_campaign=instagram-free&utm_source=settings&utm_medium=upgrade-license', $license_key);
 		$renew_url = sprintf('https://smashballoon.com/checkout/?license_key=%s&download_id=%s&utm_campaign=instagram-free&utm_source=settings&utm_medium=upgrade-license&utm_content=renew-license', $license_key, sanitize_key($sbi_download_id));
 		$learn_more_url = 'https://smashballoon.com/doc/my-license-key-wont-activate/?utm_campaign=instagram-free&utm_source=settings&utm_medium=license&utm_content=learn-more';
 
@@ -732,6 +694,7 @@ class SBI_Global_Settings
 
 		$user_id = get_current_user_id();
 		update_user_meta($user_id, 'sbi_ignore_new_user_sale_notice', 'always');
+		update_user_meta($user_id, 'sb_notice_discount_dismissed', true);
 		$sbi_notices->remove_notice('discount');
 
 		$sbi_statuses_option = get_option('sbi_statuses', array());
@@ -804,6 +767,19 @@ class SBI_Global_Settings
 	}
 
 	/**
+	 * Conditionally remove admin footer on plugin pages only.
+	 *
+	 * @since 6.11
+	 */
+	public function maybe_remove_admin_footer()
+	{
+		if (Util::isIFPage()) {
+			add_filter('admin_footer_text', [$this, 'remove_admin_footer_text']);
+			add_filter('update_footer', [$this, 'remove_admin_footer_text'], 11);
+		}
+	}
+
+	/**
 	 * Remove admin footer message
 	 *
 	 * @return string
@@ -821,8 +797,6 @@ class SBI_Global_Settings
 	 */
 	public function register_menu()
 	{
-		// remove admin page update footer
-		add_filter('update_footer', [$this, 'remove_admin_footer_text']);
 
 		$cap = current_user_can('manage_custom_instagram_feed_options') ? 'manage_custom_instagram_feed_options' : 'manage_options';
 		$cap = apply_filters('sbi_settings_pages_capability', $cap);
@@ -930,10 +904,10 @@ class SBI_Global_Settings
 			$has_license_error = true;
 		}
 
-		$upgrade_url = sprintf('https://smashballoon.com/instagram-feed/pricing/?license_key=%s&upgrade=true&utm_campaign=instagram-free&utm_source=settings&utm_medium=upgrade-license', $license_key);
-		$footer_upgrade_url = 'https://smashballoon.com/instagram-feed/demo?utm_campaign=instagram-free&utm_source=settings&utm_medium=footer-banner&utm_content=Try Demo';
-		$usage_tracking_url = 'https://smashballoon.com/instagram-feed/usage-tracking/';
-		$feed_issue_email_url = 'https://smashballoon.com/doc/email-report-is-not-in-my-inbox/?instagram';
+		$upgrade_url = sprintf('https://smashballoon.com/instagram-feed/instagram-lite-upgrade/?license_key=%s&upgrade=true&utm_campaign=instagram-free&utm_source=settings&utm_medium=upgrade-license', $license_key);
+		$footer_upgrade_url = 'https://smashballoon.com/instagram-feed/instagram-lite-upgrade/?utm_campaign=instagram-free&utm_source=settings&utm_medium=footer-banner&utm_content=Try Demo';
+		$usage_tracking_url = 'https://smashballoon.com/instagram-feed/usage-tracking/?utm_campaign=instagram-free&utm_source=settings&utm_medium=docs';
+		$feed_issue_email_url = 'https://smashballoon.com/doc/email-report-is-not-in-my-inbox/?instagram&utm_campaign=instagram-free&utm_source=settings&utm_medium=docs';
 
 		$sources_list = SBI_Feed_Builder::get_source_list();
 
@@ -1008,7 +982,7 @@ class SBI_Global_Settings
 			'feedsTab' => array(
 				'localizationBox' => array(
 					'title' => __('Localization', 'instagram-feed'),
-					'tooltip' => '<p>This controls the language of any predefined text strings provided by Instagram. For example, the descriptive text that accompanies some timeline posts (eg: Smash Balloon created an event) and the text in the \'Like Box\' widget. To find out how to translate the other text in the plugin see <a href="https://smashballoon.com/sbi-how-does-the-plugin-handle-text-and-language-translation/">this FAQ</a>.</p>'
+					'tooltip' => '<p>This controls the language of any predefined text strings provided by Instagram. For example, the descriptive text that accompanies some timeline posts (eg: Smash Balloon created an event) and the text in the \'Like Box\' widget. To find out how to translate the other text in the plugin see <a href="https://smashballoon.com/sbi-how-does-the-plugin-handle-text-and-language-translation/?utm_campaign=instagram-free&utm_source=settings&utm_medium=docs">this FAQ</a>.</p>'
 				),
 				'timezoneBox' => array(
 					'title' => __('Timezone', 'instagram-feed')
@@ -1050,7 +1024,7 @@ class SBI_Global_Settings
 					'tooltip' => '<p><b>If set to “Yes”,</b> it prevents all images and videos from being loaded directly from Instagram’s servers (CDN) to prevent any requests to external websites in your browser. To accommodate this, some features of your plugin will be disabled or limited. </p>
                     <p><b>If set to “No”,</b> the plugin will still make some requests to load and display images and videos directly from Instagram.</p>
                     <p><b>If set to “Automatic”,</b> it will only load images and videos directly from Instagram if consent has been given by one of these integrated GDPR cookie Plugins.</p>
-                    <p><a href="https://smashballoon.com/doc/instagram-feed-gdpr-compliance/?instagram" target="_blank" rel="noopener">Learn More</a></p>',
+                    <p><a href="https://smashballoon.com/doc/instagram-feed-gdpr-compliance/?instagram&utm_campaign=instagram-free&utm_source=settings&utm_medium=docs" target="_blank" rel="noopener">Learn More</a></p>',
 				),
 				'wpconsentBox' => array(
 					'title' => __('Install WPConsent for GDPR', 'instagram-feed'),
@@ -1086,7 +1060,7 @@ class SBI_Global_Settings
 				),
 				'usageBox' => array(
 					'title' => __('Usage Tracking', 'instagram-feed'),
-					'helpText' => sprintf(__('This helps to prevent plugin and theme conflicts by sending a report in the background once per week about your settings and relevant site stats. It does not send sensitive information like access tokens, email addresses, or user info. This will also not affect your site performance. %s', 'instagram-feed'), '<a href="' . $usage_tracking_url . '" target="_blank">' . __('Learn More', 'instagram-feed') . '</a>'),
+					'helpText' => sprintf( __( 'Send a weekly report to Smash Balloon to help improve the product. No sensitive data is collected. You can disable this at any time. %s', 'instagram-feed' ), '<a href="' . $usage_tracking_url . '" target="_blank">' . __( 'Learn More', 'instagram-feed' ) . '</a>' ),
 				),
 				'resetErrorBox' => array(
 					'title' => __('Reset Error Log', 'instagram-feed'),
@@ -1215,7 +1189,6 @@ class SBI_Global_Settings
 		$sbi_cache_cron_interval = $sbi_settings['sbi_cache_cron_interval'];
 		$sbi_cache_cron_time = $sbi_settings['sbi_cache_cron_time'];
 		$sbi_cache_cron_am_pm = $sbi_settings['sbi_cache_cron_am_pm'];
-		$usage_tracking = get_option('sbi_usage_tracking', array('last_send' => 0, 'enabled' => sbi_is_pro_version()));
 		$sbi_ajax = $sbi_settings['sb_instagram_ajax_theme'];
 		$active_gdpr_plugin = SB_Instagram_GDPR_Integrations::gdpr_plugins_active();
 		$sbi_preserve_setitngs = $sbi_settings['sb_instagram_preserve_settings'];
@@ -1254,7 +1227,7 @@ class SBI_Global_Settings
 			'advanced' => array(
 				'sbi_enable_resize' => !$sbi_settings['sb_instagram_disable_resize'],
 				'image_format' => $sbi_settings['image_format'],
-				'usage_tracking' => $usage_tracking['enabled'],
+				'usage_tracking' => SmashTrackingConfig::is_enabled(),
 				'sbi_ajax' => $sbi_ajax,
 				'sb_ajax_initial' => $sbi_settings['sb_ajax_initial'],
 				'sbi_enqueue_js_in_head' => $sbi_settings['enqueue_js_in_head'],
@@ -1314,7 +1287,7 @@ class SBI_Global_Settings
 	 */
 	public function get_gdpr_auto_info()
 	{
-		$gdpr_doc_url = 'https://smashballoon.com/doc/instagram-feed-gdpr-compliance/?instagram';
+		$gdpr_doc_url = 'https://smashballoon.com/doc/instagram-feed-gdpr-compliance/?instagram&utm_campaign=instagram-free&utm_source=settings&utm_medium=docs';
 		$output = '';
 		$active_gdpr_plugin = SB_Instagram_GDPR_Integrations::gdpr_plugins_active();
 		if ($active_gdpr_plugin) {
