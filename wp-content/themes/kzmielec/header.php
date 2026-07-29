@@ -29,7 +29,10 @@ if ( $logo_id ) {
 } else {
 	$logo_url = get_option( 'my_custom_logo_setting' );
 }
-$logo_tag = is_front_page() ? 'h1' : 'p';
+// Logo is branding, not the page heading — keep it a <p> everywhere so each page
+// has exactly one h1 (page title on subpages; the visually-hidden site-name h1 on
+// the front page). Making the logo an h1 on the front page produced a second h1.
+$logo_tag = 'p';
 $logo_img = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="site-logo__image" fetchpriority="high" decoding="async"';
 if ( $logo_width && $logo_height ) {
 	$logo_img .= ' width="' . esc_attr( (string) $logo_width ) . '" height="' . esc_attr( (string) $logo_height ) . '"';
