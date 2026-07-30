@@ -25,6 +25,29 @@ class RegisterPosts {
 	 */
 	public function __construct() {
 		$this->register_meetings();
+		add_action( 'template_redirect', [ $this, 'redirect_single_meeting' ] );
+	}
+
+	/**
+	 * Meetings are only ever shown as a group — on the homepage tiles and the
+	 * "zaplanuj-wizyte" archive. Individual meeting pages are not wanted, so
+	 * redirect any single-meeting request to the archive, jumping to that
+	 * meeting's anchor (matches the homepage tile links: /zaplanuj-wizyte/#slug).
+	 * Logged-in editors keep working post previews.
+	 *
+	 * @return void
+	 */
+	public function redirect_single_meeting(): void {
+		if ( ! is_singular( 'meetings' ) ) {
+			return;
+		}
+		if ( is_preview() && current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+		$meeting = get_queried_object();
+		$anchor  = ( $meeting instanceof \WP_Post && '' !== $meeting->post_name ) ? '#' . $meeting->post_name : '';
+		wp_safe_redirect( home_url( '/zaplanuj-wizyte/' . $anchor ), 301 );
+		exit;
 	}
 
 	/**
