@@ -18,6 +18,8 @@
 - Single output per entry: NO `.min.*` variants.
 - Never delete or overwrite the static committed files `assets/js/logo.js` and `assets/js/admin/belief-settings.js` (enqueued by `LogoSettings.php` / `BeliefSettings.php`; not build outputs).
 - Runtime npm deps required by the build: `masonry-layout` ^4.2.2, `imagesloaded` ^5.0.0.
+- `package.json` MUST keep `"sideEffects": ["*.scss","*.css"]` — load-bearing; without it production tree-shaking drops the SCSS side-effect import and the CSS disappears.
+- Expect autoprefixer to add vendor prefixes wp-scripts didn't before — CSS is not byte-identical; judge parity by rendering, not by diff.
 - Cache-busting stays on `filemtime` in all loaders.
 - Commit after each task. Do the whole migration on a feature branch, not `main`.
 
@@ -65,8 +67,8 @@ Expected: `src/frontend.ts`, `src/sass/`, `src/patterns/`, `src/block-styles/`, 
   "name": "kzmielec-theme",
   "sideEffects": ["*.scss", "*.css"],
   "scripts": {
-    "build": "wp-scripts build --webpack-src-dir=src",
-    "start": "wp-scripts start --webpack-src-dir=src",
+    "build": "wp-scripts build --source-maps",
+    "start": "wp-scripts start",
     "postinstall": "cd ../../.. && git config core.hooksPath .githooks"
   },
   "dependencies": {
@@ -206,6 +208,32 @@ For masonry: the blog index renders `.news`; confirm the dynamic chunk is fetche
 curl -sk https://kzmielec.ddev.site/ | grep -oE "assets/js/frontend.js[^\"']*"   # loads
 ```
 Load a `.news` page in Playwright and confirm no console error and the masonry chunk request returns 200 (network). If `.news` has no cards there are no visual changes — the goal is that the chunk *loads without 404* (publicPath correct).
+
+Fonts (most sensitive): confirm the `@font-face` resolves and the file loads.
+```bash
+# emitted at the exact preloaded name, no hash:
+ls assets/webfont/cinzel-v26-latin.woff2 assets/webfont/cinzel-v26-latin-ext.woff2
+# the @font-face url in the built CSS points at webfont/:
+grep -oE "url\([^)]*cinzel[^)]*\)" assets/css/frontend.css
+# and the browser actually fetches it (200, not 404):
+curl -sk -o /dev/null -w "font %{http_code}\n" https://kzmielec.ddev.site/wp-content/themes/kzmielec/assets/webfont/cinzel-v26-latin.woff2
+```
+In the Playwright run, confirm the page renders in Cinzel (serif) — a 404 font would fall back to a system serif and the headings would look different.
+
+Autoprefixer note: the CSS will contain **more** vendor prefixes than before
+(wp-scripts runs autoprefixer; the old build did not). This is expected — judge
+the screenshots on rendering, not on a text diff of the CSS.
+
+- [ ] **Step 8b: Verify CSS is written to a file under watch**
+
+Run `ddev theme:watch` (or `npm run start`) in the background, edit a color in
+`src/sass/pages/page.scss`, save, and confirm `assets/css/frontend.css` changes
+on disk (wp-scripts extracts CSS to a file in watch mode, not JS-injected — PHP
+loads it as a `<link>`). Stop watch when done.
+
+```bash
+ls -la --time-style=+%T assets/css/frontend.css   # mtime updates after a save
+```
 
 - [ ] **Step 9: Commit**
 

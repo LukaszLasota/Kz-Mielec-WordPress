@@ -178,6 +178,36 @@ page (search now uses `.search-grid`, not `.news`).
 (`backend.js`/`backend.min.js`/`backend.css` appear stale — no entry builds them,
 and `backend.css` is enqueued only defensively; treat as dead, leave or remove.)
 
+## CSS / SCSS specifics
+
+- **`sideEffects: ["*.scss","*.css"]`** in the theme `package.json` is
+  load-bearing: without it, production tree-shaking drops the
+  `import './sass/frontend.scss'` side-effect import and the CSS vanishes.
+- **Autoprefixer is a behavior change.** The current build has no
+  PostCSS/autoprefixer/browserslist; the `-webkit-` prefixes in today's output
+  are hand-authored. wp-scripts runs autoprefixer by default, so the migrated
+  CSS gains extra vendor prefixes and is **not byte-identical** (a compat
+  improvement, not a regression). This is why visual parity — not diff — is the
+  acceptance bar. An optional `.browserslistrc` can bound the prefix set.
+- **`@font-face` url resolution is the most sensitive point.** `base/_fonts.scss`
+  uses `url('../fonts/cinzel-*.woff2')`. css-loader rewrites the url and emits
+  the font; it MUST land at `assets/webfont/cinzel-*.woff2` (exact name, no hash)
+  because `header.php` preloads those exact URLs and the `@font-face` in the
+  output CSS must resolve to a real file. Verify the font actually loads (no 404),
+  not just that a file exists.
+- **CSS must be extracted to a file in `start` (watch) too**, not injected via
+  JS — PHP loads it as a `<link>`. Verify `assets/css/frontend.css` updates on
+  save under watch. (wp-scripts uses MiniCssExtractPlugin in both modes, so this
+  should hold; verify anyway.)
+- **`aspect-ratio: 16 / 9`** compiles to `16/9` today (Dart Sass does not divide
+  it); no action needed.
+- **21 `@import`, no `@use`.** Compiles with Dart Sass deprecation warnings, not
+  errors. Latent debt (Dart Sass 3 removes `@import`); out of scope now.
+- **RTL:** wp-scripts emits `*-rtl.css`. Harmless for this LTR site; ignore (or
+  disable via config).
+- **Sourcemaps:** `wp-scripts build` omits them by default — pass `--source-maps`
+  in the build script to honor "minified + sourcemaps".
+
 ## Risks / notes
 
 - **CSS-only entries** (block-styles, pattern `style.scss`) emit an empty
