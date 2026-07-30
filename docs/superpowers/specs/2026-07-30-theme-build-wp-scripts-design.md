@@ -121,18 +121,62 @@ remember to run `build` before committing.
 
 ## Migration steps (ordered)
 
-1. Add root `package.json`, `webpack.config.js`, `tsconfig.json`; `npm install`.
+1. Add root `package.json` (scripts `build`/`start`; devDep `@wordpress/scripts`
+   ^27; **dependencies `masonry-layout` ^4.2.2 + `imagesloaded` ^5.0.0**;
+   `postinstall` re-pointing `core.hooksPath` to `.githooks`),
+   `webpack.config.js`, `tsconfig.json`; `npm install`.
 2. Move `webpack/src/` → `src/`. In `webpack.config.js`, keep font/image output
    at `assets/webfont/` and `assets/media/` so `header.php`'s font `preload`
    and SCSS `url()` references keep resolving unchanged.
-3. `wp-scripts build`; verify `assets/css/frontend.css` etc. are produced and
-   the site renders 1:1 (check homepage, 404, search, a belief page).
+3. `wp-scripts build`; verify `assets/css/frontend.css` etc. are produced.
+   Verify the site renders 1:1 (homepage, 404, search, a belief page) **and that
+   masonry still lazy-loads on a `.news` page** (blog/archive/category).
 4. Drop the suffix in all three loaders (`RegisterAssets.php`, `BlockStyles.php`,
    `PatternAssets.php`) and fix the `PatternAssets.php` source glob
    `webpack/src/patterns/*` → `src/patterns/*`.
-5. Update the ddev command scripts; delete `webpack/`.
-6. Add `.githooks/pre-commit`.
-7. Final `build` + visual verification + commit.
+5. Clean orphaned dual-output from `assets/` (`*.min.js`, `*.min.css`, stale
+   `*.map`, old dynamic chunks) — **preserving `assets/js/logo.js` and
+   `assets/js/admin/belief-settings.js`**.
+6. Update the ddev command scripts; delete `webpack/`.
+7. Add `.githooks/pre-commit`.
+8. Final `build` + full visual verification + commit.
+
+## Assets NOT produced by the build (must survive untouched)
+
+Two committed admin scripts are **static files**, not webpack outputs — no entry
+builds them, and the build must not be expected to regenerate them, nor may
+cleanup delete them:
+
+- `assets/js/logo.js` — enqueued by `App/Admin/LogoSettings.php` (a byte-identical
+  copy also sits at `webpack/src/js/logo/logo.js`; after the `src/` move it becomes
+  an orphan source copy — harmless).
+- `assets/js/admin/belief-settings.js` — enqueued by `App/Admin/BeliefSettings.php`
+  (no source anywhere; purely static).
+
+## Runtime npm dependencies (build breaks without them)
+
+`src/frontend.ts` lazy-loads `src/js/masonry/masonry.js`, which imports the npm
+packages **`masonry-layout` (^4.2.2)** and **`imagesloaded` (^5.0.0)**. These are
+`dependencies` in the old `webpack/package.json` and MUST be carried into the new
+theme `package.json`, or the build fails. (`@babel/core` need not move — wp-scripts
+bundles its own Babel.)
+
+The masonry code-split produces lazy chunks (today: `src_js_masonry_masonry_js.js`,
+`vendors-…masonry-layout…js`; minified `362.min.js`/`632.min.js`). No PHP references
+these names — webpack's runtime loads them via `publicPath` — so wp-scripts renaming
+them is fine, **but** `publicPath` must resolve to the theme `assets/` URL and the
+lazy-load must be verified on a `.news` page (blog/archive/category), not the search
+page (search now uses `.search-grid`, not `.news`).
+
+## Orphaned dual-output cleanup
+
+`assets/` currently holds the dual output — both `[name].js` and `[name].min.js`
+(plus `.map`), and old dynamic-chunk files (`362.min.js`, `632.min.js`,
+`src_js_masonry_masonry_js.js`, `vendors-…`). After the single-output build these
+`.min.*` files and stale chunks are orphans. Cleanup must delete them while
+**preserving `assets/js/logo.js` and `assets/js/admin/belief-settings.js`**.
+(`backend.js`/`backend.min.js`/`backend.css` appear stale — no entry builds them,
+and `backend.css` is enqueued only defensively; treat as dead, leave or remove.)
 
 ## Risks / notes
 
@@ -157,6 +201,10 @@ remember to run `build` before committing.
 - Homepage, 404, search, and a belief page render visually identical to before,
   **including pattern styles (banner-hero, page-belief, archive-meetings) and
   block styles** — verified in the browser, not just by file existence.
+- **Masonry lazy-loads and lays out `.news` cards** on a blog/archive page.
+- Static `assets/js/logo.js` and `assets/js/admin/belief-settings.js` still exist
+  and are still enqueued by their admin loaders.
+- No `*.min.js`/`*.min.css` remain in `assets/`; single output per entry.
 - Committing a theme `src/` change auto-produces optimized `assets/` via the
   pre-commit hook.
 - `webpack/` folder and the `theme:dev`/`theme:prod` split are gone.
