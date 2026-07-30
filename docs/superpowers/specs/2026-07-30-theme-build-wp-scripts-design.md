@@ -66,25 +66,35 @@ themes/kzmielec/
   (unminified, for local debugging).
 - You run **one at a time**, never both. Dev = `watch`. Ship = `build`.
 
-### PHP: drop the suffix branch
+### PHP: drop the suffix branch (THREE loaders, not one)
 
-`RegisterAssets.php`:
+The `.min` suffix logic is duplicated across **three** asset loaders; all three
+must drop it, or they will look for `*.min.*` files the single-output build no
+longer produces:
 
-- Remove the `$suffix` property, `get_asset_suffix()`, and every
-  `{$this->suffix}` interpolation.
-- Enqueue the single canonical paths:
-  - `/assets/js/frontend.js`
-  - `/assets/css/frontend.css`
-  - `/assets/css/print.css`
-  - (admin) `/assets/css/backend.css` — kept as-is; already tolerant of a
-    missing file via `get_file_version()`.
-- Cache-busting stays on `filemtime` (chosen over `.asset.php` to keep the PHP
-  change minimal; `.asset.php`-based deps/version can be adopted later).
+1. **`App/BasicTheme/RegisterAssets.php`** — frontend `frontend.js` /
+   `frontend.css`, `print.css`, and admin `backend.css`. Remove the `$suffix`
+   property, `get_asset_suffix()`, and every `{$this->suffix}`.
+2. **`App/Core/BlockStyles.php`** — block-style CSS
+   (`assets/css/block-styles/dynamic-images-banner-hero.css`,
+   `heading-section-line.css`). Remove its own `get_asset_suffix()` and the
+   `$asset_suffix` interpolation on both paths.
+3. **`App/Core/PatternAssets.php`** — pattern CSS/JS
+   (`assets/css/patterns/{slug}-style.css`, `assets/js/patterns/{slug}-script.js`).
+   Remove its own `get_asset_suffix()` and the `$asset_suffix` interpolation.
+   **ALSO** update the runtime source-dir glob: `PatternAssets.php:195` scans
+   `"{$theme_dir}/webpack/src/patterns/*"` to discover patterns — this must
+   change to `"{$theme_dir}/src/patterns/*"` after the `src/` move, or patterns
+   silently stop enqueueing.
 
-WordPress always loads `assets/css/frontend.css` — one path, identical locally
-and in production. Only the file *contents* differ (watch = unminified,
-build = minified). Production serves the committed built file; **no build runs
-on the server.**
+Cache-busting stays on `filemtime` in all three (chosen over `.asset.php` to
+keep the PHP change minimal; `.asset.php`-based deps/version can be adopted
+later).
+
+WordPress always loads `assets/css/frontend.css` (and the fixed pattern/
+block-style paths) — one path each, identical locally and in production. Only
+the file *contents* differ (watch = unminified, build = minified). Production
+serves the committed built file; **no build runs on the server.**
 
 ### Pre-commit hook (build safety net)
 
@@ -117,7 +127,9 @@ remember to run `build` before committing.
    and SCSS `url()` references keep resolving unchanged.
 3. `wp-scripts build`; verify `assets/css/frontend.css` etc. are produced and
    the site renders 1:1 (check homepage, 404, search, a belief page).
-4. Edit `RegisterAssets.php` to drop the suffix and load single paths.
+4. Drop the suffix in all three loaders (`RegisterAssets.php`, `BlockStyles.php`,
+   `PatternAssets.php`) and fix the `PatternAssets.php` source glob
+   `webpack/src/patterns/*` → `src/patterns/*`.
 5. Update the ddev command scripts; delete `webpack/`.
 6. Add `.githooks/pre-commit`.
 7. Final `build` + visual verification + commit.
@@ -138,8 +150,13 @@ remember to run `build` before committing.
 
 - One command (`ddev theme:build`) produces the shippable assets; `theme:watch`
   covers local iteration.
-- `RegisterAssets.php` has no environment/suffix branching; one path per asset.
-- Homepage, 404, search, and a belief page render visually identical to before.
+- None of the three loaders (`RegisterAssets`, `BlockStyles`, `PatternAssets`)
+  has environment/suffix branching; one path per asset.
+- `PatternAssets` globs `src/patterns/*` (not `webpack/src/patterns/*`), so
+  patterns still enqueue.
+- Homepage, 404, search, and a belief page render visually identical to before,
+  **including pattern styles (banner-hero, page-belief, archive-meetings) and
+  block styles** — verified in the browser, not just by file existence.
 - Committing a theme `src/` change auto-produces optimized `assets/` via the
   pre-commit hook.
 - `webpack/` folder and the `theme:dev`/`theme:prod` split are gone.
