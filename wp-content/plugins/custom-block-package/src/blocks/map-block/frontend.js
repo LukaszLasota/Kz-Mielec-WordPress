@@ -14,9 +14,11 @@ function initMap(mapElement) {
 
     const map = L.map(mapElement).setView([latitude, longitude], zoom);
 
-    // Tile style chosen in the editor; grayscale/contrast applied via CSS vars.
+    // Tile style chosen in the editor; optional per-style CSS filter (e.g. the
+    // keyless Toner-Dark emulation) applied to the tile layer's container.
     const provider = getTileProvider(tileStyle);
-    L.tileLayer(provider.url, provider.options).addTo(map);
+    const tileLayer = L.tileLayer(provider.url, provider.options).addTo(map);
+    tileLayer.getContainer().style.filter = provider.filter || '';
 
     // Optional labels/roads overlay (e.g. satellite hybrid with street names).
     if (provider.overlay) {

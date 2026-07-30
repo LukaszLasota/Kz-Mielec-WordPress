@@ -1,9 +1,4 @@
 .wp-block-custom-block-package-map-block .map-container {
     height: 100%;
     width: 100%;
-
-    // Mirror the front-end filter so the editor preview matches the result.
-    .leaflet-tile-pane {
-        filter: grayscale(var(--map-grayscale, 40%)) contrast(var(--map-contrast, 105%));
-    }
 }

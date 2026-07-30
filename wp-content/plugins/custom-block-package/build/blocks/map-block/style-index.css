@@ -1,1 +1,1 @@
-.map-block-wrapper{margin-block:50px 80px}@media(max-width:600px){.map-block-wrapper{margin-block:30px 50px}}.map-container{width:100%}.map-container .leaflet-tile-pane{filter:grayscale(var(--map-grayscale,40%)) contrast(var(--map-contrast,105%))}
+.map-block-wrapper{margin-block:50px 80px}@media(max-width:600px){.map-block-wrapper{margin-block:30px 50px}}.map-container{width:100%}

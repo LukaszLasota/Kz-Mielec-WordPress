@@ -47,15 +47,7 @@
         "tileStyle": {
             "type": "string",
             "default": "voyager",
-            "enum": ["standard", "voyager", "positron", "dark", "satellite", "satelliteLabels", "terrain", "esriTopo", "esriGray", "humanitarian"]
-        },
-        "grayscale": {
-            "type": "number",
-            "default": 40
-        },
-        "contrast": {
-            "type": "number",
-            "default": 105
+            "enum": ["standard", "voyager", "positron", "dark", "satellite", "satelliteLabels", "terrain", "esriStreet", "esriTopo", "esriGray", "humanitarian"]
         }
     },
     "editorScript": "file:./index.js",

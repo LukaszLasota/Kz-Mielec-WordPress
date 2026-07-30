@@ -10,10 +10,4 @@
 
 .map-container {
     width: 100%;
-
-    // Desaturation/contrast driven by editor controls (CSS vars set inline on
-    // the container). Only the tile pane is filtered, so the marker keeps color.
-    .leaflet-tile-pane {
-        filter: grayscale(var(--map-grayscale, 40%)) contrast(var(--map-contrast, 105%));
-    }
 }

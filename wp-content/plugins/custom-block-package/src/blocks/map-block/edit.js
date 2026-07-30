@@ -9,7 +9,7 @@ import { TILE_PROVIDERS, getTileProvider } from './tile-providers';
 import './index.scss';
 
 const Edit = ({ attributes, setAttributes }) => {
-    const { latitude, longitude, zoom, containerHeight, popupText, tileStyle, grayscale, contrast } = attributes;
+    const { latitude, longitude, zoom, containerHeight, popupText, tileStyle } = attributes;
     const mapContainer = useRef(null);
     const mapInstance = useRef(null);
     const marker = useRef(null);
@@ -40,6 +40,7 @@ const Edit = ({ attributes, setAttributes }) => {
 
             const provider = getTileProvider(tileStyle);
             tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
+            tileLayer.current.getContainer().style.filter = provider.filter || '';
             if (provider.overlay) {
                 overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
             }
@@ -96,6 +97,7 @@ const Edit = ({ attributes, setAttributes }) => {
                 overlayLayer.current = null;
             }
             tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
+            tileLayer.current.getContainer().style.filter = provider.filter || '';
             if (provider.overlay) {
                 overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
             }
@@ -150,7 +152,7 @@ const Edit = ({ attributes, setAttributes }) => {
                         onChange={(value) => setAttributes({ popupText: value })}
                     />
                 </PanelBody>
-                <PanelBody title={__('Wygląd mapy', 'custom-block-package')} initialOpen={false}>
+                <PanelBody title={__('Wygląd mapy', 'custom-block-package')} initialOpen={true}>
                     <SelectControl
                         label={__('Styl mapy', 'custom-block-package')}
                         value={tileStyle}
@@ -159,20 +161,6 @@ const Edit = ({ attributes, setAttributes }) => {
                             value: key,
                         }))}
                         onChange={(value) => setAttributes({ tileStyle: value })}
-                    />
-                    <RangeControl
-                        label={__('Odbarwienie (grayscale %)', 'custom-block-package')}
-                        value={grayscale}
-                        onChange={(value) => setAttributes({ grayscale: value })}
-                        min={0}
-                        max={100}
-                    />
-                    <RangeControl
-                        label={__('Kontrast (%)', 'custom-block-package')}
-                        value={contrast}
-                        onChange={(value) => setAttributes({ contrast: value })}
-                        min={50}
-                        max={200}
                     />
                 </PanelBody>
             </InspectorControls>
@@ -191,8 +179,6 @@ const Edit = ({ attributes, setAttributes }) => {
                         height: '100%',
                         width: '100%',
                         position: 'relative',
-                        '--map-grayscale': `${grayscale}%`,
-                        '--map-contrast': `${contrast}%`,
                     }}
                 ></div>
             </div>

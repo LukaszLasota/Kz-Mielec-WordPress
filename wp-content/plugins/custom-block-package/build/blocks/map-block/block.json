@@ -55,18 +55,11 @@
         "satellite",
         "satelliteLabels",
         "terrain",
+        "esriStreet",
         "esriTopo",
         "esriGray",
         "humanitarian"
       ]
-    },
-    "grayscale": {
-      "type": "number",
-      "default": 40
-    },
-    "contrast": {
-      "type": "number",
-      "default": 105
     }
   },
   "editorScript": "file:./index.js",
