@@ -406,4 +406,4 @@ window.addEventListener('load', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=frontend.js.map?4035a9e4898389ca13fe
+//# sourceMappingURL=frontend.js.map?f7cc588fb737cbfc7f60

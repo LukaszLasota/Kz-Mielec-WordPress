@@ -30,12 +30,123 @@ class Setup implements ActionHookInterface {
 	}
 
 	/**
+	 * Meeting meta keys that should be searchable alongside title/content
+	 * (e.g. the nominative day "Niedziela 10:30" and the address, which live
+	 * in meta and are otherwise invisible to WordPress' default search).
+	 *
+	 * @var string[]
+	 */
+	private const SEARCHABLE_META_KEYS = array( '_meeting_day_hour', '_meeting_place' );
+
+	/**
 	 * Register WordPress action hooks.
 	 *
 	 * @return void
 	 */
 	public function register_add_action(): void {
 		add_action( 'after_setup_theme', array( $this, 'kzmielec_setup' ) );
+		add_action( 'pre_get_posts', array( $this, 'restrict_search_post_types' ) );
+		add_filter( 'posts_join', array( $this, 'search_meta_join' ), 10, 2 );
+		add_filter( 'posts_search', array( $this, 'search_meta_where' ), 10, 2 );
+		add_filter( 'posts_distinct', array( $this, 'search_meta_distinct' ), 10, 2 );
+	}
+
+	/**
+	 * Keep media attachments out of front-end search results.
+	 *
+	 * Attachments are public and searchable by default in WordPress, which
+	 * lets raw media files surface on the search page. Restrict the main
+	 * front-end search query to real content types.
+	 *
+	 * @param \WP_Query $query The query being prepared.
+	 * @return void
+	 */
+	public function restrict_search_post_types( \WP_Query $query ): void {
+		if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {
+			return;
+		}
+
+		$query->set( 'post_type', array( 'post', 'page', 'meetings' ) );
+	}
+
+	/**
+	 * Whether the given query is the front-end main search query.
+	 *
+	 * @param \WP_Query $query The query.
+	 * @return bool
+	 */
+	private function is_frontend_search( \WP_Query $query ): bool {
+		return ! is_admin() && $query->is_main_query() && $query->is_search();
+	}
+
+	/**
+	 * Join the postmeta table (whitelisted keys) onto the search query so
+	 * meeting meta becomes searchable.
+	 *
+	 * @param string    $join  The JOIN clause.
+	 * @param \WP_Query $query The query.
+	 * @return string
+	 */
+	public function search_meta_join( string $join, \WP_Query $query ): string {
+		global $wpdb;
+
+		if ( ! $this->is_frontend_search( $query ) ) {
+			return $join;
+		}
+
+		$keys = "'" . implode( "','", array_map( 'esc_sql', self::SEARCHABLE_META_KEYS ) ) . "'";
+		$join .= " LEFT JOIN {$wpdb->postmeta} AS kz_sm ON ( {$wpdb->posts}.ID = kz_sm.post_id AND kz_sm.meta_key IN ( {$keys} ) ) ";
+
+		return $join;
+	}
+
+	/**
+	 * OR the search terms against the joined meeting meta values, so a card
+	 * matches when a term appears in title, content OR the whitelisted meta.
+	 *
+	 * @param string    $search The search SQL fragment (leading " AND (...)").
+	 * @param \WP_Query $query  The query.
+	 * @return string
+	 */
+	public function search_meta_where( string $search, \WP_Query $query ): string {
+		global $wpdb;
+
+		if ( '' === $search || ! $this->is_frontend_search( $query ) ) {
+			return $search;
+		}
+
+		$terms = $query->query_vars['search_terms'] ?? array();
+		if ( empty( $terms ) ) {
+			$typed = trim( (string) $query->get( 's' ) );
+			if ( '' === $typed ) {
+				return $search;
+			}
+			$terms = array( $typed );
+		}
+
+		$meta_ors = array();
+		foreach ( $terms as $term ) {
+			$meta_ors[] = $wpdb->prepare( 'kz_sm.meta_value LIKE %s', '%' . $wpdb->esc_like( $term ) . '%' );
+		}
+		$meta_condition = '(' . implode( ' OR ', $meta_ors ) . ')';
+
+		// $search is " AND ( <title/content matching> )"; widen it to also
+		// accept a meta match: " AND ( ( <original> ) OR <meta> )".
+		$inner = preg_replace( '/^\s*AND\s*/', '', $search );
+
+		return " AND ( {$inner} OR {$meta_condition} )";
+	}
+
+	/**
+	 * Force DISTINCT on the search query — the meta join can otherwise
+	 * duplicate a post that matches on more than one meta row.
+	 *
+	 * @param string    $distinct The DISTINCT clause.
+	 * @param \WP_Query $query    The query.
+	 * @return string
+	 */
+	public function search_meta_distinct( string $distinct, \WP_Query $query ): string {
+		return $this->is_frontend_search( $query ) ? 'DISTINCT' : $distinct;
 	}
 
 	/**
