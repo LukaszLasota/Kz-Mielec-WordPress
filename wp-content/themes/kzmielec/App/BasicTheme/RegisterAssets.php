@@ -18,7 +18,9 @@ use Kzmielec\Interfaces\ActionHookInterface;
 /**
  * Class RegisterAssets
  *
- * Manages theme asset registration with automatic versioning and environment-based file loading.
+ * Manages theme asset registration, cache-busting each handle with the built
+ * file's filemtime. The build produces a single optimised file per entry, so
+ * there is no development/production variant to choose between.
  */
 class RegisterAssets implements ActionHookInterface {
 
@@ -128,7 +130,7 @@ class RegisterAssets implements ActionHookInterface {
 	/**
 	 * Enqueue frontend assets.
 	 *
-	 * Loads frontend CSS, JavaScript and print styles for public-facing pages.
+	 * Loads frontend CSS and JavaScript for public-facing pages.
 	 *
 	 * @return void
 	 */
@@ -138,9 +140,6 @@ class RegisterAssets implements ActionHookInterface {
 
 		// Frontend styles.
 		$this->enqueue_asset( 'style', 'kzmielec-styles', '/assets/css/frontend.css' );
-
-		// Print styles.
-		$this->enqueue_asset( 'style', 'kzmielec-print-styles', '/assets/css/print.css', array(), true, 'print' );
 
 		// Localize script for AJAX.
 		wp_localize_script(
