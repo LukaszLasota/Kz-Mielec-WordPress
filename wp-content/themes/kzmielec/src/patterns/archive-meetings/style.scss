@@ -1,4 +1,4 @@
-@use '../../sass/abstracts/variables' as *;
+@use "../../sass/abstracts/variables" as *;
 // Styles for archive-meetings.php template.
 // Loaded via PatternAssets when class "pattern-archive-meetings" detected.
 //
@@ -139,6 +139,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+
 		.archive-meetings__image--two {
 			transition: none;
 		}

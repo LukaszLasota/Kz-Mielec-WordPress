@@ -1,142 +1,148 @@
 @use "../../scss/abstracts/tokens" as *;
-@import '../../scss/abstracts/mixins';
+@import "../../scss/abstracts/mixins";
 
 .meetings {
-    h2{
-        @include gradient-text();
-        padding: 5.9375rem 0.625rem;
 
-        @media (max-width: $bp-small){
-            padding: 4.375rem 0.625rem;
-        }
+	h2 {
 
-        @media (max-width: $bp-laptop){
-            padding: 5rem 0.625rem;
-        }
-    }
+		@include gradient-text();
+		padding: 5.9375rem 0.625rem;
+
+		@media (max-width: $bp-small) {
+			padding: 4.375rem 0.625rem;
+		}
+
+		@media (max-width: $bp-laptop) {
+			padding: 5rem 0.625rem;
+		}
+	}
 }
 
 .flipping-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    width: 100%;
-    font-size: 1.1rem;
-    line-height: 150%;
-   
-    &__card {
-        perspective: 62.5rem;
-        display: flex;
-        flex-wrap: wrap;
-        position: relative;
-        overflow: hidden;
-        height: auto;
-        cursor: pointer;
-        transition: all 0.8s;
-        z-index: 0; // Create stacking context
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0;
+	width: 100%;
+	font-size: 1.1rem;
+	line-height: 150%;
 
-        &:focus-visible {
-            outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
-            outline-offset: -0.1875rem;
-            z-index: 10;
-        }
+	&__card {
+		perspective: 62.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		position: relative;
+		overflow: hidden;
+		height: auto;
+		cursor: pointer;
+		transition: all 0.8s;
+		z-index: 0; // Create stacking context
 
-        &::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--wp--preset--gradient--gradient-to-left-bottom);
-            opacity: 0;
-            transition: opacity 0.8s;
-            z-index: 1;
-        }
+		&:focus-visible {
+			outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+			outline-offset: -0.1875rem;
+			z-index: 10;
+		}
 
-        &:hover::before {
-            opacity: 1;
-        }
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--wp--preset--gradient--gradient-to-left-bottom);
+			opacity: 0;
+			transition: opacity 0.8s;
+			z-index: 1;
+		}
 
-        &:hover {
-            color: white;
-        }
+		&:hover::before {
+			opacity: 1;
+		}
 
-        > * {
-            position: relative;
-            z-index: 2;
-        }
-    }
+		&:hover {
+			color: white;
+		}
 
-    &__card-inner {
-        width: 100%;
-        height: 100%;
-        transition: transform 0.8s;
-        transform-style: preserve-3d;
-        display: grid;
-        grid-template-areas: "front";
-        transform: rotateY(0deg);
-        padding: 1.25rem;
-        box-sizing: border-box; 
-        &--flipped {
-            transform: rotateY(180deg);
-        }
-      
-    }
+		> * {
+			position: relative;
+			z-index: 2;
+		}
+	}
 
-    &__card-front,
-    &__card-back {
-        grid-area: front;
-        backface-visibility: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-    }
+	&__card-inner {
+		width: 100%;
+		height: 100%;
+		transition: transform 0.8s;
+		transform-style: preserve-3d;
+		display: grid;
+		grid-template-areas: "front";
+		transform: rotateY(0deg);
+		padding: 1.25rem;
+		box-sizing: border-box;
 
-    &__card-front {
-        transform: rotateY(0deg);
-        h3 {
-            font-weight: 400;
-            font-size: 1.7rem;
-            text-align: center;
-            word-break: break-word;
-        }
-        p {
-            margin: 0.3125rem;
-            word-break: break-word;
-        }
-        a {
-            word-break: break-all;
-        }
-    }
+		&--flipped {
+			transform: rotateY(180deg);
+		}
 
-    &__more {
-        display: none;
-        text-decoration: underline;
+	}
 
-        @media (max-width: $bp-laptop) {
-            display: block;
-        }
-    }
+	&__card-front,
+	&__card-back {
+		grid-area: front;
+		backface-visibility: hidden;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+	}
 
-    &__card-back {
-        transform: rotateY(180deg);
-        align-items: start;
-        justify-content: flex-start
-    }
+	&__card-front {
+		transform: rotateY(0deg);
 
-    @media (max-width: $bp-wide) {
-        grid-template-columns: repeat(3, 1fr);
-    }
+		h3 {
+			font-weight: 400;
+			font-size: 1.7rem;
+			text-align: center;
+			word-break: break-word;
+		}
 
-    @media (max-width: $bp-tablet) {
-        grid-template-columns: repeat(2, 1fr);
-    }
+		p {
+			margin: 0.3125rem;
+			word-break: break-word;
+		}
 
-    @media (max-width: $bp-mobile) {
-        grid-template-columns: 1fr;
-    }
+		a {
+			word-break: break-all;
+		}
+	}
+
+	&__more {
+		display: none;
+		text-decoration: underline;
+
+		@media (max-width: $bp-laptop) {
+			display: block;
+		}
+	}
+
+	&__card-back {
+		transform: rotateY(180deg);
+		align-items: start;
+		justify-content: flex-start;
+	}
+
+	@media (max-width: $bp-wide) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media (max-width: $bp-tablet) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: $bp-mobile) {
+		grid-template-columns: 1fr;
+	}
 }

@@ -8,31 +8,28 @@
 // the design tokens follows them. Custom properties are order-independent in
 // the cascade, so emitting them after the module CSS is fine.
 
-@use 'abstracts/tokens';
-@use 'base/fonts';
-
-@use 'abstracts/functions';
-@use 'abstracts/mixins';
-
-@use 'base/normalize';
-@use 'base/typography';
-
-@use 'apps/main';
-@use 'apps/menu/main-menu';
-@use 'pages/page';
-@use 'pages/page-hero';
-@use 'pages/front-page';
-@use 'pages/belief';
-@use 'pages/search-404';
-@use 'pages/single-post';
-@use 'apps/heading';
-
-@use 'apps/circles';
+@use "abstracts/tokens";
+@use "base/fonts";
+@use "abstracts/functions";
+@use "abstracts/mixins";
+@use "base/normalize";
+@use "base/typography";
+@use "apps/main";
+@use "apps/menu/main-menu";
+@use "pages/page";
+@use "pages/page-hero";
+@use "pages/front-page";
+@use "pages/belief";
+@use "pages/search-404";
+@use "pages/single-post";
+@use "apps/heading";
+@use "apps/circles";
 // Aliased: its default namespace ("main") would collide with apps/main.
-@use 'apps/wcag/main' as wcag;
-@use 'apps/footer';
+@use "apps/wcag/main" as wcag;
+@use "apps/footer";
 
 // The one place the design tokens are emitted as custom properties.
 :root {
+
 	@include tokens.css-custom-properties;
 }

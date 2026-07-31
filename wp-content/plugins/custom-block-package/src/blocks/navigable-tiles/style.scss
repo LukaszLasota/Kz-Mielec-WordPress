@@ -58,12 +58,29 @@
 	// Column count → tile width. :where() keeps specificity at zero for the
 	// modifier so the responsive queries below can override without a
 	// specificity war (otherwise .has-columns-4 would beat the media query).
-	&:where(.has-columns-1) .navigable-tiles__item { inline-size: 100%; }
-	&:where(.has-columns-2) .navigable-tiles__item { inline-size: 50%; }
-	&:where(.has-columns-3) .navigable-tiles__item { inline-size: 33.3333%; }
-	&:where(.has-columns-4) .navigable-tiles__item { inline-size: 25%; }
-	&:where(.has-columns-5) .navigable-tiles__item { inline-size: 20%; }
-	&:where(.has-columns-6) .navigable-tiles__item { inline-size: 16.6666%; }
+	&:where(.has-columns-1) .navigable-tiles__item {
+		inline-size: 100%;
+	}
+
+	&:where(.has-columns-2) .navigable-tiles__item {
+		inline-size: 50%;
+	}
+
+	&:where(.has-columns-3) .navigable-tiles__item {
+		inline-size: 33.3333%;
+	}
+
+	&:where(.has-columns-4) .navigable-tiles__item {
+		inline-size: 25%;
+	}
+
+	&:where(.has-columns-5) .navigable-tiles__item {
+		inline-size: 20%;
+	}
+
+	&:where(.has-columns-6) .navigable-tiles__item {
+		inline-size: 16.6666%;
+	}
 
 	// ── Link (block-link pattern) ─────────────────────────
 	// Link wraps only the title text; ::after expands the clickable area over
@@ -80,7 +97,7 @@
 		}
 
 		&:focus-visible {
-			outline: 0.1875rem solid currentColor;
+			outline: 0.1875rem solid currentcolor;
 			outline-offset: 0.25rem;
 		}
 	}
@@ -166,20 +183,31 @@
 	// "You are here" — current tile is non-interactive (title stays regular
 	// weight; the missing hover icon already signals the current page).
 	.navigable-tiles__item.is-current {
-		.navigable-tiles__link { cursor: default; }
+
+		.navigable-tiles__link {
+			cursor: default;
+		}
 	}
 
 	// ── Responsive ────────────────────────────────────────
 	// Viewport-based so breakpoints map directly to screen width: desktop
 	// always shows 4 columns, only tablets/phones reduce the count.
 	@media (max-width: $bp-laptop) {  // tablet landscape → 3 columns
-		.navigable-tiles__item { inline-size: 28%; }
+		.navigable-tiles__item {
+			inline-size: 28%;
+		}
 	}
+
 	@media (max-width: $bp-tablet) {   // tablet portrait → 2 columns
-		.navigable-tiles__item { inline-size: 42%; }
+		.navigable-tiles__item {
+			inline-size: 42%;
+		}
 	}
+
 	@media (max-width: $bp-mobile) {   // mobile → 1 column, centered
-		.navigable-tiles__item { inline-size: 75%; }
+		.navigable-tiles__item {
+			inline-size: 75%;
+		}
 	}
 
 	// ── Mobile tweaks — narrow screens (one column) ───────
@@ -193,7 +221,10 @@
 
 	// ── Motion ────────────────────────────────────────────
 	@media (prefers-reduced-motion: reduce) {
-		.navigable-tiles__image--two { transition: none; }
+
+		.navigable-tiles__image--two {
+			transition: none;
+		}
 	}
 
 	// ── Screen-reader-only text ───────────────────────────

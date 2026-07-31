@@ -79,7 +79,10 @@ $bp-desktop: 1400px; // large screens
 	// Typography
 	// -------------------------------------------------------------------------
 	// Body serif stack used where Cinzel (caps-only) is unsuitable for long copy.
-	--font-serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
+	// Quoted so stylelint's value-keyword-case rule leaves the capitalisation
+	// alone — it lowercases unquoted keywords, which would turn the font name
+	// into "georgia". The other two names are quoted for the same reason.
+	--font-serif: "Georgia", "Times New Roman", "Liberation Serif", serif;
 
 	// Font-size scale. --fs-heading/--fs-title/--fs-body are also consumed by
 	// the navigable-tiles block in the custom-block-package plugin — do not

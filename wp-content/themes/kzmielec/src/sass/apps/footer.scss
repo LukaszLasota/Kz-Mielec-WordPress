@@ -1,67 +1,67 @@
-@use '../abstracts/variables' as *;
+@use "../abstracts/variables" as *;
 // ===========================================
 // Footer
 // ===========================================
 
 .footer {
-    background: #454040; // zblizone do starego #4f4b4b, kontrast z var(--color-white) = 5.06:1 (AA pass)
-    width: 100%;
-    padding: 0;
-    margin: 0;
+	background: #454040; // zblizone do starego #4f4b4b, kontrast z var(--color-white) = 5.06:1 (AA pass)
+	width: 100%;
+	padding: 0;
+	margin: 0;
 
-    .footer__inner {
-        width: 100%;
-        max-width: $max-width;
-        margin: 0 auto;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--space-3xs) var(--space-xs);
+	.footer__inner {
+		width: 100%;
+		max-width: $max-width;
+		margin: 0 auto;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--space-3xs) var(--space-xs);
 
-        @media (max-width: $bp-tablet) {
-            justify-content: center;
-        }
-    }
+		@media (max-width: $bp-tablet) {
+			justify-content: center;
+		}
+	}
 
-    .footer__copyright {
-        padding: var(--space-3xs);
-        color: var(--color-white);
-        font-size: var(--fs-base);
+	.footer__copyright {
+		padding: var(--space-3xs);
+		color: var(--color-white);
+		font-size: var(--fs-base);
 
-        p {
-            margin: 0;
-            text-align: center;
-        }
+		p {
+			margin: 0;
+			text-align: center;
+		}
 
-        a {
-            color: var(--color-white);
-        }
-    }
+		a {
+			color: var(--color-white);
+		}
+	}
 
-    .footer__social {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
+	.footer__social {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 
-        a {
-            cursor: pointer;
+		a {
+			cursor: pointer;
 
-            &:focus-visible {
-                outline: 0.125rem solid var(--color-white);
-                outline-offset: 0.125rem;
-            }
-        }
+			&:focus-visible {
+				outline: 0.125rem solid var(--color-white);
+				outline-offset: 0.125rem;
+			}
+		}
 
-        img {
-            width: 2rem;
-            height: 2rem;
+		img {
+			width: 2rem;
+			height: 2rem;
 
-            @media (max-width: $bp-tablet) {
-                width: 3.125rem;
-                height: 3.125rem;
-            }
-        }
-    }
+			@media (max-width: $bp-tablet) {
+				width: 3.125rem;
+				height: 3.125rem;
+			}
+		}
+	}
 }

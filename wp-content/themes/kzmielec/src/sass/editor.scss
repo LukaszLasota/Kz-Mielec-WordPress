@@ -6,9 +6,10 @@
 // for this entry — one definition in abstracts/tokens.scss, included in a second
 // place — so editor sizes stay in sync with the front-end automatically.
 
-@use 'abstracts/tokens';
+@use "abstracts/tokens";
 
 :root {
+
 	@include tokens.css-custom-properties;
 }
 
@@ -25,12 +26,14 @@
 		font-size: var(--fs-title);
 	}
 
-	p, a {
+	p,
+	a {
 		font-size: var(--fs-body);
 		line-height: var(--lh-body);
 	}
 
-	ul, li {
+	ul,
+	li {
 		font-size: var(--fs-body);
 	}
 }

@@ -1,14 +1,20 @@
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-    color: var(--color-focus-text) !important;
-    background: var(--color-focus-bg) !important;
-    border-color: var(--color-focus-bg) !important;
-    box-shadow: 0 -0.125rem var(--color-focus-bg), 0 0.25rem var(--color-focus-text);
-    text-decoration: none;
-    outline: 0.1875rem solid transparent;
-    span {
-        color: var(--color-focus-text) !important;
-    }
-    i, .icon {
-        background-color: var(--color-focus-text) !important;
-    }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+	color: var(--color-focus-text) !important;
+	background: var(--color-focus-bg) !important;
+	border-color: var(--color-focus-bg) !important;
+	box-shadow: 0 -0.125rem var(--color-focus-bg), 0 0.25rem var(--color-focus-text);
+	text-decoration: none;
+	outline: 0.1875rem solid transparent;
+
+	span {
+		color: var(--color-focus-text) !important;
+	}
+
+	i,
+	.icon {
+		background-color: var(--color-focus-text) !important;
+	}
 }

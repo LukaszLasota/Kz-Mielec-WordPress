@@ -111,7 +111,7 @@ $cor-border: 0.125rem solid $cor-line;
 
 	// Chevron (black — matches accordion-item).
 	&::after {
-		content: '';
+		content: "";
 		display: inline-block;
 		width: 2rem;
 		height: 2rem;
@@ -119,7 +119,8 @@ $cor-border: 0.125rem solid $cor-line;
 		right: 1.2rem;
 		top: 50%;
 		transform: translateY(-50%);
-		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+		background:
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
 			no-repeat center center;
 		transition: transform 0.3s ease;
 

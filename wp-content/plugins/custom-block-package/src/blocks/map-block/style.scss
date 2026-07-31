@@ -3,13 +3,13 @@
 @use "../../scss/abstracts/tokens" as *;
 
 .map-block-wrapper {
-    margin-block: 3.125rem 5rem;
+	margin-block: 3.125rem 5rem;
 
-    @media (max-width: $bp-small) {
-        margin-block: 1.875rem 3.125rem;
-    }
+	@media (max-width: $bp-small) {
+		margin-block: 1.875rem 3.125rem;
+	}
 }
 
 .map-container {
-    width: 100%;
+	width: 100%;
 }

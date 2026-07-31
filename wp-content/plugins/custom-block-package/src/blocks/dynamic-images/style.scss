@@ -3,7 +3,9 @@
 .wp-block-custom-block-package-dynamic-images {
 	position: relative;
 
-	picture, img, source {
+	picture,
+	img,
+	source {
 		max-width: 100%;
 		height: auto;
 		display: block;
@@ -28,6 +30,7 @@
 
 	// Utility: padding-top only on desktop (matches sticky header height).
 	&.has-desktop-padding-top {
+
 		@media (min-width: $bp-tablet + 1px) {
 			padding-top: 5rem;
 		}
@@ -67,19 +70,23 @@
 	}
 
 	@media (max-width: $bp-tablet) {
+
 		.dynamic-images-overlay--desktop {
 			display: none;
 		}
+
 		.dynamic-images-overlay--tablet {
 			display: block;
 		}
 	}
 
 	@media (max-width: $bp-mobile) {
+
 		.dynamic-images-overlay--desktop,
 		.dynamic-images-overlay--tablet {
 			display: none;
 		}
+
 		.dynamic-images-overlay--mobile {
 			display: block;
 		}

@@ -1,4 +1,4 @@
-@use '../../sass/abstracts/variables' as *;
+@use "../../sass/abstracts/variables" as *;
 // Styles for page-belief.php template.
 // Loaded via PatternAssets when class "pattern-page-belief" detected.
 
@@ -110,6 +110,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+
 		.page-belief__hero-image--two {
 			transition: none;
 		}

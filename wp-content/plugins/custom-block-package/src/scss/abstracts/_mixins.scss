@@ -2,122 +2,129 @@
 @use "tokens" as *;
 
 @mixin center-block {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 
-  @mixin column-width($numberColumns: 3) {
-    width: map-get($columns, $numberColumns) -
-      (($columns__margin * ($numberColumns - 1)) / $numberColumns);
-  }
+@mixin column-width($numberColumns: 3) {
+	width:
+		map-get($columns, $numberColumns) -
+		(($columns__margin * ($numberColumns - 1)) / $numberColumns);
+}
 
-  @mixin flex {
-    display: flex;
-    flex-wrap: wrap;
-  }
+@mixin flex {
+	display: flex;
+	flex-wrap: wrap;
+}
 
-  @mixin center {
-    justify-content: center;
-    align-content: center;
-  }
+@mixin center {
+	justify-content: center;
+	align-content: center;
+}
 
-  @mixin flex-center {
-    display: flex;
-    align-content: center;
-  }
+@mixin flex-center {
+	display: flex;
+	align-content: center;
+}
 
-  @mixin start {
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
+@mixin start {
+	justify-content: flex-start;
+	align-items: flex-start;
+}
 
-  @mixin position($type, $top, $right, $bottom, $left) {
-    position: $type;
-    top: $top;
-    right: $right;
-    bottom: $bottom;
-    left: $left;
-  }
+@mixin position($type, $top, $right, $bottom, $left) {
+	position: $type;
+	top: $top;
+	right: $right;
+	bottom: $bottom;
+	left: $left;
+}
 
-  @mixin hamburger-line {
-    width: 100%;
-    height: 0.1875rem;
-    background-color: black;
-    position: absolute;
-  }
+@mixin hamburger-line {
+	width: 100%;
+	height: 0.1875rem;
+	background-color: black;
+	position: absolute;
+}
 
-  @mixin gradient{
-    text-transform: uppercase;
-    -webkit-background: linear-gradient(to right, #000 0%, #333 100%);
-    -moz-background: linear-gradient(to right, #000 0%, #333 100%);
-    background: linear-gradient(to right, #000 0%, #333 100%);
-	  -webkit-text-fill-color: transparent;
-	  text-fill-color: transparent;
-    -webkit-background-clip: text;
-    font-weight: normal;
-  }
+@mixin gradient {
+	text-transform: uppercase;
+	-webkit-background: linear-gradient(to right, #000 0%, #333 100%);
+	-moz-background: linear-gradient(to right, #000 0%, #333 100%);
+	background: linear-gradient(to right, #000 0%, #333 100%);
+	-webkit-text-fill-color: transparent;
+	text-fill-color: transparent;
+	-webkit-background-clip: text;
+	font-weight: 400;
+}
 
-  @mixin content-typography {
-    h1, h2, h3 {
-      padding: 1.25rem 0 1.25rem;
-      @include gradient;
-      font-size: 2rem;
-      letter-spacing: 0.125rem;
-      width: 100%;
+@mixin content-typography {
 
-      @media (max-width: $bp-tablet) {
-        font-size: 1.6rem;
-        padding: 3.125rem 0;
-      }
-    }
+	h1,
+	h2,
+	h3 {
+		padding: 1.25rem 0 1.25rem;
 
-    h3 {
-      font-size: 1.6rem;
-      padding: 1.5625rem 0;
-      margin: 0.3125rem 0 0.9375rem;
-    }
+		@include gradient;
+		font-size: 2rem;
+		letter-spacing: 0.125rem;
+		width: 100%;
 
-    p, a, p a {
-      font-size: 1.2rem;
-      padding: 0.125rem 0;
-      margin-top: 0;
-      margin-bottom: 0.3rem;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #212529;
+		@media (max-width: $bp-tablet) {
+			font-size: 1.6rem;
+			padding: 3.125rem 0;
+		}
+	}
 
-      @media (max-width: $bp-small) {
-        text-align: left;
-      }
-    }
+	h3 {
+		font-size: 1.6rem;
+		padding: 1.5625rem 0;
+		margin: 0.3125rem 0 0.9375rem;
+	}
 
-    p {
-      width: 100%;
-      text-align: justify;
-    }
+	p,
+	a,
+	p a {
+		font-size: 1.2rem;
+		padding: 0.125rem 0;
+		margin-top: 0;
+		margin-bottom: 0.3rem;
+		font-weight: 400;
+		line-height: 1.5;
+		color: #212529;
 
-    a {
-      color: #007bff;
-    }
+		@media (max-width: $bp-small) {
+			text-align: left;
+		}
+	}
 
-    ul {
-      font-size: 1.2rem;
-      text-decoration: none;
-      padding-left: 0;
-      padding-bottom: 2.5rem;
-      width: 100%;
+	p {
+		width: 100%;
+		text-align: justify;
+	}
 
-      li {
-        padding: 0.3125rem;
-        margin-left: 1.25rem;
-        list-style-type: none;
-      }
-    }
-  }
+	a {
+		color: #007bff;
+	}
 
-  @mixin gradient-text(
-    $font-size: 2rem,
+	ul {
+		font-size: 1.2rem;
+		text-decoration: none;
+		padding-left: 0;
+		padding-bottom: 2.5rem;
+		width: 100%;
+
+		li {
+			padding: 0.3125rem;
+			margin-left: 1.25rem;
+			list-style-type: none;
+		}
+	}
+}
+
+@mixin gradient-text(
+	$font-size: 2rem,
     $line-height: 1.4,
     $font-weight: 400,
     $text-transform: uppercase,
@@ -125,22 +132,22 @@
     $letter-spacing: 0.125rem,
     $gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
   ) {
-    font-size: $font-size;
-    line-height: $line-height;
-    font-weight: $font-weight;
-    text-transform: $text-transform;
-    width: 100%;
-    text-align: $text-align;
-    letter-spacing: $letter-spacing;
+	font-size: $font-size;
+	line-height: $line-height;
+	font-weight: $font-weight;
+	text-transform: $text-transform;
+	width: 100%;
+	text-align: $text-align;
+	letter-spacing: $letter-spacing;
 
-    // Gradient background
-    background: $gradient;
-    background-image: $gradient;
+	// Gradient background
+	background: $gradient;
+	background-image: $gradient;
 
-    -webkit-text-fill-color: transparent;
-    text-fill-color: transparent;
+	-webkit-text-fill-color: transparent;
+	text-fill-color: transparent;
 
-    // Przycinanie gradientu do tekstu
-    -webkit-background-clip: text;
-    background-clip: text;
-  }
+	// Przycinanie gradientu do tekstu
+	-webkit-background-clip: text;
+	background-clip: text;
+}

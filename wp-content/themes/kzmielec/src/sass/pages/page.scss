@@ -1,147 +1,153 @@
-@use '../abstracts/variables' as *;
+@use "../abstracts/variables" as *;
+
 .news {
-    width: 100%;
- 	max-width: var(--wp--custom--content-width-desktop);
+	width: 100%;
+	max-width: var(--wp--custom--content-width-desktop);
 	margin: 0 auto;
- 	padding: 3.125rem 0.625rem 0.625rem;
+	padding: 3.125rem 0.625rem 0.625rem;
 
 	@media (max-width: $bp-tablet) {
 		padding: 2.5rem 0.9375rem 0.625rem;
 	}
 
-    &__card {
-        width: 100%;
-        margin-bottom: var(--masonry-gap, 1.5625rem);
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-        border-radius: 0.5rem;
-        border: 0.0625rem solid $color-green;
-        overflow: hidden;
-    }
-    &__image {
-        width: 100%;
-    }
+	&__card {
+		width: 100%;
+		margin-bottom: var(--masonry-gap, 1.5625rem);
+		box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+		border-radius: 0.5rem;
+		border: 0.0625rem solid $color-green;
+		overflow: hidden;
+	}
 
-    &__body{
-        margin: var(--space-3xs) 1.5625rem 1.875rem;
-    }
-    &__link{
-        display: block;
-        color: $color-black;
-        text-decoration: none;
-    }
-    &__title{
-        font-size: 0.9375rem;     
-    }
-    &__text {
-        font-size: var(--fs-xs);
-      
-    }
+	&__image {
+		width: 100%;
+	}
 
-    
-    &__pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: var(--space-xs);
-        margin: var(--space-lg) 0 3.125rem;
+	&__body {
+		margin: var(--space-3xs) 1.5625rem 1.875rem;
+	}
 
-        &--container {
-            display: flex;
-            align-content: center;
-            justify-content: space-between;
-            align-items: center;
+	&__link {
+		display: block;
+		color: $color-black;
+		text-decoration: none;
+	}
 
-            &__item {
-                display: block;
-            }
+	&__title {
+		font-size: 0.9375rem;
+	}
 
-            a,
-            .current {
-                position: relative;
-                display: inline-flex;
-                justify-content: center;
-                align-items: center;
-                padding: 0.5rem 0.9375rem;
-                border: 0.0625rem solid $color-main;
-                border-radius: 0.3125rem;
-                text-decoration: none;
-                font-size: var(--fs-xs);
-                font-weight: var(--fw-bold);
-                color: $color-black;
-                background-color: $body-color;
-                transition: color 0.6s ease, border-color 0.6s ease;
-                margin: 0 var(--space-3xs);
-                overflow: hidden;
+	&__text {
+		font-size: var(--fs-xs);
 
-                &::before {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: var(--wp--preset--gradient--gradient-to-left-bottom);
-                    opacity: 0;
-                    transition: var(--transition-fade-slow);
-                    z-index: 0;
-                }
+	}
 
-                &:hover::before {
-                    opacity: 1;
-                }
 
-                &:hover {
-                    color: white;
-                }
+	&__pagination {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: var(--space-xs);
+		margin: var(--space-lg) 0 3.125rem;
 
-                > * {
-                    position: relative;
-                    z-index: 1;
-                }
-            }
+		&--container {
+			display: flex;
+			align-content: center;
+			justify-content: space-between;
+			align-items: center;
 
-            .current {
-                background: $BG-D;
-                color: $body-color;
-                border-color: $color-main;
-                pointer-events: none;
-            }
+			&__item {
+				display: block;
+			}
 
-            .pagination__control {
-                display: flex;
-                align-items: center;
-                font-size: var(--fs-xs);
-                font-weight: var(--fw-bold);
-                text-transform: uppercase;
+			a,
+			.current {
+				position: relative;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				padding: 0.5rem 0.9375rem;
+				border: 0.0625rem solid $color-main;
+				border-radius: 0.3125rem;
+				text-decoration: none;
+				font-size: var(--fs-xs);
+				font-weight: var(--fw-bold);
+				color: $color-black;
+				background-color: $body-color;
+				transition: color 0.6s ease, border-color 0.6s ease;
+				margin: 0 var(--space-3xs);
+				overflow: hidden;
 
-                &--desktop {
-                    display: inline;
-                }
+				&::before {
+					content: "";
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background: var(--wp--preset--gradient--gradient-to-left-bottom);
+					opacity: 0;
+					transition: var(--transition-fade-slow);
+					z-index: 0;
+				}
 
-                &--mobile {
-                    display: none; 
-                }
-            }
-        }
+				&:hover::before {
+					opacity: 1;
+				}
 
-        @media (max-width: $bp-tablet) {
-            .news__pagination--container {
-                flex-direction: row; 
-            }
+				&:hover {
+					color: white;
+				}
 
-            .pagination__control--desktop {
-                display: none;
-            }
+				> * {
+					position: relative;
+					z-index: 1;
+				}
+			}
 
-            .pagination__control--mobile {
-                display: inline; 
-            }
+			.current {
+				background: $BG-D;
+				color: $body-color;
+				border-color: $color-main;
+				pointer-events: none;
+			}
 
-            a,
-            .current {
-                font-size: 0.5625rem;
-                padding: 0.375rem var(--space-xs);
-            }
-        }
-    }
+			.pagination__control {
+				display: flex;
+				align-items: center;
+				font-size: var(--fs-xs);
+				font-weight: var(--fw-bold);
+				text-transform: uppercase;
+
+				&--desktop {
+					display: inline;
+				}
+
+				&--mobile {
+					display: none;
+				}
+			}
+		}
+
+		@media (max-width: $bp-tablet) {
+
+			.news__pagination--container {
+				flex-direction: row;
+			}
+
+			.pagination__control--desktop {
+				display: none;
+			}
+
+			.pagination__control--mobile {
+				display: inline;
+			}
+
+			a,
+			.current {
+				font-size: 0.5625rem;
+				padding: 0.375rem var(--space-xs);
+			}
+		}
+	}
 }

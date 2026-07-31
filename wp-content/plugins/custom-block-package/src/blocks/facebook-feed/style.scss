@@ -1,5 +1,5 @@
 @use "../../scss/abstracts/tokens" as *;
-@import '../../scss/abstracts/variables';
+@import "../../scss/abstracts/variables";
 
 .wp-block-custom-block-package-facebook-feed {
 	width: 90%;
@@ -95,6 +95,7 @@
 	}
 
 	@media (max-width: $bp-small) {
+
 		.facebook-feed__follow-btn {
 			width: 100%;
 			justify-content: center;
@@ -173,6 +174,7 @@
 
 	// On narrow containers, collapse to 1 column.
 	@media (max-width: $bp-small) {
+
 		&.has-columns-2 .facebook-feed__grid,
 		&.has-columns-3 .facebook-feed__grid {
 			grid-template-columns: 1fr;

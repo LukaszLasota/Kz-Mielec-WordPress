@@ -2,32 +2,33 @@
 // In the editor, each accordion-item is wrapped in .block-editor-block-list__block,
 // so the frontend "& + &" border-collapse selector doesn't work. Fix it here.
 .wp-block-custom-block-package-custom-accordion {
-    .block-editor-block-list__layout {
-        // Remove gaps between items so they stack like the frontend.
-        gap: 0;
 
-        > .block-editor-block-list__block {
-            // Reset editor margin so items touch.
-            margin-top: 0;
-            margin-bottom: 0;
+	.block-editor-block-list__layout {
+		// Remove gaps between items so they stack like the frontend.
+		gap: 0;
 
-            // Collapse top border on all items after the first.
-            + .block-editor-block-list__block .accordion__item {
-                border-top: none;
-            }
+		> .block-editor-block-list__block {
+			// Reset editor margin so items touch.
+			margin-top: 0;
+			margin-bottom: 0;
 
-            // Border radius only on first and last items.
-            &:first-child .accordion__item {
-                border-radius: 0.25rem 0.25rem 0 0;
-            }
+			// Collapse top border on all items after the first.
+			+ .block-editor-block-list__block .accordion__item {
+				border-top: none;
+			}
 
-            &:last-child .accordion__item {
-                border-radius: 0 0 0.25rem 0.25rem;
-            }
+			// Border radius only on first and last items.
+			&:first-child .accordion__item {
+				border-radius: 0.25rem 0.25rem 0 0;
+			}
 
-            &:only-child .accordion__item {
-                border-radius: 0.25rem;
-            }
-        }
-    }
+			&:last-child .accordion__item {
+				border-radius: 0 0 0.25rem 0.25rem;
+			}
+
+			&:only-child .accordion__item {
+				border-radius: 0.25rem;
+			}
+		}
+	}
 }

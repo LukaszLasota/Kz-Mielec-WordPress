@@ -1,17 +1,18 @@
 // Editor-only overrides — content always visible, no interaction.
 .accordion__item {
-    .accordion__content {
-        overflow: visible;
-        max-height: none;
-        display: block;
-    }
 
-    .accordion__title {
-        cursor: default;
+	.accordion__content {
+		overflow: visible;
+		max-height: none;
+		display: block;
+	}
 
-        // Hide chevron in editor — accordion is not interactive here.
-        &::after {
-            display: none;
-        }
-    }
+	.accordion__title {
+		cursor: default;
+
+		// Hide chevron in editor — accordion is not interactive here.
+		&::after {
+			display: none;
+		}
+	}
 }

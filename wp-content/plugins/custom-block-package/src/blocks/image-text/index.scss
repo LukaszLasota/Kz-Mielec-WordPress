@@ -1,18 +1,19 @@
-@use './style.scss';
+@use "./style.scss";
 
 .select-button {
-    background-color: #007cba;
-    color: white;
-    padding: 0.625rem;
-    border-radius: 0.3125rem;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    &:hover {
-        color: white !important;
-    }
+	background-color: #007cba;
+	color: white;
+	padding: 0.625rem;
+	border-radius: 0.3125rem;
+	border: none;
+	cursor: pointer;
+	text-align: center;
+
+	&:hover {
+		color: white !important;
+	}
 }
 
 .about-one a {
-    pointer-events: none;
+	pointer-events: none;
 }

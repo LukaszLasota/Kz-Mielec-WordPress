@@ -13,7 +13,7 @@
 // Breakpoints are re-exported from tokens.scss unchanged: media queries need
 // real compile-time values, not custom properties.
 
-@forward 'tokens';
+@forward "tokens";
 
 // Colours ---------------------------------------------------------------------
 // The old palette defined $color-black / $color-link / $color-green /
