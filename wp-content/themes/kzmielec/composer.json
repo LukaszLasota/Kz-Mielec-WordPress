@@ -12,9 +12,9 @@
         "phpstan/extension-installer": "^1.3"
     },
     "scripts": {
-        "phpstan": "phpstan analyse --memory-limit=1G",
-        "phpcs": "phpcs --standard=phpcs.xml",
-        "phpcbf": "phpcbf --standard=phpcs.xml",
+        "phpstan": "@php vendor/bin/phpstan analyse --memory-limit=1G",
+        "phpcs": "@php vendor/bin/phpcs --standard=phpcs.xml",
+        "phpcbf": "@php vendor/bin/phpcbf --standard=phpcs.xml",
         "check": ["@phpstan", "@phpcs"]
     },
     "config": {

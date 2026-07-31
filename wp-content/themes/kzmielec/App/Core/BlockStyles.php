@@ -110,5 +110,4 @@ class BlockStyles implements ActionHookInterface {
 			);
 		}
 	}
-
 }

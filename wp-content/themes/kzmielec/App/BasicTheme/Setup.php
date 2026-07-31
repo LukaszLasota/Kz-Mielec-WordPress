@@ -94,7 +94,18 @@ class Setup implements ActionHookInterface {
 			return $join;
 		}
 
-		$keys = "'" . implode( "','", array_map( 'esc_sql', self::SEARCHABLE_META_KEYS ) ) . "'";
+		// esc_sql() is declared as accepting and returning array|string, so
+		// passing it to array_map() leaves implode() with an array<array|string>
+		// as far as static analysis is concerned. Escaping each key through a
+		// typed closure keeps the value list provably array<string>.
+		$escaped_keys = array_map(
+			static function ( string $meta_key ): string {
+				return (string) esc_sql( $meta_key );
+			},
+			self::SEARCHABLE_META_KEYS
+		);
+
+		$keys  = "'" . implode( "','", $escaped_keys ) . "'";
 		$join .= " LEFT JOIN {$wpdb->postmeta} AS kz_sm ON ( {$wpdb->posts}.ID = kz_sm.post_id AND kz_sm.meta_key IN ( {$keys} ) ) ";
 
 		return $join;

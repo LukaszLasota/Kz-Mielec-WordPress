@@ -14,5 +14,14 @@
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
+	},
+	"scripts": {
+		"phpstan": "@php vendor/bin/phpstan analyse --memory-limit=1G",
+		"phpcs": "@php vendor/bin/phpcs",
+		"phpcbf": "@php vendor/bin/phpcbf",
+		"check": [
+			"@phpstan",
+			"@phpcs"
+		]
 	}
 }
