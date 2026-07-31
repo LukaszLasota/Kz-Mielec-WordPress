@@ -1,4 +1,6 @@
 // Statut page content
+@use "../../scss/abstracts/tokens" as *;
+
 $light: #ffffff;
 $body-color: #fffdf8;
 $contact-color: #ddc6b4;
@@ -12,10 +14,10 @@ $contact-color: #ddc6b4;
 }
 
 .statut-page-head{
-    padding: 100px 0 200px;
+    padding: 6.25rem 0 12.5rem;
     display: flex;
     justify-content: center;
-    margin-bottom: 50px;
+    margin-bottom: 3.125rem;
     // background-color: $contact-color;
     background-image:
     linear-gradient(
@@ -26,7 +28,7 @@ $contact-color: #ddc6b4;
       $body-color 30%
     );
     embed{
-      border: 2px solid black;
+      border: 0.125rem solid black;
     }
 }
 
@@ -35,27 +37,27 @@ $contact-color: #ddc6b4;
     width: 45%;
     position: relative;
     &__btn{
-      padding: 60px 0 40px;
+      padding: 3.75rem 0 2.5rem;
     }
     span{
         font-size: 1.6rem;
     }
     .more{
         font-weight: bold;
-        padding: 20px 40px;
+        padding: 1.25rem 2.5rem;
     }
 }
 
 #the-canvas {
-    border: 1px solid black;
+    border: 0.0625rem solid black;
     direction: ltr;
     width: 100%;
     margin: 0 auto;
-    margin-bottom: 70px;
+    margin-bottom: 4.375rem;
   }
 
   #prev, #next{
-     width: 50px;
+     width: 3.125rem;
      padding: 0;
      border: none;
      cursor: pointer;
@@ -74,19 +76,19 @@ $contact-color: #ddc6b4;
      transform: translate(-50%, -50%) rotate(180deg);
   }
 
-  @media (max-width: 1600px){
+  @media (max-width: $bp-xwide){
   .center-pdf{
     width: 60%;
     }
 }
 
-@media (max-width: 1025px){
+@media (max-width: $bp-laptop){
     .center-pdf{
       width: 80%;
       }
   }
 
-  @media (max-width: 600px){
+  @media (max-width: $bp-small){
     .center-pdf{
       width: 90%;
       span{
@@ -94,32 +96,32 @@ $contact-color: #ddc6b4;
       }
       }
       #prev, #next{
-        width: 30px;
+        width: 1.875rem;
      }
   }
-  @media (max-width: 480px){
+  @media (max-width: $bp-mobile){
   .more{
       a{
-          padding: 15px 45px;
+          padding: 0.9375rem 2.8125rem;
           font-size: 1.2rem;
-          letter-spacing: 2px;
+          letter-spacing: 0.125rem;
       }
     }
   }
 
-  @media (max-width: 768px){
+  @media (max-width: $bp-tablet){
     .more{
       a{
-          padding: 15px 55px;
+          padding: 0.9375rem 3.4375rem;
           font-size: 1.7rem;
-          letter-spacing: 2px;
+          letter-spacing: 0.125rem;
       }
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: $bp-laptop) {
     .more {
-      padding: 15px 50px;
+      padding: 0.9375rem 3.125rem;
       font-size: 1.5rem;
     }
   }

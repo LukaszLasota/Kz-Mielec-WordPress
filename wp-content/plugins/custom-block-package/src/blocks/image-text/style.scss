@@ -1,3 +1,5 @@
+@use "../../scss/abstracts/tokens" as *;
+
 .about-one {
     position: relative;
     padding: 0;
@@ -9,11 +11,11 @@
         width: 100%;
     }
 
-    @media (max-width: 1025px)  {
+    @media (max-width: $bp-laptop)  {
         width: 100%;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: $bp-laptop) {
         .about-one__caption {
             opacity: 1;
             color: white;
@@ -23,7 +25,7 @@
         }
     }
 
-    @media (min-width: 1025px) {
+    @media (min-width: $bp-laptop + 1px) {
         &:hover {
             .about-one__caption {
                 opacity: 1;

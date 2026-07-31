@@ -1,5 +1,5 @@
 // Editor-only typography (loaded via add_editor_style, does not affect the
-// frontend). Sizes are bumped up from the old 0.75rem/12px for comfortable editing.
+// frontend). Sizes are bumped up from the old 0.75rem/0.75rem for comfortable editing.
 //
 // The block editor renders in its own document (iframe), so frontend.css and the
 // :root it carries are not present here. The tokens are therefore emitted again

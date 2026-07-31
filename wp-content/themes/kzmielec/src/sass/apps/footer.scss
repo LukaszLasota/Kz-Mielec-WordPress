@@ -49,18 +49,18 @@
             cursor: pointer;
 
             &:focus-visible {
-                outline: 2px solid var(--color-white);
-                outline-offset: 2px;
+                outline: 0.125rem solid var(--color-white);
+                outline-offset: 0.125rem;
             }
         }
 
         img {
-            width: 32px;
-            height: 32px;
+            width: 2rem;
+            height: 2rem;
 
             @media (max-width: $bp-tablet) {
-                width: 50px;
-                height: 50px;
+                width: 3.125rem;
+                height: 3.125rem;
             }
         }
     }

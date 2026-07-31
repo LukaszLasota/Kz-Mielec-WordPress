@@ -1,3 +1,5 @@
+@use "../../scss/abstracts/tokens" as *;
+
 .wp-block-custom-block-package-dynamic-images {
 	position: relative;
 
@@ -13,10 +15,10 @@
 
 	.visually-hidden {
 		position: absolute;
-		width: 1px;
-		height: 1px;
+		width: 0.0625rem;
+		height: 0.0625rem;
 		padding: 0;
-		margin: -1px;
+		margin: -0.0625rem;
 		overflow: hidden;
 		clip: rect(0, 0, 0, 0);
 		clip-path: inset(50%);
@@ -26,12 +28,12 @@
 
 	// Utility: padding-top only on desktop (matches sticky header height).
 	&.has-desktop-padding-top {
-		@media (min-width: 801px) {
-			padding-top: 80px;
+		@media (min-width: $bp-tablet + 1px) {
+			padding-top: 5rem;
 		}
 
-		@media (max-width: 800px) {
-			padding-top: 5px;
+		@media (max-width: $bp-tablet) {
+			padding-top: 0.3125rem;
 		}
 	}
 
@@ -49,7 +51,7 @@
 			height: auto;
 		}
 
-		@media (max-width: 480px) {
+		@media (max-width: $bp-mobile) {
 			display: none;
 		}
 	}
@@ -64,7 +66,7 @@
 		}
 	}
 
-	@media (max-width: 800px) {
+	@media (max-width: $bp-tablet) {
 		.dynamic-images-overlay--desktop {
 			display: none;
 		}
@@ -73,7 +75,7 @@
 		}
 	}
 
-	@media (max-width: 480px) {
+	@media (max-width: $bp-mobile) {
 		.dynamic-images-overlay--desktop,
 		.dynamic-images-overlay--tablet {
 			display: none;

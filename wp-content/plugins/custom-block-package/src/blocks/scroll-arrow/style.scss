@@ -3,11 +3,13 @@
 // Production reference (html5blank-stable):
 //   .black-circle: 60x60, #000, border-radius 100%, flex centered
 //   Arrow image: 365x365 PNG, fills the circle via max-width: 100%
-//   Default margin: 80px auto 160px
-//   Mobile 480px: 50px auto 100px
+//   Default margin: 5rem auto 10rem
+//   Mobile 30rem: 3.125rem auto 6.25rem
 //
 // Note: margin uses !important to override WordPress is-layout-constrained
 // which sets margin-block: 0 on direct children.
+
+@use "../../scss/abstracts/tokens" as *;
 
 .wp-block-custom-block-package-scroll-arrow {
 	display: flex;
@@ -16,15 +18,15 @@
 	justify-content: center;
 	width: 100%;
 	// stylelint-disable-next-line declaration-no-important
-	margin-top: 80px !important;
+	margin-top: 5rem !important;
 	// stylelint-disable-next-line declaration-no-important
-	margin-bottom: 160px !important;
+	margin-bottom: 10rem !important;
 
-	@media (max-width: 480px) {
+	@media (max-width: $bp-mobile) {
 		// stylelint-disable-next-line declaration-no-important
-		margin-top: 50px !important;
+		margin-top: 3.125rem !important;
 		// stylelint-disable-next-line declaration-no-important
-		margin-bottom: 100px !important;
+		margin-bottom: 6.25rem !important;
 	}
 
 	.scroll-arrow {
@@ -32,8 +34,8 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
-		width: 60px;
-		height: 60px;
+		width: 3.75rem;
+		height: 3.75rem;
 		border-radius: 100%;
 		background: #000;
 		color: #fff;
@@ -45,8 +47,8 @@
 		}
 
 		&:focus-visible {
-			outline: 2px solid #000;
-			outline-offset: 4px;
+			outline: 0.125rem solid #000;
+			outline-offset: 0.25rem;
 		}
 
 		figure {

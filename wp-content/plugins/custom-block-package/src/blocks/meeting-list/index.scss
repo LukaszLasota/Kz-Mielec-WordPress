@@ -1,3 +1,4 @@
+@use "../../scss/abstracts/tokens" as *;
 @import '../../scss/abstracts/mixins';
 
 // Editor-specific styles with higher specificity to override editor defaults
@@ -8,14 +9,14 @@
     .meetings {
         h2 {
             @include gradient-text();
-            padding: 95px 10px;
+            padding: 5.9375rem 0.625rem;
 
-            @media (max-width: 1024px) {
-                padding: 80px 10px;
+            @media (max-width: $bp-laptop) {
+                padding: 5rem 0.625rem;
             }
 
-            @media (max-width: 600px) {
-                padding: 70px 10px;
+            @media (max-width: $bp-small) {
+                padding: 4.375rem 0.625rem;
             }
         }
 
@@ -27,15 +28,15 @@
             font-size: 1.1rem;
             line-height: 150%;
 
-            @media (max-width: 1200px) {
+            @media (max-width: $bp-wide) {
                 grid-template-columns: repeat(3, 1fr);
             }
 
-            @media (max-width: 768px) {
+            @media (max-width: $bp-tablet) {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            @media (max-width: 480px) {
+            @media (max-width: $bp-mobile) {
                 grid-template-columns: 1fr;
             }
         }
@@ -46,7 +47,7 @@
         }
 
         .flipping-cards__card-inner {
-            padding: 20px;
+            padding: 1.25rem;
             box-sizing: border-box;
         }
 
@@ -63,7 +64,7 @@
             }
 
             p {
-                margin: 5px;
+                margin: 0.3125rem;
             }
         }
     }

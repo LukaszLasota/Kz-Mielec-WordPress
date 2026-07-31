@@ -1,10 +1,12 @@
 // Spacing above the map, matching the old production rhythm
-// (contact info had a ~50px gap before the map at the section bottom).
-.map-block-wrapper {
-    margin-block: 50px 80px;
+// (contact info had a ~3.125rem gap before the map at the section bottom).
+@use "../../scss/abstracts/tokens" as *;
 
-    @media (max-width: 600px) {
-        margin-block: 30px 50px;
+.map-block-wrapper {
+    margin-block: 3.125rem 5rem;
+
+    @media (max-width: $bp-small) {
+        margin-block: 1.875rem 3.125rem;
     }
 }
 

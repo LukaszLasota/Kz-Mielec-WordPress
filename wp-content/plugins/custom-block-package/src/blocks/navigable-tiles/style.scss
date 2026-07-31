@@ -10,15 +10,17 @@
 //
 // WCAG 2.1 AA: focus-visible, aria-current, prefers-reduced-motion.
 
+@use "../../scss/abstracts/tokens" as *;
+
 .wp-block-custom-block-package-navigable-tiles {
 	// ── Config — all tunable values live here ─────────────
-	--cbp-tile-margin-block: 15px;
-	--cbp-tile-padding-inline: 30px;
+	--cbp-tile-margin-block: 0.9375rem;
+	--cbp-tile-padding-inline: 1.875rem;
 	--cbp-image-ratio: 1;          // 1 = square (PNGs are 400×400). Change for other crops.
 	--cbp-overlay-bg: #000;
 	--cbp-overlay-opacity: 0.6;
 	--cbp-icon-width: 80%;         // % of tile → scales automatically on tablet/mobile
-	--cbp-title-size: var(--fs-title, 1.5rem);   // 24px — shared type scale
+	--cbp-title-size: var(--fs-title, 1.5rem);   // 1.5rem — shared type scale
 	--cbp-title-leading: 1.4;
 	--cbp-transition: 0.5s linear;
 
@@ -78,8 +80,8 @@
 		}
 
 		&:focus-visible {
-			outline: 3px solid currentColor;
-			outline-offset: 4px;
+			outline: 0.1875rem solid currentColor;
+			outline-offset: 0.25rem;
 		}
 	}
 
@@ -140,7 +142,7 @@
 		font-size: var(--cbp-title-size);
 		line-height: var(--cbp-title-leading);
 		font-weight: 400;
-		margin: 0.3125rem; // 5px
+		margin: 0.3125rem; // 0.3125rem
 	}
 
 	// Extra breathing room between the circular image and the title.
@@ -170,22 +172,22 @@
 	// ── Responsive ────────────────────────────────────────
 	// Viewport-based so breakpoints map directly to screen width: desktop
 	// always shows 4 columns, only tablets/phones reduce the count.
-	@media (max-width: 1024px) {  // tablet landscape → 3 columns
+	@media (max-width: $bp-laptop) {  // tablet landscape → 3 columns
 		.navigable-tiles__item { inline-size: 28%; }
 	}
-	@media (max-width: 768px) {   // tablet portrait → 2 columns
+	@media (max-width: $bp-tablet) {   // tablet portrait → 2 columns
 		.navigable-tiles__item { inline-size: 42%; }
 	}
-	@media (max-width: 480px) {   // mobile → 1 column, centered
+	@media (max-width: $bp-mobile) {   // mobile → 1 column, centered
 		.navigable-tiles__item { inline-size: 75%; }
 	}
 
 	// ── Mobile tweaks — narrow screens (one column) ───────
-	// Title font stays 21px like production (no mobile reduction).
-	@media (max-width: 480px) {
+	// Title font stays 1.3125rem like production (no mobile reduction).
+	@media (max-width: $bp-mobile) {
 		// More breathing room around the circle when the tile is full-width.
 		.navigable-tiles__item {
-			padding-inline: 24px;
+			padding-inline: 1.5rem;
 		}
 	}
 
@@ -199,10 +201,10 @@
 	// Used by the "(aktualna strona)" indicator on the current tile.
 	.screen-reader-text {
 		position: absolute;
-		width: 1px;
-		height: 1px;
+		width: 0.0625rem;
+		height: 0.0625rem;
 		padding: 0;
-		margin: -1px;
+		margin: -0.0625rem;
 		overflow: hidden;
 		clip: rect(0, 0, 0, 0);
 		white-space: nowrap;

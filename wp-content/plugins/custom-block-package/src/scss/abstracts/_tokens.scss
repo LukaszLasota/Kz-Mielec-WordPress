@@ -1,0 +1,38 @@
+// =============================================================================
+// BREAKPOINT TOKENS — single source of truth for this plugin
+// =============================================================================
+
+// These mirror the theme's canonical scale in
+// `wp-content/themes/kzmielec/src/sass/abstracts/_tokens.scss`. They are
+// duplicated rather than imported on purpose: the plugin has its own webpack
+// build and must keep working with any theme, so it cannot reach into theme
+// files. Keep the shared names below in sync with the theme — if a value
+// changes there, change it here too.
+
+// Breakpoints must be SCSS variables, not CSS custom properties: a media query
+// cannot read `var(--x)`, so the value has to exist at compile time.
+
+// Use `$bp-<name> + 1px` for the complementary min-width query, so a max-width
+// and a min-width rule never both match on the boundary pixel.
+
+// -----------------------------------------------------------------------------
+// Shared with the theme — same names, same values
+// -----------------------------------------------------------------------------
+$bp-mobile: 480px; // phones
+$bp-small: 600px; // large phones / small tablets
+$bp-tablet: 800px; // tablets — main mobile/desktop switch
+$bp-laptop: 1024px; // small laptops
+
+// -----------------------------------------------------------------------------
+// Plugin-only steps
+// -----------------------------------------------------------------------------
+// Block layouts need a few stops the theme's own styles never required. They
+// live here rather than being folded into the shared steps above, because
+// folding them would move real layout boundaries:
+//   $bp-medium — section-block switches its grid to `--columns-large-tablet`
+//   $bp-wide   — section-block reaches `--columns-desktop`; meeting-list
+//                drops a column
+//   $bp-xwide  — pdf-block starts narrowing the embedded viewer
+$bp-medium: 900px;
+$bp-wide: 1200px;
+$bp-xwide: 1600px;

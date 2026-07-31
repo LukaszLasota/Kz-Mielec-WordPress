@@ -1,12 +1,14 @@
 // ── Design tokens — named so repeated values live in one place ──
+@use "../../scss/abstracts/tokens" as *;
+
 $acc-line: #000; // border colour
-$acc-border: 2px solid $acc-line;
+$acc-border: 0.125rem solid $acc-line;
 $acc-btn-bg: #343a40; // "Czytaj dalej" download-button background
 $acc-btn-bg-hover: #23272b;
 $acc-btn-text: #fff;
 
 .accordion__item {
-    // Match the old theme (.collapse): 2px black border, square corners.
+    // Match the old theme (.collapse): 0.125rem black border, square corners.
     border: $acc-border;
 
     // Stack items without doubling the shared borders.
@@ -23,10 +25,10 @@ $acc-btn-text: #fff;
     .accordion__title-text {
         margin: 0;
         padding: 0;
-        font-size: 1.25rem; // 20px — matches the rest of the site
+        font-size: 1.25rem; // 1.25rem — matches the rest of the site
         font-weight: 400;
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 0.125rem;
         text-align: center;
 
         // Reset gradient from theme's global h3 styles.
@@ -36,9 +38,9 @@ $acc-btn-text: #fff;
         background-clip: initial;
         background: none;
 
-        @media (max-width: 600px) {
+        @media (max-width: $bp-small) {
             font-size: 1.1rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.0625rem;
         }
     }
 
@@ -54,7 +56,7 @@ $acc-btn-text: #fff;
         text-align: center;
         position: relative;
 
-        @media (max-width: 600px) {
+        @media (max-width: $bp-small) {
             padding: 0.8rem 2.5rem 0.8rem 0.8rem;
         }
         font-size: inherit;
@@ -67,8 +69,8 @@ $acc-btn-text: #fff;
         &::after {
             content: '';
             display: inline-block;
-            width: 32px;
-            height: 32px;
+            width: 2rem;
+            height: 2rem;
             position: absolute;
             right: 1.2rem;
             top: 50%;
@@ -76,11 +78,11 @@ $acc-btn-text: #fff;
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center center;
             transition: transform 0.3s ease;
 
-            @media (max-width: 600px) {
-                width: 26px;
-                height: 26px;
+            @media (max-width: $bp-small) {
+                width: 1.625rem;
+                height: 1.625rem;
                 right: 0.6rem;
-                background-size: 14px 14px;
+                background-size: 0.875rem 0.875rem;
             }
         }
 
@@ -90,8 +92,8 @@ $acc-btn-text: #fff;
 
         // WCAG 2.4.7: visible focus indicator for keyboard users.
         &:focus-visible {
-            outline: 3px solid var(--wp--preset--color--site-color, #000);
-            outline-offset: -3px;
+            outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+            outline-offset: -0.1875rem;
         }
     }
 
@@ -109,7 +111,7 @@ $acc-btn-text: #fff;
         &--box {
             padding: 1.5rem 2.5rem 2.5rem;
 
-            @media (max-width: 600px) {
+            @media (max-width: $bp-small) {
                 padding: 1rem 1.2rem 1.5rem;
             }
 
@@ -118,11 +120,11 @@ $acc-btn-text: #fff;
                 text-align: justify;
                 margin-bottom: 1rem; // stack paragraphs with breathing room
 
-                @media (max-width: 500px) {
+                @media (max-width: $bp-small) {
                     text-align: left;
                 }
 
-                @media (max-width: 600px) {
+                @media (max-width: $bp-small) {
                     font-size: 0.95rem;
                 }
             }
@@ -136,7 +138,7 @@ $acc-btn-text: #fff;
                     margin-bottom: 0.5rem;
                 }
 
-                @media (max-width: 600px) {
+                @media (max-width: $bp-small) {
                     font-size: 0.95rem;
                 }
             }
@@ -175,10 +177,10 @@ $acc-btn-text: #fff;
                 background: $acc-btn-bg;
                 color: $acc-btn-text;
                 text-decoration: none;
-                border-radius: 4px;
+                border-radius: 0.25rem;
                 font-size: 1rem;
                 font-weight: 500;
-                letter-spacing: 1px;
+                letter-spacing: 0.0625rem;
                 text-transform: uppercase;
                 margin-top: 0.5rem;
                 transition: background 0.2s ease;
@@ -188,8 +190,8 @@ $acc-btn-text: #fff;
                 }
 
                 &:focus-visible {
-                    outline: 3px solid var(--wp--preset--color--site-color, #000);
-                    outline-offset: 2px;
+                    outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+                    outline-offset: 0.125rem;
                 }
             }
         }

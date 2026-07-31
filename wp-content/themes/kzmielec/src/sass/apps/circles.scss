@@ -17,7 +17,7 @@
 .vb__item {
     width: 25%;
     position: relative;
-    margin: 15px 0 15px;
+    margin: 0.9375rem 0 0.9375rem;
 
     figure {
         margin: 0;
@@ -85,7 +85,7 @@
     width: 90%;
     text-align: center;
     font-size: var(--fs-lead);
-    margin: 15px var(--space-xs) auto;
+    margin: 0.9375rem var(--space-xs) auto;
 }
 
 .vb__paragraph--one {
@@ -97,7 +97,7 @@
         width: 100%;
         text-align: center;
         font-size: 1.188rem;
-        margin: 2px;
+        margin: 0.125rem;
     }
 
     a {
@@ -105,7 +105,7 @@
     }
 
     .find__paragraph-last {
-        padding-bottom: 50px;
+        padding-bottom: 3.125rem;
     }
 }
 
@@ -127,11 +127,11 @@
 
 .center {
     .vb__item {
-        padding-top: 120px;
+        padding-top: 7.5rem;
     }
 
     .black-circle {
-        margin: 100px 20px 140px;
+        margin: 6.25rem 1.25rem 8.75rem;
     }
 
     .padding {
@@ -166,7 +166,7 @@
     .find {
         .find__paragraph {
             width: 90%;
-            margin: 2px auto;
+            margin: 0.125rem auto;
         }
     }
 
@@ -176,7 +176,7 @@
         }
 
         .black-circle {
-            margin: 90px 20px 120px;
+            margin: 5.625rem 1.25rem 7.5rem;
         }
     }
 }

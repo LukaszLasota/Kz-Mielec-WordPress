@@ -1,16 +1,17 @@
+@use "../../scss/abstracts/tokens" as *;
 @import '../../scss/abstracts/mixins';
 
 .meetings {
     h2{
         @include gradient-text();
-        padding: 95px 10px;
+        padding: 5.9375rem 0.625rem;
 
-        @media (max-width: 600px){
-            padding: 70px 10px;
+        @media (max-width: $bp-small){
+            padding: 4.375rem 0.625rem;
         }
 
-        @media (max-width: 1024px){
-            padding: 80px 10px;
+        @media (max-width: $bp-laptop){
+            padding: 5rem 0.625rem;
         }
     }
 }
@@ -18,13 +19,13 @@
 .flipping-cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0px;
+    gap: 0;
     width: 100%;
     font-size: 1.1rem;
     line-height: 150%;
    
     &__card {
-        perspective: 1000px;
+        perspective: 62.5rem;
         display: flex;
         flex-wrap: wrap;
         position: relative;
@@ -35,8 +36,8 @@
         z-index: 0; // Create stacking context
 
         &:focus-visible {
-            outline: 3px solid var(--wp--preset--color--site-color, #000);
-            outline-offset: -3px;
+            outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+            outline-offset: -0.1875rem;
             z-index: 10;
         }
 
@@ -75,7 +76,7 @@
         display: grid;
         grid-template-areas: "front";
         transform: rotateY(0deg);
-        padding: 20px;
+        padding: 1.25rem;
         box-sizing: border-box; 
         &--flipped {
             transform: rotateY(180deg);
@@ -104,7 +105,7 @@
             word-break: break-word;
         }
         p {
-            margin: 5px;
+            margin: 0.3125rem;
             word-break: break-word;
         }
         a {
@@ -116,7 +117,7 @@
         display: none;
         text-decoration: underline;
 
-        @media (max-width: 1024px) {
+        @media (max-width: $bp-laptop) {
             display: block;
         }
     }
@@ -127,15 +128,15 @@
         justify-content: flex-start
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: $bp-wide) {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: $bp-tablet) {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: $bp-mobile) {
         grid-template-columns: 1fr;
     }
 }

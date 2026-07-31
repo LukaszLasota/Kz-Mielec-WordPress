@@ -7,15 +7,15 @@
 // On the front page the first block IS the hero (full-bleed, handled by the
 // dynamic-images-banner-hero block style), so it's correct to skip it here.
 // Every other block gets horizontal edge padding so it never touches the screen
-// edge. WordPress core already caps children at contentSize (1200px) and centers.
+// edge. WordPress core already caps children at contentSize (75rem) and centers.
 
 .home .site-main.is-layout-constrained > *:not(:first-child) {
 	padding-inline: var(--space-sm);
 }
 
-// Contact info under "Znajdź nas". Local paragraphs default to 16px; production
-// renders these at 19px (.find__paragraph). Match it.
+// Contact info under "Znajdź nas". Local paragraphs default to 1rem; production
+// renders these at 1.1875rem (.find__paragraph). Match it.
 .home .site-main p.has-text-align-center {
-	font-size: var(--fs-body, 1.25rem); // 20px
+	font-size: var(--fs-body, 1.25rem); // 1.25rem
 	line-height: var(--lh-tight);
 }

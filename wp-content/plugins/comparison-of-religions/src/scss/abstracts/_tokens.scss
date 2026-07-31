@@ -1,0 +1,18 @@
+// =============================================================================
+// BREAKPOINT TOKENS — single source of truth for this plugin
+// =============================================================================
+
+// These mirror the theme's canonical scale in
+// `wp-content/themes/kzmielec/src/sass/abstracts/_tokens.scss`. They are
+// duplicated rather than imported on purpose: the plugin has its own webpack
+// build and must keep working with any theme, so it cannot reach into theme
+// files. Keep them in sync with the theme — if a value changes there, change
+// it here too.
+
+// Breakpoints must be SCSS variables, not CSS custom properties: a media query
+// cannot read `var(--x)`, so the value has to exist at compile time.
+
+// Only the two steps this plugin actually uses are declared; add more from the
+// theme's scale as they are needed rather than inventing new numbers.
+$bp-small: 600px; // large phones / small tablets
+$bp-tablet: 800px; // tablets — main mobile/desktop switch

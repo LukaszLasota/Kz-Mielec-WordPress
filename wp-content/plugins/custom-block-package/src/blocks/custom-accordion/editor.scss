@@ -18,15 +18,15 @@
 
             // Border radius only on first and last items.
             &:first-child .accordion__item {
-                border-radius: 4px 4px 0 0;
+                border-radius: 0.25rem 0.25rem 0 0;
             }
 
             &:last-child .accordion__item {
-                border-radius: 0 0 4px 4px;
+                border-radius: 0 0 0.25rem 0.25rem;
             }
 
             &:only-child .accordion__item {
-                border-radius: 4px;
+                border-radius: 0.25rem;
             }
         }
     }

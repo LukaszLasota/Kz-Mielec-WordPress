@@ -36,7 +36,7 @@
   }
 
   &__image {
-    height: 120px;
+    height: 7.5rem;
     width: auto;
   }
 
@@ -44,7 +44,7 @@
     padding: var(--space-3xs) var(--space-3xs) 0 var(--space-3xs);
 
     &__image {
-      height: 90px;
+      height: 5.625rem;
     }
   }
 
@@ -54,7 +54,7 @@
     padding: var(--space-3xs);
 
     &__image {
-      height: 80px;
+      height: 5rem;
     }
   }
 
@@ -63,7 +63,7 @@
     padding: var(--space-3xs) 0 0 0;
 
     &__image {
-      height: 65px;
+      height: 4.0625rem;
     }
   }
 }
@@ -74,7 +74,7 @@
 
 .nav {
   width: 100%;
-  padding: 0 20px;
+  padding: 0 1.25rem;
 
   &::before,
   &::after {
@@ -85,11 +85,11 @@
   }
 
   &::before {
-    border-bottom: 1px solid black;
+    border-bottom: 0.0625rem solid black;
   }
 
   &::after {
-    border-top: 1px solid black;
+    border-top: 0.0625rem solid black;
   }
 
   &__ul {
@@ -147,7 +147,7 @@
           text-shadow: none;
           font-size: 1.062rem;
           width: 100%;
-          padding: 18px 0;
+          padding: 1.125rem 0;
         }
       }
     }
@@ -155,7 +155,7 @@
 }
 
 // ===========================================
-// Sticky menu — hidden by default, visible on scroll >= 240px
+// Sticky menu — hidden by default, visible on scroll >= 15rem
 // Logo BETWEEN menu items (5-column layout)
 // ===========================================
 
@@ -229,23 +229,23 @@
   background-color: transparent;
   border: 0;
   margin: 0;
-  padding: 8px;
+  padding: 0.5rem;
 
   &__sr-only {
     border: 0;
     clip: rect(0, 0, 0, 0);
-    height: 1px;
-    margin: -1px;
+    height: 0.0625rem;
+    margin: -0.0625rem;
     overflow: hidden;
     padding: 0;
     position: absolute;
     white-space: nowrap;
-    width: 1px;
+    width: 0.0625rem;
   }
 
   .line {
-    width: 40px;
-    height: 3px;
+    width: 2.5rem;
+    height: 0.1875rem;
     background-color: var(--color-black);
     display: block;
     margin: var(--space-xs) auto;
@@ -254,8 +254,8 @@
 
   &.is-active {
     .line:nth-child(3) { opacity: 0; }
-    .line:nth-child(2) { transform: translateY(13px) rotate(45deg); }
-    .line:nth-child(4) { transform: translateY(-13px) rotate(-45deg); }
+    .line:nth-child(2) { transform: translateY(0.8125rem) rotate(45deg); }
+    .line:nth-child(4) { transform: translateY(-0.8125rem) rotate(-45deg); }
   }
 
   @media (max-width: $bp-tablet) {

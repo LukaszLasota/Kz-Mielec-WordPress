@@ -220,7 +220,7 @@ button:-moz-focusring,
 [type="button"]:-moz-focusring,
 [type="reset"]:-moz-focusring,
 [type="submit"]:-moz-focusring {
-	outline: 1px dotted ButtonText;
+	outline: 0.0625rem dotted ButtonText;
 }
 
 /**
@@ -290,7 +290,7 @@ textarea {
 
 [type="search"] {
 	-webkit-appearance: textfield;
-	outline-offset: -2px;
+	outline-offset: -0.125rem;
 }
 
 /**

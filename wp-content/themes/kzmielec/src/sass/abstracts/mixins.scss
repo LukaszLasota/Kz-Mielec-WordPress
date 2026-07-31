@@ -33,7 +33,7 @@
 
     p, a, p a {
       font-size: var(--fs-body, 1.25rem);
-      padding: 2px 0;
+      padding: 0.125rem 0;
       margin-top: 0;
       margin-bottom: 0.6rem;
       font-weight: var(--fw-regular);
@@ -88,7 +88,7 @@
     $font-weight: 400,
     $text-transform: uppercase,
     $text-align: center,
-    $letter-spacing: 2px,
+    $letter-spacing: 0.125rem,
     $gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
   ) {
     font-size: $font-size;

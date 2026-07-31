@@ -3,8 +3,8 @@
 // Loaded via PatternAssets when class "pattern-archive-meetings" detected.
 //
 // Visual target: the production "Zaplanuj wizytę" section (kzmielec.pl) — Cinzel,
-// black text, 21px title/description, circular photos. Modern deviations kept on
-// purpose: fixed 1200px container (vs production fluid %), CSS cross-fade hover
+// black text, 1.3125rem title/description, circular photos. Modern deviations kept on
+// purpose: fixed 75rem container (vs production fluid %), CSS cross-fade hover
 // and prefers-reduced-motion support.
 
 .archive-meetings {
@@ -12,10 +12,10 @@
 	// document outline (screen readers) without a visible title in the design.
 	.archive-meetings__sr-heading {
 		position: absolute;
-		width: 1px;
-		height: 1px;
+		width: 0.0625rem;
+		height: 0.0625rem;
 		padding: 0;
-		margin: -1px;
+		margin: -0.0625rem;
 		overflow: hidden;
 		clip: rect(0, 0, 0, 0);
 		white-space: nowrap;
@@ -28,17 +28,17 @@
 	// Cinzel (which is caps-only and unreadable for long copy).
 
 	.archive-meetings__item {
-		max-width: var(--content-width-narrow); // 1100px
+		max-width: var(--content-width-narrow); // 68.75rem
 		margin: 8rem auto;
 		padding: 0 var(--space-sm);
 
 		// Offset anchor jumps (down-arrow) so the sticky menu doesn't cover the
-		// target image. Mobile (<=800px) has no sticky menu, so only a small gap.
-		scroll-margin-top: 1.25rem; // 20px
+		// target image. Mobile (<=50rem) has no sticky menu, so only a small gap.
+		scroll-margin-top: 1.25rem; // 1.25rem
 
 		@media (min-width: $bp-tablet + 1px) {
-			// Sticky menu is 122px tall on desktop; clear it plus a small gap.
-			scroll-margin-top: 8.75rem; // 140px
+			// Sticky menu is 7.625rem tall on desktop; clear it plus a small gap.
+			scroll-margin-top: 8.75rem; // 8.75rem
 		}
 	}
 
@@ -55,11 +55,11 @@
 	.archive-meetings__hero-image {
 		position: relative;
 		display: block;
-		width: 13.375rem; // 214px
+		width: 13.375rem; // 13.375rem
 		aspect-ratio: 1;
 		border-radius: var(--radius-circle);
 		overflow: hidden;
-		margin-bottom: 0.9375rem; // 15px
+		margin-bottom: 0.9375rem; // 0.9375rem
 
 		.archive-meetings__image--one,
 		.archive-meetings__image--two {
@@ -87,23 +87,23 @@
 
 	.archive-meetings__title {
 		font-family: var(--font-serif);
-		font-size: var(--fs-title, 1.5rem); // 24px
+		font-size: var(--fs-title, 1.5rem); // 1.5rem
 		text-align: center;
 		color: var(--color-black);
-		margin: 0.9375rem 0 0; // 15px
+		margin: 0.9375rem 0 0; // 0.9375rem
 	}
 
 	.archive-meetings__meta {
 		font-family: var(--font-serif);
-		font-size: var(--fs-body, 1.25rem); // 20px
+		font-size: var(--fs-body, 1.25rem); // 1.25rem
 		color: var(--color-black);
 		text-align: center;
-		margin: var(--space-2xs) 0 0; // 8px
+		margin: var(--space-2xs) 0 0; // 0.5rem
 	}
 
 	.archive-meetings__content {
 		font-family: var(--font-serif);
-		font-size: var(--fs-body, 1.25rem); // 20px
+		font-size: var(--fs-body, 1.25rem); // 1.25rem
 		line-height: var(--lh-tight);
 		text-align: justify;
 		color: var(--color-black);
@@ -123,12 +123,12 @@
 		justify-content: center;
 		margin: 0;
 
-		// Match the production rhythm: the old theme centred a 60px arrow with
-		// 100px/140px vertical margins between meetings. Reproduce that here
+		// Match the production rhythm: the old theme centred a 3.75rem arrow with
+		// 6.25rem/8.75rem vertical margins between meetings. Reproduce that here
 		// (the block's default 80/160 is slightly off).
 		.wp-block-custom-block-package-scroll-arrow {
-			margin-top: 6.25rem !important; // 100px
-			margin-bottom: 8.75rem !important; // 140px
+			margin-top: 6.25rem !important; // 6.25rem
+			margin-bottom: 8.75rem !important; // 8.75rem
 		}
 	}
 

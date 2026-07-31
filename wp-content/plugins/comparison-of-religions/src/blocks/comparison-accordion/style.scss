@@ -6,23 +6,25 @@
 // Prefix "cor-" (Comparison Of Religions) avoids conflicts with other accordions.
 //
 // Adapted to the kzmielec design — consistent with the `accordion-item` block:
-//   2px black border, square corners, uppercase, inherited serif, black chevron,
+//   0.125rem black border, square corners, uppercase, inherited serif, black chevron,
 //   rem units, #000 text.
 //
 // RESPONSIVE:
-//   Desktop (>768px): CSS Grid — columns: topic + one per church
+//   Desktop (>48rem): CSS Grid — columns: topic + one per church
 //     (column count from the --cor-church-count custom property set in render.php).
-//   Mobile (≤768px): display: block — grid styles ignored; elements flow in
+//   Mobile (≤48rem): display: block — grid styles ignored; elements flow in
 //     source order: topic → church label → paragraphs.
 // ============================================================================
 
 // ── Design tokens — named so repeated values live in one place ──
+@use "../../scss/abstracts/tokens" as *;
+
 $cor-line: #000; // borders, dividers, body text
 $cor-bg: #fff;
-$cor-border: 2px solid $cor-line;
+$cor-border: 0.125rem solid $cor-line;
 
 .cor-accordion {
-	max-width: 68.75rem; // 1100px — matches the belief/archive content width.
+	max-width: 68.75rem; // 68.75rem — matches the belief/archive content width.
 	margin: 2rem auto;
 
 	// Reset Gutenberg block gap between elements.
@@ -35,7 +37,7 @@ $cor-border: 2px solid $cor-line;
 }
 
 // ── Accordion item (one per taxonomy category) ──
-// 2px black border, square corners; shared edges without doubling.
+// 0.125rem black border, square corners; shared edges without doubling.
 
 .cor-accordion__item {
 	border: $cor-border;
@@ -57,10 +59,10 @@ $cor-border: 2px solid $cor-line;
 .cor-accordion__heading {
 	margin: 0 !important;
 	padding: 0 !important;
-	font-size: 1.25rem; // matches accordion-item (production .collapse__head ≈ 21px)
+	font-size: 1.25rem; // matches accordion-item (production .collapse__head ≈ 1.3125rem)
 	font-weight: 400;
 	text-transform: uppercase; // production .collapse__head: uppercase
-	letter-spacing: 2px;
+	letter-spacing: 0.125rem;
 	text-align: center;
 	line-height: 1.3;
 
@@ -72,8 +74,8 @@ $cor-border: 2px solid $cor-line;
 	background: none !important;
 	color: inherit;
 
-	@media (max-width: 600px) {
-		font-size: 1.1875rem; // 19px — production .comparison-h4
+	@media (max-width: $bp-small) {
+		font-size: 1.1875rem; // 1.1875rem — production .comparison-h4
 	}
 }
 
@@ -103,7 +105,7 @@ $cor-border: 2px solid $cor-line;
 	-webkit-background-clip: initial;
 	background-clip: initial;
 
-	@media (max-width: 600px) {
+	@media (max-width: $bp-small) {
 		padding: 0.8rem 2.5rem 0.8rem 0.8rem;
 	}
 
@@ -111,8 +113,8 @@ $cor-border: 2px solid $cor-line;
 	&::after {
 		content: '';
 		display: inline-block;
-		width: 32px;
-		height: 32px;
+		width: 2rem;
+		height: 2rem;
 		position: absolute;
 		right: 1.2rem;
 		top: 50%;
@@ -121,11 +123,11 @@ $cor-border: 2px solid $cor-line;
 			no-repeat center center;
 		transition: transform 0.3s ease;
 
-		@media (max-width: 600px) {
-			width: 26px;
-			height: 26px;
+		@media (max-width: $bp-small) {
+			width: 1.625rem;
+			height: 1.625rem;
 			right: 0.6rem;
-			background-size: 14px 14px;
+			background-size: 0.875rem 0.875rem;
 		}
 	}
 
@@ -135,8 +137,8 @@ $cor-border: 2px solid $cor-line;
 
 	// WCAG 2.4.7: visible focus indicator for keyboard users.
 	&:focus-visible {
-		outline: 3px solid var(--wp--preset--color--site-color, #000);
-		outline-offset: -3px;
+		outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+		outline-offset: -0.1875rem;
 	}
 }
 
@@ -170,20 +172,20 @@ $cor-border: 2px solid $cor-line;
 .cor-table__header {
 	display: grid;
 	// Production ratio: topic 1 / each church 2 (1:2:2).
-	// Columns separated by 1px vertical dividers (production border-right), no gap.
+	// Columns separated by 0.0625rem vertical dividers (production border-right), no gap.
 	grid-template-columns: minmax(7.5rem, 1fr) repeat(var(--cor-church-count, 2), 2fr);
 	text-align: center;
 	font-weight: 700; // production .comparison-h4: bold, normal case (no uppercase)
-	font-size: 1.1875rem; // 19px — production .comparison-h4
+	font-size: 1.1875rem; // 1.1875rem — production .comparison-h4
 	color: $cor-line; // production: header row has no border
 
-	@media (max-width: 768px) {
+	@media (max-width: $bp-tablet) {
 		// Visually hidden but accessible to screen readers.
 		position: absolute;
-		width: 1px;
-		height: 1px;
+		width: 0.0625rem;
+		height: 0.0625rem;
 		padding: 0;
-		margin: -1px;
+		margin: -0.0625rem;
 		overflow: hidden;
 		clip: rect(0, 0, 0, 0);
 		white-space: nowrap;
@@ -198,10 +200,10 @@ $cor-border: 2px solid $cor-line;
 .cor-table__body {
 	display: grid;
 	// Production ratio: topic 1 / each church 2 (1:2:2).
-	// Columns separated by 1px vertical dividers (production border-right), no gap.
+	// Columns separated by 0.0625rem vertical dividers (production border-right), no gap.
 	grid-template-columns: minmax(7.5rem, 1fr) repeat(var(--cor-church-count, 2), 2fr);
 
-	@media (max-width: 768px) {
+	@media (max-width: $bp-tablet) {
 		display: block;
 		padding: 0 1.2rem;
 	}
@@ -215,16 +217,16 @@ $cor-border: 2px solid $cor-line;
 	// is attributed to its church (the visible column header is aria-hidden).
 	// Mobile: shown as a visible label above each church's description.
 	position: absolute;
-	width: 1px;
-	height: 1px;
+	width: 0.0625rem;
+	height: 0.0625rem;
 	padding: 0;
-	margin: -1px;
+	margin: -0.0625rem;
 	overflow: hidden;
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
 
-	@media (max-width: 768px) {
+	@media (max-width: $bp-tablet) {
 		position: static;
 		width: auto;
 		height: auto;
@@ -245,10 +247,10 @@ $cor-border: 2px solid $cor-line;
 .cor-table__cell {
 	padding: 0.7rem 1rem;
 	line-height: 1.5;
-	font-size: 1.0625rem; // 17px — production .comparison-paragraph
+	font-size: 1.0625rem; // 1.0625rem — production .comparison-paragraph
 	color: $cor-line;
 
-	@media (max-width: 600px) {
+	@media (max-width: $bp-small) {
 		padding: 0.4rem 0.8rem;
 		font-size: 1rem;
 	}
@@ -257,13 +259,13 @@ $cor-border: 2px solid $cor-line;
 	&--topic {
 		grid-column: 1;
 		font-weight: 700;
-		font-size: 1.0625rem; // 17px — a touch smaller (matches cell text), still bold
+		font-size: 1.0625rem; // 1.0625rem — a touch smaller (matches cell text), still bold
 		display: flex;
 		justify-content: center; // horizontally centred
 		align-items: flex-start; // top-aligned: topic sits at the start of its section
 		text-align: center;
 
-		@media (max-width: 768px) {
+		@media (max-width: $bp-tablet) {
 			display: block;
 			text-align: left;
 			padding: 1rem 0 0.5rem;
@@ -273,11 +275,11 @@ $cor-border: 2px solid $cor-line;
 	}
 
 	// Church description cell — positioned via inline grid-column/grid-row.
-	// Vertical divider between columns (production: 1px black border between cols).
+	// Vertical divider between columns (production: 0.0625rem black border between cols).
 	&--church {
-		border-left: 1px solid $cor-line;
+		border-left: 0.0625rem solid $cor-line;
 
-		@media (max-width: 768px) {
+		@media (max-width: $bp-tablet) {
 			border-left: none;
 			padding: 0;
 		}

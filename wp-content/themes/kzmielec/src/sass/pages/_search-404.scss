@@ -1,7 +1,7 @@
 @use '../abstracts/variables' as *;
 // Search-results header + search form, and the 404 (not found) page.
 // Reuses the site's black-on-white / serif / thin-border / gradient-hover
-// system. All sizes in rem (16px = 1rem) per project convention.
+// system. All sizes in rem (1rem = 1rem) per project convention.
 
 // Shared button/link fill-on-hover used by the submit button and 404 button.
 @mixin filled-hover-button {

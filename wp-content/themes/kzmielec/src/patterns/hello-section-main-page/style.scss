@@ -16,7 +16,7 @@
 	}
 
 	&__image img {
-		max-height: 300px;
+		max-height: 18.75rem;
 		width: auto;
 		aspect-ratio: 1;
 	}
@@ -41,7 +41,7 @@
 		height: 100%;
 		text-decoration: none;
 		color: inherit;
-		padding: var(--space-lg) 30px;
+		padding: var(--space-lg) 1.875rem;
 
 		&:hover {
 			text-decoration: none;

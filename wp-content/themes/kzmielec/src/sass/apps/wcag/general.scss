@@ -15,7 +15,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
-    padding: 8px 16px;
+    padding: 0.5rem 1rem;
     background: var(--color-focus-bg);
     color: var(--color-focus-text);
     font-size: var(--fs-base);
@@ -23,6 +23,6 @@
     text-decoration: none;
 
     &:focus {
-        top: 5px;
+        top: 0.3125rem;
     }
 }

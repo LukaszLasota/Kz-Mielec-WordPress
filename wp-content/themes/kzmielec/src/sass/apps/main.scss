@@ -9,7 +9,7 @@
 }
 
 html {
-    font-size: 100%; // 1rem = 16px (browser default)
+    font-size: 100%; // 1rem = 1rem (browser default)
     line-height: normal; // override normalize v8 line-height: var(--lh-heading)
     scroll-behavior: smooth;
 
@@ -38,8 +38,8 @@ a {
 }
 
 a:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
+    outline: 0.125rem solid currentColor;
+    outline-offset: 0.125rem;
 }
 
 a:hover,
@@ -68,10 +68,10 @@ figure {
     letter-spacing: 150%;
     text-transform: uppercase;
     position: relative;
-    margin: 30px 0 var(--space-xl);
+    margin: 1.875rem 0 var(--space-xl);
 
     &::before {
-        border-top: 1px solid black;
+        border-top: 0.0625rem solid black;
         content: '';
         margin: 0 auto;
         position: absolute;
@@ -97,17 +97,17 @@ figure {
 .black-circle {
     width: 100%;
     margin: 0 auto;
-    height: 60px;
-    width: 60px;
+    height: 3.75rem;
+    width: 3.75rem;
     border-radius: 100%;
     background: var(--color-black);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin: var(--space-2xl) 20px 160px;
+    margin: var(--space-2xl) 1.25rem 10rem;
 
     @media (max-width: $bp-mobile) {
-        margin: 50px 20px 100px;
+        margin: 3.125rem 1.25rem 6.25rem;
     }
 }
