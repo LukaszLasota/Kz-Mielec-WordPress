@@ -1,0 +1,61 @@
+@use '../../sass/abstracts/variables' as *;
+
+/**
+ * Banner Hero Pattern
+ *
+ * Full-width hero with responsive photo, motto overlay and scroll arrow.
+ * Optimized for LCP (fetchpriority, no lazy-load on hero) and CLS (aspect-ratio).
+ */
+
+.pattern-banner-hero {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+
+	// Reserve vertical space to prevent CLS.
+	&__image {
+		position: relative;
+		width: 100%;
+		padding-top: var(--space-2xl);
+		aspect-ratio: 1998 / 1073;
+
+		@media (max-width: $bp-mobile) {
+			aspect-ratio: 673 / 926;
+			padding-top: var(--space-xl);
+		}
+	}
+
+	&__photo {
+		width: 100%;
+		margin: 0;
+
+		picture {
+			display: block;
+			width: 100%;
+		}
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+			object-fit: cover;
+		}
+	}
+
+	// Motto overlay — centered absolute, 120% width like old theme.
+	&__motto {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 120%;
+		margin: 0;
+		pointer-events: none;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+}

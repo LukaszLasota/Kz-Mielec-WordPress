@@ -41,35 +41,83 @@ App/
 
 ## Build System
 
-Webpack with separate dev/prod configs. Source in `webpack/src/`, output to `assets/`.
+`@wordpress/scripts` (same toolchain as the plugins) driven by a thin
+`webpack.config.js` in the theme root. Source in `src/`, output to `assets/`.
+
+There is **one output file per entry** — no `.min` variant, no dev/prod split —
+so PHP always enqueues the same path (`assets/css/frontend.css`). Only the file
+contents differ between modes.
 
 ```bash
-cd webpack
+# from the project root, inside DDEV:
+ddev theme:build     # one optimized build (minified + source maps)
+ddev theme:watch     # watch mode (same filenames, unminified)
+
+# or directly in the theme directory:
 npm install
-npm run dev      # Development build (source maps)
-npm run watch    # Watch mode
-npm run prod     # Production build (minified)
+npm run build
+npm run start        # watch
 ```
+
+Run one at a time: `watch` while iterating, `build` to ship. The pre-commit hook
+(`.githooks/pre-commit`) runs the build and stages `assets/` automatically when a
+commit touches `src/` or the build config.
+
+Note: on WSL2/Docker, watch may miss host-side edits (inotify does not cross the
+bind mount; `watchOptions.poll` is set as a mitigation). If a save does not show
+up, run `ddev theme:build` — it is instant and reliable.
 
 ### Entry Points
 
 | Entry | Source | Output |
 |-------|--------|--------|
-| frontend | `frontend.ts` | `frontend.js` + CSS |
-| backend | `backend.ts` | `backend.css` |
-| editor | `editor.ts` | `editor.css` |
-| print | `print.ts` | `print.css` |
-| patterns/* | Auto-discovered `src/patterns/*/` | per-pattern CSS/JS |
+| frontend | `src/frontend.ts` | `assets/js/frontend.js` + `assets/css/frontend.css` |
+| editor | `src/editor.ts` | `assets/css/editor.css` (via `add_editor_style`) |
+| print | `src/print.ts` | `assets/css/print.css` |
+| patterns/* | auto-discovered `src/patterns/*/{style.scss,script.ts}` | `assets/{css,js}/patterns/<slug>-{style,script}.*` |
+| block-styles/* | auto-discovered `src/block-styles/*.scss` | `assets/css/block-styles/<name>.css` |
+
+Fonts are emitted to `assets/webfont/` and images to `assets/media/`, both with
+unhashed filenames — `header.php` preloads the font files by exact name.
 
 ## SCSS Architecture
 
 ```
-sass/
+src/sass/
+├── abstracts/
+│   ├── _tokens.scss    # SINGLE SOURCE OF TRUTH for design values
+│   ├── _variables.scss # thin SCSS aliases over the tokens
+│   ├── functions.scss
+│   └── mixins.scss
 ├── base/           # Fonts (@font-face), normalize, typography
-├── abstracts/      # Variables, functions, mixins
 ├── apps/           # Main layout, menu, footer, WCAG
-└── pages/          # Page, page-hero, single-post
+└── pages/          # Page, page-hero, front-page, belief, search-404, single-post
 ```
+
+Modules use `@use` (not the deprecated `@import`), so every partial declares its
+own dependencies — typically `@use '../abstracts/variables' as *;`.
+
+### Design tokens
+
+`abstracts/_tokens.scss` holds every value used more than once: colours,
+font sizes/weights/line-heights, spacing scale, radii, gradients, breakpoints.
+A genuinely one-off value may stay inline at its single use site.
+
+Two kinds, split by a hard constraint:
+
+- **Breakpoints are SCSS variables** (`$bp-mobile` 480, `$bp-small` 600,
+  `$bp-tablet` 800, `$bp-laptop` 1024, `$bp-desktop` 1400) — CSS media queries
+  cannot read custom properties. Use `$bp-tablet + 1px` for a complementary
+  `min-width` query.
+- **Everything else is a CSS custom property**, emitted once from a mixin
+  (`tokens.css-custom-properties`) so it is not duplicated into every entry.
+  `frontend.scss` and `editor.scss` each include it — the editor renders in its
+  own iframe and needs its own `:root`.
+
+`_variables.scss` maps legacy names onto tokens (`$color-main: var(--color-black)`),
+which is why existing call sites still read naturally. This works only because no
+style passes these through a SCSS colour function (`rgba()`, `darken()`) — those
+need a compile-time value.
 
 ## Template Hierarchy
 

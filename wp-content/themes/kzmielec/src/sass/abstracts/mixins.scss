@@ -1,0 +1,112 @@
+@use 'variables' as *;
+  @mixin gradient{
+    text-transform: uppercase;
+    -webkit-background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
+    -moz-background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
+    background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
+	  -webkit-text-fill-color: transparent;
+	  text-fill-color: transparent;
+    -webkit-background-clip: text;
+    font-weight: var(--fw-regular);
+  }
+
+  @mixin content-typography {
+    h1, h2, h3 {
+      padding-block: var(--space-2xs);      // vertical only — don't zero out content padding-inline
+      margin-top: var(--space-md);
+      @include gradient;
+      font-size: var(--fs-title);
+      letter-spacing: var(--tracking-wide);
+      width: 100%;
+
+      @media (max-width: $bp-tablet) {
+        font-size: var(--fs-body);
+        padding-block: var(--space-2xs);
+      }
+    }
+
+    h3 {
+      font-size: var(--fs-body);
+      padding-block: 0.4rem;
+      margin: 1.25rem 0 var(--space-2xs);
+    }
+
+    p, a, p a {
+      font-size: var(--fs-body, 1.25rem);
+      padding: 2px 0;
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-body);
+      color: #212529;
+
+      @media (max-width: $bp-mobile) {
+        text-align: left;
+      }
+    }
+
+    p {
+      width: 100%;
+      text-align: justify;
+
+      // Mobile: left-align (justify looks ragged on narrow screens); desktop keeps justify.
+      @media (max-width: $bp-tablet) {
+        text-align: left;
+      }
+    }
+
+    a {
+      color: #007bff;
+    }
+
+    ul, ol {
+      font-size: var(--fs-body, 1.25rem);
+      text-decoration: none;
+      padding-left: var(--space-md);
+      padding-bottom: var(--space-sm);
+      width: 100%;
+
+      li {
+        padding: 0.2rem 0;
+        margin-left: 0;
+        line-height: var(--lh-body);
+      }
+    }
+
+    ul li {
+      list-style-type: disc;
+    }
+
+    ol li {
+      list-style-type: decimal;
+    }
+  }
+
+  @mixin gradient-text(
+    $font-size: 1.25rem,
+    $line-height: 1.4,
+    $font-weight: 400,
+    $text-transform: uppercase,
+    $text-align: center,
+    $letter-spacing: 2px,
+    $gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
+  ) {
+    font-size: $font-size;
+    line-height: $line-height;
+    font-weight: $font-weight;
+    text-transform: $text-transform;
+    width: 100%;
+    text-align: $text-align;
+    letter-spacing: $letter-spacing;
+    
+    // Gradient background
+    background: $gradient;
+    background-image: $gradient;
+
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+    
+    // Przycinanie gradientu do tekstu
+    -webkit-background-clip: text;
+    background-clip: text;
+  }

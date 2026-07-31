@@ -1,0 +1,16 @@
+#!/bin/bash
+# Rebuild theme assets when theme source/config is staged, so committed
+# assets are always the optimized build. Skips when nothing theme-related
+# is staged.
+set -e
+
+THEME="wp-content/themes/kzmielec"
+if git diff --cached --name-only | grep -qE "^${THEME}/(src/|webpack\.config\.js|package\.json|tsconfig\.json)"; then
+	echo "pre-commit: theme source staged → building assets…"
+	if ! ddev theme:build >/dev/null 2>&1; then
+		echo "pre-commit: 'ddev theme:build' failed (is ddev running?). Aborting commit." >&2
+		exit 1
+	fi
+	git add "${THEME}/assets"
+	echo "pre-commit: assets rebuilt and staged."
+fi
