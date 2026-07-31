@@ -592,7 +592,7 @@ $attributes = [
 - **dynamic-images / banner-hero** — block style variation w motywie, banner główny strony
 - **core/heading / section-line** — block style variation, nagłówki sekcji z linią
 - **facebook-feed** block + cała infrastruktura (Service, Cron, REST, Admin) — pełna dokumentacja w [FACEBOOK-FEED.md](FACEBOOK-FEED.md)
-- **DDEV custom commands** — `theme:dev`, `theme:watch`, `theme:prod`, `plugin:build`, `build:all`, `watch:all` ([DDEV-COMMANDS.md](DDEV-COMMANDS.md))
+- **DDEV custom commands** — `theme:build`, `theme:watch`, `plugin:build`, `build:all`, `watch:all` ([DDEV-COMMANDS.md](DDEV-COMMANDS.md))
 - **Token Facebook** — wygenerowany never-expiring Page Token (procedura w [INSTRUKCJA-TOKEN-FB.md](INSTRUKCJA-TOKEN-FB.md))
 - **PSR-4 directories**: `app/Services/`, `app/Cron/`, `app/Rest/`, `app/Admin/` w pluginie
 
