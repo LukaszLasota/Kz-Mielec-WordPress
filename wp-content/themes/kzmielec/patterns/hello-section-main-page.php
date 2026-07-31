@@ -8,8 +8,8 @@
 ?>
 
 <!-- wp:group {"tagName":"article","metadata":{"categories":["featured","text"],"patternName":"church/hello-section-main-page","name":"Sekcja witaj na stronę główną","linkUrl":"/witaj"},"className":"pattern-hello-section-main-page","gradient":"gradient-to-bottom","layout":{"type":"flex","orientation":"vertical","justifyContent":"center","verticalAlignment":"center"}} -->
-<article class="wp-block-group pattern-hello-section-main-page has-gradient-to-bottom-gradient-background has-background"><!-- wp:image {"id":53,"sizeSlug":"full","linkDestination":"none","className":"pattern-hello-section-main-page__image"} -->
-<figure class="wp-block-image size-full pattern-hello-section-main-page__image"><img src="http://emaus.local/wp-content/uploads/2026/01/logo-white.png" alt="Logo kościoła " class="wp-image-53"/></figure>
+<article class="wp-block-group pattern-hello-section-main-page has-gradient-to-bottom-gradient-background has-background"><!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"pattern-hello-section-main-page__image"} -->
+<figure class="wp-block-image size-full pattern-hello-section-main-page__image"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/media/logo.svg' ) ); ?>" alt="<?php esc_attr_e( 'Logo kościoła', 'kzmielec' ); ?>"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:group {"layout":{"type":"flex","orientation":"vertical","justifyContent":"center"}} -->
