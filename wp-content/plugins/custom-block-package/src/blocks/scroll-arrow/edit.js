@@ -44,11 +44,18 @@ const Edit = ({ attributes, setAttributes }) => {
             </InspectorControls>
 
             <div {...blockProps}>
-                <a className="scroll-arrow" role="button" tabIndex={-1}>
+                {/*
+                 * Editor preview only — a non-interactive stand-in. The front
+                 * end renders a real <a href="#target"> in render.php, so this
+                 * deliberately is not an anchor: an <a> without href is not a
+                 * link, and role="button" on it would promise behaviour the
+                 * preview does not have.
+                 */}
+                <div className="scroll-arrow">
                     <figure>
                         <img src={arrowSrc} alt="" />
                     </figure>
-                </a>
+                </div>
             </div>
         </>
     );

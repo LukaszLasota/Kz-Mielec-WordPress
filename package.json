@@ -1,0 +1,12 @@
+{
+	"name": "kzmielec-site",
+	"private": true,
+	"description": "Repo-level tooling for the kzmielec.pl WordPress site. The theme and each plugin build independently; this package only carries the shared JS/TS linter.",
+	"scripts": {
+		"lint:js": "biome check wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
+		"lint:js:fix": "biome check --write wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.6"
+	}
+}

@@ -4,6 +4,7 @@
   "scripts": {
     "build": "WP_DEVTOOL=source-map wp-scripts build",
     "start": "wp-scripts start",
+    "lint:css": "wp-scripts lint-style 'src/**/*.scss'",
     "postinstall": "cd ../../.. && git config core.hooksPath .githooks"
   },
   "dependencies": {

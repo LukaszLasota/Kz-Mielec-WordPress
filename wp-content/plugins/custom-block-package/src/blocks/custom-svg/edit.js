@@ -70,7 +70,7 @@ const modifySvg = (svgContent, width, height, fill, stroke, applyColorToAll, css
     let newSvgTag = originalSvgTag;
     
     // Generate unique ID for SVG if needed for styling
-    const uniqueId = 'svg-editor-' + Math.random().toString(36).substr(2, 9);
+    const uniqueId = `svg-editor-${Math.random().toString(36).substr(2, 9)}`;
     
     // Ensure we have a consistent ID to use in CSS selector
     let targetId = uniqueId;
@@ -89,7 +89,7 @@ const modifySvg = (svgContent, width, height, fill, stroke, applyColorToAll, css
     if (cssClasses && cssClasses.length > 0) {
         if (/\bclass\s*=\s*["'][^"']*["']/i.test(newSvgTag)) {
             // If SVG already has a class attribute, add our classes
-            newSvgTag = newSvgTag.replace(/\bclass\s*=\s*["']([^"']*)["']/i, (match, existingClasses) => {
+            newSvgTag = newSvgTag.replace(/\bclass\s*=\s*["']([^"']*)["']/i, (_match, existingClasses) => {
                 return `class="${existingClasses} ${cssClasses}"`;
             });
         } else {
@@ -239,7 +239,7 @@ export default function Edit(props) {
      */
     const validateSvgCode = (code) => {
         // Check if code contains SVG tag
-        if (!code || !code.includes('<svg')) {
+        if (!code?.includes('<svg')) {
             return false;
         }
         
@@ -303,7 +303,7 @@ export default function Edit(props) {
      * @param {Object} media Selected media object
      */
     const fetchSvgFromMediaLibrary = (media) => {
-        if (!media || !media.url) {
+        if (!media?.url) {
             return;
         }
         
@@ -344,12 +344,12 @@ export default function Edit(props) {
                 })
                 .catch(err => {
                     console.error('Błąd podczas pobierania zawartości SVG:', err);
-                    setError('Nie udało się pobrać zawartości SVG: ' + err.message);
+                    setError(`Nie udało się pobrać zawartości SVG: ${err.message}`);
                     setIsLoading(false);
                 });
         } catch (err) {
             console.error('Błąd podczas przetwarzania pliku z biblioteki mediów:', err);
-            setError('Błąd: ' + err.message);
+            setError(`Błąd: ${err.message}`);
             setIsLoading(false);
         }
     };
@@ -392,7 +392,7 @@ export default function Edit(props) {
             })
             .catch(err => {
                 console.error('Błąd podczas pobierania SVG z URL:', err);
-                setError('Nie udało się pobrać SVG z URL: ' + err.message);
+                setError(`Nie udało się pobrać SVG z URL: ${err.message}`);
                 setIsLoading(false);
             });
     };
@@ -411,7 +411,7 @@ export default function Edit(props) {
             const heightMatch = svgContent.match(/height=["']([^"']*)["']/);
             
             // If we have viewBox, try to maintain proportions based on it
-            if (viewBoxMatch && viewBoxMatch[1]) {
+            if (viewBoxMatch?.[1]) {
                 const viewBox = viewBoxMatch[1].split(/\s+/);
                 if (viewBox.length === 4) {
                     const vbWidth = parseFloat(viewBox[2]);
@@ -420,7 +420,7 @@ export default function Edit(props) {
                     if (vbWidth && vbHeight) {
                         // Calculate proportionally new height
                         const numWidth = parseFloat(width);
-                        if (!isNaN(numWidth)) {
+                        if (!Number.isNaN(numWidth)) {
                             const newHeight = (numWidth * vbHeight / vbWidth).toFixed(2);
                             setAttributes({ svgHeight: newHeight + (width.match(/[a-z%]+$/i) || ['']) });
                         }
@@ -428,14 +428,14 @@ export default function Edit(props) {
                 }
             } 
             // If we don't have viewBox but have original dimensions
-            else if (widthMatch && widthMatch[1] && heightMatch && heightMatch[1]) {
+            else if (widthMatch?.[1] && heightMatch?.[1]) {
                 const origWidth = parseFloat(widthMatch[1]);
                 const origHeight = parseFloat(heightMatch[1]);
                 
                 if (origWidth && origHeight) {
                     // Calculate proportionally new height
                     const numWidth = parseFloat(width);
-                    if (!isNaN(numWidth)) {
+                    if (!Number.isNaN(numWidth)) {
                         const newHeight = (numWidth * origHeight / origWidth).toFixed(2);
                         setAttributes({ svgHeight: newHeight + (width.match(/[a-z%]+$/i) || ['']) });
                     }
@@ -458,7 +458,7 @@ export default function Edit(props) {
             const heightMatch = svgContent.match(/height=["']([^"']*)["']/);
             
             // If we have viewBox, try to maintain proportions based on it
-            if (viewBoxMatch && viewBoxMatch[1]) {
+            if (viewBoxMatch?.[1]) {
                 const viewBox = viewBoxMatch[1].split(/\s+/);
                 if (viewBox.length === 4) {
                     const vbWidth = parseFloat(viewBox[2]);
@@ -467,7 +467,7 @@ export default function Edit(props) {
                     if (vbWidth && vbHeight) {
                         // Calculate proportionally new width
                         const numHeight = parseFloat(height);
-                        if (!isNaN(numHeight)) {
+                        if (!Number.isNaN(numHeight)) {
                             const newWidth = (numHeight * vbWidth / vbHeight).toFixed(2);
                             setAttributes({ svgWidth: newWidth + (height.match(/[a-z%]+$/i) || ['']) });
                         }
@@ -475,14 +475,14 @@ export default function Edit(props) {
                 }
             } 
             // If we don't have viewBox but have original dimensions
-            else if (widthMatch && widthMatch[1] && heightMatch && heightMatch[1]) {
+            else if (widthMatch?.[1] && heightMatch?.[1]) {
                 const origWidth = parseFloat(widthMatch[1]);
                 const origHeight = parseFloat(heightMatch[1]);
                 
                 if (origWidth && origHeight) {
                     // Calculate proportionally new width
                     const numHeight = parseFloat(height);
-                    if (!isNaN(numHeight)) {
+                    if (!Number.isNaN(numHeight)) {
                         const newWidth = (numHeight * origWidth / origHeight).toFixed(2);
                         setAttributes({ svgWidth: newWidth + (height.match(/[a-z%]+$/i) || ['']) });
                     }
@@ -500,7 +500,7 @@ export default function Edit(props) {
                     <MediaUploadCheck>
                         <MediaUpload
                             onSelect={(media) => {
-                                if (media && media.id) {
+                                if (media?.id) {
                                     console.log('Wybrano media:', media);
                                     fetchSvgFromMediaLibrary(media);
                                 }
@@ -617,8 +617,16 @@ export default function Edit(props) {
                         help={__('Jeśli włączone, kolory zostaną zastosowane do wszystkich elementów SVG, nadpisując ich kolory.', 'wlc-custom-block')}
                     />
                     
-                    <div className="svg-block-color-control">
-                        <label>{__('Kolor wypełnienia (fill)', 'wlc-custom-block')}</label>
+                    {/*
+                     * fieldset/legend rather than a bare <label>: ColorPicker is a
+                     * composite widget rendering its own inputs, so a <label> with
+                     * no htmlFor associates with nothing and screen readers never
+                     * announce it. A legend names the whole group instead. The
+                     * browser's default fieldset border is reset in editor.css so
+                     * the panel looks unchanged.
+                     */}
+                    <fieldset className="svg-block-color-control">
+                        <legend>{__('Kolor wypełnienia (fill)', 'wlc-custom-block')}</legend>
                         <ColorPicker
                             color={svgFill}
                             onChange={(value) => setAttributes({ svgFill: value })}
@@ -633,10 +641,10 @@ export default function Edit(props) {
                                 {__('Usuń kolor', 'wlc-custom-block')}
                             </Button>
                         )}
-                    </div>
+                    </fieldset>
                     
-                    <div className="svg-block-color-control">
-                        <label>{__('Kolor obrysu (stroke)', 'wlc-custom-block')}</label>
+                    <fieldset className="svg-block-color-control">
+                        <legend>{__('Kolor obrysu (stroke)', 'wlc-custom-block')}</legend>
                         <ColorPicker
                             color={svgStroke}
                             onChange={(value) => setAttributes({ svgStroke: value })}
@@ -651,7 +659,7 @@ export default function Edit(props) {
                                 {__('Usuń kolor', 'wlc-custom-block')}
                             </Button>
                         )}
-                    </div>
+                    </fieldset>
                 </PanelBody>
 
                 {/* Link Settings Panel */}

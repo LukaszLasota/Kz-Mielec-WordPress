@@ -61,8 +61,8 @@ const Edit = ({ attributes, setAttributes }) => {
             // so panning still works normally (pan while held, stop on release).
             const map = mapInstance.current;
             const abortDrag = () => {
-                const draggable = map.dragging && map.dragging._draggable;
-                if (draggable && draggable._moving) {
+                const draggable = map.dragging?._draggable;
+                if (draggable?._moving) {
                     map.dragging.disable();
                     map.dragging.enable();
                 }

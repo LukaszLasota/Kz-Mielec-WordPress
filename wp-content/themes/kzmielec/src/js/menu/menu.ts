@@ -1,7 +1,7 @@
 import { cssVarPx } from '../utils/css-vars';
 
 export class HamburgerMenu {
-    // Mirrors $bp-tablet from src/sass/abstracts/_tokens.scss via the --bp-tablet
+    // Mirrors $bp-tablet from src/scss/abstracts/_tokens.scss via the --bp-tablet
     // custom property, so the mobile/desktop switch is defined in one place.
     private readonly mobileBreakpoint: number = cssVarPx('--bp-tablet', 800);
     private readonly stickyScrollThreshold: number = 240;

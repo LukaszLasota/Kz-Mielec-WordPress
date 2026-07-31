@@ -1,1 +1,1 @@
-import './sass/editor.scss';
+import './scss/editor.scss';

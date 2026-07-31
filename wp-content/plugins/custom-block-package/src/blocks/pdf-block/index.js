@@ -123,8 +123,8 @@ registerBlockType(block.name, {
               {pdfUrl && (
                 <embed src={pdfUrl}
                   type="application/pdf"
-                  width={viewerWidth + "%"}
-                  height={viewerHeight + "px"}
+                  width={`${viewerWidth}%`}
+                  height={`${viewerHeight}px`}
                 />
               )}
               {
@@ -154,8 +154,8 @@ registerBlockType(block.name, {
             {pdfUrl && (
               <embed src={pdfUrl}
                 type="application/pdf"
-                width={viewerWidth + "%"}
-                height={viewerHeight + "px"}
+                width={`${viewerWidth}%`}
+                height={`${viewerHeight}px`}
               />
             )}
             {

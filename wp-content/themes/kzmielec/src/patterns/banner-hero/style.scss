@@ -1,10 +1,11 @@
-@use "../../sass/abstracts/variables" as *;
+@use "../../scss/abstracts/variables" as *;
 
 /**
  * Banner Hero Pattern
  *
  * Full-width hero with responsive photo, motto overlay and scroll arrow.
- * Optimized for LCP (fetchpriority, no lazy-load on hero) and CLS (aspect-ratio).
+ * Optimised for LCP (fetchpriority, no lazy-load on the hero image) and for
+ * CLS (aspect-ratio reserves the box before the image loads).
  */
 
 .pattern-banner-hero {

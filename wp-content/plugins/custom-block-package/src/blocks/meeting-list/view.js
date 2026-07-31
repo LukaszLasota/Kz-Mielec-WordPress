@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const flipCards = document.querySelectorAll(".flipping-cards__card");
 
     function setFocusable(container, enabled) {
-        container.querySelectorAll("a, button, input, select, textarea, [tabindex]").forEach(function (el) {
+        container.querySelectorAll("a, button, input, select, textarea, [tabindex]").forEach((el) => {
             el.setAttribute("tabindex", enabled ? "0" : "-1");
         });
     }
@@ -52,7 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (cards.length === 0) return;
 
         // Reset heights before measuring
-        cards.forEach((card) => (card.style.height = "auto"));
+        cards.forEach((card) => {
+            card.style.height = "auto";
+        });
 
         let maxHeight = 0;
         cards.forEach((card) => {
@@ -61,7 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        cards.forEach((card) => (card.style.height = `${maxHeight}px`));
+        cards.forEach((card) => {
+            card.style.height = `${maxHeight}px`;
+        });
     }
 
     equalizeCardHeights();

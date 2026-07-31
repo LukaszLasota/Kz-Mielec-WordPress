@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			void panel.offsetHeight;
 
 			// Animate to full content height.
-			panel.style.maxHeight = panel.scrollHeight + 'px';
+			panel.style.maxHeight = `${panel.scrollHeight}px`;
 			panel.style.opacity = '1';
 
 			// After animation completes, set max-height to 'none' so the panel
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			trigger.setAttribute('aria-expanded', 'false');
 
 			// Lock current height as explicit inline value (starting point for transition).
-			panel.style.maxHeight = panel.scrollHeight + 'px';
+			panel.style.maxHeight = `${panel.scrollHeight}px`;
 			panel.style.opacity = '1';
 
 			// Force reflow so the browser registers scrollHeight as the start.

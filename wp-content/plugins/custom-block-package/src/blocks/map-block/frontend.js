@@ -10,7 +10,7 @@ function initMap(mapElement) {
     const shadowUrl = mapElement.dataset.shadowUrl;
     const tileStyle = mapElement.dataset.tileStyle;
 
-    if (isNaN(latitude) || isNaN(longitude)) return;
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) return;
 
     const map = L.map(mapElement).setView([latitude, longitude], zoom);
 
@@ -57,7 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, { rootMargin: '600px' });
 
-        maps.forEach((el) => observer.observe(el));
+        maps.forEach((el) => {
+            observer.observe(el);
+        });
     } else {
         maps.forEach(initMap);
     }

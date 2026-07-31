@@ -239,6 +239,7 @@ const Edit = ({ attributes, setAttributes }) => {
                                         <>
                                             <img
                                                 src={backgroundImage}
+                                                alt={__("Podgląd obrazu tła", "custom-block-package")}
                                                 style={{ width: "100%", height: "auto" }}
                                             />
                                             <Button onClick={open} isSecondary>

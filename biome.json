@@ -1,0 +1,37 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.6/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"includes": [
+			"wp-content/themes/kzmielec/src/**",
+			"wp-content/plugins/custom-block-package/src/**",
+			"wp-content/plugins/comparison-of-religions/src/**",
+			"!**/*.scss",
+			"!**/*.css",
+			"!**/*.svg"
+		]
+	},
+	"formatter": {
+		"enabled": false
+	},
+	"javascript": {
+		"globals": ["wp", "jQuery"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "off"
+			}
+		}
+	}
+}

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contentEl.hidden = false;
             // Force reflow so the browser registers max-height: 0 before transitioning.
             contentEl.offsetHeight; // eslint-disable-line no-unused-expressions
-            contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+            contentEl.style.maxHeight = `${contentEl.scrollHeight}px`;
             // After transition, allow content to grow freely (fixes footer overlap).
             contentEl.addEventListener('transitionend', () => {
                 contentEl.style.maxHeight = 'none';
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             accordion.classList.remove('accordion__item--active');
             titleEl.setAttribute('aria-expanded', 'false');
             // Set explicit height first so the transition has a start value.
-            contentEl.style.maxHeight = contentEl.scrollHeight + 'px';
+            contentEl.style.maxHeight = `${contentEl.scrollHeight}px`;
             // Force reflow so the browser registers the explicit height.
             contentEl.offsetHeight; // eslint-disable-line no-unused-expressions
             contentEl.style.maxHeight = '0';

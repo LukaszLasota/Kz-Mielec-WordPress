@@ -2,7 +2,7 @@
  * Read a numeric value from a CSS custom property on :root.
  *
  * Lets scripts share the design tokens defined in
- * `src/sass/abstracts/_tokens.scss` instead of keeping their own copies of the
+ * `src/scss/abstracts/_tokens.scss` instead of keeping their own copies of the
  * same numbers (breakpoints, masonry columns, gaps). Values may carry a unit —
  * `800px` reads back as `800`.
  *

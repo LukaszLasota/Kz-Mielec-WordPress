@@ -2,10 +2,10 @@ import Masonry from 'masonry-layout';
 import imagesLoaded from 'imagesloaded';
 import { cssVarPx as getCSSVar } from '../utils/css-vars';
 
-(function () {
+(() => {
     const masonryContainer = document.querySelector(".news");
 
-    if (!masonryContainer || !masonryContainer.querySelector('.news__card')) return;
+    if (!masonryContainer?.querySelector('.news__card')) return;
 
     let msnry = null;
 
@@ -29,24 +29,24 @@ import { cssVarPx as getCSSVar } from '../utils/css-vars';
 
     function setCardWidths(width) {
         const cards = masonryContainer.querySelectorAll('.news__card');
-        cards.forEach(function(card) {
-            card.style.width = width + 'px';
+        cards.forEach((card) => {
+            card.style.width = `${width}px`;
         });
     }
 
     function resetCardWidths() {
         const cards = masonryContainer.querySelectorAll('.news__card');
-        cards.forEach(function(card) {
+        cards.forEach((card) => {
             card.style.width = '';
         });
     }
 
     function initMasonry() {
-        var columns = getColumns();
+        const columns = getColumns();
 
         if (columns > 1 && !msnry) {
-            var colWidth = getColumnWidth(columns);
-            var gap = getCSSVar('--masonry-gap', 25);
+            const colWidth = getColumnWidth(columns);
+            const gap = getCSSVar('--masonry-gap', 25);
 
             setCardWidths(colWidth);
 
@@ -56,7 +56,7 @@ import { cssVarPx as getCSSVar } from '../utils/css-vars';
                 gutter: gap
             });
 
-            imagesLoaded(masonryContainer, function() {
+            imagesLoaded(masonryContainer, () => {
                 msnry.layout();
             });
         } else if (columns <= 1 && msnry) {
@@ -71,7 +71,7 @@ import { cssVarPx as getCSSVar } from '../utils/css-vars';
     let resizeTimer;
     function handleResize() {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
+        resizeTimer = setTimeout(() => {
             if (msnry) {
                 msnry.destroy();
                 msnry = null;

@@ -32,3 +32,18 @@
 	margin: 0 0 10px 0;
 	word-break: break-all;
 }
+/*
+ * The colour pickers sit in a fieldset so the legend names the whole group for
+ * screen readers (a bare <label> cannot associate with ColorPicker, which
+ * renders its own inputs). Reset the browser's default fieldset chrome so the
+ * sidebar looks exactly as it did before.
+ */
+.svg-block-color-control {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.svg-block-color-control > legend {
+	padding: 0;
+}
