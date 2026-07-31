@@ -1,0 +1,67 @@
+@use '../abstracts/variables' as *;
+// ===========================================
+// Footer
+// ===========================================
+
+.footer {
+    background: #454040; // zblizone do starego #4f4b4b, kontrast z var(--color-white) = 5.06:1 (AA pass)
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    .footer__inner {
+        width: 100%;
+        max-width: $max-width;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--space-3xs) var(--space-xs);
+
+        @media (max-width: $bp-tablet) {
+            justify-content: center;
+        }
+    }
+
+    .footer__copyright {
+        padding: var(--space-3xs);
+        color: var(--color-white);
+        font-size: var(--fs-base);
+
+        p {
+            margin: 0;
+            text-align: center;
+        }
+
+        a {
+            color: var(--color-white);
+        }
+    }
+
+    .footer__social {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            cursor: pointer;
+
+            &:focus-visible {
+                outline: 2px solid var(--color-white);
+                outline-offset: 2px;
+            }
+        }
+
+        img {
+            width: 32px;
+            height: 32px;
+
+            @media (max-width: $bp-tablet) {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}

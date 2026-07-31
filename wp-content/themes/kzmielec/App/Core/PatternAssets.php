@@ -148,19 +148,18 @@ class PatternAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	private function enqueue_pattern( string $slug ): void {
-		$theme_dir    = get_template_directory();
-		$theme_uri    = get_template_directory_uri();
-		$asset_suffix = $this->get_asset_suffix();
+		$theme_dir = get_template_directory();
+		$theme_uri = get_template_directory_uri();
 
-		$css_file = "{$theme_dir}/assets/css/patterns/{$slug}-style{$asset_suffix}.css";
-		$js_file  = "{$theme_dir}/assets/js/patterns/{$slug}-script{$asset_suffix}.js";
+		$css_file = "{$theme_dir}/assets/css/patterns/{$slug}-style.css";
+		$js_file  = "{$theme_dir}/assets/js/patterns/{$slug}-script.js";
 
 		// Enqueue CSS if exists.
 		if ( file_exists( $css_file ) ) {
 			$css_version = filemtime( $css_file );
 			wp_enqueue_style(
 				"pattern-{$slug}",
-				"{$theme_uri}/assets/css/patterns/{$slug}-style{$asset_suffix}.css",
+				"{$theme_uri}/assets/css/patterns/{$slug}-style.css",
 				array(),
 				false !== $css_version ? (string) $css_version : null
 			);
@@ -171,7 +170,7 @@ class PatternAssets implements ActionHookInterface {
 			$js_version = filemtime( $js_file );
 			wp_enqueue_script(
 				"pattern-{$slug}",
-				"{$theme_uri}/assets/js/patterns/{$slug}-script{$asset_suffix}.js",
+				"{$theme_uri}/assets/js/patterns/{$slug}-script.js",
 				array(),
 				false !== $js_version ? (string) $js_version : null,
 				true
@@ -188,11 +187,10 @@ class PatternAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function enqueue_editor_pattern_assets(): void {
-		$theme_dir    = get_template_directory();
-		$theme_uri    = get_template_directory_uri();
-		$asset_suffix = $this->get_asset_suffix();
+		$theme_dir = get_template_directory();
+		$theme_uri = get_template_directory_uri();
 
-		$pattern_dirs = glob( "{$theme_dir}/webpack/src/patterns/*", GLOB_ONLYDIR );
+		$pattern_dirs = glob( "{$theme_dir}/src/patterns/*", GLOB_ONLYDIR );
 
 		if ( false === $pattern_dirs || empty( $pattern_dirs ) ) {
 			return;
@@ -200,13 +198,13 @@ class PatternAssets implements ActionHookInterface {
 
 		foreach ( $pattern_dirs as $pattern_dir ) {
 			$slug     = basename( $pattern_dir );
-			$css_file = "{$theme_dir}/assets/css/patterns/{$slug}-style{$asset_suffix}.css";
+			$css_file = "{$theme_dir}/assets/css/patterns/{$slug}-style.css";
 
 			if ( file_exists( $css_file ) ) {
 				$css_version = filemtime( $css_file );
 				wp_enqueue_style(
 					"pattern-editor-{$slug}",
-					"{$theme_uri}/assets/css/patterns/{$slug}-style{$asset_suffix}.css",
+					"{$theme_uri}/assets/css/patterns/{$slug}-style.css",
 					array(),
 					false !== $css_version ? (string) $css_version : null
 				);
@@ -214,16 +212,4 @@ class PatternAssets implements ActionHookInterface {
 		}
 	}
 
-	/**
-	 * Get asset file suffix based on environment.
-	 *
-	 * @return string '.min' for production, empty string for development.
-	 */
-	private function get_asset_suffix(): string {
-		$environment = function_exists( 'wp_get_environment_type' )
-			? wp_get_environment_type()
-			: getenv( 'ENV_TYPE' );
-
-		return ( 'production' === $environment ) ? '.min' : '';
-	}
 }

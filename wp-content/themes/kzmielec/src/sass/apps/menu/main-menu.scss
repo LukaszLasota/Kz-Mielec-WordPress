@@ -1,0 +1,301 @@
+@use '../../abstracts/variables' as *;
+// ===========================================
+// Header & Navigation
+// ===========================================
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.menu {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  @media (max-width: $bp-tablet) {
+    justify-content: space-between;
+  }
+}
+
+.site-logo {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-xs) var(--space-xs) 0 var(--space-xs);
+
+  &__link {
+    display: block;
+  }
+
+  &__image {
+    height: 120px;
+    width: auto;
+  }
+
+  @media (max-width: $bp-desktop) {
+    padding: var(--space-3xs) var(--space-3xs) 0 var(--space-3xs);
+
+    &__image {
+      height: 90px;
+    }
+  }
+
+  @media (max-width: $bp-tablet) {
+    width: 15%;
+    margin: 0;
+    padding: var(--space-3xs);
+
+    &__image {
+      height: 80px;
+    }
+  }
+
+  @media (max-width: $bp-mobile) {
+    width: 25%;
+    padding: var(--space-3xs) 0 0 0;
+
+    &__image {
+      height: 65px;
+    }
+  }
+}
+
+// ===========================================
+// Navigation
+// ===========================================
+
+.nav {
+  width: 100%;
+  padding: 0 20px;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    margin: 0;
+    padding-top: var(--space-xs);
+  }
+
+  &::before {
+    border-bottom: 1px solid black;
+  }
+
+  &::after {
+    border-top: 1px solid black;
+  }
+
+  &__ul {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0 1.25rem;
+  }
+
+  &__li {
+    width: auto;
+    padding: var(--space-xs);
+    margin: 0;
+
+    a {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      color: black;
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: $bp-tablet) {
+    display: none;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+
+    &.activ {
+      display: block;
+      width: 100%;
+
+      .nav__ul {
+        display: block;
+        width: 100%;
+        padding: 0;
+      }
+
+      .nav__li {
+        margin: 0 auto;
+        width: 100%;
+        padding: 0;
+
+        a {
+          text-shadow: none;
+          font-size: 1.062rem;
+          width: 100%;
+          padding: 18px 0;
+        }
+      }
+    }
+  }
+}
+
+// ===========================================
+// Sticky menu — hidden by default, visible on scroll >= 240px
+// Logo BETWEEN menu items (5-column layout)
+// ===========================================
+
+.fixed {
+  display: none;
+  background: var(--color-white);
+  opacity: 0;
+  animation: fadeIn 0.5s linear;
+  z-index: 100;
+  margin: 0 auto;
+
+  .nav::before,
+  .nav::after {
+    display: none;
+  }
+
+  .nav__ul {
+    padding: 0;
+  }
+
+  .nav__li {
+    flex: 1;
+    padding: var(--space-3xs);
+
+    &--logo {
+      flex: 0 0 auto;
+      margin: 0 auto;
+      padding: 0;
+
+      img {
+        margin: 0 auto;
+        height: 5.625rem;
+        width: auto;
+      }
+    }
+  }
+
+  @media (max-width: $bp-tablet) {
+    display: none !important;
+  }
+}
+
+.is-fixed {
+  display: block;
+  opacity: 1;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: $max-width;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fixed { animation: none; }
+  .hamburger .line { transition: none; }
+}
+
+// ===========================================
+// Hamburger — 3 lines, middle hides, outer rotate
+// ===========================================
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  padding: 8px;
+
+  &__sr-only {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .line {
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-black);
+    display: block;
+    margin: var(--space-xs) auto;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &.is-active {
+    .line:nth-child(3) { opacity: 0; }
+    .line:nth-child(2) { transform: translateY(13px) rotate(45deg); }
+    .line:nth-child(4) { transform: translateY(-13px) rotate(-45deg); }
+  }
+
+  @media (max-width: $bp-tablet) {
+    display: inline-block;
+  }
+
+  @media (max-width: $bp-mobile) {
+    padding: var(--space-3xs);
+  }
+}
+
+// ===========================================
+// .three — hamburger container
+// ===========================================
+
+.three {
+  display: none;
+
+  @media (max-width: $bp-tablet) {
+    display: block;
+    width: 12%;
+  }
+
+  @media (max-width: $bp-mobile) {
+    width: 20%;
+  }
+}
+
+// ===========================================
+// Mobile fixed menu
+// ===========================================
+
+.fix {
+  @media (max-width: $bp-tablet) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: white;
+    width: 100%;
+  }
+}

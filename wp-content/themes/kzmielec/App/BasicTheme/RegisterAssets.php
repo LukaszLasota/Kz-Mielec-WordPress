@@ -22,12 +22,6 @@ use Kzmielec\Interfaces\ActionHookInterface;
  */
 class RegisterAssets implements ActionHookInterface {
 
-	/**
-	 * File suffix for production assets (.min for production, empty for development).
-	 *
-	 * @var string
-	 */
-	private string $suffix;
 
 	/**
 	 * Theme directory URI.
@@ -51,7 +45,6 @@ class RegisterAssets implements ActionHookInterface {
 	public function __construct() {
 		$this->theme_uri  = get_stylesheet_directory_uri();
 		$this->theme_path = get_stylesheet_directory();
-		$this->suffix     = $this->get_asset_suffix();
 
 		$this->register_add_action();
 	}
@@ -66,27 +59,6 @@ class RegisterAssets implements ActionHookInterface {
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_kzmielec_admin_assets' ) );
 	}
 
-	/**
-	 * Get asset suffix based on environment.
-	 *
-	 * Returns '.min' for production environment, empty string for development.
-	 * Supports WordPress native wp_get_environment_type() and fallback to getenv().
-	 *
-	 * @return string Asset suffix (.min or empty).
-	 */
-	private function get_asset_suffix(): string {
-		$env = 'development';
-
-		// Try WordPress native function (WP 5.5+).
-		if ( function_exists( 'wp_get_environment_type' ) ) {
-			$env = wp_get_environment_type();
-		} elseif ( false !== getenv( 'ENV_TYPE' ) ) {
-			// Fallback for Docker/deployment environments.
-			$env = getenv( 'ENV_TYPE' );
-		}
-
-		return ( 'production' === $env ) ? '.min' : '';
-	}
 
 	/**
 	 * Get file version for cache busting.
@@ -150,7 +122,7 @@ class RegisterAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function register_kzmielec_admin_assets(): void {
-		$this->enqueue_asset( 'style', 'kzmielec-admin-style', "/assets/css/backend{$this->suffix}.css" );
+		$this->enqueue_asset( 'style', 'kzmielec-admin-style', '/assets/css/backend.css' );
 	}
 
 	/**
@@ -162,13 +134,13 @@ class RegisterAssets implements ActionHookInterface {
 	 */
 	public function register_kzmielec_assets(): void {
 		// Frontend JavaScript.
-		$this->enqueue_asset( 'script', 'kzmielec-script', "/assets/js/frontend{$this->suffix}.js" );
+		$this->enqueue_asset( 'script', 'kzmielec-script', '/assets/js/frontend.js' );
 
 		// Frontend styles.
-		$this->enqueue_asset( 'style', 'kzmielec-styles', "/assets/css/frontend{$this->suffix}.css" );
+		$this->enqueue_asset( 'style', 'kzmielec-styles', '/assets/css/frontend.css' );
 
 		// Print styles.
-		$this->enqueue_asset( 'style', 'kzmielec-print-styles', "/assets/css/print{$this->suffix}.css", array(), true, 'print' );
+		$this->enqueue_asset( 'style', 'kzmielec-print-styles', '/assets/css/print.css', array(), true, 'print' );
 
 		// Localize script for AJAX.
 		wp_localize_script(

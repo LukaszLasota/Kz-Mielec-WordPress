@@ -1,0 +1,16 @@
+{
+  "name": "kzmielec-theme",
+  "sideEffects": ["*.scss", "*.css"],
+  "scripts": {
+    "build": "WP_DEVTOOL=source-map wp-scripts build",
+    "start": "wp-scripts start",
+    "postinstall": "cd ../../.. && git config core.hooksPath .githooks"
+  },
+  "dependencies": {
+    "imagesloaded": "^5.0.0",
+    "masonry-layout": "^4.2.2"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.9.0"
+  }
+}

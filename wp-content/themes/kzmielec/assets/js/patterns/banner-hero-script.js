@@ -1,22 +1,2 @@
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/*!********************************************!*\
-  !*** ./src/patterns/banner-hero/script.ts ***!
-  \********************************************/
-
-document.addEventListener('DOMContentLoaded', () => {
-    const arrow = document.querySelector('.pattern-banner-hero .black-circle a');
-    if (!arrow)
-        return;
-    arrow.addEventListener('click', (e) => {
-        const target = document.querySelector(arrow.getAttribute('href') || '');
-        if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
-});
-
-/******/ })()
-;
-//# sourceMappingURL=banner-hero-script.js.map?ab0bdffa99005a20f479
+document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".pattern-banner-hero .black-circle a");e&&e.addEventListener("click",t=>{const n=document.querySelector(e.getAttribute("href")||"");n&&(t.preventDefault(),n.scrollIntoView({behavior:"smooth",block:"start"}))})});
+//# sourceMappingURL=banner-hero-script.js.map

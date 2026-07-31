@@ -1,0 +1,46 @@
+@use '../sass/abstracts/variables' as *;
+// Heading "Z linią" — section divider with horizontal line through center.
+//
+// Production: .section-head with letter-spacing 150% inside 60% wrapper.
+// Our wrapper is 1200px so we scale letter-spacing down proportionally.
+// Uses display:flex + ::before/::after for lines — no <span> needed.
+
+.wp-block-heading.is-style-section-line {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	font-size: var(--fs-heading, 2rem); // 32px — matches production (3.2rem @ 62.5% root)
+	font-weight: var(--fw-regular);
+	letter-spacing: var(--tracking-wide);        // production desktop value
+	text-transform: uppercase;
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: var(--space-xl);
+
+	&::before,
+	&::after {
+		content: "";
+		flex: 1;
+		height: 1px;
+		background: var(--color-black);
+	}
+
+	&::before {
+		margin-right: 20px;
+	}
+
+	&::after {
+		margin-left: 20px;
+	}
+
+	@media (max-width: $bp-mobile) {
+		font-size: 1.75rem;     // 28px — matches production (2.8rem @ 62.5% root)
+		letter-spacing: 1.1px;  // production mobile value
+
+		&::before,
+		&::after {
+			display: none;
+		}
+	}
+}

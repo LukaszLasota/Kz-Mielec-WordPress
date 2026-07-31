@@ -1,0 +1,36 @@
+// Editor-only typography (loaded via add_editor_style, does not affect the
+// frontend). Sizes are bumped up from the old 0.75rem/12px for comfortable editing.
+//
+// The block editor renders in its own document (iframe), so frontend.css and the
+// :root it carries are not present here. The tokens are therefore emitted again
+// for this entry — one definition in abstracts/tokens.scss, included in a second
+// place — so editor sizes stay in sync with the front-end automatically.
+
+@use 'abstracts/tokens';
+
+:root {
+	@include tokens.css-custom-properties;
+}
+
+.editor-styles-wrapper {
+	font-size: var(--fs-body);
+
+	h1 {
+		font-size: var(--fs-heading);
+		letter-spacing: var(--tracking-wide);
+		text-transform: uppercase;
+	}
+
+	h3 {
+		font-size: var(--fs-title);
+	}
+
+	p, a {
+		font-size: var(--fs-body);
+		line-height: var(--lh-body);
+	}
+
+	ul, li {
+		font-size: var(--fs-body);
+	}
+}

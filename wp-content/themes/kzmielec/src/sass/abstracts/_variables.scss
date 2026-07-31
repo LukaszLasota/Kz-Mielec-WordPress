@@ -1,0 +1,35 @@
+// =============================================================================
+// SCSS aliases over the design tokens
+// =============================================================================
+//
+// Values are NOT defined here — `tokens.scss` is the single source of truth.
+// These aliases exist so the long-standing `$color-main` / `$max-width` style
+// usages keep reading naturally while resolving to one central definition.
+//
+// Each alias emits `var(--token)`, which is safe here because no style passes
+// these variables through a SCSS colour function (`rgba()`, `darken()`, …) or
+// interpolation — those would require a compile-time value.
+//
+// Breakpoints are re-exported from tokens.scss unchanged: media queries need
+// real compile-time values, not custom properties.
+
+@forward 'tokens';
+
+// Colours ---------------------------------------------------------------------
+// The old palette defined $color-black / $color-link / $color-green /
+// $color-main as four separate names for the same black. They are kept as
+// aliases (call sites still read well) but now share one definition.
+$color-black: var(--color-black);
+$color-main: var(--color-black);
+$color-link: var(--color-black);
+$color-green: var(--color-black);
+$body-color: var(--color-white);
+
+$color-accessible-blue: var(--color-link-accessible);
+
+// Layout ----------------------------------------------------------------------
+$max-width: var(--content-max-width);
+
+// Gradients -------------------------------------------------------------------
+$BG: var(--gradient-diagonal);
+$BG-D: var(--gradient-vertical);

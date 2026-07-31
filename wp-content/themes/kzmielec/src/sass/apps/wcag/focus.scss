@@ -1,0 +1,14 @@
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    color: var(--color-focus-text) !important;
+    background: var(--color-focus-bg) !important;
+    border-color: var(--color-focus-bg) !important;
+    box-shadow: 0 -2px var(--color-focus-bg), 0 4px var(--color-focus-text);
+    text-decoration: none;
+    outline: 3px solid transparent;
+    span {
+        color: var(--color-focus-text) !important;
+    }
+    i, .icon {
+        background-color: var(--color-focus-text) !important;
+    }
+}

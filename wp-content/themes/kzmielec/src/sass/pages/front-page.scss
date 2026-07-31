@@ -1,0 +1,21 @@
+// Front page layout (front-page.php → main.site-main.is-layout-constrained).
+//
+// Scoped to .home because is-layout-constrained is shared by other templates
+// (archive-meetings, page-belief) whose first child is NOT a hero — there
+// :not(:first-child) would wrongly skip the first content block.
+//
+// On the front page the first block IS the hero (full-bleed, handled by the
+// dynamic-images-banner-hero block style), so it's correct to skip it here.
+// Every other block gets horizontal edge padding so it never touches the screen
+// edge. WordPress core already caps children at contentSize (1200px) and centers.
+
+.home .site-main.is-layout-constrained > *:not(:first-child) {
+	padding-inline: var(--space-sm);
+}
+
+// Contact info under "Znajdź nas". Local paragraphs default to 16px; production
+// renders these at 19px (.find__paragraph). Match it.
+.home .site-main p.has-text-align-center {
+	font-size: var(--fs-body, 1.25rem); // 20px
+	line-height: var(--lh-tight);
+}

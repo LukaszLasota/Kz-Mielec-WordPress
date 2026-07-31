@@ -65,9 +65,8 @@ class BlockStyles implements ActionHookInterface {
 			)
 		);
 
-		$asset_suffix = $this->get_asset_suffix();
-		$css_path     = '/assets/css/block-styles/dynamic-images-banner-hero' . $asset_suffix . '.css';
-		$full_path    = get_template_directory() . $css_path;
+		$css_path  = '/assets/css/block-styles/dynamic-images-banner-hero.css';
+		$full_path = get_template_directory() . $css_path;
 
 		if ( file_exists( $full_path ) ) {
 			wp_enqueue_block_style(
@@ -96,9 +95,8 @@ class BlockStyles implements ActionHookInterface {
 			)
 		);
 
-		$asset_suffix = $this->get_asset_suffix();
-		$css_path     = '/assets/css/block-styles/heading-section-line' . $asset_suffix . '.css';
-		$full_path    = get_template_directory() . $css_path;
+		$css_path  = '/assets/css/block-styles/heading-section-line.css';
+		$full_path = get_template_directory() . $css_path;
 
 		if ( file_exists( $full_path ) ) {
 			wp_enqueue_block_style(
@@ -113,16 +111,4 @@ class BlockStyles implements ActionHookInterface {
 		}
 	}
 
-	/**
-	 * Get asset file suffix based on environment.
-	 *
-	 * @return string '.min' for production, empty string for development.
-	 */
-	private function get_asset_suffix(): string {
-		$environment = function_exists( 'wp_get_environment_type' )
-			? wp_get_environment_type()
-			: ( getenv( 'ENV_TYPE' ) ?: 'development' );
-
-		return ( 'production' === $environment ) ? '.min' : '';
-	}
 }

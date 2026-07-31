@@ -1,0 +1,154 @@
+// =============================================================================
+// DESIGN TOKENS — single source of truth for repeated values
+// =============================================================================
+//
+// Rule for this project: a value used 2+ times anywhere in the styles lives
+// here and is referenced from here. Genuinely one-off values may stay inline
+// at their single use site.
+//
+// Two kinds of tokens, split by a hard technical constraint:
+//
+//   1. Breakpoints are SCSS variables. CSS media queries cannot read custom
+//      properties (`@media (max-width: var(--x))` is invalid), so these must
+//      be resolved at compile time.
+//   2. Everything else is a CSS custom property on :root, so the same token
+//      also applies inside the block editor, can be inspected in devtools,
+//      and can be overridden per scope.
+//
+// SCSS aliases in `variables.scss` point at these custom properties, which is
+// why existing `$color-main` style usages keep working unchanged.
+//
+// Values here are deliberately identical to what they replaced — this file
+// centralises them, it does not redesign them.
+
+// -----------------------------------------------------------------------------
+// Breakpoints (compile-time — media queries)
+// -----------------------------------------------------------------------------
+// One scale, used everywhere. The old styles had drifted onto 480/500/600/
+// 767/768/800/1024 for the same intents; those are now consolidated here, so
+// a breakpoint is changed in one place. Use `$bp-tablet + 1px` for the
+// complementary min-width query.
+$bp-mobile: 480px; // phones
+$bp-small: 600px; // large phones / small tablets
+$bp-tablet: 800px; // tablets — the theme's main mobile/desktop switch
+$bp-laptop: 1024px; // small laptops
+$bp-desktop: 1400px; // large screens
+
+// -----------------------------------------------------------------------------
+// Custom properties
+// -----------------------------------------------------------------------------
+// Wrapped in a mixin rather than emitted directly: this module is loaded by
+// every partial that needs a token, and a bare `:root {}` here would be
+// duplicated into every separate entry point (frontend, each pattern, each
+// block style). The entry that owns the document — frontend.scss — includes it
+// exactly once; pattern entries load this file only for the breakpoints above
+// and emit nothing.
+@mixin css-custom-properties {
+	// -------------------------------------------------------------------------
+	// Breakpoints, mirrored for JavaScript
+	// -------------------------------------------------------------------------
+	// The SCSS variables above remain the definition (media queries need a
+	// compile-time value); these interpolate the very same variables so scripts
+	// can read the identical numbers instead of hard-coding their own copy.
+	// Read them with `cssVarPx()` from src/js/utils/css-vars.
+	--bp-mobile: #{$bp-mobile};
+	--bp-small: #{$bp-small};
+	--bp-tablet: #{$bp-tablet};
+	--bp-laptop: #{$bp-laptop};
+	--bp-desktop: #{$bp-desktop};
+
+	// -------------------------------------------------------------------------
+	// Colours
+	// -------------------------------------------------------------------------
+	--color-black: #000;
+	--color-white: #fff;
+	--color-gray-dark: #333; // gradient end-stop, muted body copy
+	--color-gray-mid: #555; // secondary meta text
+	--color-gray-light: #f0f0f0; // hover fills
+	--color-surface-muted: #f4f4f4; // neutral media background
+
+	// Accessible link/button blue — WCAG 2.1 AA (5.25:1 on white). Used to
+	// override third-party widgets whose default blue fails contrast.
+	--color-link-accessible: #1568d8;
+
+	// WCAG focus pair (GOV.UK-style): yellow field, near-black text.
+	--color-focus-bg: #fd0;
+	--color-focus-text: #0b0c0c;
+
+	// -------------------------------------------------------------------------
+	// Typography
+	// -------------------------------------------------------------------------
+	// Body serif stack used where Cinzel (caps-only) is unsuitable for long copy.
+	--font-serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
+
+	// Font-size scale. --fs-heading/--fs-title/--fs-body are also consumed by
+	// the navigable-tiles block in the custom-block-package plugin — do not
+	// rename them.
+	--fs-heading: 2rem; // 32px — section-line headings
+	--fs-title: 1.5rem; // 24px — tile/item titles
+	--fs-lead: 1.312rem; // 21px — production paragraph size
+	--fs-body: 1.25rem; // 20px — descriptions, contact, day/hour
+	--fs-base: 1rem; // 16px — form fields, plain copy
+	--fs-small: 0.75rem; // 12px — labels, buttons
+	--fs-xs: 0.625rem; // 10px — pagination, badges
+
+	// Weights. The Cinzel variable font declares the 400–900 range in
+	// @font-face; these are the two weights the design actually uses.
+	--fw-regular: 400;
+	--fw-bold: 700;
+
+	// Line heights.
+	--lh-heading: 1.15; // tight — display/headings
+	--lh-tight: 1.4; // condensed copy
+	--lh-body: 1.5; // default body copy
+
+	// Letter spacing for the uppercase serif treatment.
+	--tracking-wide: 0.125rem; // 2px
+
+	// -------------------------------------------------------------------------
+	// Layout
+	// -------------------------------------------------------------------------
+	// Content widths. Desktop uses a fixed max-width (matches theme.json
+	// contentSize: 1200px) so content stays readable on large screens instead
+	// of growing with the viewport. Used as max-width on content containers.
+	--wp--custom--content-width-mobile: 100%;
+	--wp--custom--content-width-tablet: 85%;
+	--wp--custom--content-width-desktop: 1200px;
+	--wp--custom--content-width-large-desktop: 1200px;
+
+	// Alias for the same 1200px container, for styles that read a plain token.
+	--content-max-width: 1200px;
+	--content-width-narrow: 68.75rem; // 1100px — narrower text measure
+
+	// -------------------------------------------------------------------------
+	// Spacing scale (rem — 16px base, per project convention)
+	// -------------------------------------------------------------------------
+	--space-4xs: 0.1rem; // 1.6px — hairline gap under pattern paragraphs
+	--space-3xs: 0.3125rem; // 5px
+	--space-2xs: 0.5rem; // 8px
+	--space-xs: 0.625rem; // 10px
+	--space-sm: 1rem; // 16px
+	--space-md: 1.5rem; // 24px
+	--space-lg: 2.5rem; // 40px
+	--space-xl: 3.75rem; // 60px
+	--space-2xl: 5rem; // 80px
+
+	// -------------------------------------------------------------------------
+	// Transitions
+	// -------------------------------------------------------------------------
+	--transition-fade: opacity 0.5s linear;
+	--transition-fade-slow: opacity 0.8s ease;
+
+	// -------------------------------------------------------------------------
+	// Radii
+	// -------------------------------------------------------------------------
+	--radius-sm: 0.3125rem; // 5px — buttons, inputs, pagination
+	--radius-md: 0.5rem; // 8px — cards
+	--radius-circle: 50%;
+
+	// -------------------------------------------------------------------------
+	// Gradients (black → dark grey, the theme's fill-on-hover system)
+	// -------------------------------------------------------------------------
+	--gradient-diagonal: linear-gradient(to left bottom, #000 0%, #333 100%);
+	--gradient-vertical: linear-gradient(to bottom, #000 0%, #333 100%);
+}
