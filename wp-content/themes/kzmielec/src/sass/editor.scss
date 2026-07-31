@@ -1,9 +1,12 @@
 // Editor-only typography (loaded via add_editor_style, does not affect the
-// frontend). Sizes are bumped up from the old 0.75rem/0.75rem for comfortable editing.
-//
-// The block editor renders in its own document (iframe), so frontend.css and the
+// frontend). Sizes are bumped up from the old 0.75rem/0.75rem for comfortable
+// editing.
+
+// The block editor renders in its own document (iframe), so frontend.css and
+// the
 // :root it carries are not present here. The tokens are therefore emitted again
-// for this entry — one definition in abstracts/tokens.scss, included in a second
+// for this entry — one definition in abstracts/tokens.scss, included in a
+// second
 // place — so editor sizes stay in sync with the front-end automatically.
 
 @use "abstracts/tokens";

@@ -1,9 +1,11 @@
 @use "../../sass/abstracts/variables" as *;
 // Styles for archive-meetings.php template.
 // Loaded via PatternAssets when class "pattern-archive-meetings" detected.
-//
-// Visual target: the production "Zaplanuj wizytę" section (kzmielec.pl) — Cinzel,
-// black text, 1.3125rem title/description, circular photos. Modern deviations kept on
+
+// Visual target: the production "Zaplanuj wizytę" section (kzmielec.pl) —
+// Cinzel,
+// black text, 1.3125rem title/description, circular photos. Modern deviations
+// kept on
 // purpose: fixed 75rem container (vs production fluid %), CSS cross-fade hover
 // and prefers-reduced-motion support.
 

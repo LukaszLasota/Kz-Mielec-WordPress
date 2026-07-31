@@ -1,15 +1,15 @@
 // =============================================================================
 // SCSS aliases over the design tokens
 // =============================================================================
-//
+
 // Values are NOT defined here — `tokens.scss` is the single source of truth.
 // These aliases exist so the long-standing `$color-main` / `$max-width` style
 // usages keep reading naturally while resolving to one central definition.
-//
+
 // Each alias emits `var(--token)`, which is safe here because no style passes
 // these variables through a SCSS colour function (`rgba()`, `darken()`, …) or
 // interpolation — those would require a compile-time value.
-//
+
 // Breakpoints are re-exported from tokens.scss unchanged: media queries need
 // real compile-time values, not custom properties.
 

@@ -63,6 +63,9 @@ hr {
  */
 
 pre {
+	// stylelint-disable-next-line font-family-no-duplicate-names -- normalize.css
+	// repeats the keyword on purpose: it stops Firefox and Safari shrinking
+	// monospace text to 13px.
 	font-family: monospace, monospace;
 	font-size: 1em;
 }
@@ -106,6 +109,9 @@ strong {
 code,
 kbd,
 samp {
+	// stylelint-disable-next-line font-family-no-duplicate-names -- normalize.css
+	// repeats the keyword on purpose: it stops Firefox and Safari shrinking
+	// monospace text to 13px.
 	font-family: monospace, monospace;
 	font-size: 1em;
 }

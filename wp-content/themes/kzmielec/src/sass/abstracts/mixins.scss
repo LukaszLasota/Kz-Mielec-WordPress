@@ -2,11 +2,8 @@
 
 @mixin gradient {
 	text-transform: uppercase;
-	-webkit-background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
-	-moz-background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
 	background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
 	-webkit-text-fill-color: transparent;
-	text-fill-color: transparent;
 	-webkit-background-clip: text;
 	font-weight: var(--fw-regular);
 }
@@ -56,12 +53,17 @@
 		width: 100%;
 		text-align: justify;
 
-		// Mobile: left-align (justify looks ragged on narrow screens); desktop keeps justify.
+		// Mobile: left-align (justify looks ragged on narrow screens); desktop keeps
+		// justify.
 		@media (max-width: $bp-tablet) {
 			text-align: left;
 		}
 	}
 
+	// stylelint-disable-next-line no-descending-specificity -- the state rule
+	// above is nested with its block on purpose. Reordering to satisfy the rule
+	// would move a lower-specificity selector later in the cascade and change
+	// which declaration wins.
 	a {
 		color: #007bff;
 	}
@@ -92,13 +94,13 @@
 
 @mixin gradient-text(
 	$font-size: 1.25rem,
-    $line-height: 1.4,
-    $font-weight: 400,
-    $text-transform: uppercase,
-    $text-align: center,
-    $letter-spacing: 0.125rem,
-    $gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
-  ) {
+	$line-height: 1.4,
+	$font-weight: 400,
+	$text-transform: uppercase,
+	$text-align: center,
+	$letter-spacing: 0.125rem,
+	$gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
+) {
 	font-size: $font-size;
 	line-height: $line-height;
 	font-weight: $font-weight;
@@ -112,7 +114,6 @@
 	background-image: $gradient;
 
 	-webkit-text-fill-color: transparent;
-	text-fill-color: transparent;
 
 	// Przycinanie gradientu do tekstu
 	-webkit-background-clip: text;

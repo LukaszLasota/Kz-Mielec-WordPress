@@ -1,9 +1,9 @@
 // Front-end stylesheet entry.
-//
+
 // Uses @use (not the deprecated @import): each module is loaded exactly once
 // and declares its own dependencies. The load order below is preserved from
 // the previous @import list because it determines CSS cascade order.
-//
+
 // All @use rules must come before any other rule, so the one-time emission of
 // the design tokens follows them. Custom properties are order-independent in
 // the cascade, so emitting them after the module CSS is fine.

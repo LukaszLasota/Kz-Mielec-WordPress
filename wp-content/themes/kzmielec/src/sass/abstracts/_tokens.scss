@@ -1,23 +1,23 @@
 // =============================================================================
 // DESIGN TOKENS — single source of truth for repeated values
 // =============================================================================
-//
+
 // Rule for this project: a value used 2+ times anywhere in the styles lives
 // here and is referenced from here. Genuinely one-off values may stay inline
 // at their single use site.
-//
+
 // Two kinds of tokens, split by a hard technical constraint:
-//
+
 //   1. Breakpoints are SCSS variables. CSS media queries cannot read custom
 //      properties (`@media (max-width: var(--x))` is invalid), so these must
 //      be resolved at compile time.
 //   2. Everything else is a CSS custom property on :root, so the same token
 //      also applies inside the block editor, can be inspected in devtools,
 //      and can be overridden per scope.
-//
+
 // SCSS aliases in `variables.scss` point at these custom properties, which is
 // why existing `$color-main` style usages keep working unchanged.
-//
+
 // Values here are deliberately identical to what they replaced — this file
 // centralises them, it does not redesign them.
 

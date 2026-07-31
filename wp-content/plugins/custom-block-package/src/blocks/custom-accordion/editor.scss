@@ -1,6 +1,7 @@
 // Editor-specific overrides.
-// In the editor, each accordion-item is wrapped in .block-editor-block-list__block,
-// so the frontend "& + &" border-collapse selector doesn't work. Fix it here.
+// In the editor each accordion-item sits inside its own
+// .block-editor-block-list__block wrapper, so the frontend "& + &"
+// border-collapse selector never matches. Fixed here.
 .wp-block-custom-block-package-custom-accordion {
 
 	.block-editor-block-list__layout {

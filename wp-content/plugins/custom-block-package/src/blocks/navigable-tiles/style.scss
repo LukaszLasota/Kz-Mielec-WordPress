@@ -1,13 +1,14 @@
 // Navigable Tiles — meetings + beliefs.
-//
-// Circular navigation tiles with a base photo, optional black overlay (beliefs),
+
+// Circular navigation tiles with a base photo, optional black overlay
+// (beliefs),
 // and a hover icon that fades out to reveal the photo. Base PNGs are square,
 // so the layout needs no magic numbers — the container is forced square and
 // clipped to a circle.
-//
+
 // Modern CSS (container queries, :has(), logical properties) with @supports
 // fallbacks for browsers that lack container-query support.
-//
+
 // WCAG 2.1 AA: focus-visible, aria-current, prefers-reduced-motion.
 
 @use "../../scss/abstracts/tokens" as *;

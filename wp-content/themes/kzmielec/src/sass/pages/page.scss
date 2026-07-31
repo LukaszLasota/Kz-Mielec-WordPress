@@ -96,7 +96,7 @@
 				}
 
 				&:hover {
-					color: white;
+					color: var(--color-white);
 				}
 
 				> * {
@@ -105,6 +105,10 @@
 				}
 			}
 
+			// stylelint-disable-next-line no-descending-specificity -- the state rule
+			// above is nested with its block on purpose. Reordering to satisfy the rule
+			// would move a lower-specificity selector later in the cascade and change
+			// which declaration wins.
 			.current {
 				background: $BG-D;
 				color: $body-color;

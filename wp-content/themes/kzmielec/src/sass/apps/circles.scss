@@ -46,6 +46,10 @@
 			cursor: pointer;
 		}
 
+		// stylelint-disable-next-line no-descending-specificity -- the state rule
+		// above is nested with its block on purpose. Reordering to satisfy the rule
+		// would move a lower-specificity selector later in the cascade and change
+		// which declaration wins.
 		.vb__image--two {
 			position: absolute;
 			top: 49%;
@@ -65,7 +69,7 @@
 		display: block;
 		width: 74.5%;
 		height: 97.2%;
-		background-color: black;
+		background-color: var(--color-black);
 		opacity: 0.6;
 		z-index: 2;
 		border-radius: 100%;
@@ -76,6 +80,10 @@
 		opacity: 0.5;
 		pointer-events: none;
 
+		// stylelint-disable-next-line no-descending-specificity -- the state rule
+		// above is nested with its block on purpose. Reordering to satisfy the rule
+		// would move a lower-specificity selector later in the cascade and change
+		// which declaration wins.
 		.vb__image--two {
 			display: none;
 		}
@@ -104,7 +112,7 @@
 	}
 
 	a {
-		color: black;
+		color: var(--color-black);
 	}
 
 	.find__paragraph-last {
@@ -166,6 +174,10 @@
 		}
 	}
 
+	// stylelint-disable-next-line no-descending-specificity -- the state rule
+	// above is nested with its block on purpose. Reordering to satisfy the rule
+	// would move a lower-specificity selector later in the cascade and change
+	// which declaration wins.
 	.vb__paragraph--one {
 		text-align: left;
 	}

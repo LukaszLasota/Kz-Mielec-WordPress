@@ -1,19 +1,21 @@
 // ============================================================================
 // Comparison Accordion — Frontend Styles (kzmielec design)
 // ============================================================================
-//
+
 // BEM naming: .cor-accordion (block), __item / __heading / __trigger / __panel.
-// Prefix "cor-" (Comparison Of Religions) avoids conflicts with other accordions.
-//
+// Prefix "cor-" (Comparison Of Religions) avoids conflicts with other
+// accordions.
+
 // Adapted to the kzmielec design — consistent with the `accordion-item` block:
-//   0.125rem black border, square corners, uppercase, inherited serif, black chevron,
-//   rem units, #000 text.
-//
-// RESPONSIVE:
-//   Desktop (>48rem): CSS Grid — columns: topic + one per church
-//     (column count from the --cor-church-count custom property set in render.php).
-//   Mobile (≤48rem): display: block — grid styles ignored; elements flow in
-//     source order: topic → church label → paragraphs.
+// 0.125rem black border, square corners, uppercase, inherited serif,
+// black chevron, rem units, #000 text.
+
+// RESPONSIVE
+// Desktop (>48rem): CSS Grid — columns are the topic plus one per church.
+//   Column count comes from the --cor-church-count custom property, set in
+//   render.php.
+// Mobile (≤48rem): display: block — grid styles are ignored and elements flow
+//   in source order: topic → church label → paragraphs.
 // ============================================================================
 
 // ── Design tokens — named so repeated values live in one place ──
@@ -22,6 +24,14 @@
 $cor-line: #000; // borders, dividers, body text
 $cor-bg: #fff;
 $cor-border: 0.125rem solid $cor-line;
+
+// Chevron as an inline SVG, so the accordion needs no image request.
+// The quotes are mandatory: the SVG contains single quotes and a closing
+// parenthesis, which would terminate an unquoted url() early. Hoisted into a
+// variable so the unavoidable rule exceptions live in exactly one place.
+/* stylelint-disable function-url-quotes, max-line-length */
+$cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+/* stylelint-enable function-url-quotes, max-line-length */
 
 .cor-accordion {
 	max-width: 68.75rem; // 68.75rem — matches the belief/archive content width.
@@ -66,12 +76,13 @@ $cor-border: 0.125rem solid $cor-line;
 	text-align: center;
 	line-height: 1.3;
 
-	// Reset gradient from the theme's global h3 styles.
+	// Reset gradient from the theme's global h3 styles. `background` comes first
+	// because the shorthand resets background-clip; putting it after would undo
+	// the two clip resets below it.
+	background: none !important;
 	-webkit-text-fill-color: initial !important;
-	text-fill-color: initial !important;
 	-webkit-background-clip: initial !important;
 	background-clip: initial !important;
-	background: none !important;
 	color: inherit;
 
 	@media (max-width: $bp-small) {
@@ -101,7 +112,6 @@ $cor-border: 0.125rem solid $cor-line;
 
 	// Reset gradient from the theme's global heading styles.
 	-webkit-text-fill-color: initial;
-	text-fill-color: initial;
 	-webkit-background-clip: initial;
 	background-clip: initial;
 
@@ -110,6 +120,10 @@ $cor-border: 0.125rem solid $cor-line;
 	}
 
 	// Chevron (black — matches accordion-item).
+	// stylelint-disable-next-line no-descending-specificity -- the state rule
+	// above is nested with its block on purpose. Reordering to satisfy the rule
+	// would move a lower-specificity selector later in the cascade and change
+	// which declaration wins.
 	&::after {
 		content: "";
 		display: inline-block;
@@ -119,9 +133,7 @@ $cor-border: 0.125rem solid $cor-line;
 		right: 1.2rem;
 		top: 50%;
 		transform: translateY(-50%);
-		background:
-			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-			no-repeat center center;
+		background: $cor-chevron no-repeat center center;
 		transition: transform 0.3s ease;
 
 		@media (max-width: $bp-small) {
@@ -173,7 +185,8 @@ $cor-border: 0.125rem solid $cor-line;
 .cor-table__header {
 	display: grid;
 	// Production ratio: topic 1 / each church 2 (1:2:2).
-	// Columns separated by 0.0625rem vertical dividers (production border-right), no gap.
+	// Columns separated by 0.0625rem vertical dividers (production border-right),
+	// no gap.
 	grid-template-columns: minmax(7.5rem, 1fr) repeat(var(--cor-church-count, 2), 2fr);
 	text-align: center;
 	font-weight: 700; // production .comparison-h4: bold, normal case (no uppercase)
@@ -201,7 +214,8 @@ $cor-border: 0.125rem solid $cor-line;
 .cor-table__body {
 	display: grid;
 	// Production ratio: topic 1 / each church 2 (1:2:2).
-	// Columns separated by 0.0625rem vertical dividers (production border-right), no gap.
+	// Columns separated by 0.0625rem vertical dividers (production border-right),
+	// no gap.
 	grid-template-columns: minmax(7.5rem, 1fr) repeat(var(--cor-church-count, 2), 2fr);
 
 	@media (max-width: $bp-tablet) {
@@ -276,7 +290,8 @@ $cor-border: 0.125rem solid $cor-line;
 	}
 
 	// Church description cell — positioned via inline grid-column/grid-row.
-	// Vertical divider between columns (production: 0.0625rem black border between cols).
+	// Vertical divider between columns (production: 0.0625rem black border between
+	// cols).
 	&--church {
 		border-left: 0.0625rem solid $cor-line;
 

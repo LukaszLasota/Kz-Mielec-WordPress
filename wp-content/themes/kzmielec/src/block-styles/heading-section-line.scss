@@ -1,6 +1,6 @@
 @use "../sass/abstracts/variables" as *;
 // Heading "Z linią" — section divider with horizontal line through center.
-//
+
 // Production: .section-head with letter-spacing 150% inside 60% wrapper.
 // Our wrapper is 75rem so we scale letter-spacing down proportionally.
 // Uses display:flex + ::before/::after for lines — no <span> needed.

@@ -5,7 +5,6 @@
 *::before {
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 	text-rendering: optimizelegibility;
 }
 
@@ -21,7 +20,8 @@ html {
 
 body {
 	// Match production, which renders in a plain serif (Cinzel never loads
-	// there). This is the site-wide body font; the editor mirrors it via theme.json.
+	// there). This is the site-wide body font; the editor mirrors it via
+	// theme.json.
 	font: 300 1rem/1.4 Georgia, "Times New Roman", "Liberation Serif", serif;
 	font-weight: var(--fw-regular);
 	font-style: normal;
@@ -72,7 +72,7 @@ figure {
 	margin: 1.875rem 0 var(--space-xl);
 
 	&::before {
-		border-top: 0.0625rem solid black;
+		border-top: 0.0625rem solid var(--color-black);
 		content: "";
 		margin: 0 auto;
 		position: absolute;

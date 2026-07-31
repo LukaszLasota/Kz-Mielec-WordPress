@@ -24,7 +24,7 @@
 	gap: 0;
 	width: 100%;
 	font-size: 1.1rem;
-	line-height: 150%;
+	line-height: 1.5;
 
 	&__card {
 		perspective: 62.5rem;
@@ -61,7 +61,7 @@
 		}
 
 		&:hover {
-			color: white;
+			color: #fff;
 		}
 
 		> * {
