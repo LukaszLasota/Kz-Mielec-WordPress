@@ -112,6 +112,10 @@ function comparison_of_religions_import_page(): void {
 		$data = comparison_of_religions_export_data();
 		$json = wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 
+		if ( false === $json ) {
+			wp_die( esc_html__( 'ERROR: Nie udalo sie zserializowac danych do JSON.', 'comparison-of-religions' ) );
+		}
+
 		header( 'Content-Type: application/json; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="comparison-of-religions-export.json"' );
 		header( 'Content-Length: ' . strlen( $json ) );
@@ -137,7 +141,8 @@ function comparison_of_religions_import_page(): void {
 			$tmp_file = sanitize_text_field( $_FILES['cor_json_file']['tmp_name'] );
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading uploaded temp file.
 			$raw_json = file_get_contents( $tmp_file );
-			$data     = json_decode( $raw_json, true );
+			// An unreadable upload lands in the same branch as malformed JSON.
+			$data = false === $raw_json ? null : json_decode( $raw_json, true );
 
 			if ( null === $data || ! is_array( $data ) ) {
 				echo esc_html__( 'ERROR: Nieprawidłowy format JSON.', 'comparison-of-religions' ) . "\n";

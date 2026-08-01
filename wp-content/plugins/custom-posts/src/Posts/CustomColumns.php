@@ -58,7 +58,12 @@ class CustomColumns {
 				echo '<strong>' . esc_html( get_the_title( $post_id ) ) . '</strong>';
 				break;
 			case 'author':
-				$author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $post_id ) );
+				// get_post_field() is typed array|int|string; the author id is
+				// numeric, so narrow it before passing it on.
+				$author_id = get_post_field( 'post_author', $post_id );
+				$author    = is_numeric( $author_id )
+					? get_the_author_meta( 'display_name', (int) $author_id )
+					: '';
 				echo esc_html( $author );
 				break;
 			case 'taxonomy-category':
@@ -78,11 +83,13 @@ class CustomColumns {
 				}
 				break;
 			case 'date':
-				echo esc_html( get_the_date( '', $post_id ) );
+				// Both date helpers return false for an invalid post; an empty
+				// cell is the correct rendering for that.
+				echo esc_html( (string) get_the_date( '', $post_id ) );
 				break;
 			case 'modified_date':
 				$modified_date = get_post_modified_time( 'Y-m-d H:i', false, $post_id );
-				echo esc_html( $modified_date );
+				echo esc_html( (string) $modified_date );
 				break;
 		}
 	}

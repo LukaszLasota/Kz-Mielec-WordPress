@@ -92,6 +92,15 @@ class CptBuilder {
 			'taxonomies'         => [ 'category' ],
 		];
 
-		register_post_type( $this->type, $args );
+		// register_post_type() requires a non-empty lowercase key. $this->type
+		// comes from the caller, so normalise it and bail rather than
+		// registering a post type WordPress will mishandle.
+		$post_type = strtolower( $this->type );
+
+		if ( '' === $post_type ) {
+			return;
+		}
+
+		register_post_type( $post_type, $args );
 	}
 }
