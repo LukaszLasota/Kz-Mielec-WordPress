@@ -39,6 +39,7 @@ class Theme {
 		Core\BlockStyles::class,
 		Core\GroupLinkSupport::class,
 		Core\PerformanceOptimizer::class,
+		Core\ModernImages::class,
 		Seo\YoastFallbacks::class,
 	);
 

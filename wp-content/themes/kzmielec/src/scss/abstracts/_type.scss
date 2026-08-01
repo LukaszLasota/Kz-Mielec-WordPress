@@ -96,7 +96,9 @@ $roles: (
 	h4: (body, tight, narrow, 2),
 	h5: (body-sm, tight, narrow, 2),
 	h6: (base, tight, narrow, 1),
-	subtitle: (body, snug, wide, 2), // panel and accordion headings
+	// The narrow tier matters here for the same reason as h1: at 16px
+	// "Konstantynopolitańskie" is 290px inside a 286px panel on a 320px screen.
+	subtitle: (body, snug, wide, 2, 3),
 	body: (body, body, null, 2), // content paragraphs → 16px on a phone
 	copy: (body-sm, body, null, 1), // secondary/dense paragraphs
 	meta: (meta, body, null, 0), // already 14px; small prose stays put

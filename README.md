@@ -275,6 +275,43 @@ and `height`: 25 are the Instagram plugin's placeholders and 9 are remote
 Facebook thumbnails whose size is unknown at render time. Neither causes layout
 shift here, because the containers reserve space with `aspect-ratio`.
 
+### Modern image formats
+
+`App/Core/ModernImages.php` wraps images in `<picture>` and offers AVIF, then
+WebP, then the original — but only for a format whose file actually sits next to
+the source on disk. Nothing converts anything at request time; the markup adapts
+to what is there, so a missing sibling is simply not offered and the `<img>`
+still works.
+
+`srcset` cannot do this: a browser picks a *width* from a srcset, not a codec.
+The alternative — rewriting extensions at the server and trusting the `Accept`
+header — moves the decision out of the repository and breaks the first time a CDN
+caches one variant under both names.
+
+Three hooks, because images arrive three ways: `wp_content_img_tag` for editor
+content, `wp_get_attachment_image` for templates and blocks (which is also how
+the theme reaches plugin markup without the plugin knowing), and `render_block`
+for a block that builds its own `<picture>` for art direction — the hero does,
+and there the format sources have to sit beside each existing `<source>`, keeping
+its `media`, rather than wrapping it again.
+
+`scripts/convert-uploads.php` is what puts the files there. Run it inside DDEV,
+where PHP has GD with both encoders:
+
+```bash
+ddev exec php scripts/convert-uploads.php --dry-run
+ddev exec php scripts/convert-uploads.php
+```
+
+It never touches an original, never overwrites a newer conversion, and discards
+any output that came out larger than its source — which happens with flat line
+art, where PNG is already the right format. On this library: 511 files written,
+65 discarded, **25 MB of sources down to 9 MB (−64%)** in 38 seconds.
+
+The converted files live in `wp-content/uploads/`, which is **not** in the
+repository, so production needs its own run — or LiteSpeed Cache's image
+optimisation, which is installed there and does the same job.
+
 ## Local environment
 
 DDEV on WSL2. `ddev start`, then the site is at
