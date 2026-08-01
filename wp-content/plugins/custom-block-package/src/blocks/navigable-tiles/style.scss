@@ -48,6 +48,12 @@
 		--cbp-title-size: #{fs(body-sm)};
 	}
 
+	// Matches the h3 role at its narrowest step, so a tile title never outgrows
+	// a content heading on a 320px screen.
+	@media (max-width: 360px) {
+		--cbp-title-size: #{fs(base)};
+	}
+
 	@media (max-width: $bp-mobile) {
 		--cbp-tile-padding-inline: #{space(4)};
 	}

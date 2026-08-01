@@ -84,10 +84,15 @@ $tracking: (
 // (16px in content, 14px in accordions, 20px in the meetings archive, 32px on a
 // belief section label) because every component that forgot the query kept its
 // desktop value.
+// A fifth number, where present, is the drop on the narrowest phones. Only the
+// display levels carry one: at 24px the longest word in these titles is still
+// 319px and a 320px screen leaves it 280px, so h1 needs one more step. Below
+// that the ladder compresses towards uniform, which is what 320px physically
+// allows for uppercase Cinzel with 2px of tracking.
 $roles: (
-	h1: (display, heading, wide, 3),
-	h2: (heading, heading, wide, 3),
-	h3: (title, snug, wide, 2),
+	h1: (display, heading, wide, 3, 4),
+	h2: (heading, heading, wide, 3, 4),
+	h3: (title, snug, wide, 2, 3),
 	h4: (body, tight, narrow, 2),
 	h5: (body-sm, tight, narrow, 2),
 	h6: (base, tight, narrow, 1),
@@ -102,6 +107,11 @@ $roles: (
 // this module, so reading its variables here would be circular.
 // `npm run check:mirrors` fails if the two numbers diverge.
 $phone-max: 600px;
+
+// A typographic threshold, not a layout one, which is why it lives here and
+// not with the breakpoints: the width at which Polish compounds stop fitting a
+// display heading. Measured, not chosen.
+$narrow-max: 360px;
 
 // Narrow screens take the same role a fixed number of steps down the size
 // ladder, with the level's own leading and tracking — a heading keeps its voice
@@ -188,6 +198,13 @@ $phone-max: 600px;
 
 		@media (max-width: $phone-max) {
 			font-size: fs(step-down($size, $phone-down));
+		}
+	}
+
+	@if list.length($spec) >= 5 {
+
+		@media (max-width: $narrow-max) {
+			font-size: fs(step-down($size, list.nth($spec, 5)));
 		}
 	}
 }
