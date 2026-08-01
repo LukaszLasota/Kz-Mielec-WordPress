@@ -18,7 +18,7 @@ use Kzmielec\Interfaces\ActionHookInterface;
 /**
  * Class ThemeSettingsPage
  *
- * Creates the parent admin menu page that holds Logo and Masonry subpages.
+ * Creates the parent admin menu page that holds the Logo and belief subpages.
  */
 class ThemeSettingsPage implements ActionHookInterface {
 

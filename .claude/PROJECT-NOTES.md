@@ -183,37 +183,25 @@ Church\Admin\LogoSettings       # Ładuje się tylko w is_admin()
 **Funkcje:**
 - Zarządzanie zasobami CSS/JS motywu
 - Automatyczne wersjonowanie (cache busting przez `filemtime()`)
-- Conditional loading (np. Masonry tylko na blogach)
-- Uniwersalne środowisko (WordPress + Docker fallback)
+- Build daje jeden zoptymalizowany plik na wejście, więc nie ma wariantu `.min`
 
 **Metody:**
 
-1. **`get_asset_suffix(): string`**
-   - Zwraca `.min` dla produkcji, pusty string dla development
-   - Wspiera `wp_get_environment_type()` (WordPress 5.5+)
-   - Fallback: `getenv('ENV_TYPE')` dla Docker/deployment
-
-2. **`get_file_version(string $file_path): string|bool`**
+1. **`get_file_version(string $file_path): string|false`**
    - Cache busting przez `filemtime()`
-   - Sprawdza `file_exists()` przed wywołaniem
-   - Loguje błędy dla brakujących plików
+   - Zwraca `false`, gdy pliku nie ma
 
-3. **`enqueue_asset()`**
+2. **`enqueue_asset()`**
    - Uniwersalna metoda do `wp_enqueue_script()` i `wp_enqueue_style()`
-   - Eliminuje duplikację kodu
-   - Automatyczne versjonowanie
+   - Pomija zasób, którego plik nie istnieje
 
-4. **`register_church_assets(): void`**
-   - Frontend: `frontend.js`, `frontend.css`, `print.css`
+3. **`register_kzmielec_assets(): void`**
+   - Frontend: `frontend.js`, `frontend.css`
    - AJAX localization: `redlist.ajax_url`
 
-5. **`register_church_admin_assets(): void`**
-   - Admin: `backend.js`, `backend.css`
-
-6. **`enqueue_masonry_settings(): void`**
-   - Conditional loading: tylko `is_home() || is_archive() || is_search()`
-   - Używa WordPress bundled Masonry library (`wp-includes/js/masonry.min.js`)
-   - Ładuje config: `/assets/js/vendor/masonry.js`
+Motyw nie ma dziś własnych zasobów admina — `backend.css` nigdy nie powstał,
+więc metoda ładująca go została usunięta (2026-08-01). Skrypt panelu logo
+(`assets/js/logo.js`) ładuje `App/Admin/LogoSettings.php` osobno.
 
 **Standard kodowania:**
 - WordPress Coding Standards (WPCS)
@@ -256,19 +244,20 @@ Church\Admin\LogoSettings       # Ładuje się tylko w is_admin()
 
 ### Build system - Webpack
 
-**Konfiguracja:**
-- `webpack.dev.js` - development (`mode: 'development'`)
-- `webpack.prod.js` - production (`mode: 'production'`)
+**Konfiguracja:** jeden `webpack.config.js` na bazie `@wordpress/scripts`
+(nie ma już osobnych plików dev/prod ani wariantu `.min`).
 
-**Output:**
-- Development: `frontend.js`, `backend.js`
-- Production: `frontend.min.js`, `backend.min.js`
+**Wejścia:** `src/frontend.ts`, `src/editor.ts` oraz automatycznie wykrywane
+`src/patterns/<slug>/` i `src/block-styles/*.scss`.
+
+**Output:** `assets/js/[name].js` i `assets/css/[name].css`; obrazy i fonty
+trafiają do `assets/media/` i `assets/webfont/`.
 
 **Skrypty npm:**
 ```bash
-npm run dev    # Webpack development build
-npm run watch  # Webpack watch mode
-npm run prod   # Webpack production build (minifikacja)
+npm run build     # build produkcyjny
+npm run start     # tryb watch
+npm run lint:css  # stylelint na src/**/*.scss
 ```
 
 ---
@@ -655,44 +644,23 @@ composer check    # Both PHPStan + PHPCS
 
 ## ZNANE PROBLEMY I TODO
 
-### ⚠️ NIEUKOŃCZONE - Masonry.js
+### Masonry - USUNIĘTY (2026-08-01)
 
-**Status:** Kod działa, ale plik w złej lokalizacji
+Masonry był ładowany leniwie z `src/frontend.ts` na stronach z kontenerem
+`.news` (lista wpisów). Usunięty razem ze źródłem, chunkami, zależnościami npm
+(`masonry-layout`, `imagesloaded`) i deklaracjami typów, bo w serwisie nie ma
+ani jednego wpisu, a układ nie był nigdzie używany.
 
-**Problem:**
-- Plik aktualnie: `webpack/src/js/masonry/masonry.js`
-- RegisterAssets.php oczekuje: `assets/js/vendor/masonry.js`
-- Folder `webpack/src/` NIE jest dostępny publicznie przez URL
+**Konsekwencja do zapamiętania:** `.news` nie ma w CSS żadnego układu
+kolumnowego — karty są `width: 100%`. Gdy w Fazie 4 pojawią się aktualności,
+lista wyświetli się jako jedna kolumna, dopóki nie doda się siatki (wystarczy
+`display: grid` z `repeat(auto-fill, minmax(…))` — bez JavaScriptu).
 
-**TODO:**
-1. Przenieś plik: `webpack/src/js/masonry/masonry.js` → `assets/js/vendor/masonry.js`
-2. LUB stwórz folder: `mkdir -p assets/js/vendor`
-3. Przebuduj webpack: `npm run dev`
-4. Testuj na stronie bloga/archiwum
+### Logo.js
 
-**Kod masonry.js:**
-```javascript
-// Inicjalizacja Masonry dla layoutu newsów
-document.addEventListener("DOMContentLoaded", function () {
-    const masonryContainer = document.querySelector(".news");
-    if (masonryContainer) {
-        new Masonry(masonryContainer, {
-            itemSelector: ".news__card",
-            percentPosition: true
-        });
-    }
-});
-```
-
-**Conditional loading:**
-- Ładuje się tylko na: `is_home() || is_archive() || is_search()`
-- Używa WordPress bundled Masonry library (~30KB z `wp-includes/js/masonry.min.js`)
-- Optymalizacja: NIE ładuje na stronach statycznych
-
-### Logo.js - podobny problem
-
-**Plik:** `webpack/src/js/logo/logo.js`
-**TODO:** Podobnie jak masonry.js - wymaga przeniesienia lub dodania do webpack bundle
+`assets/js/logo.js` to plik statyczny (nie ma wejścia w webpacku), ładowany
+przez `App/Admin/LogoSettings.php` z wersjonowaniem po `filemtime()`. Działa —
+wcześniejsza notatka o „złej lokalizacji" dotyczyła starego motywu.
 
 ---
 

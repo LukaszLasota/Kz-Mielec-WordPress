@@ -8,10 +8,3 @@
  */
 declare module '*.scss';
 declare module '*.css';
-
-/**
- * npm packages used by the lazy-loaded masonry bundle that ship no type
- * definitions of their own.
- */
-declare module 'masonry-layout';
-declare module 'imagesloaded';

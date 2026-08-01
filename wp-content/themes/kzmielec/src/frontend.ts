@@ -3,11 +3,6 @@ import { HamburgerMenu } from './js/menu/menu';
 
 new HamburgerMenu();
 
-// Lazy-load masonry only on pages with .news container (blog/archive/search).
-if (document.querySelector('.news')) {
-  import(/* webpackChunkName: "masonry" */ './js/masonry/masonry.js');
-}
-
 // Prevent browser native jump to anchor on cross-page navigation.
 if (window.location.hash) {
   history.scrollRestoration = 'manual';

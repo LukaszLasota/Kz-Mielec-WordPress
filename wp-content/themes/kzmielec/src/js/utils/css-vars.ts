@@ -3,7 +3,7 @@
  *
  * Lets scripts share the design tokens defined in
  * `src/scss/abstracts/_tokens.scss` instead of keeping their own copies of the
- * same numbers (breakpoints, masonry columns, gaps). Values may carry a unit —
+ * same numbers (breakpoints, gaps). Values may carry a unit —
  * `800px` reads back as `800`.
  *
  * @param name     Custom property name, including the leading `--`.

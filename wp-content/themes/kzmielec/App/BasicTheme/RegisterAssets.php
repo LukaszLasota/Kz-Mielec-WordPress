@@ -58,7 +58,6 @@ class RegisterAssets implements ActionHookInterface {
 	 */
 	public function register_add_action(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_kzmielec_assets' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'register_kzmielec_admin_assets' ) );
 	}
 
 
@@ -114,17 +113,6 @@ class RegisterAssets implements ActionHookInterface {
 		} else {
 			wp_enqueue_style( $handle, $url, $deps, $version, $media );
 		}
-	}
-
-	/**
-	 * Enqueue admin assets.
-	 *
-	 * Loads backend CSS and JavaScript for WordPress admin panel.
-	 *
-	 * @return void
-	 */
-	public function register_kzmielec_admin_assets(): void {
-		$this->enqueue_asset( 'style', 'kzmielec-admin-style', '/assets/css/backend.css' );
 	}
 
 	/**
