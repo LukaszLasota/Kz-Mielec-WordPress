@@ -75,15 +75,20 @@ class NavigableTilesService {
 				: (string) get_permalink( $post_id );
 
 			$items[] = array(
-				'id'          => $post_id,
-				'page_id'     => $post_id,
-				'title'       => (string) get_the_title( $post_id ),
-				'link'        => $link,
-				'image_base'  => $base_id ? (string) wp_get_attachment_image_url( $base_id, 'full' ) : '',
-				'image_hover' => $hover_id ? (string) wp_get_attachment_image_url( $hover_id, 'full' ) : '',
-				'day_hour'    => $day_hour,
-				'anchor'      => $anchor,
-				'is_current'  => false, // Filled in render.
+				'id'             => $post_id,
+				'page_id'        => $post_id,
+				'title'          => (string) get_the_title( $post_id ),
+				'link'           => $link,
+				// Both the URL and the id: the id lets the renderer emit srcset and
+				// intrinsic dimensions, the URL stays as the fallback for an image
+				// that is no longer in the media library.
+				'image_base'     => $base_id ? (string) wp_get_attachment_image_url( $base_id, 'full' ) : '',
+				'image_hover'    => $hover_id ? (string) wp_get_attachment_image_url( $hover_id, 'full' ) : '',
+				'image_base_id'  => $base_id,
+				'image_hover_id' => $hover_id,
+				'day_hour'       => $day_hour,
+				'anchor'         => $anchor,
+				'is_current'     => false, // Filled in render.
 			);
 		}
 
@@ -119,15 +124,20 @@ class NavigableTilesService {
 			$hover_id = (int) get_post_meta( $page_id, self::META_BELIEF_HOVER_IMAGE, true );
 
 			$items[] = array(
-				'id'          => $page_id,
-				'page_id'     => $page_id,
-				'title'       => (string) get_the_title( $page_id ),
-				'link'        => (string) get_permalink( $page_id ),
-				'image_base'  => $base_id ? (string) wp_get_attachment_image_url( $base_id, 'full' ) : '',
-				'image_hover' => $hover_id ? (string) wp_get_attachment_image_url( $hover_id, 'full' ) : '',
-				'day_hour'    => '',
-				'anchor'      => '',
-				'is_current'  => false,
+				'id'             => $page_id,
+				'page_id'        => $page_id,
+				'title'          => (string) get_the_title( $page_id ),
+				'link'           => (string) get_permalink( $page_id ),
+				// Both the URL and the id: the id lets the renderer emit srcset and
+				// intrinsic dimensions, the URL stays as the fallback for an image
+				// that is no longer in the media library.
+				'image_base'     => $base_id ? (string) wp_get_attachment_image_url( $base_id, 'full' ) : '',
+				'image_hover'    => $hover_id ? (string) wp_get_attachment_image_url( $hover_id, 'full' ) : '',
+				'image_base_id'  => $base_id,
+				'image_hover_id' => $hover_id,
+				'day_hour'       => '',
+				'anchor'         => '',
+				'is_current'     => false,
 			);
 		}
 

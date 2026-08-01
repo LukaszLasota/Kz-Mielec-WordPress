@@ -249,6 +249,32 @@ parse SCSS and reports `.scss` files as ignored.
 
 TypeScript is theme-only; the plugins are plain JavaScript.
 
+## SEO
+
+Yoast handles titles, canonicals, sitemaps and the schema graph. What it cannot
+do is invent content, so `App/Seo/YoastFallbacks.php` fills the gaps an audit of
+all 19 published pages found — and steps aside the moment an editor fills the
+field itself:
+
+| gap | before | after |
+|---|---|---|
+| `og:image` | missing on 19/19 — a shared link had no picture | site logo as the fallback |
+| `meta description` | missing on 12/19 | generated from the content, blocks stripped first |
+| `<title>` length | up to 117 characters, half of it truncated by Google | site name dropped past 60; longest is now 76 |
+| schema | Organization only | a `Church` node with address, phone and the service times, read from the meetings CPT |
+| tile images | raw `<img src>` at full size, 131 KB per photo | `wp_get_attachment_image()` with srcset and `sizes` derived from the column count |
+
+Already correct before the audit, and worth not breaking: one `h1` per page on all
+19, no skipped heading levels, `alt` on all 204 content images, `lang="pl-PL"`,
+`fetchpriority="high"` on the hero and `loading="lazy"` on everything below it.
+
+Two things are deliberately **not** code. The remaining two long titles are the
+page titles themselves — shortening them is editorial, and truncating them in PHP
+would only produce a worse sentence. And 34 images still ship without `width`
+and `height`: 25 are the Instagram plugin's placeholders and 9 are remote
+Facebook thumbnails whose size is unknown at render time. Neither causes layout
+shift here, because the containers reserve space with `aspect-ratio`.
+
 ## Local environment
 
 DDEV on WSL2. `ddev start`, then the site is at

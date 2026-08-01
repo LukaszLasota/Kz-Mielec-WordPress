@@ -77,6 +77,46 @@ if ( ! function_exists( 'cbp_navigable_tiles_wrapper_attrs' ) ) {
 	}
 }
 
+if ( ! function_exists( 'cbp_navigable_tiles_image' ) ) {
+	/**
+	 * Render one tile image through WordPress so it carries srcset and dimensions.
+	 *
+	 * The block used to print a raw `<img src>` pointing at the `full` size: on the
+	 * beliefs page that is 16 images, and the photographic ones are 131 KB each at
+	 * 400x400, downloaded at full size on a phone that shows them 150px wide.
+	 * `wp_get_attachment_image()` emits the whole srcset WordPress already
+	 * generated, plus the intrinsic width and height.
+	 *
+	 * `sizes` is derived from the column count rather than left at the default
+	 * `100vw`, which would tell the browser these are full-width images and defeat
+	 * the point. Tiles are one per row below 600px, two up to 1024px, and
+	 * `columns` per row above that.
+	 *
+	 * The alt is empty on purpose: the tile's own link text carries the meaning and
+	 * the wrapper is aria-hidden, so a description here would be read twice.
+	 *
+	 * @param int    $attachment_id Attachment to render.
+	 * @param string $class_name    Class for the img tag.
+	 * @param int    $columns       Tiles per row on a wide screen.
+	 * @return void
+	 */
+	function cbp_navigable_tiles_image( int $attachment_id, string $class_name, int $columns ): void {
+		$wide = max( 1, (int) round( 100 / max( 1, $columns ) ) );
+
+		echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WordPress escapes the attributes it builds.
+			$attachment_id,
+			'medium_large',
+			false,
+			array(
+				'class'   => $class_name,
+				'alt'     => '',
+				'loading' => 'lazy',
+				'sizes'   => '(max-width: 600px) 100vw, (max-width: 1024px) 50vw, ' . $wide . 'vw',
+			)
+		);
+	}
+}
+
 if ( ! function_exists( 'cbp_navigable_tiles_render_tile' ) ) {
 	/**
 	 * Render a single tile as a list item.
@@ -89,6 +129,8 @@ if ( ! function_exists( 'cbp_navigable_tiles_render_tile' ) ) {
 		$is_current  = $config['highlight_current'] && ( (int) $item['page_id'] === $config['current_page_id'] );
 		$base_image  = (string) ( $item['image_base'] ?? '' );
 		$hover_image = (string) ( $item['image_hover'] ?? '' );
+		$base_id     = (int) ( $item['image_base_id'] ?? 0 );
+		$hover_id    = (int) ( $item['image_hover_id'] ?? 0 );
 		$title       = (string) ( $item['title'] ?? '' );
 		$link        = (string) ( $item['link'] ?? '' );
 		$day_hour    = (string) ( $item['day_hour'] ?? '' );
@@ -98,15 +140,29 @@ if ( ! function_exists( 'cbp_navigable_tiles_render_tile' ) ) {
 		?>
 		<li class="navigable-tiles__item<?php echo $is_current ? ' is-current' : ''; ?>">
 			<span class="navigable-tiles__image" aria-hidden="true">
-				<?php if ( '' !== $base_image ) : ?>
+				<?php
+				if ( $base_id ) {
+					cbp_navigable_tiles_image( $base_id, 'navigable-tiles__image--one', $config['columns'] );
+				} elseif ( '' !== $base_image ) {
+					?>
 					<img class="navigable-tiles__image--one" src="<?php echo esc_url( $base_image ); ?>" alt="" loading="lazy">
-				<?php endif; ?>
+					<?php
+				}
+				?>
 				<?php if ( $has_overlay ) : ?>
 					<span class="navigable-tiles__image--overlay"></span>
 				<?php endif; ?>
-				<?php if ( $show_hover ) : ?>
-					<img class="navigable-tiles__image--two" src="<?php echo esc_url( $hover_image ); ?>" alt="" loading="lazy">
-				<?php endif; ?>
+				<?php
+				if ( $show_hover ) {
+					if ( $hover_id ) {
+						cbp_navigable_tiles_image( $hover_id, 'navigable-tiles__image--two', $config['columns'] );
+					} else {
+						?>
+						<img class="navigable-tiles__image--two" src="<?php echo esc_url( $hover_image ); ?>" alt="" loading="lazy">
+						<?php
+					}
+				}
+				?>
 			</span>
 			<h3 class="navigable-tiles__title">
 				<a
