@@ -10,7 +10,7 @@
 
 html {
 	font-size: 100%; // 1rem = 1rem (browser default)
-	line-height: normal; // override normalize v8 line-height: var(--lh-heading)
+	line-height: normal; // override normalize v8 line-height: lh(heading)
 	scroll-behavior: smooth;
 
 	@media (prefers-reduced-motion: reduce) {
@@ -60,38 +60,15 @@ figure {
 	margin: 0 auto;
 }
 
-// Section heading with line through
-.section-head {
+// Centring wrapper for the banner-hero arrow (patterns/banner-hero.php).
+// The last surviving rule from the old theme's circles stylesheet; the rest of
+// that file styled markup the navigable-tiles block replaced.
+.center__main {
 	width: 100%;
-	text-align: center;
-	font-size: var(--fs-heading);
-	font-weight: var(--fw-regular);
-	letter-spacing: 150%;
-	text-transform: uppercase;
-	position: relative;
-	margin: 1.875rem 0 var(--space-xl);
-
-	&::before {
-		border-top: 0.0625rem solid var(--color-black);
-		content: "";
-		margin: 0 auto;
-		position: absolute;
-		top: 50%;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		width: 80%;
-		z-index: -1;
-	}
-
-	span {
-		background: var(--color-white);
-		padding: 0 var(--space-xs);
-	}
-
-	@media (max-width: $bp-tablet) {
-		font-size: var(--fs-title);
-	}
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
 }
 
 // Black circle — 1:1 from old theme
@@ -99,14 +76,14 @@ figure {
 	height: 3.75rem;
 	width: 3.75rem;
 	border-radius: 100%;
-	background: var(--color-black);
+	background: palette(ink);
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
-	margin: var(--space-2xl) 1.25rem 10rem;
+	margin: space(20) space(5) space(40);
 
 	@media (max-width: $bp-mobile) {
-		margin: 3.125rem 1.25rem 6.25rem;
+		margin: space(12) space(5) space(24);
 	}
 }

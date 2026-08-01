@@ -1,8 +1,9 @@
 @use "../scss/abstracts/variables" as *;
 // Heading "Z linią" — section divider with horizontal line through center.
 
-// Production: .section-head with letter-spacing 150% inside 60% wrapper.
-// Our wrapper is 75rem so we scale letter-spacing down proportionally.
+// Replaces the old theme's .section-head, whose rule declared an invalid
+// `letter-spacing: 150%` (percentages are not a valid unit, so the browser
+// dropped it) and which no markup used any more — that rule is gone.
 // Uses display:flex + ::before/::after for lines — no <span> needed.
 
 .wp-block-heading.is-style-section-line {
@@ -10,33 +11,34 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	font-size: var(--fs-heading, 2rem); // 2rem — matches production (3.2rem @ 62.5% root)
+
+	@include type(h2); // a section heading is an h2 in every other context too
+
 	font-weight: var(--fw-regular);
-	letter-spacing: var(--tracking-wide);        // production desktop value
 	text-transform: uppercase;
 	text-align: center;
-	margin-top: 1.875rem;
-	margin-bottom: var(--space-xl);
+	margin-top: space(8);
+	margin-bottom: space(16);
 
 	&::before,
 	&::after {
 		content: "";
 		flex: 1;
 		height: 0.0625rem;
-		background: var(--color-black);
+		background: palette(ink);
 	}
 
 	&::before {
-		margin-right: 1.25rem;
+		margin-right: space(5);
 	}
 
 	&::after {
-		margin-left: 1.25rem;
+		margin-left: space(5);
 	}
 
 	@media (max-width: $bp-mobile) {
-		font-size: 1.75rem;     // 1.75rem — matches production (2.8rem @ 62.5% root)
-		letter-spacing: 0.06875rem;  // production mobile value
+
+		@include type(h2, $compact: true);
 
 		&::before,
 		&::after {

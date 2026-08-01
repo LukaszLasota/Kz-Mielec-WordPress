@@ -38,93 +38,25 @@
 @mixin hamburger-line {
 	width: 100%;
 	height: 0.1875rem;
-	background-color: #000;
+	background-color: palette(ink);
 	position: absolute;
 }
 
-@mixin gradient {
-	text-transform: uppercase;
-	background: linear-gradient(to right, #000 0%, #333 100%);
-	-webkit-text-fill-color: transparent;
-	-webkit-background-clip: text;
-	font-weight: 400;
-}
-
-@mixin content-typography {
-
-	h1,
-	h2,
-	h3 {
-		padding: 1.25rem 0 1.25rem;
-
-		@include gradient;
-		font-size: 2rem;
-		letter-spacing: 0.125rem;
-		width: 100%;
-
-		@media (max-width: $bp-tablet) {
-			font-size: 1.6rem;
-			padding: 3.125rem 0;
-		}
-	}
-
-	h3 {
-		font-size: 1.6rem;
-		padding: 1.5625rem 0;
-		margin: 0.3125rem 0 0.9375rem;
-	}
-
-	p,
-	a,
-	p a {
-		font-size: 1.2rem;
-		padding: 0.125rem 0;
-		margin-top: 0;
-		margin-bottom: 0.3rem;
-		font-weight: 400;
-		line-height: 1.5;
-		color: #212529;
-
-		@media (max-width: $bp-small) {
-			text-align: left;
-		}
-	}
-
-	p {
-		width: 100%;
-		text-align: justify;
-	}
-
-	// stylelint-disable-next-line no-descending-specificity -- the state rule
-	// above is nested with its block on purpose. Reordering to satisfy the rule
-	// would move a lower-specificity selector later in the cascade and change
-	// which declaration wins.
-	a {
-		color: #007bff;
-	}
-
-	ul {
-		font-size: 1.2rem;
-		text-decoration: none;
-		padding-left: 0;
-		padding-bottom: 2.5rem;
-		width: 100%;
-
-		li {
-			padding: 0.3125rem;
-			margin-left: 1.25rem;
-			list-style-type: none;
-		}
-	}
-}
+// `content-typography` used to live here as a copy of the theme's mixin, and
+// the copy had drifted: h1-h3 at 2rem against the theme's 1.5rem, p at 1.2rem
+// against 1.25rem, different margins. Nothing in this plugin included it, so
+// the divergence was invisible and would have surfaced the first time a block
+// reached for it. Content typography belongs to the theme; blocks style their
+// own markup and take sizes from the shared scale in `type.scss`. The
+// `gradient` mixin went with it — it had no other caller.
 
 @mixin gradient-text(
-	$font-size: 2rem,
-	$line-height: 1.4,
+	$font-size: fs(heading),
+	$line-height: lh(heading),
 	$font-weight: 400,
 	$text-transform: uppercase,
 	$text-align: center,
-	$letter-spacing: 0.125rem,
+	$letter-spacing: tracking(wide),
 	$gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
 ) {
 	font-size: $font-size;

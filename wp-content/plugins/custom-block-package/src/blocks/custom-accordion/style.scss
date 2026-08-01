@@ -1,6 +1,8 @@
+@use "../../scss/abstracts/tokens" as *;
+
 
 .wp-block-custom-block-package-custom-accordion {
-	padding: 3.125rem 0 1.25rem;
-	max-width: var(--wp--custom--content-width-desktop, 75rem);
+	padding: space(12) 0 space(5);
+	max-width: var(--content-max-width, 75rem); // fallback: foreign theme
 	margin-inline: auto;
 }

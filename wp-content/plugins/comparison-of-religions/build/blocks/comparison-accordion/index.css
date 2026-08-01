@@ -1,1 +1,1 @@
-.cor-editor-preview .cor-accordion__panel{display:block!important;max-height:none!important;opacity:1!important;overflow:visible!important}.cor-editor-preview .cor-accordion__trigger:after{display:none}.cor-editor-preview .cor-accordion__trigger{cursor:default;pointer-events:none}
+.cor-editor-preview .cor-accordion__panel{max-height:none;opacity:1;overflow:visible}.cor-editor-preview .cor-accordion__panel[hidden]{display:block}.cor-editor-preview .cor-accordion__trigger:after{display:none}.cor-editor-preview .cor-accordion__trigger{cursor:default;pointer-events:none}

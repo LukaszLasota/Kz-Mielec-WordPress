@@ -14,18 +14,19 @@
 // real compile-time values, not custom properties.
 
 @forward "tokens";
+@use "design" as *;
 
 // Colours ---------------------------------------------------------------------
 // The old palette defined $color-black / $color-link / $color-green /
 // $color-main as four separate names for the same black. They are kept as
 // aliases (call sites still read well) but now share one definition.
-$color-black: var(--color-black);
-$color-main: var(--color-black);
-$color-link: var(--color-black);
-$color-green: var(--color-black);
-$body-color: var(--color-white);
+$color-black: palette(ink);
+$color-main: palette(ink);
+$color-link: palette(ink);
+$color-green: palette(ink);
+$body-color: palette(paper);
 
-$color-accessible-blue: var(--color-link-accessible);
+$color-accessible-blue: palette(link-accessible);
 
 // Layout ----------------------------------------------------------------------
 $max-width: var(--content-max-width);

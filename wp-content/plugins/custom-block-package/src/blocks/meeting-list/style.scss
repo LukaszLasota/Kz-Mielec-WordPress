@@ -6,14 +6,14 @@
 	h2 {
 
 		@include gradient-text();
-		padding: 5.9375rem 0.625rem;
+		padding: space(24) space(3);
 
 		@media (max-width: $bp-small) {
-			padding: 4.375rem 0.625rem;
+			padding: space(16) space(3);
 		}
 
 		@media (max-width: $bp-laptop) {
-			padding: 5rem 0.625rem;
+			padding: space(20) space(3);
 		}
 	}
 }
@@ -23,8 +23,9 @@
 	grid-template-columns: repeat(4, 1fr);
 	gap: 0;
 	width: 100%;
-	font-size: 1.1rem;
-	line-height: 1.5;
+
+	@include type(copy);
+
 
 	&__card {
 		perspective: 62.5rem;
@@ -38,7 +39,7 @@
 		z-index: 0; // Create stacking context
 
 		&:focus-visible {
-			outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+			outline: 0.1875rem solid var(--wp--preset--color--site-color, palette(ink));
 			outline-offset: -0.1875rem;
 			z-index: 10;
 		}
@@ -61,7 +62,7 @@
 		}
 
 		&:hover {
-			color: #fff;
+			color: palette(paper);
 		}
 
 		> * {
@@ -78,7 +79,7 @@
 		display: grid;
 		grid-template-areas: "front";
 		transform: rotateY(0deg);
-		padding: 1.25rem;
+		padding: space(5);
 		box-sizing: border-box;
 
 		&--flipped {
@@ -104,13 +105,14 @@
 
 		h3 {
 			font-weight: 400;
-			font-size: 1.7rem;
+			font-size: fs(subheading);
+			line-height: lh(snug);
 			text-align: center;
 			word-break: break-word;
 		}
 
 		p {
-			margin: 0.3125rem;
+			margin: space(1);
 			word-break: break-word;
 		}
 

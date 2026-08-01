@@ -1,48 +1,116 @@
 @use "variables" as *;
+@use "type" as *;
 
 @mixin gradient {
 	text-transform: uppercase;
-	background: linear-gradient(to right, var(--color-black) 0%, var(--color-gray-dark) 100%);
+	background: linear-gradient(to right, palette(ink) 0%, palette(gray-dark) 100%);
 	-webkit-text-fill-color: transparent;
 	-webkit-background-clip: text;
 	font-weight: var(--fw-regular);
 }
 
+// The project's one content-width standard.
+// A container takes the full column (--content-max-width) so a wide block — a
+// comparison table, an accordion, a gallery — can use all of it. The prose
+// inside is pulled back to --content-width-narrow instead. Before this, four
+// templates each solved it their own way, three of them by constraining the
+// container, which squeezed every wide block while leaving the margins empty.
+// Direct children only: a heading nested inside a block belongs to that block's
+// layout, not to the reading measure.
+@mixin content-measure {
+
+	> :is(p, ul, ol, h1, h2, h3, h4, h5, h6, blockquote) {
+		max-width: var(--content-width-narrow);
+		margin-inline: auto;
+	}
+}
+
+// Typography for editor-authored content: the one place that decides what a
+// heading and a paragraph look like inside a page, post or hero. Every heading
+// level is declared, so an author who reaches for h5 gets a designed size
+// instead of a browser default.
+// The gradient uppercase treatment stops at h3 on purpose — it is the design's
+// display voice, and at h4 and below the letterforms are too small for a
+// gradient fill to read as anything but grey.
 @mixin content-typography {
 
 	h1,
 	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		width: 100%;
+		margin-top: space(6);
+		padding-block: space(2); // vertical only — don't zero out content padding-inline
+	}
+
+	h1,
+	h2,
 	h3 {
-		padding-block: var(--space-2xs);      // vertical only — don't zero out content padding-inline
-		margin-top: var(--space-md);
 
 		@include gradient;
-		font-size: var(--fs-title);
-		letter-spacing: var(--tracking-wide);
-		width: 100%;
+	}
+
+	h1 {
+
+		@include type(h1);
 
 		@media (max-width: $bp-tablet) {
-			font-size: var(--fs-body);
-			padding-block: var(--space-2xs);
+
+			@include type(h1, $compact: true);
+		}
+	}
+
+	h2 {
+
+		@include type(h2);
+
+		@media (max-width: $bp-tablet) {
+
+			@include type(h2, $compact: true);
 		}
 	}
 
 	h3 {
-		font-size: var(--fs-body);
-		padding-block: 0.4rem;
-		margin: 1.25rem 0 var(--space-2xs);
+
+		@include type(h3);
+
+		margin: space(5) 0 space(2);
+		padding-block: space(2);
+
+		@media (max-width: $bp-tablet) {
+
+			@include type(h3, $compact: true);
+		}
+	}
+
+	h4 {
+
+		@include type(h4);
+	}
+
+	h5 {
+
+		@include type(h5);
+	}
+
+	h6 {
+
+		@include type(h6);
 	}
 
 	p,
 	a,
 	p a {
-		font-size: var(--fs-body, 1.25rem);
-		padding: 0.125rem 0;
+
+		@include type(body);
+
+		padding: space(1) 0;
 		margin-top: 0;
-		margin-bottom: 0.6rem;
+		margin-bottom: space(3);
 		font-weight: var(--fw-regular);
-		line-height: var(--lh-body);
-		color: #212529;
+		color: palette(text);
 
 		@media (max-width: $bp-mobile) {
 			text-align: left;
@@ -70,16 +138,17 @@
 
 	ul,
 	ol {
-		font-size: var(--fs-body, 1.25rem);
+
+		@include type(body);
+
 		text-decoration: none;
-		padding-left: var(--space-md);
-		padding-bottom: var(--space-sm);
+		padding-left: space(6);
+		padding-bottom: space(4);
 		width: 100%;
 
 		li {
-			padding: 0.2rem 0;
+			padding: space(1) 0;
 			margin-left: 0;
-			line-height: var(--lh-body);
 		}
 	}
 
@@ -90,32 +159,6 @@
 	ol li {
 		list-style-type: decimal;
 	}
-}
 
-@mixin gradient-text(
-	$font-size: 1.25rem,
-	$line-height: 1.4,
-	$font-weight: 400,
-	$text-transform: uppercase,
-	$text-align: center,
-	$letter-spacing: 0.125rem,
-	$gradient: var(--wp--preset--gradient--gradient-to-left-bottom)
-) {
-	font-size: $font-size;
-	line-height: $line-height;
-	font-weight: $font-weight;
-	text-transform: $text-transform;
-	width: 100%;
-	text-align: $text-align;
-	letter-spacing: $letter-spacing;
-
-	// Gradient background
-	background: $gradient;
-	background-image: $gradient;
-
-	-webkit-text-fill-color: transparent;
-
-	// Przycinanie gradientu do tekstu
-	-webkit-background-clip: text;
-	background-clip: text;
+	@include content-measure;
 }

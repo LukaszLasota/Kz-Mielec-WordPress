@@ -1,5 +1,9 @@
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
+// Vendored file, locally amended: the line heights below read the project
+// type scale instead of normalize's own 1.15.
+@use "../abstracts/variables" as *;
+
 /* Document
 	 ========================================================================== */
 
@@ -9,7 +13,7 @@
  */
 
 html {
-	line-height: var(--lh-heading);
+	line-height: lh(heading);
 	-webkit-text-size-adjust: 100%;
 	scroll-behavior: smooth;
 }
@@ -171,7 +175,7 @@ select,
 textarea {
 	font-family: inherit;
 	font-size: 100%;
-	line-height: var(--lh-heading);
+	line-height: lh(heading);
 	margin: 0;
 }
 

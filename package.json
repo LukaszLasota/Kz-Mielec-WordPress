@@ -1,10 +1,12 @@
 {
 	"name": "kzmielec-site",
 	"private": true,
-	"description": "Repo-level tooling for the kzmielec.pl WordPress site. The theme and each plugin build independently; this package only carries the shared JS/TS linter.",
+	"description": "Repo-level tooling for the kzmielec.pl WordPress site. The theme and each plugin build independently; this package carries the shared JS/TS linter and the cross-package checks.",
 	"scripts": {
-		"lint:js": "biome check wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
-		"lint:js:fix": "biome check --write wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src"
+		"lint:js": "biome check scripts wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
+		"lint:js:fix": "biome check --write scripts wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
+		"check:type-scale": "node scripts/check-type-scale.mjs",
+		"check:mirrors": "node scripts/check-mirrors.mjs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.6"

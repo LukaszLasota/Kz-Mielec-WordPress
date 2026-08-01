@@ -7,6 +7,7 @@
 	},
 	"files": {
 		"includes": [
+			"scripts/**",
 			"wp-content/themes/kzmielec/src/**",
 			"wp-content/plugins/custom-block-package/src/**",
 			"wp-content/plugins/comparison-of-religions/src/**",

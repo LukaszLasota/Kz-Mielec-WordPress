@@ -1,7 +1,7 @@
 // Statut page content
 @use "../../scss/abstracts/tokens" as *;
 
-$light: #fff;
+$light: palette(paper);
 $body-color: #fffdf8;
 $contact-color: #ddc6b4;
 
@@ -14,14 +14,14 @@ $contact-color: #ddc6b4;
 }
 
 .statut-page-head {
-	padding: 6.25rem 0 12.5rem;
+	padding: space(24) 0 12.5rem;
 	display: flex;
 	justify-content: center;
-	margin-bottom: 3.125rem;
+	margin-bottom: space(12);
 	background-image: linear-gradient(to bottom, $body-color 0%, $contact-color 0%, $contact-color 30%, $body-color 30%);
 
 	embed {
-		border: 0.125rem solid #000;
+		border: 0.125rem solid palette(ink);
 	}
 }
 
@@ -31,25 +31,26 @@ $contact-color: #ddc6b4;
 	position: relative;
 
 	&__btn {
-		padding: 3.75rem 0 2.5rem;
+		padding: space(16) 0 space(10);
 	}
 
 	span {
-		font-size: 1.6rem;
+		font-size: fs(title);
+		line-height: lh(snug);
 	}
 
 	.more {
 		font-weight: 700;
-		padding: 1.25rem 2.5rem;
+		padding: space(5) space(10);
 	}
 }
 
 #the-canvas {
-	border: 0.0625rem solid #000;
+	border: 0.0625rem solid palette(ink);
 	direction: ltr;
 	width: 100%;
 	margin: 0 auto;
-	margin-bottom: 4.375rem;
+	margin-bottom: space(16);
 }
 
 #prev,
@@ -96,7 +97,7 @@ $contact-color: #ddc6b4;
 		width: 90%;
 
 		span {
-			font-size: 1.6rem;
+			font-size: fs(title);
 		}
 	}
 
@@ -111,9 +112,9 @@ $contact-color: #ddc6b4;
 	.more {
 
 		a {
-			padding: 0.9375rem 2.8125rem;
-			font-size: 1.2rem;
-			letter-spacing: 0.125rem;
+			padding: space(4) space(12);
+			font-size: fs(body-sm);
+			letter-spacing: tracking(wide);
 		}
 	}
 }
@@ -123,9 +124,9 @@ $contact-color: #ddc6b4;
 	.more {
 
 		a {
-			padding: 0.9375rem 3.4375rem;
-			font-size: 1.7rem;
-			letter-spacing: 0.125rem;
+			padding: space(4) space(12);
+			font-size: fs(subheading);
+			letter-spacing: tracking(wide);
 		}
 	}
 }
@@ -133,8 +134,8 @@ $contact-color: #ddc6b4;
 @media (max-width: $bp-laptop) {
 
 	.more {
-		padding: 0.9375rem 3.125rem;
-		font-size: 1.5rem;
+		padding: space(4) space(12);
+		font-size: fs(title);
 	}
 }
 

@@ -3,7 +3,7 @@
 // =============================================================================
 
 // These mirror the theme's canonical scale in
-// `wp-content/themes/kzmielec/src/sass/abstracts/_tokens.scss`. They are
+// `wp-content/themes/kzmielec/src/scss/abstracts/_tokens.scss`. They are
 // duplicated rather than imported on purpose: the plugin has its own webpack
 // build and must keep working with any theme, so it cannot reach into theme
 // files. Keep the shared names below in sync with the theme — if a value
@@ -14,6 +14,11 @@
 
 // Use `$bp-<name> + 1px` for the complementary min-width query, so a max-width
 // and a min-width rule never both match on the boundary pixel.
+
+// Re-exported so a file that already uses the tokens module can call
+// fs() / lh() / tracking() without a second import.
+@forward "design";
+@forward "type";
 
 // -----------------------------------------------------------------------------
 // Shared with the theme — same names, same values

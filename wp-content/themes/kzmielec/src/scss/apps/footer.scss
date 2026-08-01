@@ -4,7 +4,7 @@
 // ===========================================
 
 .footer {
-	background: #454040; // zblizone do starego #4f4b4b, kontrast z var(--color-white) = 5.06:1 (AA pass)
+	background: #454040; // zblizone do starego #4f4b4b, kontrast z palette(paper) = 5.06:1 (AA pass)
 	width: 100%;
 	padding: 0;
 	margin: 0;
@@ -17,7 +17,7 @@
 		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: center;
-		padding: var(--space-3xs) var(--space-xs);
+		padding: space(1) space(3);
 
 		@media (max-width: $bp-tablet) {
 			justify-content: center;
@@ -25,9 +25,9 @@
 	}
 
 	.footer__copyright {
-		padding: var(--space-3xs);
-		color: var(--color-white);
-		font-size: var(--fs-base);
+		padding: space(1);
+		color: palette(paper);
+		font-size: fs(base);
 
 		p {
 			margin: 0;
@@ -35,7 +35,7 @@
 		}
 
 		a {
-			color: var(--color-white);
+			color: palette(paper);
 		}
 	}
 
@@ -49,7 +49,7 @@
 			cursor: pointer;
 
 			&:focus-visible {
-				outline: 0.125rem solid var(--color-white);
+				outline: 0.125rem solid palette(paper);
 				outline-offset: 0.125rem;
 			}
 		}

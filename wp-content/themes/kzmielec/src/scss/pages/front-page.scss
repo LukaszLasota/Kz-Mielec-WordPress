@@ -1,3 +1,5 @@
+@use "../abstracts/variables" as *;
+
 // Front page layout (front-page.php → main.site-main.is-layout-constrained).
 
 // Scoped to .home because is-layout-constrained is shared by other templates
@@ -11,12 +13,13 @@
 // centers.
 
 .home .site-main.is-layout-constrained > *:not(:first-child) {
-	padding-inline: var(--space-sm);
+	padding-inline: space(4);
 }
 
-// Contact info under "Znajdź nas". Local paragraphs default to 1rem; production
-// renders these at 1.1875rem (.find__paragraph). Match it.
+// Contact info under "Znajdź nas" — a paragraph, so it reads as one:
+// core would otherwise leave these at 1rem because they sit outside the
+// content container that `content-typography` covers.
 .home .site-main p.has-text-align-center {
-	font-size: var(--fs-body, 1.25rem); // 1.25rem
-	line-height: var(--lh-tight);
+
+	@include type(body);
 }

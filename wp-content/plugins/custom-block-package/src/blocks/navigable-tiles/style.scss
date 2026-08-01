@@ -18,11 +18,11 @@
 	--cbp-tile-margin-block: 0.9375rem;
 	--cbp-tile-padding-inline: 1.875rem;
 	--cbp-image-ratio: 1;          // 1 = square (PNGs are 400×400). Change for other crops.
-	--cbp-overlay-bg: #000;
+	--cbp-overlay-bg: #{palette(ink)}; // interpolated: Sass skips custom property values
 	--cbp-overlay-opacity: 0.6;
 	--cbp-icon-width: 80%;         // % of tile → scales automatically on tablet/mobile
-	--cbp-title-size: var(--fs-title, 1.5rem);   // 1.5rem — shared type scale
-	--cbp-title-leading: 1.4;
+	--cbp-title-size: #{fs(title)}; // interpolated: Sass does not parse custom property values
+	--cbp-title-leading: #{lh(tight)};
 	--cbp-transition: 0.5s linear;
 
 	// Block width — fills its container; the page template controls the actual
@@ -33,7 +33,7 @@
 	// ── Heading ───────────────────────────────────────────
 	.navigable-tiles__heading {
 		text-align: center;
-		margin-block: 0 2rem;
+		margin-block: 0 space(8);
 	}
 
 	// ── Grid — flex container, tiles are the flex items ───
@@ -111,7 +111,7 @@
 		position: relative;
 		inline-size: 100%;
 		aspect-ratio: var(--cbp-image-ratio);
-		border-radius: 50%;
+		border-radius: radius(circle);
 		overflow: hidden;
 	}
 
@@ -132,7 +132,7 @@
 		inset: 0;
 		background-color: var(--cbp-overlay-bg);
 		opacity: var(--cbp-overlay-opacity);
-		border-radius: 50%;
+		border-radius: radius(circle);
 		z-index: 2;
 		pointer-events: none;
 	}
@@ -160,12 +160,12 @@
 		font-size: var(--cbp-title-size);
 		line-height: var(--cbp-title-leading);
 		font-weight: 400;
-		margin: 0.3125rem; // 0.3125rem
+		margin: space(1); // 0.3125rem
 	}
 
 	// Extra breathing room between the circular image and the title.
 	.navigable-tiles__title {
-		margin-block-start: 1rem;
+		margin-block-start: space(4);
 	}
 
 	.navigable-tiles__title .navigable-tiles__link {
@@ -216,7 +216,7 @@
 	@media (max-width: $bp-mobile) {
 		// More breathing room around the circle when the tile is full-width.
 		.navigable-tiles__item {
-			padding-inline: 1.5rem;
+			padding-inline: space(6);
 		}
 	}
 

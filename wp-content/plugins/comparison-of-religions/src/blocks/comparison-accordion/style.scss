@@ -21,8 +21,8 @@
 // ── Design tokens — named so repeated values live in one place ──
 @use "../../scss/abstracts/tokens" as *;
 
-$cor-line: #000; // borders, dividers, body text
-$cor-bg: #fff;
+$cor-line: palette(ink); // borders, dividers, body text
+$cor-bg: palette(paper);
 $cor-border: 0.125rem solid $cor-line;
 
 // Chevron as an inline SVG, so the accordion needs no image request.
@@ -34,11 +34,11 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 /* stylelint-enable function-url-quotes, max-line-length */
 
 .cor-accordion {
-	max-width: 68.75rem; // 68.75rem — matches the belief/archive content width.
-	margin: 2rem auto;
-
-	// Reset Gutenberg block gap between elements.
-	gap: 0 !important;
+	// The full content column, not the reading measure: this is a three-column
+	// grid, and custom-accordion in the sibling plugin declares the same width.
+	// Fallback for a theme that does not define the token.
+	max-width: var(--content-max-width, 75rem);
+	margin: space(8) auto;
 
 	> * {
 		margin-top: 0;
@@ -66,27 +66,34 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 // ── Heading + trigger button ──
 // The <h3> wraps a <button> (accessible accordion pattern, WCAG).
 
-.cor-accordion__heading {
-	margin: 0 !important;
-	padding: 0 !important;
-	font-size: 1.25rem; // matches accordion-item (production .collapse__head ≈ 1.3125rem)
+// Scoped through the block wrapper on purpose. The theme styles editor
+// content with `.page__content-container h3` — specificity (0,1,1) — which
+// beats a bare `.cor-accordion__heading` (0,1,0); that is what the
+// `!important` on every one of these declarations used to be for. Adding
+// the wrapper class takes this rule to (0,2,0), so it wins on specificity
+// and the resets can be plain declarations.
+.wp-block-comparison-of-religions-comparison-accordion .cor-accordion__heading {
+	margin: 0;
+	padding: 0;
+
+	@include type(subtitle); // same role as accordion-item in custom-block-package
+
 	font-weight: 400;
 	text-transform: uppercase; // production .collapse__head: uppercase
-	letter-spacing: 0.125rem;
 	text-align: center;
-	line-height: 1.3;
 
 	// Reset gradient from the theme's global h3 styles. `background` comes first
 	// because the shorthand resets background-clip; putting it after would undo
 	// the two clip resets below it.
-	background: none !important;
-	-webkit-text-fill-color: initial !important;
-	-webkit-background-clip: initial !important;
-	background-clip: initial !important;
+	background: none;
+	-webkit-text-fill-color: initial;
+	-webkit-background-clip: initial;
+	background-clip: initial;
 	color: inherit;
 
 	@media (max-width: $bp-small) {
-		font-size: 1.1875rem; // 1.1875rem — production .comparison-h4
+
+		@include type(subtitle, $compact: true);
 	}
 }
 
@@ -96,7 +103,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	align-items: center;
 	width: 100%;
 	cursor: pointer;
-	padding: 1rem 3rem 1rem 1.5rem;
+	padding: space(4) space(12) space(4) space(6);
 	background: none;
 	border: none;
 	text-align: center;
@@ -108,7 +115,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	letter-spacing: inherit;
 	text-transform: inherit;
 	line-height: inherit;
-	color: var(--wp--preset--color--site-color, #212529);
+	color: var(--wp--preset--color--site-color, palette(text));
 
 	// Reset gradient from the theme's global heading styles.
 	-webkit-text-fill-color: initial;
@@ -116,7 +123,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	background-clip: initial;
 
 	@media (max-width: $bp-small) {
-		padding: 0.8rem 2.5rem 0.8rem 0.8rem;
+		padding: space(3) space(10) space(3) space(3);
 	}
 
 	// Chevron (black — matches accordion-item).
@@ -150,7 +157,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 
 	// WCAG 2.4.7: visible focus indicator for keyboard users.
 	&:focus-visible {
-		outline: 0.1875rem solid var(--wp--preset--color--site-color, #000);
+		outline: 0.1875rem solid var(--wp--preset--color--site-color, palette(ink));
 		outline-offset: -0.1875rem;
 	}
 }
@@ -174,7 +181,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 }
 
 .cor-accordion__panel-inner {
-	padding: 1.5rem 0 0.5rem; // breathing room above the table
+	padding: space(6) 0 space(2); // breathing room above the table
 }
 
 // ── Table header row ──
@@ -190,7 +197,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	grid-template-columns: minmax(7.5rem, 1fr) repeat(var(--cor-church-count, 2), 2fr);
 	text-align: center;
 	font-weight: 700; // production .comparison-h4: bold, normal case (no uppercase)
-	font-size: 1.1875rem; // 1.1875rem — production .comparison-h4
+	font-size: fs(body-sm); // production .comparison-h4, snapped to the scale
 	color: $cor-line; // production: header row has no border
 
 	@media (max-width: $bp-tablet) {
@@ -220,7 +227,7 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 
 	@media (max-width: $bp-tablet) {
 		display: block;
-		padding: 0 1.2rem;
+		padding: 0 space(5);
 	}
 }
 
@@ -252,29 +259,30 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		font-style: italic; // production .comparison-h4-display: italic
 		font-weight: 700; // mobile: bold, but smaller than the topic heading
 		color: $cor-line;
-		font-size: 1.05rem;
-		margin: 0.8rem 0 0.2rem;
+		font-size: fs(base);
+		margin: space(3) 0 space(1);
 	}
 }
 
 // ── Table cells ──
 
 .cor-table__cell {
-	padding: 0.7rem 1rem;
-	line-height: 1.5;
-	font-size: 1.0625rem; // 1.0625rem — production .comparison-paragraph
+	padding: space(3) space(4);
+
+	@include type(copy); // production .comparison-paragraph
+
 	color: $cor-line;
 
 	@media (max-width: $bp-small) {
-		padding: 0.4rem 0.8rem;
-		font-size: 1rem;
+		padding: space(2) space(3);
+		font-size: fs(base);
 	}
 
 	// Topic cell — always column 1, spans multiple rows (inline grid-row).
 	&--topic {
 		grid-column: 1;
 		font-weight: 700;
-		font-size: 1.0625rem; // 1.0625rem — a touch smaller (matches cell text), still bold
+		font-size: fs(body-sm); // same step as the cell text, still bold
 		display: flex;
 		justify-content: center; // horizontally centred
 		align-items: flex-start; // top-aligned: topic sits at the start of its section
@@ -283,9 +291,9 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		@media (max-width: $bp-tablet) {
 			display: block;
 			text-align: left;
-			padding: 1rem 0 0.5rem;
-			font-size: 1.35rem; // mobile: topic heading a touch bigger than church label
-			margin-bottom: 0.3rem;
+			padding: space(4) 0 space(2);
+			font-size: fs(body); // mobile: topic heading a step above the church label
+			margin-bottom: space(1);
 		}
 	}
 
@@ -305,9 +313,9 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 // Higher specificity (0-2-1) to override the theme's .page-hero > section p
 // centering that would otherwise center-align the cell text.
 .cor-accordion .cor-table__cell p {
-	margin: 0 0 0.5rem;
+	margin: 0 0 space(2);
 	text-align: left;
-	line-height: 1.5;
+	line-height: lh(body);
 	color: $cor-line;
 
 	&:last-child {

@@ -4,26 +4,29 @@
 
 	&__header {
 		width: 100%;
-		max-width: var(--wp--custom--content-width-desktop);
+		max-width: var(--content-max-width);
 		margin-inline: auto;
 	}
 
 	&__title {
-		padding: 1.25rem 1.25rem 1.875rem;
+		padding: space(5) space(5) space(8);
 		margin-bottom: 0;
-		letter-spacing: var(--tracking-wide);
+
+		@include type(h1);
+
 		text-transform: uppercase;
 		background: var(--wp--preset--gradient--gradient-90-deg);
 		-webkit-text-fill-color: transparent;
 		-webkit-background-clip: text;
 		font-weight: var(--fw-regular);
-		font-size: var(--fs-body);
 
 		width: 100%;
 
 		@media (max-width: $bp-tablet) {
-			font-size: var(--fs-base);
-			padding: 3.125rem 0;
+
+			@include type(h1, $compact: true);
+
+			padding: space(12) 0;
 		}
 
 	}

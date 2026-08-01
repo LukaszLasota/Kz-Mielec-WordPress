@@ -91,19 +91,145 @@ with any theme, so it cannot reach into theme sources. Keep them in sync.
 All lengths are in `rem` at a 16px root. The only `px` left is `$bp-* + 1px`
 arithmetic in media queries, which needs a comparable compile-time unit.
 
+### Type scale
+
+`src/scss/abstracts/_type.scss` holds every font size, leading and tracking in
+the project — ten whole-pixel steps at a 16px root (40, 32, 28, 24, 20, 18, 16,
+14, 12, 10) plus four leadings and two trackings. `_tokens.scss` emits them as
+`--fs-*`, `--lh-*` and `--tracking-*`, so the numbers exist in exactly one
+place.
+
+Call sites do not write `var(--fs-body)` by hand. They read one step through
+`fs()` / `lh()` / `tracking()`, which add the fallback a plugin needs under a
+foreign theme, or take a whole **role** — size, leading and tracking together —
+with `@include type(h2)`. A role means no rule can pick a size and leave the
+leading to chance; the functions reject a step that does not exist, so a typo
+fails the build.
+
+The roles are `h1`–`h6`, `subtitle` (panel and accordion headings), `body`,
+`copy`, `meta` and `label`. `content-typography` declares all six heading levels,
+and `editor.scss` applies the same roles inside the block editor, so what an
+author sees is the front end's scale rather than an approximation. The gradient
+uppercase treatment stops at h3 — below that the letterforms are too small for a
+gradient fill to read as anything but grey.
+
+On narrow screens a heading takes `@include type(h2, $compact: true)`: exactly
+one step down, with the leading and tracking of its own level, so it keeps its
+voice and only its size compresses. Only the display levels have a compact
+variant — h4–h6 are already 20px and below, where stepping down would trade
+hierarchy for legibility. Asking for a compact variant that does not exist is an
+error, not a silent fall-through, because a media query that repeats the size it
+overrides is a dead rule.
+
+Prose has three roles rather than one, because a paragraph in a table cell is not
+running text: `body` (20px) for content paragraphs, `copy` (18px) for secondary
+copy in cards and tables, `meta` (14px) for excerpts, feed text and dates. All
+three leave tracking inherited.
+
+Component rules that are not headings take the leading from the scale but only
+carry `tracking(wide)` when the component is uppercase; 2px between lowercase
+letterforms reads as a spacing bug rather than a treatment.
+
+Every role has at least one caller. A role with none is a guess about future
+markup, and the scale is meant to describe what the site does.
+
+The scale is duplicated in three places for reasons that cannot be designed
+away: `_type.scss` is mirrored verbatim into both plugins (a plugin cannot import
+theme sources), and the font sizes are mirrored again in `theme.json`, which is
+JSON and cannot import SCSS. That mirror is what puts these steps — and, with
+`defaultFontSizes` and `customFontSize` off, only these steps — in the editor's
+size picker. `npm run check:mirrors` fails if any of the three drift.
+
+### Spacing, radii, colours
+
+`src/scss/abstracts/_design.scss` holds them, on the same contract as the type
+scale: numbers once, `--space-*` / `--radius-*` / `--color-*` emitted from the
+maps, call sites read `space()` / `radius()` / `palette()`.
+
+Spacing is a **4px grid where the name is the multiple** — `space(6)` is 24px.
+The previous scale was nine irregular steps (1.6 / 5 / 8 / 10 / 16 / 24 / 40 / 60
+/ 80px) that two thirds of call sites bypassed across 43 different values; 58% of
+those were already multiples of 4, so the grid was the shape the layout had
+anyway. Numeric names beat t-shirt sizes at fourteen steps: nobody has to
+remember whether `md` outranks `lg`, and the ladder extends without renaming.
+
+Colours are named by role — `ink` and `paper`, not black and white. A role
+survives a repaint, and stylelint's `color-named` rule reads a bare `black` as a
+CSS named colour even inside a function call; muting a rule to fit our naming
+would be the wrong way round.
+
+`palette()` rather than `color()` because CSS has a `color()` function of its own
+(Color 5 colour spaces) and Sass resolves that name to it, so a user-defined
+`color()` is never called. This is the kind of collision that compiles silently —
+`npm run check:type-scale` is what catches it.
+
+Two values stay literal on purpose: the 1.6px hairline under pattern paragraphs
+(the smallest grid step is 4px, and tripling a hairline is a visible change) and
+one 200px offset whose nearest step is 20% away. Both carry a comment saying so.
+
+### Content width
+
+One standard, one mixin — `content-measure` in `abstracts/mixins.scss`:
+
+- the **container** takes the full content column (1200px), so a wide block — a
+  comparison table, an accordion, a gallery — can use all of it;
+- the **prose inside** is pulled back to `--content-width-narrow` (1100px) with
+  `margin-inline: auto`.
+
+Direct children only: a heading nested inside a block belongs to that block's
+layout, not to the reading measure.
+
+It applies in all five content contexts — `.page__content-container`,
+`.single-post__content-container`, `.page-hero > section`,
+`.page-belief__content` and `.archive-meetings__content` — three of which used to
+solve it the other way round, by constraining the container. That squeezed every
+wide block on the page to the reading measure while leaving the margins empty:
+the comparison table and the three `custom-accordion` pages rendered at 1068px
+inside a 1200px column, even though `custom-accordion` asks for 1200px itself.
+
+Constraining the container is the tempting fix because it is one declaration, but
+it puts the limit on the wrong element. A block child cannot exceed its parent's
+content box, so the only ways back out are negative margins or a viewport-keyed
+media query — both of which this project tried and then deleted.
+
 ## Quality gates
 
-Four tools, one per language, all green.
+Four linters, one per language, all green.
 
 | tool | scope | command |
 |---|---|---|
 | Biome | JS / TS / JSON | `npm run lint:js` (repo root, covers all packages) |
 | stylelint | SCSS | `npm run lint:css` (per package) |
 | PHPCS | WordPress coding standard | `composer phpcs` (per package) |
-| PHPStan | PHP static analysis | `composer phpstan` (per package) |
+| PHPStan | PHP static analysis, **level 8** in all four packages | `composer phpstan` (per package) |
 
 `composer check` runs PHPStan and PHPCS together. `npx tsc --noEmit` type-checks
 the theme.
+
+The plugins ran at level 6 for a while. Level 7 turned out to report exactly the
+same errors as level 8 — seven in total, every one of them a WordPress function
+that can return `false` or an `array` being treated as a `string` — so there was
+nothing between the two levels and the whole project sits at 8.
+
+`!important` appears 15 times, and every one is a fight with a stylesheet this
+project does not own: the WCAG focus indicator (which must not be overridable),
+a third-party feed plugin's button, `@wordpress/components` inside the editor,
+and the scroll-arrow block's margins. Core prints its constrained-layout margin
+at specificity (0,1,0) — the `:where()` in that selector counts for nothing —
+which ties with a block's own class, and stylesheet print order is not stable
+between pages, so `!important` is what removes the coin flip. Everywhere else the
+fix was specificity: matching one more class, or pulling an attribute into the
+selector.
+
+Two project-specific checks cover what no linter can see:
+
+| check | what it catches |
+|---|---|
+| `npm run check:type-scale` | an `fs()` / `lh()` / `tracking()` call that survived into built CSS — Sass treats an unknown function as plain CSS and passes it through, so a missing import or a non-interpolated custom property (`--x: fs(body)`) compiles cleanly and ships broken |
+| `npm run check:mirrors` | drift between the three copies of the type scale, and between the shared breakpoint names |
+
+Both live in `scripts/` and read only build output, so they are cheap enough to
+run after every build.
 
 Biome is configured as a **linter only** — the formatter is off, so it reports
 defects instead of reflowing files. It cannot replace stylelint: Biome does not

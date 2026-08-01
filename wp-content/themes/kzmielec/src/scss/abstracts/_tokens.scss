@@ -21,6 +21,14 @@
 // Values here are deliberately identical to what they replaced — this file
 // centralises them, it does not redesign them.
 
+@use "design";
+@use "type";
+
+// Re-exported so a file that already uses the tokens module can call
+// fs() / lh() / tracking() without a second import.
+@forward "design";
+@forward "type";
+
 // -----------------------------------------------------------------------------
 // Breakpoints (compile-time — media queries)
 // -----------------------------------------------------------------------------
@@ -60,20 +68,9 @@ $bp-desktop: 1400px; // large screens
 	// -------------------------------------------------------------------------
 	// Colours
 	// -------------------------------------------------------------------------
-	--color-black: #000;
-	--color-white: #fff;
-	--color-gray-dark: #333; // gradient end-stop, muted body copy
-	--color-gray-mid: #555; // secondary meta text
-	--color-gray-light: #f0f0f0; // hover fills
-	--color-surface-muted: #f4f4f4; // neutral media background
-
-	// Accessible link/button blue — WCAG 2.1 AA (5.25:1 on white). Used to
-	// override third-party widgets whose default blue fails contrast.
-	--color-link-accessible: #1568d8;
-
-	// WCAG focus pair (GOV.UK-style): yellow field, near-black text.
-	--color-focus-bg: #fd0;
-	--color-focus-text: #0b0c0c;
+	@each $name, $value in design.$palette {
+		--color-#{$name}: #{$value};
+	}
 
 	// -------------------------------------------------------------------------
 	// Typography
@@ -84,57 +81,47 @@ $bp-desktop: 1400px; // large screens
 	// into "georgia". The other two names are quoted for the same reason.
 	--font-serif: "Georgia", "Times New Roman", "Liberation Serif", serif;
 
-	// Font-size scale. --fs-heading/--fs-title/--fs-body are also consumed by
-	// the navigable-tiles block in the custom-block-package plugin — do not
-	// rename them.
-	--fs-heading: 2rem; // 32px — section-line headings
-	--fs-title: 1.5rem; // 24px — tile/item titles
-	--fs-lead: 1.312rem; // 21px — production paragraph size
-	--fs-body: 1.25rem; // 20px — descriptions, contact, day/hour
-	--fs-base: 1rem; // 16px — form fields, plain copy
-	--fs-small: 0.75rem; // 12px — labels, buttons
-	--fs-xs: 0.625rem; // 10px — pagination, badges
+	// The type scale is defined once in `type.scss` and emitted here, so the
+	// numbers exist in exactly one place. Names are load-bearing:
+	// --fs-heading/--fs-title/--fs-body are read by the navigable-tiles block in
+	// the custom-block-package plugin — renaming a key breaks it silently.
+	@each $step, $size in type.$fs {
+		--fs-#{$step}: #{$size};
+	}
+
+	@each $step, $value in type.$lh {
+		--lh-#{$step}: #{$value};
+	}
+
+	@each $step, $value in type.$tracking {
+		--tracking-#{$step}: #{$value};
+	}
 
 	// Weights. The Cinzel variable font declares the 400–900 range in
 	// @font-face; these are the two weights the design actually uses.
 	--fw-regular: 400;
 	--fw-bold: 700;
 
-	// Line heights.
-	--lh-heading: 1.15; // tight — display/headings
-	--lh-tight: 1.4; // condensed copy
-	--lh-body: 1.5; // default body copy
-
-	// Letter spacing for the uppercase serif treatment.
-	--tracking-wide: 0.125rem; // 2px
-
 	// -------------------------------------------------------------------------
 	// Layout
 	// -------------------------------------------------------------------------
-	// Content widths. Desktop uses a fixed max-width (matches theme.json
-	// contentSize: 1200px) so content stays readable on large screens instead
-	// of growing with the viewport. Used as max-width on content containers.
-	--wp--custom--content-width-mobile: 100%;
-	--wp--custom--content-width-tablet: 85%;
-	--wp--custom--content-width-desktop: 1200px;
-	--wp--custom--content-width-large-desktop: 1200px;
-
-	// Alias for the same 1200px container, for styles that read a plain token.
+	// One name for the content column. It had three: theme.json's
+	// `settings.custom.content-width-desktop`, which WordPress turns into
+	// --wp--custom--content-width-desktop; a second declaration of that same
+	// property here; and this token — all 1200px, plus three unused siblings for
+	// mobile, tablet and large-desktop.
+	// The value is mirrored in theme.json as `settings.layout.contentSize`,
+	// because core reads that to build its constrained-layout rules and cannot
+	// read SCSS. `npm run check:mirrors` fails if the two drift.
 	--content-max-width: 1200px;
-	--content-width-narrow: 68.75rem; // 1100px — narrower text measure
+	--content-width-narrow: 68.75rem; // 1100px — the reading measure
 
 	// -------------------------------------------------------------------------
 	// Spacing scale (rem — 16px base, per project convention)
 	// -------------------------------------------------------------------------
-	--space-4xs: 0.1rem; // 1.6px — hairline gap under pattern paragraphs
-	--space-3xs: 0.3125rem; // 5px
-	--space-2xs: 0.5rem; // 8px
-	--space-xs: 0.625rem; // 10px
-	--space-sm: 1rem; // 16px
-	--space-md: 1.5rem; // 24px
-	--space-lg: 2.5rem; // 40px
-	--space-xl: 3.75rem; // 60px
-	--space-2xl: 5rem; // 80px
+	@each $step, $value in design.$space {
+		--space-#{$step}: #{$value};
+	}
 
 	// -------------------------------------------------------------------------
 	// Transitions
@@ -145,9 +132,9 @@ $bp-desktop: 1400px; // large screens
 	// -------------------------------------------------------------------------
 	// Radii
 	// -------------------------------------------------------------------------
-	--radius-sm: 0.3125rem; // 5px — buttons, inputs, pagination
-	--radius-md: 0.5rem; // 8px — cards
-	--radius-circle: 50%;
+	@each $name, $value in design.$radius {
+		--radius-#{$name}: #{$value};
+	}
 
 	// -------------------------------------------------------------------------
 	// Gradients (black → dark grey, the theme's fill-on-hover system)

@@ -1,3 +1,5 @@
+@use "../../scss/abstracts/tokens" as *;
+
 // Editor-only styles for Scroll Arrow block.
 .wp-block-custom-block-package-scroll-arrow {
 	display: flex;
@@ -6,9 +8,9 @@
 	align-items: center;
 	width: 100%;
 	// stylelint-disable-next-line declaration-no-important
-	margin-top: 5rem !important;
+	margin-top: space(20) !important;
 	// stylelint-disable-next-line declaration-no-important
-	margin-bottom: 10rem !important;
+	margin-bottom: space(40) !important;
 
 	.scroll-arrow {
 		display: flex;
@@ -17,7 +19,7 @@
 		width: 3.75rem;
 		height: 3.75rem;
 		border-radius: 100%;
-		background: #000;
+		background: palette(ink);
 
 		figure {
 			margin: 0;
@@ -30,13 +32,5 @@
 			height: auto;
 			display: block;
 		}
-	}
-
-	.scroll-arrow__hint {
-		width: 100%;
-		text-align: center;
-		font-size: 0.8rem;
-		color: #999;
-		margin-top: 0.5rem;
 	}
 }

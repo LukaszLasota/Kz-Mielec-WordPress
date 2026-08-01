@@ -29,7 +29,7 @@
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
-	padding: var(--space-xs) var(--space-xs) 0 var(--space-xs);
+	padding: space(3) space(3) 0 space(3);
 
 	&__link {
 		display: block;
@@ -41,7 +41,7 @@
 	}
 
 	@media (max-width: $bp-desktop) {
-		padding: var(--space-3xs) var(--space-3xs) 0 var(--space-3xs);
+		padding: space(1) space(1) 0 space(1);
 
 		&__image {
 			height: 5.625rem;
@@ -51,7 +51,7 @@
 	@media (max-width: $bp-tablet) {
 		width: 15%;
 		margin: 0;
-		padding: var(--space-3xs);
+		padding: space(1);
 
 		&__image {
 			height: 5rem;
@@ -60,7 +60,7 @@
 
 	@media (max-width: $bp-mobile) {
 		width: 25%;
-		padding: var(--space-3xs) 0 0 0;
+		padding: space(1) 0 0 0;
 
 		&__image {
 			height: 4.0625rem;
@@ -74,22 +74,22 @@
 
 .nav {
 	width: 100%;
-	padding: 0 1.25rem;
+	padding: 0 space(5);
 
 	&::before,
 	&::after {
 		content: "";
 		display: block;
 		margin: 0;
-		padding-top: var(--space-xs);
+		padding-top: space(3);
 	}
 
 	&::before {
-		border-bottom: 0.0625rem solid var(--color-black);
+		border-bottom: 0.0625rem solid palette(ink);
 	}
 
 	&::after {
-		border-top: 0.0625rem solid var(--color-black);
+		border-top: 0.0625rem solid palette(ink);
 	}
 
 	&__ul {
@@ -99,12 +99,12 @@
 		justify-content: space-between;
 		align-items: center;
 		list-style: none;
-		padding: 0 1.25rem;
+		padding: 0 space(5);
 	}
 
 	&__li {
 		width: auto;
-		padding: var(--space-xs);
+		padding: space(3);
 		margin: 0;
 
 		a {
@@ -113,9 +113,9 @@
 			justify-content: center;
 			align-items: center;
 			text-align: center;
-			font-size: 1.125rem;
+			font-size: fs(body-sm);
 			text-transform: uppercase;
-			color: var(--color-black);
+			color: palette(ink);
 			text-decoration: underline;
 		}
 	}
@@ -145,9 +145,9 @@
 
 				a {
 					text-shadow: none;
-					font-size: 1.062rem;
+					font-size: fs(base);
 					width: 100%;
-					padding: 1.125rem 0;
+					padding: space(5) 0;
 				}
 			}
 		}
@@ -161,7 +161,7 @@
 
 .fixed {
 	display: none;
-	background: var(--color-white);
+	background: palette(paper);
 	opacity: 0;
 	animation: fadeIn 0.5s linear;
 	z-index: 100;
@@ -178,7 +178,7 @@
 
 	.nav__li {
 		flex: 1;
-		padding: var(--space-3xs);
+		padding: space(1);
 
 		&--logo {
 			flex: 0 0 auto;
@@ -194,7 +194,13 @@
 	}
 
 	@media (max-width: $bp-tablet) {
-		display: none !important;
+
+		// `.is-fixed` below sets `display: block` at the same specificity
+		// (0,1,0), so a plain `.fixed` rule here would win only by being
+		// later in the file. Matching both classes settles it at (0,2,0).
+		&.is-fixed {
+			display: none;
+		}
 	}
 }
 
@@ -241,7 +247,7 @@
 	background-color: transparent;
 	border: 0;
 	margin: 0;
-	padding: 0.5rem;
+	padding: space(2);
 
 	&__sr-only {
 		border: 0;
@@ -258,9 +264,9 @@
 	.line {
 		width: 2.5rem;
 		height: 0.1875rem;
-		background-color: var(--color-black);
+		background-color: palette(ink);
 		display: block;
-		margin: var(--space-xs) auto;
+		margin: space(3) auto;
 		transition: all 0.3s ease-in-out;
 	}
 
@@ -284,7 +290,7 @@
 	}
 
 	@media (max-width: $bp-mobile) {
-		padding: var(--space-3xs);
+		padding: space(1);
 	}
 }
 
@@ -317,7 +323,7 @@
 		left: 0;
 		right: 0;
 		z-index: 100;
-		background: var(--color-white);
+		background: palette(paper);
 		width: 100%;
 	}
 }

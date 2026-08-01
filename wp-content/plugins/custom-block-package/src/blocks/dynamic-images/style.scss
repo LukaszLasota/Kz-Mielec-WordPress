@@ -32,11 +32,11 @@
 	&.has-desktop-padding-top {
 
 		@media (min-width: $bp-tablet + 1px) {
-			padding-top: 5rem;
+			padding-top: space(20);
 		}
 
 		@media (max-width: $bp-tablet) {
-			padding-top: 0.3125rem;
+			padding-top: space(1);
 		}
 	}
 

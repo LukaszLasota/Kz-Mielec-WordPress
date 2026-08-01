@@ -11,14 +11,14 @@
 		h2 {
 
 			@include gradient-text();
-			padding: 5.9375rem 0.625rem;
+			padding: space(24) space(3);
 
 			@media (max-width: $bp-laptop) {
-				padding: 5rem 0.625rem;
+				padding: space(20) space(3);
 			}
 
 			@media (max-width: $bp-small) {
-				padding: 4.375rem 0.625rem;
+				padding: space(16) space(3);
 			}
 		}
 
@@ -27,8 +27,9 @@
 			grid-template-columns: repeat(4, 1fr);
 			gap: 0;
 			width: 100%;
-			font-size: 1.1rem;
-			line-height: 1.5;
+
+			@include type(copy);
+
 
 			@media (max-width: $bp-wide) {
 				grid-template-columns: repeat(3, 1fr);
@@ -49,7 +50,7 @@
 		}
 
 		.flipping-cards__card-inner {
-			padding: 1.25rem;
+			padding: space(5);
 			box-sizing: border-box;
 		}
 
@@ -62,11 +63,12 @@
 
 			h3 {
 				font-weight: 400;
-				font-size: 1.7rem;
+				font-size: fs(subheading);
+				line-height: lh(snug);
 			}
 
 			p {
-				margin: 0.3125rem;
+				margin: space(1);
 			}
 		}
 	}

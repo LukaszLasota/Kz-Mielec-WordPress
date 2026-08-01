@@ -1,1 +1,1 @@
-.map-block-wrapper{margin-block:3.125rem 5rem}@media(max-width:600px){.map-block-wrapper{margin-block:1.875rem 3.125rem}}.map-container{width:100%}
+.map-block-wrapper{margin-block:var(--space-12,3rem) var(--space-20,5rem)}@media(max-width:600px){.map-block-wrapper{margin-block:var(--space-8,2rem) var(--space-12,3rem)}}.map-container{width:100%}

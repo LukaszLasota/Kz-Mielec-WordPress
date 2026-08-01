@@ -6,7 +6,14 @@
 //   Default margin: 5rem auto 10rem
 //   Mobile 30rem: 3.125rem auto 6.25rem
 
-// Note: margin uses !important to override WordPress is-layout-constrained
+// The margins keep !important, and this is measured rather than assumed:
+// WordPress prints a constrained-layout rule for `> *` whose specificity is
+// (0,1,0) — the `:where()` in it counts for nothing — exactly the same as
+// this block's own class.
+// A tie is settled by stylesheet order, and that order is not stable: on the
+// front page this block's CSS lands after core's, on /roznica-wyznan/ the
+// comparison block's CSS lands before it. !important removes the dependency
+// on print order.
 // which sets margin-block: 0 on direct children.
 
 @use "../../scss/abstracts/tokens" as *;
@@ -18,15 +25,15 @@
 	justify-content: center;
 	width: 100%;
 	// stylelint-disable-next-line declaration-no-important
-	margin-top: 5rem !important;
+	margin-top: space(20) !important;
 	// stylelint-disable-next-line declaration-no-important
-	margin-bottom: 10rem !important;
+	margin-bottom: space(40) !important;
 
 	@media (max-width: $bp-mobile) {
 		// stylelint-disable-next-line declaration-no-important
-		margin-top: 3.125rem !important;
+		margin-top: space(12) !important;
 		// stylelint-disable-next-line declaration-no-important
-		margin-bottom: 6.25rem !important;
+		margin-bottom: space(24) !important;
 	}
 
 	.scroll-arrow {
@@ -37,8 +44,8 @@
 		width: 3.75rem;
 		height: 3.75rem;
 		border-radius: 100%;
-		background: #000;
-		color: #fff;
+		background: palette(ink);
+		color: palette(paper);
 		text-decoration: none;
 		transition: opacity 0.3s ease;
 
@@ -47,7 +54,7 @@
 		}
 
 		&:focus-visible {
-			outline: 0.125rem solid #000;
+			outline: 0.125rem solid palette(ink);
 			outline-offset: 0.25rem;
 		}
 
@@ -65,18 +72,5 @@
 			height: auto;
 			display: block;
 		}
-
-		// Placeholder when no image is set.
-		&--placeholder {
-			font-size: 1.5rem;
-		}
-	}
-
-	.scroll-arrow__hint {
-		width: 100%;
-		text-align: center;
-		font-size: 0.8rem;
-		color: #999;
-		margin-top: 0.5rem;
 	}
 }

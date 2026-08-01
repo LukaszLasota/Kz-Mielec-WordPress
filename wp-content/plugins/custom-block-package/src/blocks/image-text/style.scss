@@ -19,7 +19,7 @@
 
 		.about-one__caption {
 			opacity: 1;
-			color: #fff;
+			color: palette(paper);
 		}
 
 		.about-one__overlay {
@@ -33,7 +33,7 @@
 
 			.about-one__caption {
 				opacity: 1;
-				color: #fff;
+				color: palette(paper);
 			}
 
 			.about-one__overlay {
@@ -57,17 +57,19 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -100%);
-		color: #fff;
+		color: palette(paper);
 		text-transform: uppercase;
 		font-weight: 400;
-		font-size: 1.5rem;
+
+		@include type(h3);
+
 		text-align: center;
 		opacity: 0;
 		z-index: 20;
 		transition: 0.5s opacity linear;
 		-webkit-background-clip: unset;
 		background-clip: unset;
-		-webkit-text-fill-color: #fff;
+		-webkit-text-fill-color: palette(paper);
 	}
 
 	&__overlay {

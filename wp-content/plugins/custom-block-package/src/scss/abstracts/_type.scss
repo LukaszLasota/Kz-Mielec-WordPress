@@ -1,0 +1,170 @@
+// =============================================================================
+// TYPE SCALE — every font size, leading and tracking in the project
+// =============================================================================
+
+// This file holds the numbers; nothing else in the project may invent one.
+// `tokens.scss` turns the maps below into `--fs-*`, `--lh-*` and `--tracking-*`
+// custom properties, so the same scale reaches the front end, the block editor
+// and devtools. Call sites read a single step through `fs()` / `lh()` /
+// `tracking()`, or take a whole role at once with `@include type(h2)`.
+
+// It is mirrored verbatim at `src/scss/abstracts/_type.scss` in all three
+// packages — this theme (the source), custom-block-package and
+// comparison-of-religions.
+// Duplicated rather than imported for the same reason as the breakpoints: each
+// package has its own webpack build and a plugin must render correctly under
+// any theme, so it cannot reach into theme sources. Change all three together —
+// `cmp` the files to check they have not drifted.
+
+// The scale is also mirrored in the theme's `theme.json`
+// (`settings.typography.fontSizes`), which is JSON and cannot import SCSS. That
+// mirror is what puts the same steps — and only those steps — in the editor's
+// size picker.
+
+// Why functions rather than writing `var(--fs-body)` by hand: the fallback is
+// what keeps a plugin readable under a theme that never defines the token, and
+// `fs()` rejects a step that does not exist, so a typo fails the build instead
+// of silently emitting `font-size: var(--fs-bdoy)`.
+
+@use "sass:list";
+@use "sass:map";
+
+// -----------------------------------------------------------------------------
+// Font sizes
+// -----------------------------------------------------------------------------
+// Whole pixels at a 16px root. The styles had drifted onto 24 different sizes,
+// many a single pixel apart (1.05 / 1.0625 / 1.1 / 1.1875 / 1.2rem) — that is
+// drift, not design. There is deliberately no step between these values.
+$fs: (
+	display: 2.5rem, // 40px — h1
+	heading: 2rem, // 32px — h2, section headings
+	subheading: 1.75rem, // 28px — headings on cards and hero blocks
+	title: 1.5rem, // 24px — h3, tile titles
+	body: 1.25rem, // 20px — h4, content paragraphs
+	body-sm: 1.125rem, // 18px — dense copy: menus, cards, tables
+	base: 1rem, // 16px — form fields, plain copy
+	meta: 0.875rem, // 14px — captions, timestamps, counts
+	small: 0.75rem, // 12px — buttons, labels
+	xs: 0.625rem, // 10px — badges, pagination
+);
+
+// -----------------------------------------------------------------------------
+// Line heights
+// -----------------------------------------------------------------------------
+// Unitless on purpose: a unitless value is inherited as a ratio and re-computed
+// against each element's own font size, so nested text never inherits the
+// parent's absolute leading.
+$lh: (
+	heading: 1.15, // display sizes — tight enough not to look airy
+	snug: 1.3, // multi-line headings and card titles
+	tight: 1.4, // condensed copy, meta lines
+	body: 1.5, // default for running text
+);
+
+// -----------------------------------------------------------------------------
+// Letter spacing
+// -----------------------------------------------------------------------------
+// In rem, not em: the uppercase Cinzel treatment wants the same optical gap at
+// every size, and an em value would scale it away on small labels.
+$tracking: (
+	wide: 0.125rem, // 2px — the uppercase display treatment
+	narrow: 0.0625rem, // 1px — small uppercase labels, where 2px reads as gappy
+);
+
+// -----------------------------------------------------------------------------
+// Roles
+// -----------------------------------------------------------------------------
+// A role is a size, a leading and a tracking as one unit, so no call site can
+// pick a font size and leave the leading to chance. `null` tracking means the
+// element inherits — running text keeps whatever its container set.
+// Each entry: (font-size step, line-height step, tracking step or null).
+$roles: (
+	h1: (display, heading, wide),
+	h2: (heading, heading, wide),
+	h3: (title, snug, wide),
+	h4: (body, tight, narrow),
+	h5: (body-sm, tight, narrow),
+	h6: (base, tight, narrow),
+	subtitle: (body, snug, wide), // panel and accordion headings
+	body: (body, body, null), // content paragraphs
+	copy: (body-sm, body, null), // secondary/dense paragraphs
+	meta: (meta, body, null), // small prose: excerpts, feed text, dates
+	label: (small, tight, narrow), // uppercase labels
+);
+
+// The narrow-screen ladder: exactly one step down, and nothing else changes.
+// Leading and tracking stay those of the level, so a heading keeps its voice
+// and only its size compresses — the old styles collapsed h1, h2 and h3 onto
+// a single size, which flattened the hierarchy precisely where a small screen
+// needs it most.
+// Only the display sizes have an entry. h4-h6 are 20px and below already;
+// stepping them down would trade hierarchy for legibility, and legibility wins.
+$roles-compact: (
+	h1: (heading, heading, wide),
+	h2: (subheading, heading, wide),
+	h3: (body, snug, wide),
+	subtitle: (body-sm, snug, wide),
+);
+
+// -----------------------------------------------------------------------------
+// Accessors
+// -----------------------------------------------------------------------------
+
+@function fs($step) {
+
+	@if not map.has-key($fs, $step) {
+
+		@error "Unknown font size step `#{$step}` — see $fs in _type.scss.";
+	}
+
+	@return var(--fs-#{$step}, #{map.get($fs, $step)});
+}
+
+@function lh($step) {
+
+	@if not map.has-key($lh, $step) {
+
+		@error "Unknown line height step `#{$step}` — see $lh in _type.scss.";
+	}
+
+	@return var(--lh-#{$step}, #{map.get($lh, $step)});
+}
+
+@function tracking($step) {
+
+	@if not map.has-key($tracking, $step) {
+
+		@error "Unknown tracking step `#{$step}` — see $tracking in _type.scss.";
+	}
+
+	@return var(--tracking-#{$step}, #{map.get($tracking, $step)});
+}
+
+// Applies a whole role. Tracking is omitted when the role declares `null`, so
+// the element inherits instead of being reset to `normal`.
+// `$compact: true` takes the narrow-screen variant; asking for it on a role
+// that has none is an error rather than a silent fall-through to the desktop
+// values, because a media query that quietly repeats the size it overrides is
+// the kind of dead rule this scale exists to prevent.
+@mixin type($role, $compact: false) {
+
+	@if not map.has-key($roles, $role) {
+
+		@error "Unknown type role `#{$role}` — see $roles in _type.scss.";
+	}
+
+	@if $compact and not map.has-key($roles-compact, $role) {
+
+		@error "Role `#{$role}` has no compact variant — see $roles-compact.";
+	}
+
+	$spec: if($compact, map.get($roles-compact, $role), map.get($roles, $role));
+	$track: list.nth($spec, 3);
+
+	font-size: fs(list.nth($spec, 1));
+	line-height: lh(list.nth($spec, 2));
+
+	@if $track {
+		letter-spacing: tracking($track);
+	}
+}

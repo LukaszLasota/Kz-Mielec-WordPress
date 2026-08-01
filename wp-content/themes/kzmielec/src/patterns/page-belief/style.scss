@@ -1,4 +1,5 @@
 @use "../../scss/abstracts/variables" as *;
+@use "../../scss/abstracts/mixins" as *;
 // Styles for page-belief.php template.
 // Loaded via PatternAssets when class "pattern-page-belief" detected.
 
@@ -20,20 +21,21 @@
 	// Section label above the hero (matches production: centred, uppercase,
 	// no divider lines). A <p>, not a heading, so the page title stays the h1.
 	.page-belief__section-heading {
-		font-size: var(--fs-heading, 2rem);
+
+		@include type(h2);
+
 		font-weight: var(--fw-regular);
 		text-transform: uppercase;
 		text-align: center;
-		letter-spacing: var(--tracking-wide);
-		margin: 1.875rem 0 3.75rem; // 1.875rem / 3.75rem — matches old theme .section-head-one
+		margin: space(8) 0 space(16); // 1.875rem / 3.75rem — matches old theme .section-head-one
 	}
 
 	.page-belief__hero {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 4.5rem; // 4.5rem above the hero
-		margin: 0 0 4rem; // larger gap below the hero, before the content
+		padding-top: space(20); // 4.5rem above the hero
+		margin: 0 0 space(16); // larger gap below the hero, before the content
 	}
 
 	// Hero tile — matches the nav tiles / production: photo fills the circle,
@@ -43,9 +45,9 @@
 		display: block;
 		width: 13.3125rem; // 13.3125rem — matches production hero
 		height: 13.3125rem;
-		border-radius: var(--radius-circle);
+		border-radius: radius(circle);
 		overflow: hidden;
-		margin-bottom: var(--space-sm);
+		margin-bottom: space(4);
 
 		.page-belief__hero-image--one {
 			position: absolute;
@@ -59,9 +61,9 @@
 		.page-belief__hero-bg {
 			position: absolute;
 			inset: 0;
-			background: var(--color-black);
+			background: palette(ink);
 			opacity: 0.55;
-			border-radius: var(--radius-circle);
+			border-radius: radius(circle);
 			z-index: 2;
 		}
 
@@ -76,7 +78,9 @@
 	}
 
 	.page-belief__title {
-		font-size: var(--fs-title, 1.5rem);
+
+		@include type(h1);
+
 		font-weight: var(--fw-regular);
 		text-transform: uppercase;
 		text-align: center;
@@ -87,16 +91,25 @@
 	// justified,
 	// black, wide column).
 	.page-belief__content {
-		max-width: var(--content-width-narrow); // 68.75rem — matches the archive width
-		margin: 2rem auto;
-		padding: 0 var(--space-sm);
-		font-size: var(--fs-body, 1.25rem); // 1.25rem
-		line-height: var(--lh-tight);
+		// The container takes the full content column; the reading measure sits on
+		// the prose below instead. Constraining the container was the wrong level:
+		// it squeezed every wide block on this template — the comparison table and
+		// the three pages built from custom-accordion, which asks for 1200px
+		// itself — to 1068px, while leaving ~186px empty on each side.
+		max-width: var(--content-max-width);
+		margin: space(8) auto;
+		padding: 0 space(4);
+
+		@include content-measure;
+		@include type(body);
+
 		text-align: justify;
-		color: var(--color-black);
+		color: palette(ink);
 
 		p {
-			margin-bottom: var(--space-4xs);
+			margin-bottom: 0.1rem; // 1.6px hairline — deliberately off the 4px
+			// grid: the smallest step is 4px and tripling this gap would be a
+			// visible change, so it stays a literal at its two call sites.
 		}
 
 		@media (max-width: $bp-mobile) {
@@ -107,7 +120,7 @@
 	.page-belief__separator {
 		display: flex;
 		justify-content: center;
-		margin: 3rem 0;
+		margin: space(12) 0;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

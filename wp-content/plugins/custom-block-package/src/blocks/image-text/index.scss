@@ -1,16 +1,22 @@
 @use "./style.scss";
+// `@use "./style.scss"` loads that file but does not re-export what it uses,
+// so the helpers need their own import here.
+@use "../../scss/abstracts/tokens" as *;
 
 .select-button {
 	background-color: #007cba;
-	color: #fff;
-	padding: 0.625rem;
-	border-radius: 0.3125rem;
+	color: palette(paper);
+	padding: space(3);
+	border-radius: radius(sm);
 	border: none;
 	cursor: pointer;
 	text-align: center;
 
+	// Editor-only. This is a <Button> from @wordpress/components, so it also
+	// carries .components-button, whose `:hover` rule is (0,2,0) and beats
+	// `.select-button` (0,1,0). Third-party stylesheet, so !important stays.
 	&:hover {
-		color: #fff !important;
+		color: palette(paper) !important;
 	}
 }
 

@@ -1,4 +1,5 @@
 @use "../../scss/abstracts/variables" as *;
+@use "../../scss/abstracts/mixins" as *;
 // Styles for archive-meetings.php template.
 // Loaded via PatternAssets when class "pattern-archive-meetings" detected.
 
@@ -30,9 +31,10 @@
 	// Cinzel (which is caps-only and unreadable for long copy).
 
 	.archive-meetings__item {
-		max-width: var(--content-width-narrow); // 68.75rem
-		margin: 8rem auto;
-		padding: 0 var(--space-sm);
+		// Full column; the reading measure sits on the prose inside __content.
+		max-width: var(--content-max-width);
+		margin: space(32) auto;
+		padding: 0 space(4);
 
 		// Offset anchor jumps (down-arrow) so the sticky menu doesn't cover the
 		// target image. Mobile (<=50rem) has no sticky menu, so only a small gap.
@@ -48,7 +50,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		margin-bottom: var(--space-sm);
+		margin-bottom: space(4);
 	}
 
 	// Circular hero matching the homepage navigable-tiles block: base photo
@@ -59,9 +61,9 @@
 		display: block;
 		width: 13.375rem; // 13.375rem
 		aspect-ratio: 1;
-		border-radius: var(--radius-circle);
+		border-radius: radius(circle);
 		overflow: hidden;
-		margin-bottom: 0.9375rem; // 0.9375rem
+		margin-bottom: space(4); // 0.9375rem
 
 		.archive-meetings__image--one,
 		.archive-meetings__image--two {
@@ -89,29 +91,36 @@
 
 	.archive-meetings__title {
 		font-family: var(--font-serif);
-		font-size: var(--fs-title, 1.5rem); // 1.5rem
+		font-size: fs(title); // 1.5rem
+		line-height: lh(snug);
 		text-align: center;
-		color: var(--color-black);
-		margin: 0.9375rem 0 0; // 0.9375rem
+		color: palette(ink);
+		margin: space(4) 0 0; // 0.9375rem
 	}
 
 	.archive-meetings__meta {
 		font-family: var(--font-serif);
-		font-size: var(--fs-body, 1.25rem); // 1.25rem
-		color: var(--color-black);
+		font-size: fs(body); // 1.25rem
+		color: palette(ink);
 		text-align: center;
-		margin: var(--space-2xs) 0 0; // 0.5rem
+		margin: space(2) 0 0; // 0.5rem
 	}
 
 	.archive-meetings__content {
+
+		@include content-measure;
+
 		font-family: var(--font-serif);
-		font-size: var(--fs-body, 1.25rem); // 1.25rem
-		line-height: var(--lh-tight);
+
+		@include type(body);
+
 		text-align: justify;
-		color: var(--color-black);
+		color: palette(ink);
 
 		p {
-			margin-bottom: var(--space-4xs);
+			margin-bottom: 0.1rem; // 1.6px hairline — deliberately off the 4px
+			// grid: the smallest step is 4px and tripling this gap would be a
+			// visible change, so it stays a literal at its two call sites.
 		}
 
 		// Justify reads poorly in narrow columns; fall back to left on mobile.
@@ -128,16 +137,20 @@
 		// Match the production rhythm: the old theme centred a 3.75rem arrow with
 		// 6.25rem/8.75rem vertical margins between meetings. Reproduce that here
 		// (the block's default 80/160 is slightly off).
+		// !important here is forced by the block, whose own margins are
+		// !important (see scroll-arrow/style.scss for why). A consumer cannot
+		// override an important declaration with a normal one at any
+		// specificity, so the escalation propagates.
 		.wp-block-custom-block-package-scroll-arrow {
-			margin-top: 6.25rem !important; // 6.25rem
-			margin-bottom: 8.75rem !important; // 8.75rem
+			margin-top: space(24) !important; // 6.25rem
+			margin-bottom: space(32) !important; // 8.75rem
 		}
 	}
 
 	.archive-meetings__back-top {
 		display: flex;
 		justify-content: center;
-		margin: 3rem 0;
+		margin: space(12) 0;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

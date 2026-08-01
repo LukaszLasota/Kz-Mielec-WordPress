@@ -33,7 +33,9 @@
 			]
 		},
 		"typography": {
-			"fluid": true,
+			"customFontSize": false,
+			"defaultFontSizes": false,
+			"fluid": false,
 			"fontFamilies": [
 				{
 					"fontFamily": "'Cinzel', serif",
@@ -55,43 +57,54 @@
 			],
 			"fontSizes": [
 				{
-					"fluid": false,
+					"name": "Display",
+					"size": "2.5rem",
+					"slug": "display"
+				},
+				{
+					"name": "Heading",
+					"size": "2rem",
+					"slug": "heading"
+				},
+				{
+					"name": "Subheading",
+					"size": "1.75rem",
+					"slug": "subheading"
+				},
+				{
+					"name": "Title",
+					"size": "1.5rem",
+					"slug": "title"
+				},
+				{
+					"name": "Body",
+					"size": "1.25rem",
+					"slug": "body"
+				},
+				{
+					"name": "Body small",
+					"size": "1.125rem",
+					"slug": "body-sm"
+				},
+				{
+					"name": "Base",
+					"size": "1rem",
+					"slug": "base"
+				},
+				{
+					"name": "Meta",
+					"size": "0.875rem",
+					"slug": "meta"
+				},
+				{
 					"name": "Small",
-					"size": "0.9rem",
+					"size": "0.75rem",
 					"slug": "small"
 				},
 				{
-					"fluid": false,
-					"name": "Medium",
-					"size": "1.05rem",
-					"slug": "medium"
-				},
-				{
-					"fluid": {
-						"min": "1.39rem",
-						"max": "1.85rem"
-					},
-					"name": "Large",
-					"size": "1.85rem",
-					"slug": "large"
-				},
-				{
-					"fluid": {
-						"min": "1.85rem",
-						"max": "2.5rem"
-					},
-					"name": "Extra Large",
-					"size": "2.5rem",
-					"slug": "x-large"
-				},
-				{
-					"fluid": {
-						"min": "2.5rem",
-						"max": "3.27rem"
-					},
-					"name": "Extra Extra Large",
-					"size": "3.27rem",
-					"slug": "xx-large"
+					"name": "Extra small",
+					"size": "0.625rem",
+					"slug": "xs"
 				}
 			],
 			"writingMode": true
@@ -101,12 +114,6 @@
 			"radius": true,
 			"style": true,
 			"width": true
-		},
-		"custom": {
-			"content-width-mobile": "100%",
-			"content-width-tablet": "85%",
-			"content-width-desktop": "1200px",
-			"content-width-large-desktop": "1200px"
 		},
 		"useRootPaddingAwareAlignments": true,
 		"layout": {

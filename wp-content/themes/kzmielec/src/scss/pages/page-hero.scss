@@ -2,10 +2,10 @@
 @use "../abstracts/mixins" as *;
 
 .page-hero > section {
-	padding-bottom: var(--space-2xl);
+	padding-bottom: space(20);
 
 	@media (max-width: $bp-small) {
-		padding-bottom: var(--space-xl);
+		padding-bottom: space(16);
 	}
 
 	// First block: full-width hero banner.
@@ -18,10 +18,10 @@
 
 	// 5rem gap between hero and content.
 	> *:nth-child(2) {
-		margin-top: var(--space-2xl);
+		margin-top: space(20);
 
 		@media (max-width: $bp-small) {
-			margin-top: var(--space-xl);
+			margin-top: space(16);
 		}
 	}
 
@@ -29,13 +29,13 @@
 	// mobile with edge padding. The hero (first child) stays full-bleed.
 	> *:not(:first-child) {
 		width: 100%;
-		max-width: var(--wp--custom--content-width-desktop);
+		max-width: var(--content-max-width);
 		margin-inline: auto;
-		padding-inline: 0.7812rem;
+		padding-inline: space(3);
 
 		@media (max-width: $bp-tablet) {
 			max-width: 100%;       // mobile: use the full width…
-			padding-inline: var(--space-sm);  // …minus a comfortable edge gap
+			padding-inline: space(4);  // …minus a comfortable edge gap
 		}
 	}
 

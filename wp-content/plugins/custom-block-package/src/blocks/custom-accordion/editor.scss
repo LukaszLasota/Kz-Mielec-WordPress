@@ -1,3 +1,5 @@
+@use "../../scss/abstracts/tokens" as *;
+
 // Editor-specific overrides.
 // In the editor each accordion-item sits inside its own
 // .block-editor-block-list__block wrapper, so the frontend "& + &"
@@ -20,15 +22,15 @@
 
 			// Border radius only on first and last items.
 			&:first-child .accordion__item {
-				border-radius: 0.25rem 0.25rem 0 0;
+				border-radius: radius(sm) radius(sm) 0 0;
 			}
 
 			&:last-child .accordion__item {
-				border-radius: 0 0 0.25rem 0.25rem;
+				border-radius: 0 0 radius(sm) radius(sm);
 			}
 
 			&:only-child .accordion__item {
-				border-radius: 0.25rem;
+				border-radius: radius(sm);
 			}
 		}
 	}

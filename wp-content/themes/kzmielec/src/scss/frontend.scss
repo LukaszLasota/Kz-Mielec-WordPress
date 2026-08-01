@@ -18,11 +18,8 @@
 @use "pages/page";
 @use "pages/page-hero";
 @use "pages/front-page";
-@use "pages/belief";
 @use "pages/search-404";
 @use "pages/single-post";
-@use "apps/heading";
-@use "apps/circles";
 // Aliased: its default namespace ("main") would collide with apps/main.
 @use "apps/wcag/main" as wcag;
 @use "apps/footer";

@@ -16,13 +16,13 @@
 .page__content-container {
 
 	width: 100%;
-	max-width: var(--wp--custom--content-width-desktop);
+	max-width: var(--content-max-width);
 	margin: 0 auto;
-	padding: var(--space-2xl) 1.25rem;
+	padding: space(20) space(5);
 	display: block;
 
 	@media (max-width: $bp-small) {
-		padding: 1.875rem var(--space-md); // larger side padding on small screens
+		padding: space(8) space(6); // larger side padding on small screens
 	}
 
 	@include content-typography;

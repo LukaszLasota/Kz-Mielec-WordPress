@@ -15,10 +15,10 @@
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 999;
-	padding: 0.5rem 1rem;
-	background: var(--color-focus-bg);
-	color: var(--color-focus-text);
-	font-size: var(--fs-base);
+	padding: space(2) space(4);
+	background: palette(focus-bg);
+	color: palette(focus-text);
+	font-size: fs(base);
 	font-weight: 700;
 	text-decoration: none;
 

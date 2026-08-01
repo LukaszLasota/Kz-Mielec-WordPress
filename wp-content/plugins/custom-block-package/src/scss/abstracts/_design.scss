@@ -1,0 +1,118 @@
+// =============================================================================
+// DESIGN SCALE — spacing, radii and colours
+// =============================================================================
+
+// Same contract as `_type.scss`: the numbers live here once, `tokens.scss`
+// emits them as custom properties, and call sites read them through a function
+// that adds the fallback a plugin needs under a foreign theme and rejects a
+// step that does not exist.
+
+// Mirrored verbatim at `src/scss/abstracts/_design.scss` in all three
+// packages — this theme (the source), custom-block-package and
+// comparison-of-religions. A plugin builds on its own and must render under any
+// theme, so it cannot reach into theme sources. `npm run check:mirrors` fails
+// if the copies drift.
+
+@use "sass:list";
+@use "sass:map";
+
+// -----------------------------------------------------------------------------
+// Spacing
+// -----------------------------------------------------------------------------
+// A 4px grid, and the name is the multiple: `space(6)` is 24px. The old scale
+// was nine irregular steps (1.6/5/8/10/16/24/40/60/80px) with two thirds of the
+// call sites bypassing it on 43 different values — 58% of which were already
+// multiples of 4, so the grid was the shape the layout had anyway.
+// Numeric names beat t-shirt sizes at this length: nobody has to remember
+// whether `md` is larger than `lg`, and the ladder extends without renaming.
+$space: (
+	1: 0.25rem, // 4px
+	2: 0.5rem, // 8px
+	3: 0.75rem, // 12px
+	4: 1rem, // 16px
+	5: 1.25rem, // 20px
+	6: 1.5rem, // 24px
+	8: 2rem, // 32px
+	10: 2.5rem, // 40px
+	12: 3rem, // 48px
+	16: 4rem, // 64px
+	20: 5rem, // 80px
+	24: 6rem, // 96px
+	32: 8rem, // 128px
+	40: 10rem, // 160px
+);
+
+// -----------------------------------------------------------------------------
+// Radii
+// -----------------------------------------------------------------------------
+// `circle` is 50%, which is not interchangeable with the `100%` a few rules
+// use: on a non-square element the two produce different curves, so those stay
+// raw at their call site.
+$radius: (
+	sm: 0.25rem, // 4px — buttons, inputs, pagination
+	md: 0.5rem, // 8px — cards
+	circle: 50%,
+);
+
+// -----------------------------------------------------------------------------
+// Colours
+// -----------------------------------------------------------------------------
+// Named by role, not by appearance: `ink` and `paper` rather than black and
+// white. Partly because a role survives a repaint, partly because stylelint's
+// `color-named` rule reads a bare `black` as a CSS named colour even inside a
+// function call — and muting a rule to fit our naming is the wrong way round.
+// Only values used more than once are here. Single-use colours — a brand blue
+// in one widget, one decorative tint — stay at their call site; naming them
+// would grow this map without telling a reader anything.
+$palette: (
+	ink: #000,
+	paper: #fff,
+	gray-dark: #333, // gradient end-stop, muted body copy
+	gray-mid: #555, // secondary meta text
+	gray-light: #f0f0f0, // hover fills
+	surface-muted: #f4f4f4, // neutral media background
+	text: #212529, // body copy in editor content
+	// Accessible link/button blue — WCAG 2.1 AA, 5.25:1 on white. Overrides
+	// third-party widgets whose own blue fails contrast.
+	link-accessible: #1568d8,
+	// WCAG focus pair (GOV.UK style): yellow field, near-black text.
+	focus-bg: #fd0,
+	focus-text: #0b0c0c,
+);
+
+// -----------------------------------------------------------------------------
+// Accessors
+// -----------------------------------------------------------------------------
+// `palette()` rather than `color()`: CSS has a `color()` function of its own
+// (Color 5 colour spaces) and Sass resolves that name to it, so a user-defined
+// `color()` would never be called.
+
+@function space($step) {
+
+	@if not map.has-key($space, $step) {
+
+		@error "Unknown spacing step `#{$step}` — see $space in _design.scss.";
+	}
+
+	@return var(--space-#{$step}, #{map.get($space, $step)});
+}
+
+@function radius($step) {
+
+	@if not map.has-key($radius, $step) {
+
+		@error "Unknown radius `#{$step}` — see $radius in _design.scss.";
+	}
+
+	@return var(--radius-#{$step}, #{map.get($radius, $step)});
+}
+
+@function palette($name) {
+
+	@if not map.has-key($palette, $name) {
+
+		@error "Unknown colour `#{$name}` — see $palette in _design.scss.";
+	}
+
+	@return var(--color-#{$name}, #{map.get($palette, $name)});
+}

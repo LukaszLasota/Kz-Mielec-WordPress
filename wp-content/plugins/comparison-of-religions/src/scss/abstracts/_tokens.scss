@@ -3,7 +3,7 @@
 // =============================================================================
 
 // These mirror the theme's canonical scale in
-// `wp-content/themes/kzmielec/src/sass/abstracts/_tokens.scss`. They are
+// `wp-content/themes/kzmielec/src/scss/abstracts/_tokens.scss`. They are
 // duplicated rather than imported on purpose: the plugin has its own webpack
 // build and must keep working with any theme, so it cannot reach into theme
 // files. Keep them in sync with the theme — if a value changes there, change
@@ -14,5 +14,11 @@
 
 // Only the two steps this plugin actually uses are declared; add more from the
 // theme's scale as they are needed rather than inventing new numbers.
+
+// Re-exported so a file that already uses the tokens module can call
+// fs() / lh() / tracking() without a second import.
+@forward "design";
+@forward "type";
+
 $bp-small: 600px; // large phones / small tablets
 $bp-tablet: 800px; // tablets — main mobile/desktop switch

@@ -17,12 +17,12 @@
 	&__image {
 		position: relative;
 		width: 100%;
-		padding-top: var(--space-2xl);
+		padding-top: space(20);
 		aspect-ratio: 1998 / 1073;
 
 		@media (max-width: $bp-mobile) {
 			aspect-ratio: 673 / 926;
-			padding-top: var(--space-xl);
+			padding-top: space(16);
 		}
 	}
 

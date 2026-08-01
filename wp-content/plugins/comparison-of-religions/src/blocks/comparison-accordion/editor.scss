@@ -9,10 +9,16 @@
 	// Force all accordion panels open (override the [hidden] attribute
 	// and any collapsed state that might be set by frontend.js).
 	.cor-accordion__panel {
-		display: block !important;
-		max-height: none !important;
-		opacity: 1 !important;
-		overflow: visible !important;
+		max-height: none;
+		opacity: 1;
+		overflow: visible;
+
+		// `[hidden]` in style.scss is also (0,2,0), so the attribute has to be
+		// part of this selector — at (0,3,0) it wins on specificity instead of
+		// relying on which stylesheet the editor prints last.
+		&[hidden] {
+			display: block;
+		}
 	}
 
 	// Hide the chevron arrow since panels can't be toggled in the editor.
