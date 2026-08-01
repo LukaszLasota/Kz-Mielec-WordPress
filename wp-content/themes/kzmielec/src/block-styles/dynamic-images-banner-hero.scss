@@ -1,10 +1,20 @@
 @use "../scss/abstracts/variables" as *;
 
+// A classic (space-taking) scrollbar counts towards 100vw but not towards 100%,
+// so capping the overlay at 100vw made it exactly one scrollbar wider than the
+// visible page and gave the front page a horizontal scrollbar between roughly
+// 800px and 1440px. --scrollbar-width measures that difference on the root,
+// where 100% resolves to the viewport minus the scrollbar; it is 0 on platforms
+// with overlay scrollbars, which leaves the rendering unchanged there.
+:root {
+	--scrollbar-width: calc(100vw - 100%);
+}
+
 .wp-block-custom-block-package-dynamic-images.is-style-banner-hero {
 	width: 100%;
 
 	.wp-block-custom-block-package-dynamic-images__overlay {
-		width: min(120%, 100vw);
+		width: min(120%, calc(100vw - var(--scrollbar-width, 0px)));
 
 		@media (max-width: $bp-tablet) {
 			width: 100%;
