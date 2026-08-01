@@ -36,14 +36,9 @@
 		margin: space(32) auto;
 		padding: 0 space(4);
 
-		// Offset anchor jumps (down-arrow) so the sticky menu doesn't cover the
-		// target image. Mobile (<=50rem) has no sticky menu, so only a small gap.
-		scroll-margin-top: 1.25rem; // 1.25rem
-
-		@media (min-width: $bp-tablet + 1px) {
-			// Sticky menu is 7.625rem tall on desktop; clear it plus a small gap.
-			scroll-margin-top: 8.75rem; // 8.75rem
-		}
+		// Anchor offset used to be handled here with two hard-coded values; it now
+		// comes from the one `[id]` rule in apps/main.scss, which reads the menu
+		// height the script measures.
 	}
 
 	.archive-meetings__hero {

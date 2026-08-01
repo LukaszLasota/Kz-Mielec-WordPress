@@ -53,6 +53,20 @@ figure {
 	overflow-x: clip;
 }
 
+// Anchor targets clear the sticky menu.
+// Both menus are `position: fixed; top: 0`, so a jump to `#one` used to land
+// with the heading under the bar. `scroll-margin-top` is the whole fix and it
+// covers every path we scroll by: the native smooth scroll on a link click,
+// and the three `scrollIntoView()` calls (scroll-arrow, banner-hero, the
+// on-load hash handler). `:target` would not — scroll-arrow calls
+// preventDefault() and never sets the hash, so the pseudo-class never matches.
+// --menu-height is measured and published by HamburgerMenu; the fallback is the
+// desktop bar (5.625rem logo plus its 0.75rem padding) for the moments before
+// the script runs.
+[id] {
+	scroll-margin-top: calc(var(--menu-height, 7.125rem) + #{space(4)});
+}
+
 // Main page wrapper
 .wrapper {
 	width: 100%;

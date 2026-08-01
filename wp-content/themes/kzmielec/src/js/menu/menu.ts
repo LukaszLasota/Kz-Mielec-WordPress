@@ -42,6 +42,41 @@ export class HamburgerMenu {
         // Mobile: menu always fixed
         this.applyMobileFixed();
         window.addEventListener('resize', () => this.applyMobileFixed());
+
+        // Publish the sticky menu's height so anchors can clear it.
+        this.publishMenuHeight();
+        window.addEventListener('resize', () => this.publishMenuHeight());
+    }
+
+    /**
+     * Writes the height of whichever menu is stuck to the top into
+     * `--menu-height`, which `scroll-margin-top` reads so an anchor target does
+     * not land underneath it.
+     *
+     * The height cannot be a constant in the stylesheet: the two menus differ
+     * (the sticky one uses a smaller logo) and the mobile bar collapses to just
+     * the hamburger. It also cannot be read from the sticky menu directly while
+     * it is `display: none`, which it is until the page has scrolled 240px — a
+     * hidden element measures 0. Hence the brief visibility swap below, which
+     * costs one forced layout at startup.
+     */
+    private publishMenuHeight(): void {
+        const isMobile = window.innerWidth <= this.mobileBreakpoint;
+        const menu = isMobile ? this.mainMenu : this.fixedMenu;
+        let height = menu.offsetHeight;
+
+        if (height === 0) {
+            const { display, visibility } = menu.style;
+            menu.style.visibility = 'hidden';
+            menu.style.display = 'block';
+            height = menu.offsetHeight;
+            menu.style.display = display;
+            menu.style.visibility = visibility;
+        }
+
+        if (height > 0) {
+            document.documentElement.style.setProperty('--menu-height', `${height}px`);
+        }
     }
 
     private closeMenu(): void {
