@@ -8,6 +8,7 @@
  * Author:            Łukasz Lasota
  * Author URI:        https://github.com/LukaszLasota
  * Text Domain:       custom-block-package
+ * Domain Path:       /languages
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -34,6 +35,15 @@ use CustomBlockPackage\Blocks\RegisterBlocks;
 use CustomBlockPackage\Cache\BlockCache;
 use CustomBlockPackage\Cron\FacebookFeedCron;
 use CustomBlockPackage\Rest\FacebookFeedController;
+
+// Load the translation catalogue before anything registers a translated label.
+add_action(
+	'init',
+	static function (): void {
+		load_plugin_textdomain( 'custom-block-package', false, dirname( plugin_basename( UP_PLUGIN_FILE ) ) . '/languages' );
+	},
+	0
+);
 
 new RegisterBlocks();
 new AssetsManager();

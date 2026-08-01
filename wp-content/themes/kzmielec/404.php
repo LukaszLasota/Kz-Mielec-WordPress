@@ -19,14 +19,14 @@ get_header();
 			<?php esc_html_e( 'Nie znaleziono strony', 'kzmielec' ); ?>
 		</h1>
 		<p class="error-404__text">
-			<?php esc_html_e( 'Strona, ktorej szukasz, nie istnieje lub zostala przeniesiona. Sprobuj wyszukac ponizej albo wroc na strone glowna.', 'kzmielec' ); ?>
+			<?php esc_html_e( 'Strona, której szukasz, nie istnieje lub została przeniesiona. Spróbuj wyszukać poniżej albo wróć na stronę główną.', 'kzmielec' ); ?>
 		</p>
 
 		<?php get_search_form(); ?>
 
 		<div class="error-404__actions">
 			<a class="error-404__button" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<span><?php esc_html_e( 'Wroc na strone glowna', 'kzmielec' ); ?></span>
+				<span><?php esc_html_e( 'Wróć na stronę główną', 'kzmielec' ); ?></span>
 			</a>
 		</div>
 	</section>

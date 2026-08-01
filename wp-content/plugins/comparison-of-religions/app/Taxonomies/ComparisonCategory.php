@@ -44,14 +44,14 @@ class ComparisonCategory {
 	 */
 	public static function register_taxonomy(): void {
 		$labels = [
-			'name'              => __( 'Kategorie porownania', 'comparison-of-religions' ),
-			'singular_name'     => __( 'Kategoria porownania', 'comparison-of-religions' ),
-			'add_new_item'      => __( 'Dodaj kategorie', 'comparison-of-religions' ),
-			'edit_item'         => __( 'Edytuj kategorie', 'comparison-of-religions' ),
+			'name'              => __( 'Kategorie porównania', 'comparison-of-religions' ),
+			'singular_name'     => __( 'Kategoria porównania', 'comparison-of-religions' ),
+			'add_new_item'      => __( 'Dodaj kategorię', 'comparison-of-religions' ),
+			'edit_item'         => __( 'Edytuj kategorię', 'comparison-of-religions' ),
 			'search_items'      => __( 'Szukaj kategorii', 'comparison-of-religions' ),
 			'all_items'         => __( 'Wszystkie kategorie', 'comparison-of-religions' ),
-			'parent_item'       => __( 'Kategoria nadrzedna', 'comparison-of-religions' ),
-			'parent_item_colon' => __( 'Kategoria nadrzedna:', 'comparison-of-religions' ),
+			'parent_item'       => __( 'Kategoria nadrzędna', 'comparison-of-religions' ),
+			'parent_item_colon' => __( 'Kategoria nadrzędna:', 'comparison-of-religions' ),
 			'new_item_name'     => __( 'Nowa kategoria', 'comparison-of-religions' ),
 			'menu_name'         => __( 'Kategorie porównania', 'comparison-of-religions' ),
 		];

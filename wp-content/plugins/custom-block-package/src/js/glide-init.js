@@ -10,5 +10,5 @@ export function initGlide(selector, options = {}) {
   }).mount();
 }
 
-// Eksportuj jako globalną funkcję dla WordPress
+// Export as a global so WordPress-enqueued scripts can call it.
 window.initGlide = initGlide;

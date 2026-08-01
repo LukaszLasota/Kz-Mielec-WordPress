@@ -12,7 +12,7 @@
 					printf(
 						wp_kses(
 							/* translators: %1$s: site name, %2$s: current year */
-							__( 'Copyright %1$s. Wszelkie prawa zastrzezone &copy; %2$s.', 'kzmielec' ),
+							__( 'Copyright %1$s. Wszelkie prawa zastrzeżone &copy; %2$s.', 'kzmielec' ),
 							array( 'span' => array() )
 						),
 						esc_html( get_bloginfo( 'name' ) ),

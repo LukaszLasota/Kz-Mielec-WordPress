@@ -1,0 +1,107 @@
+# Copyright (C) 2026 Łukasz Lasota
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Posts 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/custom-posts\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-01T21:24:12+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: custom-posts\n"
+
+#. Plugin Name of the plugin
+#: custom-posts.php
+msgid "Custom Posts"
+msgstr ""
+
+#. Description of the plugin
+#: custom-posts.php
+msgid "Wtyczka do rejestracji niestandardowych postów i taksonomii."
+msgstr ""
+
+#. Author of the plugin
+#: custom-posts.php
+msgid "Łukasz Lasota"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:38
+msgid "Tytuł"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:39
+msgid "Autor"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:40
+msgid "Kategorie"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:41
+msgid "Tagi"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:42
+msgid "Data"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:43
+msgid "Ostatnia modyfikacja"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:74
+msgid "Brak kategorii"
+msgstr ""
+
+#: src/Posts/CustomColumns.php:82
+msgid "Brak tagów"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:61
+#: src/Posts/RegisterPosts.php:72
+msgid "Spotkania"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:62
+msgid "Spotkanie"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:63
+msgid "Dodaj Nowe"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:64
+msgid "Dodaj Nowe Spotkanie"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:65
+msgid "Edytuj Spotkanie"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:66
+msgid "Nowe Spotkanie"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:67
+msgid "Wszystkie Spotkania"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:68
+msgid "Zobacz Spotkania"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:69
+msgid "Szukaj Spotkań"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:70
+msgid "Nie znaleziono spotkań"
+msgstr ""
+
+#: src/Posts/RegisterPosts.php:71
+msgid "Nie znaleziono spotkań w Koszu"
+msgstr ""

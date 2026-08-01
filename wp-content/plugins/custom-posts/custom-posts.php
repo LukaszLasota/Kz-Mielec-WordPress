@@ -5,6 +5,7 @@
  * Version: 1.0.0
  * Author: Łukasz Lasota
  * Text Domain: custom-posts
+ * Domain Path: /languages
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * License: GPLv2 or later
@@ -29,6 +30,15 @@ spl_autoload_register(
 			}
 		}
 	}
+);
+
+// Load the translation catalogue before the post type labels are registered.
+add_action(
+	'init',
+	function () {
+		load_plugin_textdomain( 'custom-posts', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	},
+	0
 );
 
 add_action(

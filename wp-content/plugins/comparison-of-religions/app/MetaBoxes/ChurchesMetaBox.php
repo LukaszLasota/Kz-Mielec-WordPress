@@ -183,7 +183,7 @@ class ChurchesMetaBox {
 			<div class="cor-church-row__header">
 				<strong><?php esc_html_e( 'Kosciol', 'comparison-of-religions' ); ?></strong>
 				<button type="button" class="button cor-remove-church">
-					<?php esc_html_e( 'Usun', 'comparison-of-religions' ); ?>
+					<?php esc_html_e( 'Usuń', 'comparison-of-religions' ); ?>
 				</button>
 			</div>
 			<div class="cor-church-row__fields">

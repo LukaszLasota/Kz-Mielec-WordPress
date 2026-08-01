@@ -26,7 +26,7 @@ if ( $kz_logo_id ) {
 
 // Friendly per-type labels for the result badge.
 $kz_type_labels = array(
-	'post'     => __( 'Aktualnosc', 'kzmielec' ),
+	'post'     => __( 'Aktualność', 'kzmielec' ),
 	'page'     => __( 'Strona', 'kzmielec' ),
 	'meetings' => __( 'Spotkanie', 'kzmielec' ),
 );
@@ -94,7 +94,7 @@ $kz_type_labels = array(
 			array(
 				'mid_size'  => 1,
 				'prev_text' => esc_html__( '« Poprzednia', 'kzmielec' ),
-				'next_text' => esc_html__( 'Nastepna »', 'kzmielec' ),
+				'next_text' => esc_html__( 'Następna »', 'kzmielec' ),
 			)
 		);
 		?>
@@ -103,7 +103,7 @@ $kz_type_labels = array(
 			<?php
 			printf(
 				/* translators: %s: search query (already quoted). */
-				esc_html__( 'Brak wynikow dla %s. Sprobuj innej frazy.', 'kzmielec' ),
+				esc_html__( 'Brak wyników dla %s. Spróbuj innej frazy.', 'kzmielec' ),
 				'„' . esc_html( get_search_query() ) . '”'
 			);
 			?>

@@ -166,6 +166,11 @@ class Setup implements ActionHookInterface {
 	 * @return void
 	 */
 	public function kzmielec_setup(): void {
+		// Every user-facing string in this theme goes through the 'kzmielec'
+		// domain, but without this call WordPress never looks for a catalogue,
+		// so a translation dropped into languages/ would be ignored.
+		load_theme_textdomain( 'kzmielec', get_template_directory() . '/languages' );
+
 		add_theme_support( 'menus' );
 
 		add_theme_support( 'post-thumbnails' );

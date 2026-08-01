@@ -1,12 +1,12 @@
 <?php
 /**
- * Szablon renderowania bloku Obraz i Tekst
+ * Image and Text block render template.
  *
  * @package CustomBlockPackage
  *
- * @var array $attributes Atrybuty bloku
- * @var string $content Zawartość bloku
- * @var WP_Block $block Instancja bloku
+ * @var array $attributes Block attributes.
+ * @var string $content Block content.
+ * @var WP_Block $block Block instance.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

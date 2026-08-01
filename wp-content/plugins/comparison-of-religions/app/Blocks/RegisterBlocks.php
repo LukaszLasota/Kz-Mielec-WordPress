@@ -72,7 +72,26 @@ class RegisterBlocks {
 				continue;
 			}
 
-			register_block_type_from_metadata( $block_json_path );
+			$block_type = register_block_type_from_metadata( $block_json_path );
+
+			if ( $block_type instanceof \WP_Block_Type ) {
+				$this->set_editor_script_translations( $block_type );
+			}
+		}
+	}
+
+	/**
+	 * Point the block's editor script at the plugin's translation catalogue.
+	 *
+	 * Editor labels come from @wordpress/i18n, which reads a per-handle JSON
+	 * catalogue rather than the PHP text domain.
+	 *
+	 * @param \WP_Block_Type $block_type Registered block type.
+	 * @return void
+	 */
+	private function set_editor_script_translations( \WP_Block_Type $block_type ): void {
+		foreach ( $block_type->editor_script_handles as $handle ) {
+			wp_set_script_translations( $handle, 'comparison-of-religions', COR_PLUGIN_DIR . 'languages' );
 		}
 	}
 }

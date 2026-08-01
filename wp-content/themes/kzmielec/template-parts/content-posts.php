@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             </span>',
 			'next_text'          => '
             <span class="pagination__control pagination__control--next">
-                <span class="pagination__control--desktop">' . esc_html__( 'Nastepna strona', 'kzmielec' ) . ' &raquo;</span>
+                <span class="pagination__control--desktop">' . esc_html__( 'Następna strona', 'kzmielec' ) . ' &raquo;</span>
                 <span class="pagination__control--mobile">&raquo;</span>
             </span>',
 			'type'               => 'array',

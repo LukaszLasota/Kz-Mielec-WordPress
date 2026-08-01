@@ -64,9 +64,17 @@ if ( ! function_exists( 'cbp_navigable_tiles_wrapper_attrs' ) ) {
 	 * @return array<string, string>
 	 */
 	function cbp_navigable_tiles_wrapper_attrs( array $config ): array {
+		// Two tile blocks share the front page, so the fallback label has to name
+		// the section, not the role — a screen reader already announces "navigation",
+		// and two landmarks both called "Nawigacja" are indistinguishable in the
+		// landmark list. An author-supplied section title always wins.
+		$fallback_label = 'meetings' === $config['data_source']
+			? __( 'Spotkania', 'custom-block-package' )
+			: __( 'W co wierzymy', 'custom-block-package' );
+
 		$attrs = array(
 			'class'      => 'has-source-' . $config['data_source'] . ' has-columns-' . $config['columns'],
-			'aria-label' => '' !== $config['section_title'] ? $config['section_title'] : __( 'Nawigacja', 'custom-block-package' ),
+			'aria-label' => '' !== $config['section_title'] ? $config['section_title'] : $fallback_label,
 		);
 
 		if ( '' !== $config['anchor'] ) {

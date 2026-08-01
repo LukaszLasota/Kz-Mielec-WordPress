@@ -46,9 +46,9 @@ class ComparisonTopic {
 	 */
 	public static function register_post_type(): void {
 		$labels = [
-			'name'               => __( 'Tematy porownania', 'comparison-of-religions' ),
-			'singular_name'      => __( 'Temat porownania', 'comparison-of-religions' ),
-			'menu_name'          => __( 'Porownania', 'comparison-of-religions' ),
+			'name'               => __( 'Tematy porównania', 'comparison-of-religions' ),
+			'singular_name'      => __( 'Temat porównania', 'comparison-of-religions' ),
+			'menu_name'          => __( 'Porównania', 'comparison-of-religions' ),
 			'all_items'          => __( 'Wszystkie tematy', 'comparison-of-religions' ),
 			'add_new'            => __( 'Dodaj temat', 'comparison-of-religions' ),
 			'add_new_item'       => __( 'Dodaj nowy temat', 'comparison-of-religions' ),

@@ -9,6 +9,7 @@
  * Author:            Lukasz Lasota
  * License:           GPL-2.0-or-later
  * Text Domain:       comparison-of-religions
+ * Domain Path:       /languages
  *
  * @package ComparisonOfReligions
  *
@@ -113,7 +114,7 @@ function comparison_of_religions_import_page(): void {
 		$json = wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE );
 
 		if ( false === $json ) {
-			wp_die( esc_html__( 'ERROR: Nie udalo sie zserializowac danych do JSON.', 'comparison-of-religions' ) );
+			wp_die( esc_html__( 'ERROR: Nie udało się zserializować danych do JSON.', 'comparison-of-religions' ) );
 		}
 
 		header( 'Content-Type: application/json; charset=utf-8' );

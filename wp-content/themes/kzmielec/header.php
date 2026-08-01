@@ -11,7 +11,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-<a class="skip-link" href="#primary"><?php esc_html_e( 'Przejdz do tresci', 'kzmielec' ); ?></a>
+<a class="skip-link" href="#primary"><?php esc_html_e( 'Przejdź do treści', 'kzmielec' ); ?></a>
 <div class="wrapper">
 <?php
 $logo_id     = get_option( 'my_custom_logo_setting_id' );
@@ -65,21 +65,21 @@ if ( has_nav_menu( 'primary' ) ) {
 <header class="site-header" id="zero">
 	<div class="menu">
 		<<?php echo tag_escape( $logo_tag ); ?> class="site-logo">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="site-logo__link" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?> — <?php esc_attr_e( 'strona glowna', 'kzmielec' ); ?>">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="site-logo__link" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?> — <?php esc_attr_e( 'strona główna', 'kzmielec' ); ?>">
 				<?php echo wp_kses( $logo_img, $allowed_img ); ?>
 			</a>
 		</<?php echo tag_escape( $logo_tag ); ?>>
 
 		<div class="three">
 			<button class="hamburger" id="hamburger-main" aria-controls="primary-menu" aria-expanded="false">
-				<span class="hamburger__sr-only"><?php esc_html_e( 'Otworz/zamknij menu', 'kzmielec' ); ?></span>
+				<span class="hamburger__sr-only"><?php esc_html_e( 'Otwórz/zamknij menu', 'kzmielec' ); ?></span>
 				<span class="line" aria-hidden="true"></span>
 				<span class="line" aria-hidden="true"></span>
 				<span class="line" aria-hidden="true"></span>
 			</button>
 		</div>
 
-		<nav class="nav" id="primary-menu" aria-label="<?php esc_attr_e( 'Nawigacja glowna', 'kzmielec' ); ?>">
+		<nav class="nav" id="primary-menu" aria-label="<?php esc_attr_e( 'Nawigacja główna', 'kzmielec' ); ?>">
 			<?php if ( $menu_items ) : ?>
 				<ul class="nav__ul">
 					<?php
@@ -96,7 +96,7 @@ if ( has_nav_menu( 'primary' ) ) {
 	<div class="menu fixed" aria-hidden="true">
 		<div class="three">
 			<button class="hamburger" aria-controls="fixed-menu" aria-expanded="false" tabindex="-1">
-				<span class="hamburger__sr-only"><?php esc_html_e( 'Otworz/zamknij menu', 'kzmielec' ); ?></span>
+				<span class="hamburger__sr-only"><?php esc_html_e( 'Otwórz/zamknij menu', 'kzmielec' ); ?></span>
 				<span class="line" aria-hidden="true"></span>
 				<span class="line" aria-hidden="true"></span>
 				<span class="line" aria-hidden="true"></span>
