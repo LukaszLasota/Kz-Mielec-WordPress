@@ -77,34 +77,48 @@ $tracking: (
 // A role is a size, a leading and a tracking as one unit, so no call site can
 // pick a font size and leave the leading to chance. `null` tracking means the
 // element inherits — running text keeps whatever its container set.
-// Each entry: (font-size step, line-height step, tracking step or null).
+// Each entry: (font-size step, line-height step, tracking step or null, steps
+// down on a phone). That last number is why the mixin emits its own media
+// query: a role has one phone size, wherever it is used. Adding the query at
+// call sites instead left <p> rendering at four different sizes on a phone
+// (16px in content, 14px in accordions, 20px in the meetings archive, 32px on a
+// belief section label) because every component that forgot the query kept its
+// desktop value.
 $roles: (
-	h1: (display, heading, wide),
-	h2: (heading, heading, wide),
-	h3: (title, snug, wide),
-	h4: (body, tight, narrow),
-	h5: (body-sm, tight, narrow),
-	h6: (base, tight, narrow),
-	subtitle: (body, snug, wide), // panel and accordion headings
-	body: (body, body, null), // content paragraphs
-	copy: (body-sm, body, null), // secondary/dense paragraphs
-	meta: (meta, body, null), // small prose: excerpts, feed text, dates
-	label: (small, tight, narrow), // uppercase labels
+	h1: (display, heading, wide, 3),
+	h2: (heading, heading, wide, 3),
+	h3: (title, snug, wide, 2),
+	h4: (body, tight, narrow, 2),
+	h5: (body-sm, tight, narrow, 2),
+	h6: (base, tight, narrow, 1),
+	subtitle: (body, snug, wide, 2), // panel and accordion headings
+	body: (body, body, null, 2), // content paragraphs → 16px on a phone
+	copy: (body-sm, body, null, 1), // secondary/dense paragraphs
+	meta: (meta, body, null, 0), // already 14px; small prose stays put
+	label: (small, tight, narrow, 0), // 12px labels stay put
 );
 
-// The narrow-screen ladder: exactly one step down, and nothing else changes.
-// Leading and tracking stay those of the level, so a heading keeps its voice
-// and only its size compresses — the old styles collapsed h1, h2 and h3 onto
-// a single size, which flattened the hierarchy precisely where a small screen
-// needs it most.
-// Only the display sizes have an entry. h4-h6 are 20px and below already;
-// stepping them down would trade hierarchy for legibility, and legibility wins.
-$roles-compact: (
-	h1: (heading, heading, wide),
-	h2: (subheading, heading, wide),
-	h3: (body, snug, wide),
-	subtitle: (body-sm, snug, wide),
-);
+// Mirrors $bp-small from _tokens.scss. It cannot be imported: tokens.scss uses
+// this module, so reading its variables here would be circular.
+// `npm run check:mirrors` fails if the two numbers diverge.
+$phone-max: 600px;
+
+// Narrow screens take the same role a fixed number of steps down the size
+// ladder, with the level's own leading and tracking — a heading keeps its voice
+// and only its size compresses. The old styles collapsed h1, h2 and h3 onto one
+// size, which flattened the hierarchy exactly where a small screen needs it.
+// Derived from the order of $fs rather than a second map, so the two cannot
+// disagree, and `$down: 2` costs nothing extra.
+@function step-down($step, $by) {
+	$keys: map.keys($fs);
+	$i: list.index($keys, $step) + $by;
+
+	@if $i > list.length($keys) {
+		$i: list.length($keys);
+	}
+
+	@return list.nth($keys, $i);
+}
 
 // -----------------------------------------------------------------------------
 // Accessors
@@ -140,31 +154,40 @@ $roles-compact: (
 	@return var(--tracking-#{$step}, #{map.get($tracking, $step)});
 }
 
-// Applies a whole role. Tracking is omitted when the role declares `null`, so
-// the element inherits instead of being reset to `normal`.
-// `$compact: true` takes the narrow-screen variant; asking for it on a role
-// that has none is an error rather than a silent fall-through to the desktop
-// values, because a media query that quietly repeats the size it overrides is
-// the kind of dead rule this scale exists to prevent.
-@mixin type($role, $compact: false) {
+// Applies a whole role: the desktop values plus the role's own phone size.
+// Tracking is omitted when the role declares `null`, so the element inherits
+// instead of being reset to `normal`.
+// There is deliberately no parameter for "a bit smaller here". Call sites used
+// to add their own `@media (max-width: …) { @include type(h1, …) }`, and since
+// that query overlapped the one this mixin emits, whichever came later in the
+// file won — a page title rendered 32px on a phone where the role says 24px,
+// and no linter can see that conflict. The role decides, in one place.
+@mixin type($role) {
 
 	@if not map.has-key($roles, $role) {
 
 		@error "Unknown type role `#{$role}` — see $roles in _type.scss.";
 	}
 
-	@if $compact and not map.has-key($roles-compact, $role) {
-
-		@error "Role `#{$role}` has no compact variant — see $roles-compact.";
-	}
-
-	$spec: if($compact, map.get($roles-compact, $role), map.get($roles, $role));
+	$spec: map.get($roles, $role);
 	$track: list.nth($spec, 3);
 
-	font-size: fs(list.nth($spec, 1));
+	$size: list.nth($spec, 1);
+
+	font-size: fs($size);
 	line-height: lh(list.nth($spec, 2));
 
 	@if $track {
 		letter-spacing: tracking($track);
+	}
+
+	// The phone size travels with the role, so no call site can forget it.
+	$phone-down: list.nth($spec, 4);
+
+	@if $phone-down > 0 {
+
+		@media (max-width: $phone-max) {
+			font-size: fs(step-down($size, $phone-down));
+		}
 	}
 }

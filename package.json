@@ -6,7 +6,8 @@
 		"lint:js": "biome check scripts wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
 		"lint:js:fix": "biome check --write scripts wp-content/themes/kzmielec/src wp-content/plugins/custom-block-package/src wp-content/plugins/comparison-of-religions/src",
 		"check:type-scale": "node scripts/check-type-scale.mjs",
-		"check:mirrors": "node scripts/check-mirrors.mjs"
+		"check:mirrors": "node scripts/check-mirrors.mjs",
+		"check:sizes": "node scripts/check-sizes.mjs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.6"

@@ -98,7 +98,7 @@
 		// itself — to 1068px, while leaving ~186px empty on each side.
 		max-width: var(--content-max-width);
 		margin: space(8) auto;
-		padding: 0 space(4);
+		padding: 0 space(5); // 20px — the shared phone gutter
 
 		@include content-measure;
 		@include type(body);

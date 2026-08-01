@@ -63,8 +63,26 @@ figure {
 // --menu-height is measured and published by HamburgerMenu; the fallback is the
 // desktop bar (5.625rem logo plus its 0.75rem padding) for the moments before
 // the script runs.
+:root {
+	// --menu-height is measured and published by HamburgerMenu; the fallback is
+	// the desktop bar (5.625rem logo plus its 0.75rem padding) for the moments
+	// before the script runs. Interpolated: Sass skips custom property values.
+	--bar-clearance: calc(var(--menu-height, 7.125rem) + #{space(4)});
+}
+
 [id] {
-	scroll-margin-top: calc(var(--menu-height, 7.125rem) + #{space(4)});
+	scroll-margin-top: var(--bar-clearance);
+}
+
+// The mobile bar is fixed and therefore out of flow, so a template's content
+// would start underneath it — the page title landed behind the bar on every
+// content page. The front page is excluded: its first block is a deliberate
+// full-bleed hero that is meant to run to the top edge.
+@media (max-width: $bp-tablet) {
+
+	body:not(.home) .site-main {
+		padding-top: var(--bar-clearance);
+	}
 }
 
 // Main page wrapper

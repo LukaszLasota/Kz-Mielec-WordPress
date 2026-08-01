@@ -38,8 +38,6 @@
 
 	@media (max-width: $bp-mobile) {
 
-		@include type(h2, $compact: true);
-
 		&::before,
 		&::after {
 			display: none;

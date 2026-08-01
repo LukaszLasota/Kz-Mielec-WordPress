@@ -43,6 +43,7 @@
 		width: 100%;
 		margin-top: space(6);
 		padding-block: space(2); // vertical only — don't zero out content padding-inline
+
 	}
 
 	h1,
@@ -56,20 +57,12 @@
 
 		@include type(h1);
 
-		@media (max-width: $bp-tablet) {
-
-			@include type(h1, $compact: true);
-		}
 	}
 
 	h2 {
 
 		@include type(h2);
 
-		@media (max-width: $bp-tablet) {
-
-			@include type(h2, $compact: true);
-		}
 	}
 
 	h3 {
@@ -79,25 +72,24 @@
 		margin: space(5) 0 space(2);
 		padding-block: space(2);
 
-		@media (max-width: $bp-tablet) {
-
-			@include type(h3, $compact: true);
-		}
 	}
 
 	h4 {
 
 		@include type(h4);
+
 	}
 
 	h5 {
 
 		@include type(h5);
+
 	}
 
 	h6 {
 
 		@include type(h6);
+
 	}
 
 	p,

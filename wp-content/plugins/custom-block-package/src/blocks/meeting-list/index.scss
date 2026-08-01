@@ -62,9 +62,10 @@
 			text-align: center;
 
 			h3 {
+
+				@include type(h3);
+
 				font-weight: 400;
-				font-size: fs(subheading);
-				line-height: lh(snug);
 			}
 
 			p {

@@ -18,11 +18,15 @@
 	width: 100%;
 	max-width: var(--content-max-width);
 	margin: 0 auto;
-	padding: space(20) space(5);
+	// Bottom is deliberately larger than top: the footer sits directly under this
+	// container, and content that ends flush against it reads as cut off.
+	padding: space(20) space(5) space(24);
 	display: block;
 
+	// One inline padding on phones — 20px — shared with every other content
+	// container, so the text column starts in the same place on every template.
 	@media (max-width: $bp-small) {
-		padding: space(8) space(6); // larger side padding on small screens
+		padding: space(8) space(5) space(16);
 	}
 
 	@include content-typography;

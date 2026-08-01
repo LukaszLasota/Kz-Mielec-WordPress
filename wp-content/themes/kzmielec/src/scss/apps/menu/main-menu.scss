@@ -242,6 +242,15 @@
 // ===========================================
 
 .hamburger {
+	// The bars' own geometry, so the X below can be derived from it instead of
+	// repeating a number. It used to be hard-coded as translateY(0.8125rem),
+	// which happened to equal 13px — the pitch when the gap was 10px. Moving the
+	// gap to the 4px grid made the pitch 15px and the cross stopped meeting.
+	// Interpolated because Sass does not parse custom property values.
+	--hamburger-bar: 0.1875rem; // 3px
+	--hamburger-gap: #{space(3)}; // 12px — adjacent bar margins collapse
+	--hamburger-pitch: calc(var(--hamburger-bar) + var(--hamburger-gap));
+
 	display: none;
 	cursor: pointer;
 	background-color: transparent;
@@ -263,13 +272,14 @@
 
 	.line {
 		width: 2.5rem;
-		height: 0.1875rem;
+		height: var(--hamburger-bar);
 		background-color: palette(ink);
 		display: block;
-		margin: space(3) auto;
+		margin: var(--hamburger-gap) auto;
 		transition: all 0.3s ease-in-out;
 	}
 
+	// The first child is the screen-reader label, so the bars are children 2-4.
 	&.is-active {
 
 		.line:nth-child(3) {
@@ -277,11 +287,11 @@
 		}
 
 		.line:nth-child(2) {
-			transform: translateY(0.8125rem) rotate(45deg);
+			transform: translateY(var(--hamburger-pitch)) rotate(45deg);
 		}
 
 		.line:nth-child(4) {
-			transform: translateY(-0.8125rem) rotate(-45deg);
+			transform: translateY(calc(-1 * var(--hamburger-pitch))) rotate(-45deg);
 		}
 	}
 

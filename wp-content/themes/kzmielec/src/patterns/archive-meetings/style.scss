@@ -34,7 +34,7 @@
 		// Full column; the reading measure sits on the prose inside __content.
 		max-width: var(--content-max-width);
 		margin: space(32) auto;
-		padding: 0 space(4);
+		padding: 0 space(5); // 20px — the shared phone gutter
 
 		// Anchor offset used to be handled here with two hard-coded values; it now
 		// comes from the one `[id]` rule in apps/main.scss, which reads the menu
@@ -85,17 +85,22 @@
 	}
 
 	.archive-meetings__title {
+
+		// A card title: the h3 role keeps the size it had and picks up the phone
+		// step the hand-rolled pair was missing.
+		@include type(h3);
+
 		font-family: var(--font-serif);
-		font-size: fs(title); // 1.5rem
-		line-height: lh(snug);
 		text-align: center;
 		color: palette(ink);
 		margin: space(4) 0 0; // 0.9375rem
 	}
 
 	.archive-meetings__meta {
+
+		@include type(body);
+
 		font-family: var(--font-serif);
-		font-size: fs(body); // 1.25rem
 		color: palette(ink);
 		text-align: center;
 		margin: space(2) 0 0; // 0.5rem

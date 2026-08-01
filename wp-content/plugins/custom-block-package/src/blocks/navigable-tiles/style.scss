@@ -15,13 +15,15 @@
 
 .wp-block-custom-block-package-navigable-tiles {
 	// ── Config — all tunable values live here ─────────────
-	--cbp-tile-margin-block: 0.9375rem;
-	--cbp-tile-padding-inline: 1.875rem;
+	--cbp-tile-margin-block: #{space(4)}; // 16px — was 15px, off the grid
+	--cbp-tile-padding-inline: #{space(8)}; // 32px — was 30px, off the grid
 	--cbp-image-ratio: 1;          // 1 = square (PNGs are 400×400). Change for other crops.
 	--cbp-overlay-bg: #{palette(ink)}; // interpolated: Sass skips custom property values
 	--cbp-overlay-opacity: 0.6;
 	--cbp-icon-width: 80%;         // % of tile → scales automatically on tablet/mobile
-	--cbp-title-size: #{fs(title)}; // interpolated: Sass does not parse custom property values
+	// Interpolated: Sass does not parse custom property values. The phone value
+	// below is the h3 role's, so a tile title matches every other card title.
+	--cbp-title-size: #{fs(title)};
 	--cbp-title-leading: #{lh(tight)};
 	--cbp-transition: 0.5s linear;
 
@@ -29,6 +31,26 @@
 	// width (page-hero constrains to 70%, belief template to content width).
 	inline-size: 100%;
 	margin-inline: auto;
+
+	// The block ends a page — on the belief template the footer follows it
+	// directly — so it carries its own closing gap instead of relying on
+	// whatever happens to sit underneath.
+	margin-block-end: space(16);
+
+	@media (max-width: $bp-tablet) {
+		margin-block-end: space(10);
+	}
+
+	// Tile titles are a single word ("Nabożeństwo" is 208px at 1.5rem) and the
+	// tile is only ~200px wide on a narrow phone, so it gives back a step of
+	// inline padding rather than letting the word spill out.
+	@media (max-width: $bp-small) {
+		--cbp-title-size: #{fs(body-sm)};
+	}
+
+	@media (max-width: $bp-mobile) {
+		--cbp-tile-padding-inline: #{space(4)};
+	}
 
 	// ── Heading ───────────────────────────────────────────
 	.navigable-tiles__heading {

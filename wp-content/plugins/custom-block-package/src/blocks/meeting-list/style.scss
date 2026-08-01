@@ -104,9 +104,12 @@
 		transform: rotateY(0deg);
 
 		h3 {
+
+			// Card titles are the h3 role across the site, so this drops from
+			// subheading to title and gains the phone step with it.
+			@include type(h3);
+
 			font-weight: 400;
-			font-size: fs(subheading);
-			line-height: lh(snug);
 			text-align: center;
 			word-break: break-word;
 		}

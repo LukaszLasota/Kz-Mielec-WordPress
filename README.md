@@ -113,13 +113,24 @@ author sees is the front end's scale rather than an approximation. The gradient
 uppercase treatment stops at h3 — below that the letterforms are too small for a
 gradient fill to read as anything but grey.
 
-On narrow screens a heading takes `@include type(h2, $compact: true)`: exactly
-one step down, with the leading and tracking of its own level, so it keeps its
-voice and only its size compresses. Only the display levels have a compact
-variant — h4–h6 are already 20px and below, where stepping down would trade
-hierarchy for legibility. Asking for a compact variant that does not exist is an
-error, not a silent fall-through, because a media query that repeats the size it
-overrides is a dead rule.
+Each role also declares how many steps it drops on a phone, and `type()` emits
+that media query itself. On a 390px screen the ladder is 24 / 20 / 18 / 16px for
+h1 / h2 / h3 / running text — the same drop for headings and text, so the
+relationship between them survives the narrow screen.
+
+There is deliberately **no parameter** for "a bit smaller here". Call sites used
+to add their own `@media { @include type(h1, …) }`, and because that query
+overlapped the one the mixin emits, whichever came later in the file won: a page
+title rendered 32px on a phone where the role said 24px, and no linter can see
+that conflict. Removing the parameter makes the bug unreachable; `check:sizes`
+counts what actually shipped.
+
+Phone sizes are also why headings are not hyphenated. Polish compounds are long —
+"błogosławieństwa" is 415px wide at 2rem — and a word without a hyphen has
+nowhere to break, which grew a horizontal scrollbar on a 390px screen. The fix is
+the smaller heading, not `overflow-wrap`: a heading split mid-word reads worse
+than a smaller heading. Verified in a real browser across 19 pages at 360, 390,
+768 and 1440px; 320px is below the floor for one long title.
 
 Prose has three roles rather than one, because a paragraph in a table cell is not
 running text: `body` (20px) for content paragraphs, `copy` (18px) for secondary
@@ -226,7 +237,8 @@ Two project-specific checks cover what no linter can see:
 | check | what it catches |
 |---|---|
 | `npm run check:type-scale` | an `fs()` / `lh()` / `tracking()` call that survived into built CSS — Sass treats an unknown function as plain CSS and passes it through, so a missing import or a non-interpolated custom property (`--x: fs(body)`) compiles cleanly and ships broken |
-| `npm run check:mirrors` | drift between the three copies of the type scale, and between the shared breakpoint names |
+| `npm run check:mirrors` | drift between the mirrored scale files, the shared breakpoints, the theme.json font sizes and the content width |
+| `npm run check:sizes` | a `font-size` in built CSS that is not a step of the scale — stylelint validates syntax, not vocabulary, and `font-size: 1.3rem` is valid CSS |
 
 Both live in `scripts/` and read only build output, so they are cheap enough to
 run after every build.

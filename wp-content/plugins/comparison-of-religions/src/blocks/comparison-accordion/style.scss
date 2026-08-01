@@ -91,10 +91,6 @@ $cor-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	background-clip: initial;
 	color: inherit;
 
-	@media (max-width: $bp-small) {
-
-		@include type(subtitle, $compact: true);
-	}
 }
 
 .cor-accordion__trigger {
