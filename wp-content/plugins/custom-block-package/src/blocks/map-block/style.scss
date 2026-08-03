@@ -3,6 +3,14 @@
 @use "../../scss/abstracts/tokens" as *;
 
 .map-block-wrapper {
+	// Leaflet stacks its own furniture high: panes at 600-700, controls at 800
+	// and the four corner containers at 1000. Those numbers are absolute, so
+	// they outranked the sticky menu (100), the accessibility bar (101) and even
+	// the skip link (999) — the map drew over the menu as it scrolled under it.
+	// `isolation: isolate` makes this wrapper a stacking context, which keeps
+	// every one of those values local to the map instead of competing with the
+	// page. Nothing about the map's own layering changes.
+	isolation: isolate;
 	margin-block: space(12) space(20);
 
 	@media (max-width: $bp-small) {

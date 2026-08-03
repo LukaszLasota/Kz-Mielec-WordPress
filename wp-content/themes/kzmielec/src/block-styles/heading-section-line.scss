@@ -17,6 +17,11 @@
 	font-weight: var(--fw-regular);
 	text-transform: uppercase;
 	text-align: center;
+	// The heading text is an anonymous flex item between the two rules, so its
+	// min-content width — the longest word — is a floor it cannot shrink below.
+	// At 200% text that pushed the page sideways. Only `anywhere` lowers that
+	// floor; it changes nothing at a size where the word already fits.
+	overflow-wrap: anywhere;
 	margin-top: space(8);
 	margin-bottom: space(16);
 

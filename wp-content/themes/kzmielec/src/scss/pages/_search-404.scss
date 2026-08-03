@@ -127,7 +127,13 @@
 	margin: space(10) auto 0;
 	padding: 0 space(3);
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+	// `min(17rem, 100%)`, not a bare `17rem`: a track minimum is a floor the grid
+	// may not go below, so on a screen narrower than the minimum the column
+	// overflows the page instead of shrinking. 17rem fits a 320px screen at the
+	// default font size, which is why this never showed — but at 1.5x text (the
+	// accessibility bar, or simply a large default font in the browser) the
+	// column became 408px wide inside a 320px viewport and scrolled sideways.
+	grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
 	gap: space(6);
 }
 

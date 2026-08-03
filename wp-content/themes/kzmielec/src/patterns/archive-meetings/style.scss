@@ -36,6 +36,13 @@
 		margin: space(32) auto;
 		padding: 0 space(5); // 20px — the shared phone gutter
 
+		// 8rem of air reads as generous on a wide screen and as a wasted screenful
+		// on a phone, where it pushed the first meeting most of the way down the
+		// viewport. Half of it keeps the separation without the emptiness.
+		@media (max-width: $bp-tablet) {
+			margin: space(16) auto;
+		}
+
 		// Anchor offset used to be handled here with two hard-coded values; it now
 		// comes from the one `[id]` rule in apps/main.scss, which reads the menu
 		// height the script measures.
@@ -54,7 +61,10 @@
 	.archive-meetings__hero-image {
 		position: relative;
 		display: block;
-		width: 13.375rem; // 13.375rem
+		// Capped for the same reason as the belief hero: a fixed rem circle grows
+		// with the root font size and was 428px wide inside a 320px screen at
+		// 200% text, which scrolled the page sideways.
+		width: min(13.375rem, 100%);
 		aspect-ratio: 1;
 		border-radius: radius(circle);
 		overflow: hidden;
@@ -144,6 +154,14 @@
 		.wp-block-custom-block-package-scroll-arrow {
 			margin-top: space(24) !important; // 6.25rem
 			margin-bottom: space(32) !important; // 8.75rem
+
+			// Same reasoning as the item margin above: the production rhythm was
+			// drawn for a desktop column, and 6rem + 8rem between two meetings is
+			// most of a phone screen spent on a single arrow.
+			@media (max-width: $bp-tablet) {
+				margin-top: space(10) !important; // 2.5rem
+				margin-bottom: space(12) !important; // 3rem
+			}
 		}
 	}
 

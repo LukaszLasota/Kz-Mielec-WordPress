@@ -27,6 +27,13 @@ body {
 	font-style: normal;
 	color: $color-main;
 	margin: 0;
+	// Last-resort break for words that cannot fit their column. Polish compounds
+	// are long — "krzywdzeniem", "Rozporządzenia" — and at 1.5x text on a 320px
+	// screen they overflowed the paragraph and gave the page a horizontal
+	// scrollbar (WCAG 1.4.10). `break-word` only acts when the word would
+	// overflow anyway, so at the default size nothing about the setting changes.
+	// Inherited, so this one declaration covers content, headings and widgets.
+	overflow-wrap: break-word;
 }
 
 img {

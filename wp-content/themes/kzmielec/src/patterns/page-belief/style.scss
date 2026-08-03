@@ -43,8 +43,12 @@
 	.page-belief__hero-image {
 		position: relative;
 		display: block;
-		width: 13.3125rem; // 13.3125rem — matches production hero
-		height: 13.3125rem;
+		// 13.3125rem matches production, but capped: a fixed rem circle grows
+		// with the root font size, and at 200% text it was 426px wide inside a
+		// 320px screen, which scrolled the page sideways. `aspect-ratio` keeps it
+		// a circle once the width is allowed to shrink.
+		width: min(13.3125rem, 100%);
+		aspect-ratio: 1;
 		border-radius: radius(circle);
 		overflow: hidden;
 		margin-bottom: space(4);

@@ -34,6 +34,10 @@ $acc-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 	.accordion__title-text {
 		margin: 0;
 		padding: 0;
+		// Declared here rather than inherited from the theme because a plugin has
+		// to render correctly under any theme. See the button below for why
+		// wrapping needs saying twice.
+		overflow-wrap: break-word;
 
 		@include type(subtitle);
 
@@ -57,6 +61,16 @@ $acc-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 		align-items: center;
 		width: 100%;
 		cursor: pointer;
+		// `anywhere`, not `break-word`: the label is an anonymous flex item of
+		// this button, and such an item may not shrink below its min-content
+		// width — the longest unbreakable word, here
+		// "Nicejsko-Konstantynopolitańskie". `break-word` breaks a line that
+		// would overflow but leaves that floor in place, so the panel still
+		// pushed a 320px screen sideways once the text was enlarged (the
+		// accessibility bar, or simply a large default font in the browser).
+		// `anywhere` is the one value that also lowers min-content. Neither
+		// value changes anything at a size where the word already fits.
+		overflow-wrap: anywhere;
 		padding: space(4) space(12) space(4) space(6);
 		background: none;
 		border: none;

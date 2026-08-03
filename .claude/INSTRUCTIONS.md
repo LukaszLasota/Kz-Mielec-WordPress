@@ -38,9 +38,23 @@
 - Aktualizuj dokumentację gdy wprowadzasz zmiany
 - Pytaj o zgodę przed modyfikacją plików
 
+### Praca z gitem
+
+- **Pracuj bezpośrednio na `main`.** Żadnych nowych gałęzi, żadnych worktree,
+  żadnych gałęzi typu `feature/*`. Powód jest praktyczny: zmiany w worktree nie
+  są serwowane przez ddev, więc `kzmielec.ddev.site` ich nie pokazuje i nie da
+  się ich po prostu obejrzeć.
+- **Nie commituj bez zgody.** Skończoną pracę zostaw w katalogu roboczym,
+  opisz co się zmieniło i czekaj. Pytaj osobno o commit i osobno o push.
+- **Nie pushuj bez zgody** i nie otwieraj PR-ów.
+- Jeśli środowisko wymusi izolację (np. zadanie w tle), przenieś zmiany na
+  `main` jako niezacommitowane i usuń gałąź oraz worktree, żeby nic nie zostało.
+
 ### Czego NIGDY nie robić
 
 - Nie zmieniaj kodu bez pozwolenia
 - Nie pokazuj kodu bez zgody
 - Nie zakładaj - pytaj!
 - Nie działaj samodzielnie bez jasnych instrukcji
+- Nie zakładaj nowych gałęzi ani worktree
+- Nie rób commitów ani pushy bez wyraźnej zgody

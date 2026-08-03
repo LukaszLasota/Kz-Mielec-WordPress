@@ -4,7 +4,12 @@
 // ===========================================
 
 .footer {
-	background: #454040; // zblizone do starego #4f4b4b, kontrast z palette(paper) = 5.06:1 (AA pass)
+	// Black, matching the accessibility bar at the top of the page, so the
+	// document is bracketed by the same colour. This replaces the old #454040
+	// (itself a stand-in for #4f4b4b): 21:1 against the white text instead of
+	// 5.06:1, and it inverts with the palette in high contrast rather than
+	// staying a mid grey the mode exists to remove.
+	background: palette(ink);
 	width: 100%;
 	padding: 0;
 	margin: 0;

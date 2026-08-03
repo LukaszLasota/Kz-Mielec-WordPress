@@ -10,6 +10,25 @@
 	align-items: center;
 	width: 100%;
 	margin: 0 auto;
+
+	// Up to the tablet breakpoint the header carries the stickiness for the menu
+	// inside it. It has to be this element and not the menu: sticky travels only
+	// within its containing block, and the header is no taller than the menu, so
+	// sticking the menu to the header gives it nowhere to go. The header's own
+	// containing block is `.wrapper` — the whole page — so it pins for as long as
+	// there is page left.
+
+	// Staying in flow is the point. `position: fixed` here used to cover the
+	// accessibility bar above it, and left no space behind itself so the hero
+	// photograph lost its top edge under it. Sticky keeps both: the bar scrolls
+	// away with the page, the content begins below the menu, and the menu still
+	// follows the visitor down.
+	@media (max-width: $bp-tablet) {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background: palette(paper);
+	}
 }
 
 .menu {
@@ -257,6 +276,19 @@
 	border: 0;
 	margin: 0;
 	padding: space(2);
+	// `.three` is a percentage of the bar (20% below 480px, so 64px on a 320px
+	// screen) while the button inside it is sized in rem. At the default font
+	// size the button is 56px and fits; at 1.5x text it is 84px and pushes the
+	// page sideways. The cap costs nothing at the default size and keeps the
+	// button inside its column at any size.
+	max-width: 100%;
+
+	// Where the button is actually shown, give it a definite width taken from
+	// `.three`. That is what lets the bars' `max-width: 100%` resolve against
+	// something real instead of against their own intrinsic size.
+	@media (max-width: $bp-tablet) {
+		width: 100%;
+	}
 
 	&__sr-only {
 		border: 0;
@@ -271,7 +303,14 @@
 	}
 
 	.line {
+		// `max-width`, not `min(2.5rem, 100%)`. The button is an inline-block, so
+		// its width comes from its content — the bars — and a percentage inside
+		// `min()` resolves to zero while that intrinsic width is being computed.
+		// The bars collapsed and the whole control shrank to 8px. A percentage
+		// `max-width` is ignored during intrinsic sizing and applies once the
+		// container is definite, which is what the mobile rule below arranges.
 		width: 2.5rem;
+		max-width: 100%;
 		height: var(--hamburger-bar);
 		background-color: palette(ink);
 		display: block;
@@ -328,11 +367,11 @@
 .fix {
 
 	@media (max-width: $bp-tablet) {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 100;
+		// No positioning here any more — `.site-header` below is what sticks. A
+		// `position: sticky` on this element could not work: sticky only travels
+		// inside its own containing block, and with the menu back in flow the
+		// header is exactly as tall as the menu, which leaves a sticking range of
+		// zero. The menu simply scrolled away.
 		background: palette(paper);
 		width: 100%;
 	}

@@ -73,6 +73,12 @@ class ModernImages implements FilterHookInterface {
 	public function register_add_filter(): void {
 		add_filter( 'wp_content_img_tag', array( $this, 'wrap_content_image' ) );
 		add_filter( 'wp_get_attachment_image', array( $this, 'wrap_attachment_image' ) );
+		// Late on `the_content`, not on `render_block`: the nesting is created by
+		// `wrap_content_image()` above, which WordPress calls through
+		// `wp_content_img_tag` while filtering the content — that is, AFTER every
+		// block has rendered. A `render_block` filter cannot see it. See the method
+		// for why the nesting breaks the hero's art direction.
+		add_filter( 'the_content', array( $this, 'flatten_nested_pictures' ), 30 );
 		// A block that builds its own <picture> for art direction — the hero is one
 		// — is skipped by the two filters above, so its sources are enhanced in place.
 		add_filter( 'render_block', array( $this, 'enhance_block_picture' ) );
@@ -96,6 +102,71 @@ class ModernImages implements FilterHookInterface {
 	 */
 	public function wrap_attachment_image( string $html ): string {
 		return $this->wrap( $html );
+	}
+
+	/**
+	 * Collapse a `<picture>` that ended up inside another `<picture>`.
+	 *
+	 * The hero block builds its own `<picture>` with a `<source media="(max-width:
+	 * 480px)">` set for art direction, and takes the fallback `<img>` from
+	 * `wp_get_attachment_image()` — which `wrap_attachment_image()` above wraps in a
+	 * `<picture>` of its own. Nesting is invalid, and HTML parsers do not
+	 * auto-close `<picture>`, so the `<img>` ended up owned by the INNER element.
+	 * A `<source>` only applies to its own picture's direct `<img>` child, so the
+	 * mobile art direction was silently ignored: phones were served the desktop
+	 * photograph at every width.
+	 *
+	 * Flattening keeps document order, which is what makes it correct — the outer
+	 * element's `media` sources still precede the inner element's format sources,
+	 * and a browser takes the first source that both matches and is supported.
+	 *
+	 * @param string $html Rendered block markup.
+	 * @return string
+	 */
+	public function flatten_nested_pictures( string $html ): string {
+		if ( substr_count( $html, '<picture' ) < 2 ) {
+			return $html;
+		}
+
+		$parts = preg_split(
+			'#(<picture\b[^>]*>|</picture>)#i',
+			$html,
+			-1,
+			PREG_SPLIT_DELIM_CAPTURE
+		);
+
+		if ( ! is_array( $parts ) ) {
+			return $html;
+		}
+
+		$depth  = 0;
+		$output = '';
+		foreach ( $parts as $part ) {
+			$is_open  = (bool) preg_match( '#^<picture\b#i', $part );
+			$is_close = 0 === strcasecmp( $part, '</picture>' );
+
+			if ( $is_open ) {
+				++$depth;
+				// Keep only the outermost opening tag.
+				if ( 1 === $depth ) {
+					$output .= $part;
+				}
+				continue;
+			}
+
+			if ( $is_close ) {
+				// Keep only the closing tag that returns us to the top level.
+				if ( 1 === $depth ) {
+					$output .= $part;
+				}
+				$depth = max( 0, $depth - 1 );
+				continue;
+			}
+
+			$output .= $part;
+		}
+
+		return $output;
 	}
 
 	/**
