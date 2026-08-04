@@ -1,0 +1,16 @@
+#!/bin/bash
+
+## Description: Build both block plugins (custom-block-package + comparison-of-religions)
+## Usage: plugin:build
+## Example: ddev plugin:build
+
+# The name says "plugin" but there are two with a build, and this command used to
+# run only the first — the reason an edit to the comparison accordion could look
+# built when it was not. `custom-posts` has no build step and belongs nowhere here.
+set -euo pipefail
+
+for pkg in custom-block-package comparison-of-religions; do
+	echo "=== Building ${pkg} ==="
+	(cd "/var/www/html/wp-content/plugins/${pkg}" && npm run build)
+	echo ""
+done

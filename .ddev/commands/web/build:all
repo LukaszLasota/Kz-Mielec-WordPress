@@ -1,0 +1,27 @@
+#!/bin/bash
+
+## Description: Build all assets (theme + both block plugins)
+## Usage: build:all
+## Example: ddev build:all
+
+# Fail on the first broken build. Without this the script ran to the end and
+# still printed "All builds complete", so a webpack error looked like a success.
+set -euo pipefail
+
+# Every package with its own webpack build. `comparison-of-religions` used to be
+# missing here, so this command reported success while that plugin's CSS stayed
+# stale — an edited source could sit unbuilt and look deployed. `custom-posts` is
+# absent on purpose: it has no build step at all, `src/` is its runtime code.
+PACKAGES=(
+	"wp-content/themes/kzmielec"
+	"wp-content/plugins/custom-block-package"
+	"wp-content/plugins/comparison-of-religions"
+)
+
+for pkg in "${PACKAGES[@]}"; do
+	echo "=== Building ${pkg} ==="
+	(cd "/var/www/html/${pkg}" && npm run build)
+	echo ""
+done
+
+echo "=== All builds complete ==="

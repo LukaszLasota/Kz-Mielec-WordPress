@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Watch theme assets for changes (dev mode)
+## Usage: theme:watch
+## Example: ddev theme:watch
+
+cd /var/www/html/wp-content/themes/kzmielec && npm run start

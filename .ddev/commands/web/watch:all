@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## Description: Watch all assets for changes (theme + both block plugins)
+## Usage: watch:all
+## Example: ddev watch:all
+
+# Same list as build:all, and for the same reason: a watcher that silently skips
+# a package means edits to it appear to do nothing.
+PACKAGES=(
+	"wp-content/themes/kzmielec"
+	"wp-content/plugins/custom-block-package"
+	"wp-content/plugins/comparison-of-religions"
+)
+
+for pkg in "${PACKAGES[@]}"; do
+	(cd "/var/www/html/${pkg}" && npm run start) &
+done
+
+echo "=== Watching theme + both block plugins (Ctrl+C to stop) ==="
+wait

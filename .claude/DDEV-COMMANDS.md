@@ -1,22 +1,29 @@
 # Komendy DDEV — Kzmielec
 
-Custom komendy DDEV dla projektu. Pliki w `.ddev/commands/web/` (ignorowane przez git,
-więc istnieją tylko lokalnie — po świeżym klonie trzeba je odtworzyć).
+Custom komendy DDEV dla projektu. Pliki w `.ddev/commands/web/` — **są w repo**
+(`.gitignore` wyłącza resztę `.ddev/`, ale nie `commands/`), więc po klonie działają
+od razu. Wcześniej były ignorowane i trzeba je było odtwarzać ręcznie, co znaczyło,
+że każda maszyna mogła budować co innego.
 
 ## Build
 
 | Komenda | Opis |
 |---------|------|
 | `ddev theme:build` | Build motywu — **jedna optymalna wersja** (minified + sourcemapy) |
-| `ddev plugin:build` | Build pluginu custom-block-package |
-| `ddev build:all` | Build wszystkiego: plugin + motyw |
+| `ddev plugin:build` | Build **obu** wtyczek blokowych: custom-block-package + comparison-of-religions |
+| `ddev build:all` | Build wszystkiego: motyw + obie wtyczki blokowe (przerywa na pierwszym błędzie) |
+
+`custom-posts` nie ma builda — `src/` to jej kod runtime, nie źródła do kompilacji.
+Do 2026-08-04 `build:all` i `plugin:build` pomijały `comparison-of-religions`
+i nie sprawdzały kodu wyjścia, więc nieudany albo pominięty build kończył się
+komunikatem „All builds complete".
 
 ## Watch
 
 | Komenda | Opis |
 |---------|------|
 | `ddev theme:watch` | Watch motywu — te same nazwy plików, wersja nieminifikowana |
-| `ddev watch:all` | Watch motywu + pluginu równolegle (Ctrl+C żeby zatrzymać) |
+| `ddev watch:all` | Watch motywu + obu wtyczek blokowych równolegle (Ctrl+C żeby zatrzymać) |
 
 Uruchamiasz **jedną naraz** — `watch` do iterowania, `build` do wydania.
 
