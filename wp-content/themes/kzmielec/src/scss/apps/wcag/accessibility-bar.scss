@@ -139,48 +139,12 @@
 // special positioning on any screen — it scrolls away with the page everywhere,
 // which is also what it does on desktop.
 
-// The three A's differ in size so the control shows what it does rather than
-// only saying it. The ladder is three steps of the type scale — 12 / 16 / 20px
-// — not three arbitrary ratios, so it stays in the project's vocabulary.
-// Declared before the pressed-state rules below, which are more specific.
-.a11y-bar__button--step-1 .a11y-bar__glyph {
-	font-size: fs(base);
-}
-
-.a11y-bar__button--step-2 .a11y-bar__glyph {
-	font-size: fs(body);
-}
-
-// On a phone the same ladder is too loud: 20px in a 32px box leaves almost no
-// ground around the letter, and the row of three reads as three big letters
-// rather than as one control with three settings. One step down each — so
-// 12 / 14 / 16 — keeps the ladder readable and gives each glyph some ground
-// inside its box. The boxes stay 2rem: they are the touch target, and shrinking
-// them would eat into the 24px floor of WCAG 2.2 target size (2.5.8).
-// This block sits AFTER the two rules above, not in the small-screen section
-// further up, because it ties with them on specificity — placed earlier, the
-// desktop sizes would win on source order and this would do nothing at all.
-@media (max-width: $bp-mobile) {
-
-	.a11y-bar__button--step-1 .a11y-bar__glyph {
-		font-size: fs(meta);
-	}
-
-	.a11y-bar__button--step-2 .a11y-bar__glyph {
-		font-size: fs(base);
-	}
-}
-
-// One fixed square each, so the three read as a row of equals. Letting every
-// button hug its own glyph made them 28x28, 31x28 and 33x30 — visibly ragged,
-// because the glyphs deliberately differ in size.
-// 2rem is 32px at the default root, comfortably over the 24px floor of WCAG 2.2
-// target size (2.5.8), and it scales with the text setting.
-.a11y-bar__button--size {
-	width: 2rem;
-	height: 2rem;
-	padding: 0;
-}
+// The three steps used to be one letter at three sizes — 12 / 16 / 20px, and
+// 12 / 14 / 16 once the phone row had to be tightened. Size alone turned out to
+// be too quiet a signal: three A's a few pixels apart read as three identical
+// buttons. They say "A", "A+", "A++" instead, which names the step rather than
+// implying it, and the glyphs all share the strip's own 12px so the difference
+// lives in the label and not in a ladder that shrinks with the available room.
 
 .a11y-bar__button {
 
@@ -204,6 +168,31 @@
 	text-transform: uppercase;
 	line-height: 1;
 	cursor: pointer;
+}
+
+// A fixed 2rem square no longer fits: "A++" is three characters and would have
+// overflowed a 32px box, so the width grows with the label from a 2rem floor —
+// 32px at the default root, past the 24px floor of WCAG 2.2 target size
+// (2.5.8), and it scales with the text setting. The height stays fixed so all
+// four controls share one edge.
+// This has to sit AFTER the rule above, not before it: both selectors are one
+// class, so source order decides, and while `width` was fixed the padding it
+// inherited made no difference. With `min-width` it does — the generic
+// `space(1) space(2)` was still winning and added 16px to each of the three,
+// which put the row back onto two lines at 320px with the largest text setting.
+.a11y-bar__button--size {
+	min-width: 2rem;
+	height: 2rem;
+	padding: 0 space(1);
+
+	// The strip's labels are uppercase and tracked, which is right for words and
+	// wrong here: the tracking sits after the final "+" as well, so "A++" filled
+	// its box edge to edge and the padding above had nowhere to show. Dropping it
+	// pays for that padding almost exactly, and the row still holds one line at
+	// 320px with the largest text setting.
+	.a11y-bar__glyph {
+		letter-spacing: 0;
+	}
 }
 
 // The pressed state is a filled swatch, not just a colour change, so it does

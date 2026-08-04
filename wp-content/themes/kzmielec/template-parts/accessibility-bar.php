@@ -26,24 +26,33 @@ if ( ! defined( 'ABSPATH' ) ) {
  * button applies to <html>; the stylesheet turns it into a root font-size
  * multiplier.
  *
- * Each label deliberately starts with the visible "A" so the accessible name
- * contains the visible text (WCAG 2.5.3 Label in Name) — a button whose only
- * visible label is a letter still has to be announced as something meaningful.
+ * `glyph` is what the visitor reads, and each label deliberately begins with
+ * exactly that string, because the accessible name has to contain the visible
+ * text (WCAG 2.5.3 Label in Name) — "A+" on screen must be "A+" when announced,
+ * followed by something meaningful, since a letter and a plus sign on their own
+ * say nothing out loud.
  *
- * @var array<int, array{value: string, label: string}> $kzmielec_text_sizes
+ * The steps used to be one "A" at three font sizes. Size alone was too quiet a
+ * signal: at a few pixels apart, and especially on a phone where the row has to
+ * be tight, the three buttons read as identical.
+ *
+ * @var array<int, array{value: string, glyph: string, label: string}> $kzmielec_text_sizes
  */
 $kzmielec_text_sizes = array(
 	array(
 		'value' => 'normal',
+		'glyph' => 'A',
 		'label' => __( 'A — rozmiar standardowy', 'kzmielec' ),
 	),
 	array(
 		'value' => 'large',
-		'label' => __( 'A — tekst powiększony', 'kzmielec' ),
+		'glyph' => 'A+',
+		'label' => __( 'A+ — tekst powiększony', 'kzmielec' ),
 	),
 	array(
 		'value' => 'xlarge',
-		'label' => __( 'A — tekst największy', 'kzmielec' ),
+		'glyph' => 'A++',
+		'label' => __( 'A++ — tekst największy', 'kzmielec' ),
 	),
 );
 ?>
@@ -58,7 +67,7 @@ $kzmielec_text_sizes = array(
 				data-a11y-size="<?php echo esc_attr( $kzmielec_size['value'] ); ?>"
 				aria-pressed="<?php echo 0 === $kzmielec_index ? 'true' : 'false'; ?>"
 			>
-				<span class="a11y-bar__glyph" aria-hidden="true">A</span>
+				<span class="a11y-bar__glyph" aria-hidden="true"><?php echo esc_html( $kzmielec_size['glyph'] ); ?></span>
 				<span class="visually-hidden"><?php echo esc_html( $kzmielec_size['label'] ); ?></span>
 			</button>
 		<?php endforeach; ?>
