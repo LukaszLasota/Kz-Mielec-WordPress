@@ -2,6 +2,16 @@
 @use "../../scss/abstracts/tokens" as *;
 
 $acc-line: palette(ink); // border colour
+// The ONE source of the accordion frame. The theme declared it a second time,
+// in `theme.json` under `styles.blocks`, as 1px in a preset colour. WordPress
+// compiled that into `:root :where(.wp-block-…-accordion-item)`, which ties
+// with `.accordion__item` on specificity (`:where()` counts as zero) and won
+// on source order — so the 2px asked for here rendered as 1px in BOTH
+// palettes, and the preset colour could not follow the high-contrast token
+// swap. It also left this block 1px while the comparison plugin's accordion,
+// which had no such entry, stayed 2px. That entry is gone; do not bring it
+// back. A block must render correctly under any theme, so the declaration
+// belongs with the block.
 $acc-border: 0.125rem solid $acc-line;
 $acc-btn-bg: #343a40; // "Czytaj dalej" download-button background
 $acc-btn-bg-hover: #23272b;

@@ -124,15 +124,6 @@
 	"styles": {
 		"typography": {
 			"fontFamily": "Georgia, 'Times New Roman', 'Liberation Serif', serif"
-		},
-		"blocks": {
-			"custom-block-package/accordion-item": {
-				"border": {
-					"color": "var(--wp--preset--color--site-color)",
-					"width": "1px",
-					"style": "solid"
-				}
-			}
 		}
 	}
 }

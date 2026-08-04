@@ -390,17 +390,14 @@
 		border: 0.125rem solid palette(focus-bg);
 	}
 
-	// The accordion frame used to need its own rule here, because the winning
-	// declaration is not ours: WordPress generates
-	// `:root :where(.wp-block-custom-block-package-accordion-item)` from the
-	// block's own border settings and colours it with
-	// `var(--wp--preset--color--site-color)` — a preset, so outside the token
-	// swap. It tied with our `.accordion__item` on specificity and won on source
-	// order, leaving the frame black on a black page. The blanket `border-color`
-	// above is `!important` and beats a generated rule too, which is why that
-	// exception is gone. The same generated rule also forces the frame to 1px
-	// where our SCSS asks for 0.125rem, in BOTH palettes — a separate question,
-	// and not this mode's to answer.
+	// The accordion frame used to need an exception here. It was declared in
+	// `theme.json` as well as in the block, and WordPress compiled the theme's
+	// copy into `:root :where(.wp-block-…-accordion-item)`, which ties with
+	// `.accordion__item` on specificity (`:where()` counts as zero) and won on
+	// source order — in a preset colour, so it stayed black on a black page.
+	// Two things settled it: the blanket `border-color` above is `!important`
+	// and beats a generated rule, and that duplicate has since been deleted from
+	// `theme.json`, leaving the block as the single source. Nothing to add here.
 
 	// The footer paints a literal dark grey and writes `paper`-coloured text on
 	// it. Inverted, that text is black on dark grey at 1.9:1, so the footer joins

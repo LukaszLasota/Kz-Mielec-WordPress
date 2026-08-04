@@ -1,12 +1,20 @@
 // Post-cutover accessibility check against the live site.
 // Run from a directory where puppeteer + axe-core are installed:
-//   cd /home/lukasz/.claude/jobs/52da36a6/tmp && node <repo>/scripts/deploy/verify-production.js
+//   cd <dir-with-node_modules> && node <repo>/scripts/deploy/verify-production.js
 const fs = require('node:fs');
 const os = require('node:os');
 // Aliased: the page loop below binds a local `path` for the URL.
 const nodePath = require('node:path');
-const puppeteer = require('puppeteer');
-const { source: axeSource } = require('axe-core');
+
+// Resolved from the working directory, not from this file. `require` looks in
+// node_modules beside the script and then up the tree — the repository has
+// neither puppeteer nor axe-core, so following the instruction above verbatim
+// failed with MODULE_NOT_FOUND. These are heavy, single-purpose test
+// dependencies that deliberately do not live in the repo, which is why the
+// caller supplies them and this has to look where the caller is.
+const fromCwd = (name) => require(require.resolve(name, { paths: [process.cwd()] }));
+const puppeteer = fromCwd('puppeteer');
+const { source: axeSource } = fromCwd('axe-core');
 
 const BASE = 'https://kzmielec.pl';
 const CHROME =
