@@ -1,7 +1,9 @@
 import './scss/frontend.scss';
+import { AccessibilityBar } from './js/a11y/accessibility-bar';
 import { HamburgerMenu } from './js/menu/menu';
 
 new HamburgerMenu();
+new AccessibilityBar();
 
 // Prevent browser native jump to anchor on cross-page navigation.
 if (window.location.hash) {

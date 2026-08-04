@@ -11,6 +11,10 @@ $acc-btn-text: palette(paper);
 // The quotes are mandatory: the SVG contains single quotes and a closing
 // parenthesis, which would terminate an unquoted url() early. Hoisted into a
 // variable so the unavoidable rule exceptions live in exactly one place.
+// The stroke colour below is inert: the shape is a MASK, painted with
+// `currentcolor`, so only its alpha matters. It used to be a background image,
+// which meant the chevron carried `#000000` with it and no colour rule could
+// reach it — the mark vanished on a dark canvas (the high-contrast mode).
 /* stylelint-disable function-url-quotes, max-line-length */
 $acc-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3 5.5l5 5 5-5' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 /* stylelint-enable function-url-quotes, max-line-length */
@@ -100,14 +104,20 @@ $acc-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 			right: 1.2rem;
 			top: 50%;
 			transform: translateY(-50%);
-			background: $acc-chevron no-repeat center center;
+			// Painted, not drawn: the SVG masks a solid `currentcolor` fill, so the
+			// chevron always matches the title text it belongs to and follows any
+			// palette change for free.
+			mask-image: $acc-chevron;
+			mask-repeat: no-repeat;
+			mask-position: center center;
+			background-color: currentcolor;
 			transition: transform 0.3s ease;
 
 			@media (max-width: $bp-small) {
 				width: 1.625rem;
 				height: 1.625rem;
 				right: 0.6rem;
-				background-size: 0.875rem 0.875rem;
+				mask-size: 0.875rem 0.875rem;
 			}
 		}
 

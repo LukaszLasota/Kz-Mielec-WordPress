@@ -9,7 +9,11 @@
 }
 
 html {
-	font-size: 100%; // 1rem = 1rem (browser default)
+	// 1rem = the browser default, multiplied by the accessibility bar's text-size
+	// setting (1 when unset). Multiplying rather than assigning is what keeps a
+	// larger default font the visitor set themselves — the whole scale is in rem,
+	// so this one declaration resizes the site.
+	font-size: calc(100% * var(--a11y-text-scale, 1));
 	line-height: normal; // override normalize v8 line-height: lh(heading)
 	scroll-behavior: smooth;
 
@@ -61,8 +65,9 @@ figure {
 }
 
 // Anchor targets clear the sticky menu.
-// Both menus are `position: fixed; top: 0`, so a jump to `#one` used to land
-// with the heading under the bar. `scroll-margin-top` is the whole fix and it
+// The menu pins itself to the top of the viewport once it has been scrolled
+// past, so a jump to `#one` used to land with the heading behind it.
+// `scroll-margin-top` is the whole fix, and it
 // covers every path we scroll by: the native smooth scroll on a link click,
 // and the three `scrollIntoView()` calls (scroll-arrow, banner-hero, the
 // on-load hash handler). `:target` would not — scroll-arrow calls
@@ -81,16 +86,13 @@ figure {
 	scroll-margin-top: var(--bar-clearance);
 }
 
-// The mobile bar is fixed and therefore out of flow, so a template's content
-// would start underneath it — the page title landed behind the bar on every
-// content page. The front page is excluded: its first block is a deliberate
-// full-bleed hero that is meant to run to the top edge.
-@media (max-width: $bp-tablet) {
-
-	body:not(.home) .site-main {
-		padding-top: var(--bar-clearance);
-	}
-}
+// There used to be a `body:not(.home) .site-main { padding-top: … }` here, to
+// keep content clear of a `position: fixed` mobile menu. The menu has been
+// `position: sticky` since it stopped covering the accessibility bar, so it
+// sits in the flow and reserves its space — the padding compensated for nothing
+// and just added ~91px above the first element of every page but the front one.
+// `--bar-clearance` is still needed for the anchors above: a PINNED sticky menu
+// does overlap whatever a jump lands on.
 
 // Main page wrapper
 .wrapper {

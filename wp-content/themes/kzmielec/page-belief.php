@@ -45,8 +45,6 @@ get_header();
 			: '';
 		?>
 
-		<p class="page-belief__section-heading"><?php esc_html_e( 'W co i jak wierzymy', 'kzmielec' ); ?></p>
-
 		<div class="page-belief__hero">
 			<span class="page-belief__hero-image" aria-hidden="true">
 				<?php

@@ -1,0 +1,493 @@
+@use "../../abstracts/variables" as *;
+
+// =============================================================================
+// ACCESSIBILITY BAR — text size and high contrast
+// =============================================================================
+
+// Variant A: a full-width strip above the header, the placement people already
+// know from public-sector sites, so it is looked for exactly there. It scrolls
+// away with the page rather than sticking, which is why it can sit above a
+// sticky menu without the two fighting over the top of the viewport.
+
+// Both settings are stored on <html> as data attributes, written by the inline
+// head script in `RegisterAssets` before first paint and thereafter by
+// `src/js/a11y/accessibility-bar.ts`. Keeping the state on the root — rather
+// than in a class on <body> — is what lets the rules below reach every
+// stylesheet on the page, including the ones the block plugins ship.
+
+// -----------------------------------------------------------------------------
+// Text size
+// -----------------------------------------------------------------------------
+// One multiplier on the root font size, not a redefinition of the type scale.
+// Every length in this project is in rem by convention, so the multiplier
+// carries the type, the leading, the tracking and the spacing together and no
+// component has to opt in. `apps/main.scss` multiplies `100%` by it rather than
+// setting a fixed size, so it composes with — instead of overriding — a larger
+// default font the visitor may already have set in the browser.
+
+// 1.15 and 1.3, not 1.25 and 1.5. The larger pair was measurably too much: at
+// 1.5 the root reaches 24px, content paragraphs 30px, and on a 320px screen the
+// bar alone grew to 176px — a quarter of the viewport spent on the control
+// rather than the content. These steps are a real help and stay proportionate.
+
+// This does not weaken WCAG conformance. 1.4.4 Resize Text asks that text
+// survive 200% enlargement **by the user agent**; it does not ask a site to
+// ship its own control. The browser still offers 200%, and the site is tested
+// against it separately — this bar is a convenience on top.
+:root[data-a11y-size="large"] {
+	--a11y-text-scale: 1.15;
+}
+
+:root[data-a11y-size="xlarge"] {
+	--a11y-text-scale: 1.3;
+}
+
+// -----------------------------------------------------------------------------
+// The strip
+// -----------------------------------------------------------------------------
+// Hidden until the head script marks the document: every control here is inert
+// without JavaScript, and offering a dead control is worse than offering none.
+.a11y-bar {
+	display: none;
+	// Black strip, light controls. It does NOT invert with the rest of the
+	// site — the high-contrast block pins it to the dark ground on purpose, so
+	// the control that switches the mode on looks the same before and after.
+	background-color: palette(ink);
+	color: palette(paper);
+	// 1px under the strip. Invisible in the light palette, where a black strip
+	// on a white page needs no help; load-bearing in high contrast, where the
+	// page turns black too and the strip would otherwise have no bottom edge at
+	// all. The blanket rule there paints this yellow, so one declaration does
+	// for both palettes.
+	border-bottom: 0.0625rem solid palette(paper);
+}
+
+:root[data-a11y-js] .a11y-bar {
+	display: block;
+}
+
+.a11y-bar__inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: space(2);
+	max-width: var(--content-max-width);
+	margin: 0 auto;
+	padding: space(2) space(5);
+}
+
+.a11y-bar__label {
+
+	@include type(label);
+
+	text-transform: uppercase;
+}
+
+// The short label for the contrast button waits here; the small-screen block
+// below swaps the pair. `display`, not `visibility` or a visually-hidden class,
+// because only a display-hidden node drops out of the accessible name — see the
+// comment in `template-parts/accessibility-bar.php`.
+.a11y-bar__glyph--narrow {
+	display: none;
+}
+
+// -----------------------------------------------------------------------------
+// The strip on small screens
+// -----------------------------------------------------------------------------
+// Two things go wrong on a phone if the desktop treatment is left alone.
+
+// First, the strip wrapped onto three rows and stood 82px tall at 390px and
+// below: "ROZMIAR TEKSTU" plus a 160px "WYSOKI KONTRAST" plus three buttons do
+// not fit in 350px. The label is the cheapest thing to drop — it carries
+// `aria-hidden`, because each button already announces its own name, so hiding
+// it costs a screen-reader user nothing and returns the strip to one row.
+// Dropping it was not enough once a text setting was on, and the measurements
+// say why: at the largest setting the row needs 379px, of which the contrast
+// button alone is 207px — more than the three letters together (126px). No
+// amount of shrinking the letters closes a 59px gap on a 320px screen, so the
+// widest element gets the shorter word instead. With "Kontrast" the row needs
+// about 292px and fits every phone at every setting. 320px used to break at the
+// middle setting too (335px), not only at the largest.
+@media (max-width: $bp-mobile) {
+
+	.a11y-bar__label {
+		display: none;
+	}
+
+	.a11y-bar__glyph--wide {
+		display: none;
+	}
+
+	.a11y-bar__glyph--narrow {
+		display: inline;
+	}
+
+	.a11y-bar__inner {
+		gap: space(1);
+		padding: space(2) space(3);
+	}
+}
+
+// Second — a real defect, not a nicety — the mobile menu used to be
+// `position: fixed; top: 0; z-index: 100`, which covered this strip completely:
+// `elementFromPoint` over it returned the hamburger, so the controls were
+// invisible AND unclickable on exactly the devices where they matter most. The
+// fix belongs to the menu, not here: it is `position: sticky` now (`.fix` in
+// `apps/menu/main-menu.scss`), so it stays in flow below the strip and pins
+// itself only after the visitor scrolls past. The strip therefore needs no
+// special positioning on any screen — it scrolls away with the page everywhere,
+// which is also what it does on desktop.
+
+// The three A's differ in size so the control shows what it does rather than
+// only saying it. The ladder is three steps of the type scale — 12 / 16 / 20px
+// — not three arbitrary ratios, so it stays in the project's vocabulary.
+// Declared before the pressed-state rules below, which are more specific.
+.a11y-bar__button--step-1 .a11y-bar__glyph {
+	font-size: fs(base);
+}
+
+.a11y-bar__button--step-2 .a11y-bar__glyph {
+	font-size: fs(body);
+}
+
+// On a phone the same ladder is too loud: 20px in a 32px box leaves almost no
+// ground around the letter, and the row of three reads as three big letters
+// rather than as one control with three settings. One step down each — so
+// 12 / 14 / 16 — keeps the ladder readable and gives each glyph some ground
+// inside its box. The boxes stay 2rem: they are the touch target, and shrinking
+// them would eat into the 24px floor of WCAG 2.2 target size (2.5.8).
+// This block sits AFTER the two rules above, not in the small-screen section
+// further up, because it ties with them on specificity — placed earlier, the
+// desktop sizes would win on source order and this would do nothing at all.
+@media (max-width: $bp-mobile) {
+
+	.a11y-bar__button--step-1 .a11y-bar__glyph {
+		font-size: fs(meta);
+	}
+
+	.a11y-bar__button--step-2 .a11y-bar__glyph {
+		font-size: fs(base);
+	}
+}
+
+// One fixed square each, so the three read as a row of equals. Letting every
+// button hug its own glyph made them 28x28, 31x28 and 33x30 — visibly ragged,
+// because the glyphs deliberately differ in size.
+// 2rem is 32px at the default root, comfortably over the 24px floor of WCAG 2.2
+// target size (2.5.8), and it scales with the text setting.
+.a11y-bar__button--size {
+	width: 2rem;
+	height: 2rem;
+	padding: 0;
+}
+
+.a11y-bar__button {
+
+	@include type(label);
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	// 2rem for every control, so the four boxes in the row share one height. The
+	// size buttons below are square at 2rem, and leaving the contrast button on
+	// its content height put it at 28px against their 32px — its top and bottom
+	// edges visibly inside theirs. 2rem also clears the 24px floor of WCAG 2.2
+	// target size (2.5.8) and grows with the text-size setting.
+	min-width: 2rem;
+	min-height: 2rem;
+	padding: space(1) space(2);
+	background-color: transparent;
+	color: inherit;
+	border: 0.0625rem solid currentcolor;
+	border-radius: radius(sm);
+	text-transform: uppercase;
+	line-height: 1;
+	cursor: pointer;
+}
+
+// The pressed state is a filled swatch, not just a colour change, so it does
+// not rely on colour alone (WCAG 1.4.1). `currentcolor` and `palette(ink)` keep
+// it right in both palettes without a second rule: the fill is always the
+// strip's text colour and the glyph is always the strip's background.
+.a11y-bar__button[aria-pressed="true"] {
+	background-color: currentcolor;
+}
+
+.a11y-bar__button[aria-pressed="true"] .a11y-bar__glyph {
+	color: palette(ink);
+}
+
+
+// -----------------------------------------------------------------------------
+// High contrast
+// -----------------------------------------------------------------------------
+// A strict inversion of the two colours the design is built from. It works
+// site-wide, rather than rule by rule, because every colour in the theme and in
+// both block plugins resolves through these tokens: swapping `ink` and `paper`
+// therefore flips foreground and background everywhere the pair is used the way
+// it is meant to be. A black button (background `ink`, text `paper`) becomes a
+// white button with black text — still a button, still contrasting.
+
+// Scoped entirely under the attribute, so with the bar untouched not one
+// declaration here applies and the default design is bit-for-bit unchanged.
+:root[data-a11y-contrast="on"] {
+	--color-ink: #fff;
+	--color-paper: #000;
+	// The greys collapse into the two extremes on purpose. Mid grey on black is
+	// what this mode exists to get rid of; keeping a "slightly dimmer white"
+	// would reintroduce it.
+	--color-gray-dark: #fff;
+	--color-gray-mid: #fff;
+	--color-gray-light: #000;
+	--color-surface-muted: #000;
+	--color-text: #fff;
+	// Yellow on black is 15.9:1 and is the pairing users of this mode expect;
+	// the accessible blue is tuned for white and drops to 2.4:1 here.
+	--color-link-accessible: #fd0;
+	// The fill-on-hover gradient is black→dark grey behind text coloured
+	// `paper`. Once `paper` is black that text needs a light fill underneath it,
+	// so the gradient inverts with everything else.
+	--gradient-diagonal: linear-gradient(to left bottom, #fff 0%, #e0e0e0 100%);
+	--gradient-vertical: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
+
+	// `normalize` leaves the canvas transparent, so without this the inverted
+	// text would land on the browser's default white.
+	background-color: palette(paper);
+	color: palette(ink);
+
+	// EXCEPTIONS to this rule live at the end of the block, where their higher
+	// specificity can win.
+
+	// Every piece of text goes yellow, and this is deliberately blunt. Colours on
+	// this site come from three places and only one of them inverts: our own
+	// tokens do, WordPress presets (`--wp--preset--color--*`) do not, and
+	// literals inside third-party CSS do not either. Anything in the last two
+	// groups that was black stayed black on a black canvas — invisible, not
+	// merely ugly. Accordion titles measured 1.00:1, and axe could not see it
+	// because a collapsed panel's text is not evaluated for contrast.
+	// Yellow on black is 15.9:1. `!important` is needed because WordPress's own
+	// `.has-*-color` utility classes are themselves `!important`.
+	*,
+	::before,
+	::after {
+		color: palette(focus-bg) !important;
+
+		// Borders go the same way, and for the same reason: they come from the same
+		// three places, only one of which inverts. Fixing them one component at a
+		// time meant a white frame kept turning up somewhere else — a table, a
+		// search field, a card, the footer — because each was a separate rule with
+		// its own colour. One declaration covers every border on the site instead.
+		// Yellow on the black canvas is 15.9:1, far past the 3:1 that WCAG 1.4.11
+		// asks of a non-text boundary. Borders that are `transparent` or zero-width
+		// are unaffected: there is nothing to paint. `outline-color` is deliberately
+		// NOT included — the focus ring has its own pairing a few rules below.
+		border-color: palette(focus-bg) !important;
+	}
+
+	// The blunt rule above cannot reach a heading, because a heading is not
+	// painted with `color` at all. `@include gradient` (theme mixin, applied to
+	// h1–h3 inside the content container) and `gradient-text()` (the same
+	// technique in the block plugin, on `.meetings h2`) clip a linear gradient to
+	// the glyphs and set `-webkit-text-fill-color: transparent`: what you see is
+	// the gradient, and `color` paints nothing. So these headings ignored the
+	// yellow and showed the white gradient this mode installs for the surfaces
+	// that genuinely need one — a white page title above yellow body text.
+	// Handing the fill back to `color` is what puts them under the palette.
+	// `.single-post__title` uses `--wp--preset--gradient--gradient-90-deg`, a
+	// preset, which would not have inverted either.
+	h1,
+	h2,
+	h3,
+	.single-post__title {
+		background-image: none;
+		-webkit-text-fill-color: currentcolor;
+	}
+
+	// Colours written as literals in the block plugins, which therefore cannot
+	// invert through the tokens. They are handled here, with the rest of the
+	// mode, rather than in each package: this is a presentation override that
+	// exists only while the attribute is set, and the theme already overrides the
+	// Smash Balloon feed the same way in `general.scss`.
+
+	// The Facebook feed is drawn in Facebook's own greys — #1c1e21 body text,
+	// #65676b meta, #e4e6eb borders. Left alone they stay a light-grey island on
+	// a black page; #1c1e21 on black is 1.25:1.
+	// Its text and its #e4e6eb borders are both covered by the two blanket rules
+	// above, so only the filled button below still needs naming here.
+
+	// The follow button is a filled swatch rather than body text, so it inverts
+	// the other way round: a ground with the text knocked out of it. The ground
+	// is the same yellow as every outline and every letter in this mode — white
+	// would have been the only white object left on the page — and its label is
+	// the black canvas, at 15.9:1. As a pressed button on the strip.
+	.facebook-feed__follow-btn {
+		background: palette(focus-bg);
+	}
+
+	.facebook-feed__follow-btn,
+	.facebook-feed__follow-btn * {
+		color: palette(paper) !important;
+	}
+
+	// The feed's scrollbar is painted in the same brand greys and would
+	// otherwise be a grey smear on black.
+	.facebook-feed__scroll {
+
+		&::-webkit-scrollbar-track {
+			background: palette(paper);
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: palette(ink);
+		}
+	}
+
+	// The PDF page header is a cream/tan banded gradient with token-coloured
+	// text over it — once the text turns white it needs the black canvas, not
+	// the cream.
+	.statut-page-head {
+		background-image: none;
+	}
+
+	// Smash Balloon's Instagram feed paints its own white surfaces, so it stayed
+	// a 543x617 light island on an otherwise black page — including the footer
+	// strip with the "Więcej" button. Its own class names are the only handle
+	// there is. Post thumbnails keep their colours: inverting photographs makes
+	// them wrong, not more readable.
+	// `!important` because Smash Balloon writes the feed background as an INLINE
+	// style from its own settings panel (`background-color: rgb(255,255,255)` on
+	// `.sbi`). An inline style outranks every selector, so this is the only way
+	// to reach it from a stylesheet — the same reason `general.scss` already
+	// needs it for this plugin's follow button.
+	.sbi,
+	.sbi_header,
+	.sbi_footer {
+		background-color: palette(paper) !important;
+	}
+
+	// Grounds that must NOT invert, because what sits on them is fixed
+	// artwork rather than token-coloured text. The tile scrim is the clearest
+	// case: `--cbp-overlay-bg` is `ink`, so the
+	// token swap turned a 60%-black veil into a 60%-WHITE one: the photographs
+	// bleached to pale grey and the gold line icons over them — image files,
+	// whose colour CSS cannot touch — lost the dark ground they were drawn for.
+	// A scrim's whole job is to hold an image back; inverting it does the
+	// opposite. `paper` is the black canvas in this mode, which is exactly what
+	// the scrim should be.
+	// `!important` earns its place here. The belief hero's scrim is styled in
+	// `patterns/page-belief/style.scss`, which webpack emits as its own
+	// stylesheet and WordPress enqueues AFTER `frontend.css`. Both selectors land
+	// on the same specificity, so source order decided it and the pattern won —
+	// the scrim stayed a 55% WHITE wash and the photograph stayed bleached, which
+	// is exactly the defect this rule was meant to fix.
+	.navigable-tiles__image--overlay,
+	.page-belief__hero-bg {
+		background-color: palette(paper) !important;
+	}
+
+
+	// The scroll arrow is the same story in miniature: a gold mark on a dark
+	// disc. Inverting the disc to white left the gold at roughly 1.9:1, so the
+	// disc keeps its dark ground and the mark its light one.
+	.scroll-arrow {
+		background: palette(paper);
+		// The disc is black on a black page, so without an edge it reads as a
+		// floating gold mark with no button around it. Yellow, not white, for the
+		// same reason as the accordion frame below: in this mode yellow is the
+		// colour every outline and every piece of text shares, and a lone white
+		// ring read as a different kind of element. 15.9:1 on the black canvas,
+		// well past the 3:1 that WCAG 1.4.11 asks of a non-text boundary.
+		border: 0.125rem solid palette(focus-bg);
+	}
+
+	// The accordion frame used to need its own rule here, because the winning
+	// declaration is not ours: WordPress generates
+	// `:root :where(.wp-block-custom-block-package-accordion-item)` from the
+	// block's own border settings and colours it with
+	// `var(--wp--preset--color--site-color)` — a preset, so outside the token
+	// swap. It tied with our `.accordion__item` on specificity and won on source
+	// order, leaving the frame black on a black page. The blanket `border-color`
+	// above is `!important` and beats a generated rule too, which is why that
+	// exception is gone. The same generated rule also forces the frame to 1px
+	// where our SCSS asks for 0.125rem, in BOTH palettes — a separate question,
+	// and not this mode's to answer.
+
+	// The footer paints a literal dark grey and writes `paper`-coloured text on
+	// it. Inverted, that text is black on dark grey at 1.9:1, so the footer joins
+	// the black canvas; its text comes from the blanket rule above, and the
+	// border is what still holds the two apart.
+	.footer {
+		background: palette(paper);
+		// Only width and style are decided here; the blanket rule above paints
+		// this edge yellow like every other border in this mode.
+		border-top: 0.0625rem solid palette(focus-bg);
+	}
+
+	// The hamburger's three bars are painted as a BACKGROUND, not as text and not
+	// as a border, so neither blanket rule above can reach them: they stayed white
+	// while every other mark on the page turned yellow. They are also the only
+	// thing standing in for the word "menu" on a phone, so they take the colour of
+	// the text they replace. This one escaped the sweep because the sweep ran at
+	// 1280px, where the hamburger does not exist.
+	.hamburger .line {
+		background-color: palette(focus-bg);
+	}
+
+	// The strip keeps the black ground it has in the light palette rather than
+	// inverting with the other surfaces. It used to invert, and that made it the
+	// largest white object on a page whose whole point is to have none. Its text
+	// and its button outlines now come from the two blanket rules above, which is
+	// also why the exception that used to live here is gone.
+	.a11y-bar {
+		background-color: palette(paper);
+	}
+
+	// A pressed size button fills with the yellow the blanket rule gives it, so
+	// its glyph has to take the black ground: 15.9:1, where the white it took
+	// was 1.7:1 on yellow — the pressed button was the least readable control on
+	// the strip.
+	.a11y-bar__button[aria-pressed="true"] .a11y-bar__glyph {
+		color: palette(paper) !important;
+	}
+
+	// The Instagram follow button takes its background from
+	// `--color-link-accessible`, which is a link colour here and turns yellow —
+	// and the plugin paints its label white, giving white on yellow at 1.7:1.
+	// It becomes a filled swatch like every other button instead. `!important`
+	// matches `general.scss`, which needs it to win over the plugin's own sheet;
+	// this selector is the more specific of the two.
+	.sbi_follow_btn a {
+		background-color: palette(focus-bg) !important;
+	}
+
+	.sbi_follow_btn a,
+	.sbi_follow_btn a * {
+		color: palette(paper) !important;
+	}
+	// One: the focus indicator. The pair is a yellow field with near-black text,
+	// and yellow on yellow would erase it. Higher specificity than the blanket,
+	// because both carry `!important`.
+	a:focus-visible,
+	button:focus-visible,
+	input:focus-visible,
+	textarea:focus-visible,
+	a:focus-visible *,
+	button:focus-visible * {
+		color: palette(focus-text) !important;
+	}
+}
+
+:root[data-a11y-contrast="on"] body {
+	background-color: palette(paper);
+	color: palette(ink);
+}
+
+// The logo is dark artwork on a transparent background — the one image on the
+// page that disappears entirely when the canvas turns black. Content
+// photographs are deliberately left alone: inverting a photograph does not make
+// it more readable, it makes it wrong.
+:root[data-a11y-contrast="on"] .site-logo__image,
+:root[data-a11y-contrast="on"] .nav__li--logo img {
+	filter: invert(1);
+}

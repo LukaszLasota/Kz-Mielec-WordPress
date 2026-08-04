@@ -58,6 +58,35 @@ class RegisterAssets implements ActionHookInterface {
 	 */
 	public function register_add_action(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_kzmielec_assets' ) );
+		add_action( 'wp_head', array( $this, 'print_accessibility_preferences' ), 1 );
+	}
+
+	/**
+	 * Print the inline script that restores the visitor's accessibility settings.
+	 *
+	 * This has to be inline and in the head, ahead of the stylesheet: the bundled
+	 * script runs in the footer, so restoring the setting there would show the
+	 * page at the default size in the default palette first and only then redraw
+	 * it — a flash that is worst for exactly the people who need the setting.
+	 *
+	 * Nothing read from storage reaches the DOM verbatim. Each value is compared
+	 * against a fixed allowlist and only the literals below are ever written, so
+	 * a tampered `localStorage` entry cannot inject an attribute value. The whole
+	 * body is wrapped in try/catch because reading `localStorage` throws outright
+	 * when a browser blocks storage (Safari's private mode), and an exception
+	 * here would stop the rest of the head from running.
+	 *
+	 * `data-a11y-js` is what reveals the bar: the controls do nothing without
+	 * JavaScript, so a visitor without it should not be offered them.
+	 *
+	 * @return void
+	 */
+	public function print_accessibility_preferences(): void {
+		$script = <<<'JS'
+(function(){try{var r=document.documentElement,s=localStorage.getItem("kzmielec-a11y-size");r.setAttribute("data-a11y-js","");if("large"===s||"xlarge"===s){r.setAttribute("data-a11y-size",s);}if("on"===localStorage.getItem("kzmielec-a11y-contrast")){r.setAttribute("data-a11y-contrast","on");}}catch(e){}})();
+JS;
+
+		wp_print_inline_script_tag( $script );
 	}
 
 

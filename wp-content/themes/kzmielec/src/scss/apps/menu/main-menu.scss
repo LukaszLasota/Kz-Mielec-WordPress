@@ -18,11 +18,13 @@
 	// containing block is `.wrapper` — the whole page — so it pins for as long as
 	// there is page left.
 
-	// Staying in flow is the point. `position: fixed` here used to cover the
-	// accessibility bar above it, and left no space behind itself so the hero
-	// photograph lost its top edge under it. Sticky keeps both: the bar scrolls
-	// away with the page, the content begins below the menu, and the menu still
-	// follows the visitor down.
+	// Sticky, not fixed, and that distinction is load-bearing: `position: fixed`
+	// here used to cover the accessibility bar above it, because a fixed element
+	// is measured against the viewport and knows nothing about the strip. Sticky
+	// is measured against the flow, so the menu starts below the bar, is on
+	// screen from the first paint, and pins itself the moment the bar has
+	// scrolled away — which is the behaviour asked for: the menu always pinned,
+	// the bar never. No JavaScript reads the scroll position for this.
 	@media (max-width: $bp-tablet) {
 		position: sticky;
 		top: 0;

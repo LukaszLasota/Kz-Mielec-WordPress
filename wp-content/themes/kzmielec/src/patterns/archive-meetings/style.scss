@@ -33,14 +33,17 @@
 	.archive-meetings__item {
 		// Full column; the reading measure sits on the prose inside __content.
 		max-width: var(--content-max-width);
-		margin: space(32) auto;
+		// 6rem, down from 8rem. This template's rhythm is now the one both it and
+		// page-belief follow, so the number is set once here and repeated there;
+		// 8rem was a touch more air than the page needed above the first circle.
+		margin: space(24) auto;
 		padding: 0 space(5); // 20px — the shared phone gutter
 
-		// 8rem of air reads as generous on a wide screen and as a wasted screenful
-		// on a phone, where it pushed the first meeting most of the way down the
-		// viewport. Half of it keeps the separation without the emptiness.
+		// Generous air on a wide screen is a wasted screenful on a phone, where it
+		// pushed the first meeting most of the way down the viewport. Half of it
+		// keeps the separation without the emptiness.
 		@media (max-width: $bp-tablet) {
-			margin: space(16) auto;
+			margin: space(12) auto;
 		}
 
 		// Anchor offset used to be handled here with two hard-coded values; it now
@@ -152,15 +155,15 @@
 		// override an important declaration with a normal one at any
 		// specificity, so the escalation propagates.
 		.wp-block-custom-block-package-scroll-arrow {
-			margin-top: space(24) !important; // 6.25rem
-			margin-bottom: space(32) !important; // 8.75rem
+			margin-top: space(20) !important; // 5rem
+			margin-bottom: space(24) !important; // 6rem
 
 			// Same reasoning as the item margin above: the production rhythm was
-			// drawn for a desktop column, and 6rem + 8rem between two meetings is
+			// drawn for a desktop column, and 5rem + 6rem between two meetings is
 			// most of a phone screen spent on a single arrow.
 			@media (max-width: $bp-tablet) {
-				margin-top: space(10) !important; // 2.5rem
-				margin-bottom: space(12) !important; // 3rem
+				margin-top: space(8) !important; // 2rem
+				margin-bottom: space(10) !important; // 2.5rem
 			}
 		}
 	}

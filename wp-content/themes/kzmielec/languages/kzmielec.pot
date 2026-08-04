@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-01T21:24:10+02:00\n"
+"POT-Creation-Date: 2026-08-04T11:31:47+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: kzmielec\n"
@@ -230,30 +230,29 @@ msgstr ""
 msgid "Przejdź do treści"
 msgstr ""
 
-#: header.php:68
+#: header.php:73
 msgid "strona główna"
 msgstr ""
 
-#: header.php:75
-#: header.php:99
+#: header.php:80
+#: header.php:104
 msgid "Otwórz/zamknij menu"
 msgstr ""
 
-#: header.php:82
+#: header.php:87
 msgid "Nawigacja główna"
 msgstr ""
 
-#: header.php:106
+#: header.php:111
 msgid "Menu przyklejone"
 msgstr ""
 
-#: page-belief.php:48
-#: page-belief.php:83
-msgid "W co i jak wierzymy"
+#: page-belief.php:69
+msgid "Przewiń do nawigacji wiary"
 msgstr ""
 
-#: page-belief.php:71
-msgid "Przewiń do nawigacji wiary"
+#: page-belief.php:81
+msgid "W co i jak wierzymy"
 msgstr ""
 
 #. Template Name of the theme
@@ -342,6 +341,34 @@ msgstr ""
 
 #: searchform.php:29
 msgid "Szukaj"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:38
+msgid "A — rozmiar standardowy"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:42
+msgid "A — tekst powiększony"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:46
+msgid "A — tekst największy"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:50
+msgid "Ustawienia dostępności"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:52
+msgid "Rozmiar tekstu"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:87
+msgid "Wysoki kontrast"
+msgstr ""
+
+#: template-parts/accessibility-bar.php:88
+msgid "Kontrast"
 msgstr ""
 
 #: template-parts/content-posts.php:45

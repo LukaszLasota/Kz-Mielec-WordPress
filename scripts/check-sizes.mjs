@@ -37,6 +37,11 @@ const allowed = new Set(
 // Values that are not type sizes: inherited, relative to the element, or a
 // deliberate one-off documented at its call site.
 const IGNORED = /^(inherit|initial|unset|revert|100%|80%|75%|1em|2em|0)$/;
+// The one declaration that must NOT be a step of the scale: the root font size,
+// which the accessibility bar multiplies. Every rem in the project is measured
+// against it, so it is the scale's origin rather than a value on it. Compared
+// with whitespace stripped, because the minifier removes it.
+const ROOT_SCALE = 'calc(100%*var(--a11y-text-scale,1))';
 // Third-party stylesheets shipped inside a build: their sizes are not ours to set.
 const VENDORED = /\/(leaflet|vendor|node_modules)\//;
 
@@ -72,6 +77,7 @@ for (const output of OUTPUTS) {
 				: raw;
 			checked++;
 			if (!value || IGNORED.test(value) || allowed.has(norm(value))) continue;
+			if (value.replace(/\s+/g, '') === ROOT_SCALE) continue;
 			if (value.startsWith('clamp(') || value.startsWith('var(')) continue;
 			offenders.push({ file, value });
 		}

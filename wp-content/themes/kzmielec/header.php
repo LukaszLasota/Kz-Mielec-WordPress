@@ -12,6 +12,11 @@
 
 <body <?php body_class(); ?>>
 <a class="skip-link" href="#primary"><?php esc_html_e( 'Przejdź do treści', 'kzmielec' ); ?></a>
+<?php
+// After the skip link, before the wrapper: the strip is full-bleed site chrome,
+// and the skip link has to stay the first thing a keyboard reaches.
+get_template_part( 'template-parts/accessibility-bar' );
+?>
 <div class="wrapper">
 <?php
 $logo_id     = get_option( 'my_custom_logo_setting_id' );
