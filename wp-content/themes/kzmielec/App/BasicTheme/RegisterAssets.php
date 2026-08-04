@@ -86,7 +86,20 @@ class RegisterAssets implements ActionHookInterface {
 (function(){try{var r=document.documentElement,s=localStorage.getItem("kzmielec-a11y-size");r.setAttribute("data-a11y-js","");if("large"===s||"xlarge"===s){r.setAttribute("data-a11y-size",s);}if("on"===localStorage.getItem("kzmielec-a11y-contrast")){r.setAttribute("data-a11y-contrast","on");}}catch(e){}})();
 JS;
 
-		wp_print_inline_script_tag( $script );
+		/*
+		 * `data-no-optimize` is not decoration. Without it, LiteSpeed's "Minify
+		 * JS" moves this very script out of the document into an external
+		 * `data:text/javascript;base64,…` URL, and "Load JS Deferred" then
+		 * stamps `defer` on it — so the one script whose whole job is to run
+		 * before the first paint ran after it. Measured consequence: the strip
+		 * appeared ~0.9 s in and pushed the page down 49px (CLS 0.03 on desktop,
+		 * far worse on a phone), and a visitor returning with high contrast saw
+		 * the default palette first. The plugin checks this attribute in
+		 * `optimize.cls.php:889`, ahead of every transform, and uses it for its
+		 * own inline scripts; the value has to be a non-empty string because the
+		 * gate is `! empty( $attrs['data-no-optimize'] )`.
+		 */
+		wp_print_inline_script_tag( $script, array( 'data-no-optimize' => '1' ) );
 	}
 
 
