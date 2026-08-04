@@ -5,19 +5,9 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<?php
-	/*
-	 * No font preload here. Cinzel used to be preloaded, both subsets, on every
-	 * page — 40 KB in the critical path, ahead of the LCP image. Nothing renders
-	 * in it: measured across six pages, not one element computed to Cinzel and
-	 * all three @font-face entries reported `unloaded`. The family stays
-	 * declared (base/_fonts.scss with unicode-range, plus theme.json for the
-	 * editor's font picker), so if a heading is ever set in Cinzel the browser
-	 * fetches the subset it needs on its own. A preload is a promise that the
-	 * file is needed for the first paint; that promise was false.
-	 */
-	wp_head();
-	?>
+	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/cinzel-v26-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/cinzel-v26-latin-ext.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
+	<?php wp_head(); ?>
 </head>
 
 <body <?php body_class(); ?>>
