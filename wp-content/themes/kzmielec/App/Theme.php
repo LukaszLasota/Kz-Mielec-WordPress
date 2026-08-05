@@ -39,6 +39,8 @@ class Theme {
 		Core\BlockStyles::class,
 		Core\GroupLinkSupport::class,
 		Core\PerformanceOptimizer::class,
+		Core\FeedCachePurge::class,
+		Core\FeedRefreshButton::class,
 		Core\ModernImages::class,
 		Seo\YoastFallbacks::class,
 	);

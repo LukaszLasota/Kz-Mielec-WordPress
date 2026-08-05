@@ -233,6 +233,19 @@ class FacebookFeedService {
 		// Also refresh page info (name, picture).
 		$this->refresh_page_info( $page_id, $token );
 
+		/**
+		 * Fires once the stored feed data has been replaced with a fresh answer
+		 * from the API.
+		 *
+		 * Every path that refreshes the feed ends here — the cron, the "refresh"
+		 * button in the settings screen and the REST controller — so one listener
+		 * covers all three. It exists because refreshing the data changes nothing
+		 * a visitor can see while the rendered page is still cached.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action( 'cbp_feed_refreshed' );
+
 		return true;
 	}
 
