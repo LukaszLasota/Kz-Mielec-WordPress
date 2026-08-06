@@ -1,7 +1,7 @@
 # BEGIN NAGŁÓWKI BEZPIECZEŃSTWA
 # Blok trzymany celowo POZA sekcjami zarządzanymi przez wtyczki i rdzeń
-# (LSCACHE, NON_LSCACHE, WordPress, Wordfence) — tamte są przepisywane
-# automatycznie, ten nie jest ruszany.
+# (LSCACHE, NON_LSCACHE, WordPress) — tamte są przepisywane automatycznie,
+# ten nie jest ruszany.
 #
 # Uwaga przy testowaniu: LiteSpeed buforuje odczyt .htaccess przez ok. 2 minuty,
 # więc świeżo dodany nagłówek nie pojawia się od razu. Brak nagłówka zaraz po
@@ -58,16 +58,3 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress
-
-# Wordfence WAF
-<Files ".user.ini">
-<IfModule mod_authz_core.c>
-	Require all denied
-</IfModule>
-<IfModule !mod_authz_core.c>
-	Order deny,allow
-	Deny from all
-</IfModule>
-</Files>
-
-# END Wordfence WAF
