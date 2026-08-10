@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kzmielec\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-10 00:00+0000\n"
+"PO-Revision-Date: 2026-08-10 00:00+0000\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Nie znaleziono strony"
+msgstr "Page not found"
+
+msgid "Strona, której szukasz, nie istnieje lub została przeniesiona. Spróbuj wyszukać poniżej albo wróć na stronę główną."
+msgstr "The page you are looking for does not exist or has been moved. Try searching below, or go back to the home page."
+
+msgid "Wróć na stronę główną"
+msgstr "Back to the home page"
+
+msgid "Zaplanuj wizytę"
+msgstr "Plan your visit"
+
+msgid "Copyright %1$s. Wszelkie prawa zastrzeżone &copy; %2$s."
+msgstr "Copyright %1$s. All rights reserved &copy; %2$s."
+
+msgid "Social media"
+msgstr "Social media"
+
+msgid "Przejdź do treści"
+msgstr "Skip to content"
+
+msgid "strona główna"
+msgstr "home page"
+
+msgid "Otwórz/zamknij menu"
+msgstr "Open/close menu"
+
+msgid "Nawigacja główna"
+msgstr "Main navigation"
+
+msgid "Menu przyklejone"
+msgstr "Sticky menu"
+
+msgid "Przewiń do nawigacji wiary"
+msgstr "Scroll to the beliefs navigation"
+
+msgid "W co i jak wierzymy"
+msgstr "What we believe and how"
+
+msgid "Aktualność"
+msgstr "News"
+
+msgid "Strona"
+msgstr "Page"
+
+msgid "Spotkanie"
+msgstr "Meeting"
+
+msgid "Wyniki wyszukiwania: %s"
+msgstr "Search results: %s"
+
+msgid "« Poprzednia"
+msgstr "« Previous"
+
+msgid "Następna »"
+msgstr "Next »"
+
+msgid "Brak wyników dla %s. Spróbuj innej frazy."
+msgstr "No results for %s. Try a different phrase."
+
+msgid "Szukaj na stronie"
+msgstr "Search the site"
+
+msgid "Czego szukasz?"
+msgstr "What are you looking for?"
+
+msgid "Szukaj"
+msgstr "Search"
+
+msgid "A — rozmiar standardowy"
+msgstr "A — standard size"
+
+msgid "A+ — tekst powiększony"
+msgstr "A+ — enlarged text"
+
+msgid "A++ — tekst największy"
+msgstr "A++ — largest text"
+
+msgid "Ustawienia dostępności"
+msgstr "Accessibility settings"
+
+msgid "Rozmiar tekstu"
+msgstr "Text size"
+
+msgid "Wysoki kontrast"
+msgstr "High contrast"
+
+msgid "Kontrast"
+msgstr "Contrast"
+
+msgid "Brak postów."
+msgstr "No posts."
+
+msgid "Poprzednia strona"
+msgstr "Previous page"
+
+msgid "Następna strona"
+msgstr "Next page"
+
+msgid "Paginacja"
+msgstr "Pagination"
+
+msgid "Wybór języka"
+msgstr "Language selection"
