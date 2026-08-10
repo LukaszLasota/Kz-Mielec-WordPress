@@ -461,3 +461,7 @@ msgstr ""
 msgctxt "Font size name"
 msgid "Extra small"
 msgstr ""
+
+#: template-parts/accessibility-bar.php:81
+msgid "Wybór języka"
+msgstr ""

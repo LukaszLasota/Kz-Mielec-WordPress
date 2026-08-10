@@ -45,10 +45,12 @@
 // -----------------------------------------------------------------------------
 // The strip
 // -----------------------------------------------------------------------------
-// Hidden until the head script marks the document: every control here is inert
-// without JavaScript, and offering a dead control is worse than offering none.
+// Always rendered. The gate that used to live here moved to
+// `.a11y-bar__controls`, because the language links are anchors and stay useful
+// with JavaScript off — only the size and contrast buttons are inert without it,
+// and offering a dead control is worse than offering none.
 .a11y-bar {
-	display: none;
+	display: block;
 	// Black strip, light controls. It does NOT invert with the rest of the
 	// site — the high-contrast block pins it to the dark ground on purpose, so
 	// the control that switches the mode on looks the same before and after.
@@ -62,15 +64,28 @@
 	border-bottom: 0.0625rem solid palette(paper);
 }
 
-:root[data-a11y-js] .a11y-bar {
-	display: block;
+// The strip itself is unconditional now, because the language links inside it
+// are plain anchors that work without JavaScript. Only the controls, which do
+// nothing without it, stay behind the gate — one level down from where the gate
+// used to sit.
+.a11y-bar__controls {
+	display: none;
+	align-items: center;
+	gap: space(2);
+}
+
+:root[data-a11y-js] .a11y-bar__controls {
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .a11y-bar__inner {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: flex-end;
+	// Languages left, accessibility controls right. Was `flex-end` when the
+	// controls were the only occupant.
+	justify-content: space-between;
 	gap: space(2);
 	max-width: var(--content-max-width);
 	margin: 0 auto;
@@ -204,6 +219,51 @@
 }
 
 .a11y-bar__button[aria-pressed="true"] .a11y-bar__glyph {
+	color: palette(ink);
+}
+
+
+// -----------------------------------------------------------------------------
+// Language switcher
+// -----------------------------------------------------------------------------
+
+.a11y-bar__lang-list {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: space(1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.a11y-bar__lang-link {
+	display: inline-block;
+	padding: space(1) space(2);
+	color: inherit;
+	font-size: 0.75rem;
+	line-height: 1.2;
+	text-decoration: none;
+	border: 0.0625rem solid transparent;
+	border-radius: 0.125rem;
+}
+
+.a11y-bar__lang-link:hover,
+.a11y-bar__lang-link:focus-visible {
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+// The active language reuses the size buttons' fill verbatim: `currentcolor`
+// means the swatch follows whatever colour the text has, so it comes out white
+// on the black strip and yellow in high contrast without a second rule. Only the
+// label has to flip to the opposite ink, exactly as the glyph does.
+.a11y-bar__lang-link[aria-current="true"] {
+	background-color: currentcolor;
+	border-color: currentcolor;
+}
+
+.a11y-bar__lang-link[aria-current="true"] .a11y-bar__lang-code {
 	color: palette(ink);
 }
 
@@ -434,6 +494,12 @@
 	// was 1.7:1 on yellow — the pressed button was the least readable control on
 	// the strip.
 	.a11y-bar__button[aria-pressed="true"] .a11y-bar__glyph {
+		color: palette(paper) !important;
+	}
+
+	// Same flip for the active language, same reason: its fill is `currentcolor`,
+	// which the blanket rule turns yellow, so the code on top has to go black.
+	.a11y-bar__lang-link[aria-current="true"] .a11y-bar__lang-code {
 		color: palette(paper) !important;
 	}
 
