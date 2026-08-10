@@ -51,5 +51,9 @@ add_action(
 		if ( class_exists( '\CustomPostsPlugin\Posts\CustomColumns' ) ) {
 			new \CustomPostsPlugin\Posts\CustomColumns();
 		}
+
+		if ( class_exists( '\CustomPostsPlugin\Posts\MeetingsArchiveSlugs' ) ) {
+			new \CustomPostsPlugin\Posts\MeetingsArchiveSlugs();
+		}
 	}
 );
