@@ -42,6 +42,10 @@ class Theme {
 		Core\FeedCachePurge::class,
 		Core\FeedRefreshButton::class,
 		Core\ModernImages::class,
+		// Both contexts on purpose: the gettext filter has to run on the front
+		// end, while registering the strings for the panel only makes sense in
+		// admin. The class guards that part itself.
+		Core\StringTranslations::class,
 		Seo\YoastFallbacks::class,
 	);
 
