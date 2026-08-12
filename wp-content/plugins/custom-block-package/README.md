@@ -19,18 +19,28 @@ theme and the other three.
 
 ```
 custom-block-package/
-├── index.php                  # Plugin entry: autoloader, RegisterBlocks, AssetsManager
+├── index.php                     # Plugin entry: autoloader, RegisterBlocks, AssetsManager
 ├── app/
-│   ├── Autoloader.php         # PSR-4 autoloader (CustomBlockPackage namespace)
+│   ├── Autoloader.php            # PSR-4 autoloader (CustomBlockPackage namespace)
 │   ├── Blocks/
-│   │   └── RegisterBlocks.php # Auto-discovers blocks from build/blocks/
+│   │   └── RegisterBlocks.php    # Auto-discovers blocks from build/blocks/
 │   ├── Assets/
-│   │   └── AssetsManager.php  # Leaflet CSS + Glide.js assets
-│   └── Cache/
-│       └── BlockCache.php     # Transient cache (30 min TTL, auto-flush on save)
-├── src/blocks/                # Block source (JS, SCSS, PHP)
-├── build/                     # Compiled (wp-scripts)
-└── webpack.config.js          # Custom config extending wp-scripts
+│   │   └── AssetsManager.php     # Leaflet CSS + Glide.js assets
+│   ├── Cache/
+│   │   └── BlockCache.php        # Transient cache (30 min TTL, auto-flush on save)
+│   ├── Admin/
+│   │   ├── FacebookSettings.php  # Settings screen, dashboard widget, error notice
+│   │   └── MeetingMeta.php       # Meeting fields (owned here, the post type is not)
+│   ├── Services/
+│   │   ├── FacebookFeedService.php   # Graph API client, cache, fallback, mock data
+│   │   └── NavigableTilesService.php # Tile data, narrowed to the post's language
+│   ├── Cron/
+│   │   └── FacebookFeedCron.php  # Background refresh, interval from the TTL option
+│   └── Rest/
+│       └── FacebookFeedController.php # /custom-block-package/v1/facebook-feed
+├── src/blocks/                   # Block source (JS, SCSS, PHP)
+├── build/                        # Compiled (wp-scripts)
+└── webpack.config.js             # Custom config extending wp-scripts
 ```
 
 ## Blocks
@@ -58,6 +68,45 @@ original code did, and it is invisible on the front end — Polylang narrows the
 query itself there. The editor renders blocks through a REST route with no
 language context, so it received all four languages at once: 12 meetings instead
 of 3.
+
+## The Facebook feed
+
+The `facebook-feed` block replaced the Facebook Page Plugin iframe, which shipped
+around 350KB of third-party JavaScript, set cookies, took up to two seconds and
+frequently rendered blank. Posts are fetched server-side through the Graph API, so
+the visitor's browser talks to nobody but this site.
+
+**Three layers of cache, because the feed must never depend on the API being up.**
+A transient holds the posts for the configured TTL (two hours by default); a
+separate option holds the same posts and **never expires**; and a cron event
+refreshes in the background. When the API errors, the never-expiring backup is
+served — stale posts beat an empty section, and no visitor ever waits on Facebook.
+
+**The token needs attention twice a year.** It is a Page Access Token that never
+expires, generated through `me/accounts` from a long-lived user token. But its
+*data access* lapses after 90 days unless the page administrator renews the Data
+Use Checkup in the Facebook settings, and when it lapses the feed stops. The error
+lands in `cbp_fb_last_error` and raises a red notice on every admin screen, which
+is the only reason anybody finds out.
+
+Settings live under **Facebook Feed** in the admin: page id, token, TTL, plus
+buttons to test the connection, force a refresh, and load 30 fake posts for
+reviewing the UI without a token.
+
+Infinite scroll runs through the REST route rather than in the page: an
+`IntersectionObserver` watching a sentinel inside the scroll box requests the next
+slice, and the route answers with pre-rendered HTML. The scroll container uses
+`overscroll-behavior: contain` and `contain: strict`, so it cannot disturb the page
+scroll.
+
+Renewing the token: Graph API Explorer → user token with `pages_show_list` and
+`pages_read_engagement` → Access Token Debugger → **Extend Access Token** → paste
+the long-lived token back → switch the endpoint to `me/accounts` → copy the
+`access_token` for the page → save it in the admin.
+
+**Instagram deliberately stays on Smash Balloon.** The Instagram account is not
+linked to the Facebook page in Meta Business Suite, and without that link a page
+token cannot serve Instagram at all.
 
 ## Build
 

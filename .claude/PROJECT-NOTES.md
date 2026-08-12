@@ -80,6 +80,26 @@ explicitly.
 `kzmielec.pl → kzmielec.ddev.site` also rewrites `zbor@kzmielec.pl` into a dead address, and
 a wrong e-mail looks exactly like a right one.
 
+## Decisions that still hold
+
+Carried over from the migration plan of 2026-04-21, which is otherwise deleted: it
+described a system that was not built — a `circle-cards` block, ACF Pro, single meeting
+pages. What was worth keeping is the reasoning, and only where it still matches the code.
+
+| Decision | Why |
+|---|---|
+| Belief pages are WP pages, not a post type | the URLs had to stay identical (`/misja/`, `/wizja/`), and eight rarely-changing pages do not need a type |
+| Meetings are a post type with an archive | structured fields, draft/publish, one archive template. Single meeting URLs 301 to the archive anchor — the plan expected a `single-meetings.php` that turned out unnecessary |
+| The belief list is a theme option | `kzmielec_belief_pages`, ordered by drag and drop, read by the tiles block and by `page-belief.php` |
+| No ACF | the plan called for ACF Pro in phase 1. Native `register_meta()` and the Options API cover all of it, so the site carries no dependency on a paid plugin. The belief hover image is `_belief_hover_image` post meta, not the `belief_overlay_icon` the plan named |
+| Blocks live in plugins, not the theme | blocks are content, the theme is appearance — and a type or block registered by a theme vanishes the moment the theme is switched |
+| Leaflet, not Google Maps | free, and no API key to leak or expire |
+| No jQuery | plain JS, with `scroll-behavior: smooth` in CSS |
+| Instagram stays on Smash Balloon | the IG account is not linked to the FB page in Meta Business Suite, so a page token cannot serve it |
+| The Facebook feed is our own block | it replaced a stalling iframe that shipped ~350KB of third-party JS and set cookies |
+| Each plugin mirrors the scale files | a plugin builds separately and must work under any theme; `check:mirrors` catches the drift |
+| Pages are flat, no parents | verified: every published page has `post_parent = 0` |
+
 ## Where things live
 
 - Access data, hosts, paths: `~/private/connection-details.txt` — never in a repository.

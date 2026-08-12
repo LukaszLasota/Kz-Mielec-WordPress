@@ -1,21 +1,15 @@
 ---
-description: Inicjalizuje sesję pracy - czyta instrukcje i notatki projektu
+description: Starts a working session by reading the project notes
 ---
 
-# Inicjalizacja sesji pracy
+# Session start
 
-Przeczytaj następujące pliki w tej kolejności:
+Read `.claude/PROJECT-NOTES.md`: what this project is, the decisions that still
+hold, and the traps that cost time to find.
 
-1. `.claude/INSTRUCTIONS.md` - zasady współpracy
-2. `.claude/PROJECT-NOTES.md` - notatki o projekcie
+Then greet in Polish and ask what we are working on today.
 
-Po przeczytaniu:
-- Przywitaj się po polsku
-- Potwierdź że przeczytałeś instrukcje
-- Zapytaj czym się dzisiaj zajmiemy
-
-Pamiętaj o zasadach:
-- Komunikacja po polsku
-- Komentarze w kodzie po angielsku
-- Pytaj przed każdą zmianą w kodzie
-- Nie pokazuj kodu bez zgody
+The working rules -- Polish in conversation, English in everything committed, ask
+before changing code -- live in the CLAUDE.md files and load on their own. Note
+they load from `~/projects/CLAUDE.md`, which is outside this repository: on a fresh
+machine that file is absent and those rules arrive with nothing to state them.

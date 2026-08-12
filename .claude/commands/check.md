@@ -1,9 +1,15 @@
 ---
-description: Weryfikuje WCAG i bezpieczenstwo
+description: Verifies accessibility, i18n and security
 ---
 
-Sprawdz zgodnośc z WCAG 2.1 AA i opcjonalnie wyzszym jeśli to nie bedzie problem i nie zpesuje designu
-sprawdz czy wszystkie testy sa przetłumaczalne - i18n 
-sprawdz czy wszyskro jest bezpieczne, escpowanie ataki (XSS, Injection)
-komnarze w kodzie po anigielsku
-kod zgodny z ustawieniami php stan i phpcs
+Check WCAG 2.1 AA compliance, and go beyond it where that costs nothing and does
+not disturb the design.
+
+Check that every visitor-facing string is translatable (i18n) -- this site runs in
+four languages, so an untranslated string is a visible defect, not a nicety.
+
+Check that output is escaped and input validated: XSS and injection.
+
+Code comments in English.
+
+Code must satisfy the configured PHPStan level and PHPCS standard.

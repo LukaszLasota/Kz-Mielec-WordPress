@@ -107,8 +107,14 @@ in PHP.
 
 ```bash
 ddev theme:build      # theme -> assets/  (what to run before committing)
-ddev build:all        # theme + all plugins
+ddev plugin:build     # custom-block-package + comparison-of-religions
+ddev build:all        # all three, stopping at the first failure
+ddev theme:watch      # same file names, unminified output
+ddev watch:all        # theme + both block plugins in parallel
 ```
+
+Run one watch at a time: `watch` while iterating, `build` to release.
+`custom-posts` has no build — its `src/` is runtime code, not sources to compile.
 
 > **WSL2 caveat.** Native inotify events do not cross the Docker bind mount, so
 > watch mode misses host-side edits. `ddev theme:build` is the reliable path.
@@ -172,8 +178,14 @@ plain `diff`.
 ## Local environment
 
 DDEV on WSL2. `ddev start`, then the site is at
-[kzmielec.ddev.site](https://kzmielec.ddev.site). Custom DDEV commands live in
-`.ddev/commands/web/`, which is gitignored — they are local-only.
+[kzmielec.ddev.site](https://kzmielec.ddev.site).
+
+The custom commands live in `.ddev/commands/web/` and **are in the repository** —
+`.gitignore` excludes the rest of `.ddev/` but re-includes `commands/`, because a
+build script that is not in version control cannot be reviewed and cannot be fixed
+once. They used to be ignored, so `ddev build:all` existed only on whichever
+machine had typed it in. To add one, drop an executable file there with a
+`## Description:` header; DDEV picks it up by itself.
 
 ## Deploying
 
@@ -199,6 +211,7 @@ activating or deactivating it.
 
 ## Further reading
 
-Working notes, not part of the published documentation: `.claude/PROJECT-NOTES.md`
-for current state and remaining work, `.claude/DDEV-COMMANDS.md` for the full
-command reference.
+`.claude/PROJECT-NOTES.md` — working notes rather than published documentation:
+the current state, the decisions that still hold, and the traps that cost time to
+find. Everything else documents itself in the package that owns it; the five
+READMEs are linked from [Architecture](#architecture).
