@@ -74,3 +74,7 @@ htaccess.htaccess
 # produkcyjne. Trzymamy je lokalnie; dane dostepowe w ~/private/connection-details.txt.
 .claude/project-config.md
 .claude/NAGLOWKI-BEZPIECZENSTWA.md
+
+# Notatki robocze i plany — na razie poza repozytorium. Dokumentacja dla repozytorium
+# powstanie po angielsku i wtedy ten wpis zniknie albo dostanie wyjatek na wybrane pliki.
+docs/
