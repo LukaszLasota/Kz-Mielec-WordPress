@@ -5,8 +5,8 @@
 ### Strona produkcyjna
 - **URL:** https://kzmielec.pl
 - **Motyw:** html5blank-stable (customizowany HTML5 Blank, Todd Motto)
-- **Dokumentacja starego motywu:** `.claude/theme-old-docs.md`
-- **Konfiguracja hostingu/DDEV:** `.claude/project-config.md`
+- **Dokumentacja starego motywu:** usunięta po zakończeniu migracji (zostaje w historii gita)
+- **Konfiguracja hostingu/DDEV:** poza repozytorium
 
 ### Problemy starego motywu
 - 100% treści hardcoded w szablonach PHP - nic nie da się edytować z panelu WP

@@ -1,37 +1,39 @@
-# Code Context Engine — reguły indeksowania dla projektu kzmielec.
-# Docroot = root repo (pełny WordPress, NIE Bedrock). Rdzeń WP = ./wp-admin, ./wp-includes.
+# Code Context Engine -- indexing rules for the kzmielec project.
+# Docroot is the repository root (a full WordPress install, NOT Bedrock), so core
+# lives at ./wp-admin and ./wp-includes.
 #
-# KLUCZOWE: indexer.ignore jest NAME-ONLY (CCE 0.4.25) — dopasowuje NAZWĘ każdego
-# segmentu ścieżki (scalone z DEFAULT_IGNORE: vendor, node_modules, .git, dist,
-# build, logs). Wpisuj GOŁE NAZWY KATALOGÓW. Poprzednie wpisy ze slashem/ścieżką
-# ("wp-admin/", "wp-content/plugins/autoptimize/", "*/assets/") były cichymi no-opami.
-# Ref: ~/projects/dev-tooling/code-context-engine.md §2, §6.1.
+# THE THING TO KNOW: indexer.ignore is NAME-ONLY (CCE 0.4.25). It matches the
+# NAME of any path segment, merged with DEFAULT_IGNORE (vendor, node_modules,
+# .git, dist, build, logs). Write BARE DIRECTORY NAMES. Earlier entries written
+# as paths or with a trailing slash ("wp-admin/", "wp-content/plugins/autoptimize/",
+# "*/assets/") were silent no-ops -- they excluded nothing and reported nothing.
 #
-# Brak kolizji `wp` (docroot = root, brak wrappera). Nasz kod indeksowany przez
-# `cce index --path` (git-hooki, już utwardzone): themes/kzmielec,
-# plugins/custom-block-package, plugins/custom-posts. Stary html5blank-stable
-# celowo NIE wykluczony (referencja migracji). `cache` chroni watcher przed
-# reindeks-sztormem (Blade compile → zawis WSL, §6.9).
+# No `wp` collision to worry about, because the docroot is the root and there is
+# no wrapper directory. Our own code is indexed by `cce index --path` from the git
+# hooks: themes/kzmielec, plugins/custom-block-package, plugins/custom-posts. The
+# old html5blank-stable theme is deliberately NOT excluded -- it is the reference
+# for the migration. `cache` is listed to keep the watcher out of a reindex storm
+# (a Blade compile pass hangs WSL).
 indexer:
   ignore:
-    # --- rdzeń WordPressa ---
+    # --- WordPress core ---
     - wp-admin
     - wp-includes
-    # --- third-party pluginy (po NAZWIE; nasze custom-block-package / custom-posts
-    #     / comparison-of-religions ZOSTAJĄ w głównym indeksie, bez zależności od hooków) ---
+    # --- third-party plugins (BY NAME; our own custom-block-package / custom-posts
+    #     / comparison-of-religions STAY in the main index, with no dependency on hooks) ---
     - litespeed-cache
     - instagram-feed
     - wordpress-seo
-    - twentytwentyfive   # domyślny motyw WP (nie nasz)
-    # --- media / cache / zbudowany output (nie źródło) ---
+    - twentytwentyfive   # the default WP theme, not ours
+    # --- media / cache / build output (not source) ---
     - uploads
     - cache
     - upgrade
     - languages
-    - assets             # skompilowane JS/CSS (źródło jest w webpack/src, src/)
-    - build              # zbudowane bloki (źródło w src/)
-    # --- infra / sekrety / snapshot ---
+    - assets             # compiled JS/CSS (the source is under src/, via webpack)
+    - build              # compiled blocks (the source is under src/)
+    # --- infrastructure / credentials / snapshots ---
     - .ddev
-    - stara_strona       # stara statyczna strona (snapshot)
-    - wp-config.php      # dane dostępowe do bazy — nigdy nie indeksować
+    - stara_strona       # the old static site, kept as a snapshot
+    - wp-config.php      # database credentials -- never index
     - wp-config-ddev.php

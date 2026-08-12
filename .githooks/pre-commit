@@ -20,30 +20,35 @@ if [ -n "$staged" ]; then
 	# Patterns are deliberately narrow: a guard that cries wolf gets bypassed with
 	# --no-verify and then protects nothing.
 	#
-	# Wzorce w skladni ERE (grep -E): nawias trzeba escapowac, a powtorzenia pisze sie
-	# {n,} bez ukosnikow. Pierwsza wersja mieszala obie skladnie i grep odpowiadal
-	# "Unmatched ( or \(" — czyli czesc wzorcow nie dzialala wcale, a hook i tak
-	# konczyl sukcesem. Blokada, ktora cicho nie sprawdza, jest gorsza od jej braku.
+	# The patterns are ERE (grep -E): a parenthesis must be escaped, and repetition is
+	# written {n,} without backslashes. The first version mixed both syntaxes and grep
+	# answered "Unmatched ( or \(" -- meaning some patterns were not working at all,
+	# while the hook still exited successfully. A guard that silently checks nothing is
+	# worse than no guard.
 	#
-	# Ciagi specyficzne dla tego projektu — host SSH i nazwa uzytkownika — NIE sa tutaj.
-	# Pierwsza wersja hooka je wypisywala i natychmiast zablokowala swoj wlasny commit,
-	# co bylo trafna odpowiedzia na plik, ktory ujawnia to, czego zakazuje. Leza w
-	# ~/private/git-forbidden-strings.txt: jeden na wiersz, poza jakimkolwiek
-	# repozytorium, wspolne dla wszystkich projektow na tej maszynie.
+	# The strings specific to this project -- the SSH host and the username -- are NOT
+	# here. The first version of this hook spelled them out and immediately blocked its
+	# own commit, which was the correct answer to a file that discloses what it forbids.
+	# They live in ~/private/git-forbidden-strings.txt: one per line, outside every
+	# repository, shared by every project on this machine.
 	patterns=(
 		'BEGIN [A-Z ]*PRIVATE KEY'
 		'EAA[A-Za-z0-9]{60,}'
 		'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:fx'
 		"define\\([[:space:]]*'DB_PASSWORD'[[:space:]]*,[[:space:]]*'[^']{4,}'"
-		# Wartosc musi wygladac na literal, nie na kod ani placeholder: pierwszy znak
-		# nie moze byc $ " \ < ' ani spacja. Bez tego hook zglaszal dokumentacje, w ktorej
-		# `password=" . $v["DB_PASSWORD"]` tylko CZYTA haslo w czasie dzialania — a to
-		# akurat wzor do nasladowania, nie wyciek.
+		# The value has to look like a literal rather than code or a placeholder: the first
+		# character may not be $ " \ < ' or a space. Without that, the hook flagged
+		# documentation where `password=" . $v["DB_PASSWORD"]` merely READS the password at
+		# run time -- which is the pattern to copy, not a leak.
+		#
+		# Both spellings of the Polish word are matched on purpose: the notes are written in
+		# Polish even though everything committed is in English.
 		'(hasło|haslo|password)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9!@#%^&*_+=-]{6,}'
 	)
 
-	# Ciagi z pliku prywatnego dochodza do listy. Jego brak jest ostrzezeniem, nie cicha
-	# zgoda: hook, ktory nie wie, czego szukac, i nic nie mowi, jest gorszy od jego braku.
+	# The strings from the private file are appended to the list. Its absence is a warning,
+	# not silent consent: a hook that does not know what to look for and says nothing is
+	# worse than no hook.
 	forbidden_file="$HOME/private/git-forbidden-strings.txt"
 
 	if [ -r "$forbidden_file" ]; then
@@ -54,15 +59,14 @@ if [ -n "$staged" ]; then
 			patterns+=("$line")
 		done < "$forbidden_file"
 	else
-		echo "pre-commit: UWAGA — brak $forbidden_file, sprawdzam tylko wzorce ogolne." >&2
+		echo "pre-commit: WARNING -- $forbidden_file is missing, checking generic patterns only." >&2
 	fi
 
-	# Ciagi, ktore wygladaja jak sekret i sekretem nie sa. Kazdy z nich jest tu
-	# wymieniony celowo, z powodem — lista wyjatkow bez uzasadnien zamienia sie z czasem
-	# w liste wszystkiego.
+	# Strings that look like a secret and are not one. Each is listed deliberately, with a
+	# reason: a list of exceptions without justifications turns into a list of everything.
 	allow=(
-		'12ab34cd-5e6f-7890-abcd-ef1234567890'   # fikcyjny klucz DeepL w tescie i w dokumentacji
-		'password_here'                          # placeholder z wp-config-sample.php
+		'12ab34cd-5e6f-7890-abcd-ef1234567890'   # fictional DeepL key, in a test and in the docs
+		'password_here'                          # placeholder from wp-config-sample.php
 	)
 
 	hits=""
@@ -83,7 +87,7 @@ if [ -n "$staged" ]; then
 
 			[ -n "$match" ] || continue
 
-			# Znany, uzasadniony wyjatek? Wtedy to nie trafienie.
+			# A known, justified exception? Then it is not a hit.
 			skip=""
 			for safe in "${allow[@]}"; do
 				case "$match" in
@@ -100,15 +104,15 @@ if [ -n "$staged" ]; then
 
 	if [ -n "$hits" ]; then
 		echo "" >&2
-		echo "pre-commit: PRZERWANE — w zmianach są dane, które nie mogą trafić do repozytorium." >&2
+		echo "pre-commit: STOPPED -- the staged changes carry data that must not enter the repository." >&2
 		echo "" >&2
 		printf '%b' "$hits" >&2
 		echo "" >&2
-		echo "  To repozytorium jest publiczne. Dane dostępowe trzymamy w" >&2
-		echo "  ~/private/connection-details.txt, a w dokumentach używamy \$PRODHOST/\$PRODUSER." >&2
+		echo "  This repository is public. Access data is kept outside it, and documents" >&2
+		echo "  refer to the deployment target as \$PRODHOST/\$PRODUSER." >&2
 		echo "" >&2
-		echo "  Jeśli to fałszywy alarm (np. opis błędu), zawęź wzorzec w .githooks/pre-commit" >&2
-		echo "  zamiast obchodzić hook przez --no-verify." >&2
+		echo "  If this is a false alarm (a description of a bug, say), narrow the pattern in" >&2
+		echo "  .githooks/pre-commit rather than going around the hook with --no-verify." >&2
 		echo "" >&2
 		exit 1
 	fi

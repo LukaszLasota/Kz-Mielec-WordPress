@@ -1,63 +1,66 @@
-# Facebook Feed — dokumentacja implementacji
+# Facebook feed -- implementation notes
 
-Dynamiczny feed z Facebooka pobierany przez Graph API, cache'owany serwerowo, renderowany jako blok Gutenberga z infinite scroll. Zastępuje stary, zacinający się iframe Facebook Page Plugin z poprzedniej wersji strony.
+A dynamic Facebook feed fetched through the Graph API, cached on the server and
+rendered as a Gutenberg block with infinite scroll. It replaces the old, stalling
+Facebook Page Plugin iframe from the previous version of the site.
 
-## Architektura
+## Architecture
 
-Wszystko w pluginie `custom-block-package` — wyłączasz plugin → feed znika.
+All of it lives in the `custom-block-package` plugin: switch the plugin off and
+the feed is gone.
 
 ```
 custom-block-package/
 ├── app/
 │   ├── Admin/
-│   │   └── FacebookSettings.php          # Strona ustawień + dashboard widget + admin notice
+│   │   └── FacebookSettings.php          # settings screen, dashboard widget, admin notice
 │   ├── Services/
-│   │   └── FacebookFeedService.php       # Klient Graph API + cache + fallback + mock data
+│   │   └── FacebookFeedService.php       # Graph API client, cache, fallback, mock data
 │   ├── Cron/
-│   │   └── FacebookFeedCron.php          # WP Cron, refresh co 2h (konfigurowalne)
+│   │   └── FacebookFeedCron.php          # WP Cron, refresh every 2h (configurable)
 │   ├── Rest/
-│   │   └── FacebookFeedController.php    # REST endpoint /custom-block-package/v1/facebook-feed
+│   │   └── FacebookFeedController.php    # REST route /custom-block-package/v1/facebook-feed
 │   └── Cache/
-│       └── BlockCache.php                # FACEBOOK_FEED_PREFIX + flush logic
+│       └── BlockCache.php                # FACEBOOK_FEED_PREFIX and the flush logic
 ├── src/blocks/facebook-feed/
 │   ├── block.json                        # apiVersion 3, attributes, supports
-│   ├── index.js                          # Block registration
-│   ├── edit.js                           # Editor UI z ServerSideRender (preview = frontend)
-│   ├── render.php                        # Server-side render z header + scroll container
+│   ├── index.js                          # block registration
+│   ├── edit.js                           # editor UI via ServerSideRender (preview = front end)
+│   ├── render.php                        # server-side render: header + scroll container
 │   ├── view.js                           # IntersectionObserver infinite scroll
-│   ├── style.scss                        # Frontend + editor (importowany do index.scss)
-│   └── index.scss                        # Editor-only (@import style.scss)
-└── index.php                              # Bootstrap nowych klas + activation hooks
+│   ├── style.scss                        # front end and editor (imported into index.scss)
+│   └── index.scss                        # editor only (@import style.scss)
+└── index.php                              # bootstraps the classes, activation hooks
 ```
 
-## Komponenty
+## Components
 
 ### 1. FacebookFeedService
 
-`/app/Services/FacebookFeedService.php`
+`app/Services/FacebookFeedService.php`
 
-**Stałe:**
-- `OPTION_PAGE_ID` = `cbp_fb_page_id` — username strony FB (np. `Kzmielec`)
-- `OPTION_ACCESS_TOKEN` = `cbp_fb_access_token` — Page Access Token (never-expiring)
-- `OPTION_CACHE_TTL` = `cbp_fb_cache_ttl` — TTL cache w sekundach (1h/2h/6h/12h/24h)
-- `OPTION_LAST_SYNC` = `cbp_fb_last_sync` — timestamp ostatniego udanego fetcha
-- `OPTION_LAST_ERROR` = `cbp_fb_last_error` — ostatni komunikat błędu z API
-- `OPTION_BACKUP_POSTS` = `cbp_fb_backup_posts` — backup postów (nigdy nie wygasa, fallback gdy API leży)
-- `OPTION_PAGE_INFO` = `cbp_fb_page_info` — name + picture URL strony FB
-- `MAX_POSTS = 50` — max postów w jednym wywołaniu API
+**Constants:**
+- `OPTION_PAGE_ID` = `cbp_fb_page_id` -- the FB page username (e.g. `Kzmielec`)
+- `OPTION_ACCESS_TOKEN` = `cbp_fb_access_token` -- Page Access Token (never-expiring)
+- `OPTION_CACHE_TTL` = `cbp_fb_cache_ttl` -- cache TTL in seconds (1h/2h/6h/12h/24h)
+- `OPTION_LAST_SYNC` = `cbp_fb_last_sync` -- timestamp of the last successful fetch
+- `OPTION_LAST_ERROR` = `cbp_fb_last_error` -- last error message from the API
+- `OPTION_BACKUP_POSTS` = `cbp_fb_backup_posts` -- post backup (never expires; the fallback when the API is down)
+- `OPTION_PAGE_INFO` = `cbp_fb_page_info` -- the page's name and picture URL
+- `MAX_POSTS = 50` -- most posts per API call
 - `DEFAULT_TTL = 2 * HOUR_IN_SECONDS`
 - `API_VERSION = 'v19.0'`
 
-**Publiczne metody:**
-- `get_posts(int $limit = 10): array` — zwraca posty z cache
-- `get_posts_range(int $offset, int $limit): array` — paginacja dla infinite scroll
-- `get_total_count(): int` — całkowita liczba postów w cache
-- `get_page_info(): array{name, picture}` — info o stronie
-- `refresh(): bool` — wymuś fetch z API + zapis cache + backup
-- `test_connection(): array{success, message, posts_count}` — test API z obecnym tokenem
-- `load_mock_data(): bool` — wstrzykuje 30 fake postów (testy UI bez tokenu)
+**Public methods:**
+- `get_posts(int $limit = 10): array` -- posts from cache
+- `get_posts_range(int $offset, int $limit): array` -- pagination for infinite scroll
+- `get_total_count(): int` -- how many posts are in the cache
+- `get_page_info(): array{name, picture}` -- page details
+- `refresh(): bool` -- force a fetch, write the cache and the backup
+- `test_connection(): array{success, message, posts_count}` -- test the API with the current token
+- `load_mock_data(): bool` -- injects 30 fake posts (UI testing without a token)
 
-**Endpointy Graph API:**
+**Graph API endpoints:**
 ```
 GET /{page_id}/posts
   ?fields=message,created_time,permalink_url,full_picture,attachments{media,subattachments,type}
@@ -69,77 +72,72 @@ GET /{page_id}
   &access_token={token}
 ```
 
-**Flow `refresh()`:**
-1. Pobierz `page_id` i `token` z opcji
-2. wp_remote_get() do Graph API
-3. Parsuj JSON, zwaliduj
-4. Zapisz w transient (z TTL)
-5. Zapisz w `OPTION_BACKUP_POSTS` (nigdy nie wygasa)
-6. Update `OPTION_LAST_SYNC` lub `OPTION_LAST_ERROR`
-7. Pobierz info o stronie (`refresh_page_info()`)
+**What `refresh()` does:**
+1. Reads `page_id` and the token from the options
+2. `wp_remote_get()` to the Graph API
+3. Parses and validates the JSON
+4. Stores it in a transient, with the TTL
+5. Stores it in `OPTION_BACKUP_POSTS`, which never expires
+6. Updates `OPTION_LAST_SYNC` or `OPTION_LAST_ERROR`
+7. Fetches the page details (`refresh_page_info()`)
 
-**Fallback gdy API leży:**
-- Transient pusty + brak refresh → zwróć backup posts (mogą być stare, ale lepsze niż nic)
+**Fallback when the API is down:** an empty transient with no successful refresh
+returns the backup posts. They may be stale, which beats an empty feed.
 
 ### 2. FacebookFeedCron
 
-`/app/Cron/FacebookFeedCron.php`
+`app/Cron/FacebookFeedCron.php`
 
-- Custom interval `cbp_fb_interval` = TTL z opcji
+- Custom interval `cbp_fb_interval`, taken from the TTL option
 - Hook: `cbp_fb_cron_refresh`
-- `activate()` / `deactivate()` — register_activation_hook / register_deactivation_hook
-- `reschedule()` — wywoływane po zmianie TTL w admin, restartuje cron
+- `activate()` / `deactivate()` -- via register_activation_hook / register_deactivation_hook
+- `reschedule()` -- called after the TTL changes in the admin, restarts the cron event
 
 ### 3. FacebookSettings
 
-`/app/Admin/FacebookSettings.php`
+`app/Admin/FacebookSettings.php`
 
-**Menu:** WP Admin → **Facebook Feed** (top-level, dashicon `facebook-alt`)
+**Menu:** WP Admin -> **Facebook Feed** (top level, dashicon `facebook-alt`)
 
-**Pola formularza:**
-- `cbp_fb_page_id` — text input (sanitize_text_field)
-- `cbp_fb_access_token` — textarea code (sanitize_textarea_field)
-- `cbp_fb_cache_ttl` — select 1h/2h/6h/12h/24h
+**Form fields:**
+- `cbp_fb_page_id` -- text input (sanitize_text_field)
+- `cbp_fb_access_token` -- code textarea (sanitize_textarea_field)
+- `cbp_fb_cache_ttl` -- select: 1h/2h/6h/12h/24h
 
-**Przyciski Actions:**
-- **Test connection** — wywołuje `FacebookFeedService::test_connection()`
-- **Refresh cache now** — flush cache + force refresh
-- **Load mock data (for testing)** — wczytaj 30 fake postów
+**Action buttons:**
+- **Test connection** -- calls `FacebookFeedService::test_connection()`
+- **Refresh cache now** -- flushes the cache and forces a refresh
+- **Load mock data (for testing)** -- loads 30 fake posts
 
-**Status section:**
-- Last successful sync (z human_time_diff)
-- Last error (jeśli jest)
+**Status section:** last successful sync (through `human_time_diff`) and the last
+error, if there is one.
 
-**Admin notice (czerwony banner):**
-- Wyświetla się na **wszystkich stronach WP Admin** gdy `cbp_fb_last_error` nie jest puste
-- Pokazuje treść błędu + przycisk "Otwórz ustawienia"
-- Hook: `admin_notices`
+**Admin notice (red banner):** shown on **every WP Admin screen** while
+`cbp_fb_last_error` is not empty, with the error text and a button to the settings.
+Hook: `admin_notices`.
 
-**Dashboard widget:**
-- Widget na Kokpicie WP: status strony, token, cache count, last sync, error
-- Hook: `wp_dashboard_setup`
+**Dashboard widget:** page status, token, cached post count, last sync, error.
+Hook: `wp_dashboard_setup`.
 
-**Security:**
-- Wszystkie akcje z nonce (NONCE_SAVE, NONCE_ACTION)
-- Capability: `manage_options`
-- Sanityzacja inputów
+**Security:** every action carries a nonce (NONCE_SAVE, NONCE_ACTION), the
+capability is `manage_options`, and all input is sanitised.
 
 ### 4. FacebookFeedController (REST)
 
-`/app/Rest/FacebookFeedController.php`
+`app/Rest/FacebookFeedController.php`
 
-**Endpoint:** `GET /wp-json/custom-block-package/v1/facebook-feed`
+**Route:** `GET /wp-json/custom-block-package/v1/facebook-feed`
 
-**Query params:**
-- `offset` (int, default 0) — od którego posta zacząć
-- `limit` (int, default 5, max 20) — ile postów zwrócić
+**Query parameters:**
+- `offset` (int, default 0) -- which post to start from
+- `limit` (int, default 5, max 20) -- how many posts to return
 - `showImages` (bool, default true)
 - `showDate` (bool, default true)
 
 **Response:**
 ```json
 {
-  "html": "<article>...</article>...",  // Pre-renderowany HTML
+  "html": "<article>...</article>...",
   "count": 5,
   "total": 30,
   "offset": 0,
@@ -147,125 +145,130 @@ GET /{page_id}
 }
 ```
 
-**Permission:** `__return_true` (publiczny — feed jest publicznie widoczny)
+The `html` is pre-rendered server-side, so the browser appends markup rather than
+templating it.
 
-### 5. Block facebook-feed
+**Permission:** `__return_true`. The feed is public, so the route is too.
 
-`/src/blocks/facebook-feed/`
+### 5. The facebook-feed block
 
-**Atrybuty (block.json):**
-- `anchor` (string) — id elementu
-- `postsCount` (number, default 5) — początkowa liczba postów
+`src/blocks/facebook-feed/`
+
+**Attributes (block.json):**
+- `anchor` (string) -- element id
+- `postsCount` (number, default 5) -- how many posts to render initially
 - `showImages` (bool, default true)
 - `showDate` (bool, default true)
 - `columns` (number, default 1, max 3)
-- `containerHeight` (number, default 700) — wysokość scroll boxa w px
+- `containerHeight` (number, default 700) -- height of the scroll box, in px
 
 **Render flow:**
-1. `render.php` pobiera N pierwszych postów z `FacebookFeedService::get_posts()`
-2. Renderuje header (avatar + nazwa + przycisk "Odwiedź stronę")
-3. Renderuje N postów w scroll container (`.facebook-feed__scroll`)
-4. Dodaje sentinel + loading indicator jeśli `has_more`
-5. Wrapper ma `data-*` atrybuty dla view.js
+1. `render.php` takes the first N posts from `FacebookFeedService::get_posts()`
+2. Renders the header: avatar, name, and a button to the page
+3. Renders N posts inside the scroll container (`.facebook-feed__scroll`)
+4. Adds the sentinel and the loading indicator when `has_more`
+5. The wrapper carries `data-*` attributes for view.js
 
-**View.js (infinite scroll):**
-1. `IntersectionObserver` z `root: scrollContainer`, `rootMargin: '200px 0px'`
-2. Gdy sentinel widoczny → fetch z REST endpoint z aktualnym `offset` i `limit`
-3. Append HTML do grid
-4. Update `offset`, `hasMore`
-5. Disconnect observer gdy `!hasMore`
+**view.js (infinite scroll):**
+1. `IntersectionObserver` with `root: scrollContainer` and `rootMargin: '200px 0px'`
+2. Sentinel becomes visible -> fetch from the REST route with the current `offset` and `limit`
+3. Append the HTML to the grid
+4. Update `offset` and `hasMore`
+5. Disconnect the observer once `!hasMore`
 
-**CSS scroll container:**
-- `height: var(--cbp-fb-height, 700px)` (z atrybutu)
-- `max-height` + `min-height: 0` dla bezpieczeństwa
-- `overflow-y: auto` + `overscroll-behavior: contain` (izoluje scroll)
-- `contain: strict` — twarda izolacja layoutu (nie wpływa na page scroll)
+**Scroll container CSS:**
+- `height: var(--cbp-fb-height, 700px)`, from the attribute
+- `max-height` plus `min-height: 0` for safety
+- `overflow-y: auto` and `overscroll-behavior: contain`, which isolates the scroll
+- `contain: strict` -- hard layout isolation, so the page scroll is unaffected
 
-**Header bloku:**
-- Avatar 48px (z `cbp_fb_page_info[picture]`)
-- Page name + "Strona na Facebooku" (subtitle)
-- Niebieski przycisk "Odwiedź stronę" → link do facebook.com/{page_id}
-- Wrap na mobile (przycisk pełna szerokość <500px)
+**Block header:** a 48px avatar (from `cbp_fb_page_info[picture]`), the page name
+with a subtitle, and a blue button linking to facebook.com/{page_id}. It wraps on
+mobile, with the button going full width below 500px.
 
-**Względny czas:**
-- < 1 min: "przed chwilą"
-- < 1 tydzień: "X godzin temu" / "X dni temu" (`human_time_diff`)
-- > 1 tydzień: pełna data (`wp_date` z `date_format` opcji)
+**Relative time:**
+- under a minute: "just now"
+- under a week: "X hours ago" / "X days ago" (`human_time_diff`)
+- over a week: the full date (`wp_date` with the site's `date_format`)
 
-## Token Facebook
+## The Facebook token
 
-### Setup wykonany
+### What is set up
 
-**Aplikacja Meta:** `KZMielec` (App ID: 1315941170390773)
+**Meta app:** `KZMielec` (App ID 1315941170390773)
 - Type: Business
-- Use case: Manage everything on your Page
-- Mode: Development (nie wymaga App Review)
-- Admin: Dariusz Hapoń
+- Use case: manage everything on your Page
+- Mode: Development, which needs no App Review
+- Administered by the church's Facebook page administrator
 
-**Strona FB:** Kościół Zielonoświątkowy Zbór w Mielcu (Page ID: 1496572750574514)
+**FB page:** Pentecostal Church in Mielec (Page ID 1496572750574514)
 - Username: Kzmielec
-- Admin Dariusz: Administrator role
+- The page administrator holds the Administrator role
 
 **Token:**
 - Type: Page Access Token
-- Expires: **Never** (wygenerowany przez `me/accounts` endpoint z long-lived User Tokenu)
-- Data Access Expires: 90 dni (Data Use Checkup — Dariusz musi co 90 dni odnowić w Ustawieniach FB)
+- Expires: **never** (generated through the `me/accounts` endpoint from a long-lived user token)
+- Data access expires: 90 days. The Data Use Checkup has to be renewed by the page
+  administrator in the Facebook settings, and the feed stops when it lapses.
 - Scopes: `pages_show_list`, `business_management`, `pages_read_engagement`, `public_profile`
 
-### Procedura odnowienia tokenu (gdy wygaśnie / Dariusz nie odnowił Data Access)
+### Renewing the token
 
-1. Graph API Explorer → Get User Access Token (z permissions: `pages_show_list`, `pages_read_engagement`)
-2. Skopiuj User Token → Access Token Debugger → **Extend Access Token** → long-lived User Token (60 dni)
-3. Wklej long-lived User Token w Graph API Explorer
-4. Zmień endpoint na `me/accounts` → Submit
-5. Z JSON skopiuj `access_token` dla Kzmielec — to never-expiring Page Token
-6. Wklej w WP Admin → Facebook Feed → Save
+1. Graph API Explorer -> get a user access token with `pages_show_list` and `pages_read_engagement`
+2. Copy it into the Access Token Debugger -> **Extend Access Token** -> a long-lived user token (60 days)
+3. Paste the long-lived user token back into the Graph API Explorer
+4. Change the endpoint to `me/accounts` -> Submit
+5. From the JSON, copy the `access_token` belonging to Kzmielec -- that is the never-expiring page token
+6. Paste it into WP Admin -> Facebook Feed -> Save
 
-Pełna instrukcja dla admina FB: `INSTRUKCJA-TOKEN-FB.md` (do wysłania pastorowi).
+The walkthrough written for the page administrator is a separate document, kept
+out of this repository.
 
-## Mock data — testowanie bez tokenu
+## Mock data: testing without a token
 
-W admin panelu **Load mock data (for testing)** wstrzykuje 30 fake postów:
-- Image: `https://picsum.photos/seed/fbN/800/450`
-- Text: "Przykładowy post numer N — lorem ipsum..."
-- Page info: "Kościół Zielonoświątkowy Zbór w Mielcu" + avatar
-- Daty rosnące wstecz (dzień po dniu)
+**Load mock data (for testing)** in the admin injects 30 fake posts:
+- image: `https://picsum.photos/seed/fbN/800/450`
+- text: placeholder prose, numbered
+- page details: the church name and an avatar
+- dates walking backwards, one per day
 
-Używane do podglądu UI bez prawdziwego tokenu (development).
+It exists so the UI can be reviewed without a real token.
 
-## Wydajność
+## Performance
 
-| | iframe FB Page Plugin (stara prod) | Nasz block |
+| | FB Page Plugin iframe (old production) | This block |
 |---|---|---|
-| External JS | ~350KB | 0KB |
-| External cookies | Tak (GDPR) | Nie |
-| Czas ładowania | 500-2000ms (zacina się) | <50ms (z cache) |
-| Lighthouse impact | Tracker blokujący | Brak wpływu |
-| Niezawodność | Często blank | Zawsze działa (backup w `wp_options`) |
+| External JS | ~350KB | none |
+| External cookies | yes (a GDPR matter) | none |
+| Load time | 500-2000ms, and it stalled | under 50ms from cache |
+| Lighthouse impact | a blocking tracker | none |
+| Reliability | frequently blank | always renders (backup in `wp_options`) |
 
-**Cache strategy:**
-- Transient: TTL z ustawień (default 2h)
-- Backup option: nigdy nie wygasa, używany gdy API zwróci błąd
-- Cron: refresh w tle co 2h, użytkownicy nigdy nie czekają na API
+**Cache strategy:** a transient with the TTL from the settings (2h by default), a
+backup option that never expires and is used when the API errors, and a cron job
+refreshing in the background -- so no visitor ever waits on the Graph API.
 
-## Standardy
+## Standards
 
-- **PSR-4:** namespace `CustomBlockPackage\Admin\*`, `Services\*`, `Cron\*`, `Rest\*`
-- **PHPStan L8:** strict types, return types, 0 errors
-- **PHPCS WP Standards:** 0 errors, 0 warningi
-- **WCAG 2.1 AA:** semantyczne `<article>`, `<time>`, `aria-label`, `aria-live`, `loading="lazy"`, `rel="noopener noreferrer"`
-- **i18n:** wszystkie stringi w `__()` z textdomain `custom-block-package`
+- **PSR-4:** namespaces `CustomBlockPackage\Admin\*`, `Services\*`, `Cron\*`, `Rest\*`
+- **PHPStan level 8:** strict types, declared return types, zero errors
+- **PHPCS, WordPress standard:** zero errors, zero warnings
+- **WCAG 2.1 AA:** semantic `<article>` and `<time>`, `aria-label`, `aria-live`,
+  `loading="lazy"`, `rel="noopener noreferrer"`
+- **i18n:** every string through `__()` with the `custom-block-package` text domain
 
-## Instagram (status: NIE ZAIMPLEMENTOWANE)
+## Instagram: NOT implemented
 
-Decyzja: Instagram zostaje na **Smash Balloon Instagram Feed** (free) plugin. Powody:
-- Konto Instagram zbor_w_mielcu nie jest powiązane z FB Page Kzmielec w Meta Business Suite
-- Bez powiązania nie da się użyć Page Tokenu dla IG
-- Wymagałoby: konwersji konta IG na Business + powiązania z FB Page (pastor) + dodania `instagram_basic` do tokenu
+Instagram stays on the free **Smash Balloon Instagram Feed** plugin, because the
+`zbor_w_mielcu` Instagram account is not linked to the Kzmielec Facebook page in
+Meta Business Suite, and without that link a page token cannot serve Instagram.
+Doing it properly would mean converting the account to a Business one, linking it
+to the FB page, and adding `instagram_basic` to the token.
 
-Jeśli kiedyś:
-1. Pastor połączy IG z FB Page (~1.5 min na telefonie)
-2. Dodanie `instagram_basic` do tokenu (~5 min)
-3. Implementacja `InstagramFeedService` analogicznie do `FacebookFeedService` (~30 min)
+If that ever happens:
+1. The page administrator links Instagram to the FB page (about a minute, on a phone)
+2. Add `instagram_basic` to the token
+3. Write `InstagramFeedService` along the lines of `FacebookFeedService`
 
-Reuse byłby wysoki: ten sam token, BlockCache, Cron pattern, REST pattern, admin patterns.
+Reuse would be high: the same token, the same BlockCache, and the same cron, REST
+and admin patterns.
