@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Custom Posts
- * Description: Wtyczka do rejestracji niestandardowych postów i taksonomii.
+ * Description: Registers the meetings post type, with a translated archive slug per language.
  * Version: 1.0.0
  * Author: Łukasz Lasota
  * Text Domain: custom-posts
