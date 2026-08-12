@@ -73,3 +73,4 @@ htaccess.htaccess
 # To repozytorium bylo publiczne, a te pliki niosą host, uzytkownika i sciezki
 # produkcyjne. Trzymamy je lokalnie; dane dostepowe w ~/private/connection-details.txt.
 .claude/project-config.md
+.claude/NAGLOWKI-BEZPIECZENSTWA.md
