@@ -26,11 +26,11 @@
     },
     "latitude": {
       "type": "number",
-      "default": 50.031562
+      "default": 50.299071
     },
     "longitude": {
       "type": "number",
-      "default": 21.997937
+      "default": 21.4483254
     },
     "zoom": {
       "type": "number",

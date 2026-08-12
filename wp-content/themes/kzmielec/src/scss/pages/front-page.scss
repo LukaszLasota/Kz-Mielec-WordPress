@@ -22,4 +22,18 @@
 .home .site-main p.has-text-align-center {
 
 	@include type(body);
+
+	// The e-mail address is the only link in this run, and without a rule it fell
+	// through to the browser default blue — 2.23:1 against the black text around
+	// it, below the 3:1 WCAG 1.4.1 asks for when colour alone identifies a link.
+	// axe caught it on the Ukrainian and Spanish pages only, because the rule
+	// needs a certain amount of surrounding text before it applies and "email:"
+	// is shorter than "електронна пошта:". The defect was on all four.
+	//
+	// Underlining removes the reliance on colour altogether, and taking the
+	// surrounding text colour puts it at 21:1 against the page.
+	a {
+		color: inherit;
+		text-decoration: underline;
+	}
 }

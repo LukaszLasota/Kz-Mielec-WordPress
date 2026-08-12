@@ -11,8 +11,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$latitude        = isset( $attributes['latitude'] ) ? (float) $attributes['latitude'] : 50.031562;
-$longitude       = isset( $attributes['longitude'] ) ? (float) $attributes['longitude'] : 21.997937;
+/*
+ * Coordinates come from the congregation's contact settings unless this particular map
+ * was deliberately pointed somewhere else.
+ *
+ * `block.json` carries a placeholder pair, which core merges into `$attributes` for every
+ * instance, so "the author chose nothing" and "the author chose the placeholder" look
+ * identical here. An instance still on the placeholder therefore follows the settings; an
+ * instance holding anything else keeps what it holds, because a second map at a different
+ * address has to stay possible.
+ *
+ * The placeholder is the congregation's own location, and it has to be. It used to be a
+ * spot near Rzeszów, and the editor's own preview reads `block.json` directly — so once the
+ * stored coordinates were removed from the pages, every map showed the wrong town while
+ * being edited, and the right one once published. A placeholder nobody can see is a
+ * placeholder; one the editor draws on a map has to be true.
+ *
+ * The option is read directly rather than through the theme's `ContactData`, so this plugin
+ * keeps working with any theme — the same arrangement as `kzmielec_belief_pages` in
+ * NavigableTilesService.
+ */
+$placeholder_lat = 50.299071;
+$placeholder_lng = 21.4483254;
+
+$latitude  = isset( $attributes['latitude'] ) ? (float) $attributes['latitude'] : $placeholder_lat;
+$longitude = isset( $attributes['longitude'] ) ? (float) $attributes['longitude'] : $placeholder_lng;
+
+if ( abs( $latitude - $placeholder_lat ) < 0.000001 && abs( $longitude - $placeholder_lng ) < 0.000001 ) {
+	$contact = get_option( 'kzmielec_contact', array() );
+
+	if ( is_array( $contact ) ) {
+		$from_settings_lat = isset( $contact['latitude'] ) ? trim( (string) $contact['latitude'] ) : '';
+		$from_settings_lng = isset( $contact['longitude'] ) ? trim( (string) $contact['longitude'] ) : '';
+
+		if ( is_numeric( $from_settings_lat ) && is_numeric( $from_settings_lng ) ) {
+			$latitude  = (float) $from_settings_lat;
+			$longitude = (float) $from_settings_lng;
+		}
+	}
+}
 $zoom            = isset( $attributes['zoom'] ) ? (int) $attributes['zoom'] : 16;
 $containerHeight = isset( $attributes['containerHeight'] ) ? (int) $attributes['containerHeight'] : 400;
 $popupText       = isset( $attributes['popupText'] ) ? $attributes['popupText'] : __( 'Nasza lokalizacja', 'custom-block-package' );

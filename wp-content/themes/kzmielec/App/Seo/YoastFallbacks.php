@@ -50,8 +50,19 @@ class YoastFallbacks implements FilterHookInterface {
 	 * sentences on their own ("w sprawie małżeństwa, rozwodu, powtórnego
 	 * małżeństwa oraz planowania rodziny"), and appending the site name pushed
 	 * one to 117 characters — half of it invisible in the result.
+	 *
+	 * Raised from 60 to 75 once the site name itself was translated. The Spanish
+	 * name is 44 characters, so at 60 the suffix survived on 4 of 21 Spanish pages
+	 * against 9 of 21 Polish ones — the same site advertising its name in one
+	 * language and not the other. Measured across all four languages, 75 keeps the
+	 * suffix on 10-15 pages each while still dropping it on the long-sentence
+	 * titles, which run 104-128 characters and where appending anything is absurd.
+	 *
+	 * 75 is past what Google displays, and deliberately so: the site name sits at
+	 * the end, so an over-long title loses the name rather than the page's own
+	 * words. That is the right thing to lose.
 	 */
-	private const TITLE_LENGTH = 60;
+	private const TITLE_LENGTH = 75;
 
 	/**
 	 * Constructor.
@@ -168,8 +179,30 @@ class YoastFallbacks implements FilterHookInterface {
 			return '';
 		}
 
+		/*
+		 * A sentence first, then the timetable. On its own the timetable came to 71-87
+		 * characters depending on the language — well under the 120 Google will show,
+		 * and it read as a fragment rather than an invitation. This is the archive
+		 * every visitor planning a first visit lands on, so it is worth a written
+		 * opening; the times still follow, because that is what the reader is looking
+		 * for. Translated per language through the theme's .mo files rather than
+		 * through Yoast's own archive setting, which is a single global value and
+		 * would give all four languages the same Polish text.
+		 *
+		 * The address arrives from the one source instead of being written into the
+		 * translated string. While it lived inside the string, the Ukrainian catalogue
+		 * carried «вул. Промислова, 2» — a Cyrillic street name that does not exist in
+		 * the Polish postal system, and one that had already been removed from the page
+		 * content without anybody noticing this second copy.
+		 */
+		$lead = sprintf(
+			/* translators: %s: the congregation's address, supplied by the theme. */
+			__( 'Kiedy się spotykamy w Mielcu, %s:', 'kzmielec' ),
+			wp_strip_all_tags( (string) \Kzmielec\Contact\ContactBindings::line( 'address' ) )
+		);
+
 		return rtrim(
-			mb_strimwidth( implode( ', ', $parts ), 0, self::DESCRIPTION_LENGTH, '…', 'UTF-8' )
+			mb_strimwidth( $lead . ' ' . implode( ', ', $parts ), 0, self::DESCRIPTION_LENGTH, '…', 'UTF-8' )
 		);
 	}
 
@@ -217,6 +250,8 @@ class YoastFallbacks implements FilterHookInterface {
 			return $graph;
 		}
 
+		$contact = \Kzmielec\Contact\ContactData::all();
+
 		$church = array(
 			'@type'     => 'Church',
 			'@id'       => home_url( '/#church' ),
@@ -224,13 +259,15 @@ class YoastFallbacks implements FilterHookInterface {
 			'url'       => home_url( '/' ),
 			'address'   => array(
 				'@type'           => 'PostalAddress',
-				'streetAddress'   => 'ul. Przemysłowa 2',
-				'postalCode'      => '39-300',
-				'addressLocality' => 'Mielec',
+				// The street keeps its Polish form in every language: this is a postal
+				// address, not prose, and it has to work on an envelope and in a map.
+				'streetAddress'   => 'ul. ' . $contact['street'],
+				'postalCode'      => $contact['postcode'],
+				'addressLocality' => $contact['city'],
 				'addressCountry'  => 'PL',
 			),
-			'email'     => 'zbor@kzmielec.pl',
-			'telephone' => '+48669189992',
+			'email'     => $contact['email'],
+			'telephone' => \Kzmielec\Contact\ContactData::phone_e164(),
 		);
 
 		$logo_id = (int) get_option( 'site_icon' );

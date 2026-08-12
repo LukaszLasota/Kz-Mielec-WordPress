@@ -46,7 +46,28 @@ class Theme {
 		// end, while registering the strings for the panel only makes sense in
 		// admin. The class guards that part itself.
 		Core\StringTranslations::class,
+		// The safety net for Polylang being switched off. It lives in the theme
+		// rather than in the `kzmielec-translate` plugin that created the translated
+		// content, because the theme cannot be deactivated and that plugin is a
+		// migration tool which should be free to go. Does nothing while Polylang is
+		// active. See the class for the full reasoning.
+		Core\TranslationGuard::class,
+		// The social feeds carry the congregation's Polish posts on every language
+		// version, so they have to declare `lang="pl"` — WCAG 3.1.2.
+		Core\SocialFeedLanguage::class,
+		// One source for the congregation's contact details, fed into block content
+		// through the core Block Bindings API. Before this, the address, phone number,
+		// tax number, e-mail and bank account existed in four independent copies — one
+		// per language version of the front page — plus a fifth in the theme's own
+		// structured data, and they had already drifted apart unnoticed.
+		Contact\ContactBindings::class,
 		Seo\YoastFallbacks::class,
+		// Adds the `x-default` hreflang, which Polylang skips whenever the default
+		// language is hidden at the site root — as it is here.
+		Seo\Hreflang::class,
+		// The Scripture attribution travels with the quotations instead of sitting in
+		// the footer of every page. See the class for the licence reasoning.
+		Seo\ScriptureNotice::class,
 	);
 
 	/**
@@ -60,6 +81,7 @@ class Theme {
 	private array $admin_components = array(
 		Admin\ThemeSettingsPage::class,
 		Admin\LogoSettings::class,
+		Admin\ContactSettings::class,
 		Admin\BeliefSettings::class,
 		Admin\BeliefPageMeta::class,
 		Core\SvgSupport::class,
