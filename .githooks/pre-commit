@@ -33,7 +33,9 @@ if [ -n "$staged" ]; then
 	# repository, shared by every project on this machine.
 	patterns=(
 		'BEGIN [A-Z ]*PRIVATE KEY'
-		'EAA[A-Za-z0-9]{60,}'
+		# A Facebook page token runs to about 200 characters, so 100 is still well
+		# under a real one while cutting the odds of matching a base64 blob.
+		'EAA[A-Za-z0-9]{100,}'
 		'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:fx'
 		"define\\([[:space:]]*'DB_PASSWORD'[[:space:]]*,[[:space:]]*'[^']{4,}'"
 		# The value has to look like a literal rather than code or a placeholder: the first
@@ -78,6 +80,13 @@ if [ -n "$staged" ]; then
 		case "$file" in
 			*.png|*.jpg|*.jpeg|*.webp|*.avif|*.gif|*.ico|*.woff|*.woff2|*.ttf|*.eot|*.zip|*.gz|*.mo) continue ;;
 			*/node_modules/*|*/vendor/*|*/build/*|wp-admin/*|wp-includes/*) continue ;;
+			# Third-party plugins, for the same reason as core: we do not type
+			# anything into them, we only update them. Their minified assets embed
+			# base64 fonts and SVG blobs, and base64 is random alphanumerics -- so
+			# a token-shaped pattern lands in them by chance. Updating three
+			# plugins on 2026-08-12 blocked its own commit twice this way.
+			wp-content/plugins/litespeed-cache/*|wp-content/plugins/instagram-feed/*) continue ;;
+			wp-content/plugins/wordpress-seo/*|wp-content/plugins/polylang/*) continue ;;
 		esac
 
 		content=$(git show ":$file" 2>/dev/null || true)
