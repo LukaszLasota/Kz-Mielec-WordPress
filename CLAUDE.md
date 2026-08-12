@@ -26,10 +26,37 @@ Where the two disagree, this file wins: it describes this site.
 The shared file assumes Kinsta and a GitHub Actions deployment through the DevOps
 reusable workflow. Neither applies here: this site runs on a LiteSpeed host and is
 deployed by hand with rsync, following a runbook kept outside the repository.
-Access data belongs outside every repository — the pre-commit hook refuses a commit
-that carries it, and `scripts/scan-secrets.sh` checks the history.
 
-This repository is **public**, and it holds the whole WordPress install.
+## What must never be committed
+
+**This repository is public**, and it holds the whole WordPress install. Learn this
+from what already happened rather than repeating it: the deployment host, port,
+login, database name and server path sat in it from the first commit on 11 March
+2026 until August — in `.user.ini` alone, across 131 of 131 revisions. No password
+ever leaked, but host plus login is half of an SSH login.
+
+Never commit:
+
+- the deployment host, port or login, the server path, the database name or user.
+  None of them is a password; together they are a reconnaissance package.
+- **a description of this site's own weaknesses** — which security headers the host
+  strips, what is deliberately not set, what is unpatched. Those belong in the
+  operator note outside the repository.
+- personal data that the congregation does not itself publish: an administrator's
+  name in a technical document, an internal remark about a person.
+
+Where it goes instead: `~/private/`, outside every repository, chmod 600. In
+documents refer to the target as `$PRODHOST`, `$PRODUSER` and `$PRODPATH`. The
+pre-commit hook reads its forbidden strings from there and refuses the next commit;
+`scripts/scan-secrets.sh` checks the commits already made, since a file deleted by
+a later commit stays readable in the earlier one — and on GitHub it stays reachable
+by its SHA even after a force push.
+
+**The opposite error is just as real.** The domain, the address, the phone number,
+the e-mail and the bank account are published by the congregation on its own site:
+they are content, not secrets. Do not mask them. A search-replace on a bare
+`kzmielec.pl` rewrites `zbor@kzmielec.pl` into a dead address — that has already
+happened once here, and a wrong e-mail looks exactly like a right one.
 
 ## Local environment
 

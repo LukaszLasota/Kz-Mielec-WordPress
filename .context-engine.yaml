@@ -11,9 +11,10 @@
 # No `wp` collision to worry about, because the docroot is the root and there is
 # no wrapper directory. Our own code is indexed by `cce index --path` from the git
 # hooks: themes/kzmielec, plugins/custom-block-package, plugins/custom-posts. The
-# old html5blank-stable theme is deliberately NOT excluded -- it is the reference
-# for the migration. `cache` is listed to keep the watcher out of a reindex storm
-# (a Blade compile pass hangs WSL).
+# old html5blank-stable theme used to be indexed here as the migration reference;
+# it was removed once the migration was verified against the production database.
+# `cache` is listed to keep the watcher out of a reindex storm (a Blade compile
+# pass hangs WSL).
 indexer:
   ignore:
     # --- WordPress core ---
