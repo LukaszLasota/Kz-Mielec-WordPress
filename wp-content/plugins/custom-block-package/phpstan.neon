@@ -5,13 +5,17 @@ parameters:
     level: 8
     bootstrapFiles:
         - phpstan-bootstrap.php
+    # The `meeting-list` block was removed; both entries that named its render.php are
+    # gone with it. While they were here PHPStan refused to start at all — "Path ... is
+    # neither a directory, nor a file path" — so the plugin had a quality gate that could
+    # not run, which reads exactly like a gate that passes.
     paths:
         - index.php
         - app/
         - src/blocks/dynamic-images/render.php
         - src/blocks/image-text/render.php
         - src/blocks/map-block/render.php
-        - src/blocks/meeting-list/render.php
+        - src/blocks/navigable-tiles/render.php
         - src/blocks/section-block/render.php
     excludePaths:
         - vendor/
@@ -20,8 +24,3 @@ parameters:
     ignoreErrors:
         # WordPress render.php templates receive $attributes as array<string, mixed>
         - identifier: missingType.iterableValue
-        # ACF get_field() - no stubs available
-        -
-            message: '#Function get_field not found#'
-            paths:
-                - src/blocks/meeting-list/render.php
