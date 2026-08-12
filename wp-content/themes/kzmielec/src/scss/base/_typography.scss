@@ -31,3 +31,20 @@
 
 	@include content-typography;
 }
+
+// Nota o zrodlach przekladow Pisma, dokladana przez `Kzmielec\Seo\ScriptureNotice`
+// do tresci, ktora faktycznie cytuje chroniony przeklad. Stala kiedys w stopce kazdej
+// podstrony; to warunek licencji, wiec ma byc widoczna, ale nie ma udawac tresci —
+// stad mniejszy stopien, wyciszony kolor i kreska oddzielajaca.
+.scripture-notice {
+	margin-block-start: space(6);
+	padding-block-start: space(3);
+	border-block-start: 0.0625rem solid currentcolor;
+	font-size: fs(meta);
+	opacity: 0.8;
+
+	p {
+		margin: 0;
+		max-width: 60rem;
+	}
+}

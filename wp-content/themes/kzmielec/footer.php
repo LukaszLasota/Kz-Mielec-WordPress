@@ -23,6 +23,18 @@
 			<?php endif; ?>
 		</div>
 
+		<?php
+		/*
+		 * The Scripture source note is NOT here any more.
+		 *
+		 * It is a licence condition of the translations quoted on a handful of pages
+		 * (NIV, УТТ, NVI, EIB), and in the footer it appeared on every page of the site —
+		 * including the great majority that quote nothing. `Kzmielec\Seo\ScriptureNotice`
+		 * now appends it to the content that actually carries a quotation, marked by
+		 * `scripts/substitute-bible-quotes.php`.
+		 */
+		?>
+
 		<?php if ( is_active_sidebar( 'footer-social' ) ) : ?>
 			<nav class="footer__social" aria-label="<?php esc_attr_e( 'Social media', 'kzmielec' ); ?>">
 				<?php dynamic_sidebar( 'footer-social' ); ?>

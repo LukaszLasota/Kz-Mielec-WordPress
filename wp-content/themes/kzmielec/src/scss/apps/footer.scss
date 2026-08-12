@@ -29,6 +29,13 @@
 		}
 	}
 
+	// Source note for the Scripture quotations — a licence requirement of the Bible
+	// publishers, not a design element. It takes the whole row on purpose: squeezed
+	// between the copyright line and the social icons it would read as a third
+	// navigation item. Smaller than the copyright because nobody comes to the site
+	// for it, but the same `paper` colour rather than a dimmed grey, so it keeps its
+	// contrast and follows the high-contrast palette like everything else.
+
 	.footer__copyright {
 		padding: space(1);
 		color: palette(paper);
