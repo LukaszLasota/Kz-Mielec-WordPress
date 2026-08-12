@@ -45,6 +45,51 @@ export class AccessibilityBar {
         this.contrastButton?.addEventListener('click', () => {
             this.applyContrast(this.root.getAttribute('data-a11y-contrast') !== 'on');
         });
+
+        this.wireLanguageSwitcher(bar);
+    }
+
+    /**
+     * Adds Escape and click-outside to the language switcher.
+     *
+     * Strictly an enhancement. The switcher is a native <details>, so it opens,
+     * closes and takes the keyboard on its own with no script at all — this only
+     * adds the two habits people bring from scripted menus. If any of it fails
+     * the switcher still works, which is the whole reason it is a <details> and
+     * not a button with `aria-expanded`.
+     */
+    private wireLanguageSwitcher(bar: Element): void {
+        const details = bar.querySelector<HTMLDetailsElement>('.a11y-bar__lang-switch');
+
+        if (!details) {
+            return;
+        }
+
+        const summary = details.querySelector<HTMLElement>('summary');
+
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key !== 'Escape' || !details.open) {
+                return;
+            }
+
+            details.open = false;
+
+            // Focus goes back to the control that opened the panel. Closing a
+            // panel while the focus is inside it leaves the focus on a detached
+            // element, and a keyboard user lands back at the top of the page on
+            // the next Tab.
+            summary?.focus();
+        });
+
+        document.addEventListener('click', (event: MouseEvent) => {
+            if (!details.open || event.target === null) {
+                return;
+            }
+
+            if (!details.contains(event.target as Node)) {
+                details.open = false;
+            }
+        });
     }
 
     /**

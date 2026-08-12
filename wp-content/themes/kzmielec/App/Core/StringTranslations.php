@@ -58,52 +58,63 @@ class StringTranslations {
 	 */
 	public const STRINGS = array(
 		// Header and navigation.
-		'Przejdź do treści'                         => 'Nagłówek: link pomijający nawigację',
-		'strona główna'                             => 'Nagłówek: opis linku logo',
-		'Otwórz/zamknij menu'                       => 'Nagłówek: przycisk menu na telefonie',
-		'Nawigacja główna'                          => 'Nagłówek: nazwa nawigacji dla czytników ekranu',
-		'Menu przyklejone'                          => 'Nagłówek: nazwa menu przyklejonego',
+		'Przejdź do treści'                           => 'Nagłówek: link pomijający nawigację',
+		'strona główna'                               => 'Nagłówek: opis linku logo',
+		'Otwórz/zamknij menu'                         => 'Nagłówek: przycisk menu na telefonie',
+		'Nawigacja główna'                            => 'Nagłówek: nazwa nawigacji dla czytników ekranu',
+		'Menu przyklejone'                            => 'Nagłówek: nazwa menu przyklejonego',
 
 		// Accessibility strip.
-		'Ustawienia dostępności'                    => 'Belka dostępności: nazwa grupy',
-		'Wybór języka'                              => 'Belka dostępności: nazwa przełącznika języka',
-		'Rozmiar tekstu'                            => 'Belka dostępności: etykieta rozmiaru',
-		'A — rozmiar standardowy'                   => 'Belka dostępności: rozmiar standardowy',
-		'A+ — tekst powiększony'                    => 'Belka dostępności: rozmiar powiększony',
-		'A++ — tekst największy'                    => 'Belka dostępności: rozmiar największy',
-		'Wysoki kontrast'                           => 'Belka dostępności: kontrast (forma długa)',
-		'Kontrast'                                  => 'Belka dostępności: kontrast (forma krótka na telefon)',
+		'Ustawienia dostępności'                      => 'Belka dostępności: nazwa grupy',
+		'Wybór języka'                                => 'Belka dostępności: nazwa przełącznika języka',
+		'Rozmiar tekstu'                              => 'Belka dostępności: etykieta rozmiaru',
+		'A — rozmiar standardowy'                     => 'Belka dostępności: rozmiar standardowy',
+		'A+ — tekst powiększony'                      => 'Belka dostępności: rozmiar powiększony',
+		'A++ — tekst największy'                      => 'Belka dostępności: rozmiar największy',
+		'Wysoki kontrast'                             => 'Belka dostępności: kontrast (forma długa)',
+		'Kontrast'                                    => 'Belka dostępności: kontrast (forma krótka na telefon)',
 
 		// Meetings and beliefs.
-		'Zaplanuj wizytę'                           => 'Spotkania: tytuł archiwum',
-		'W co i jak wierzymy'                       => 'Wiara: tytuł sekcji',
-		'Przewiń do nawigacji wiary'                => 'Wiara: przycisk przewijania',
+		'Zaplanuj wizytę'                             => 'Spotkania: tytuł archiwum',
+		'W co i jak wierzymy'                         => 'Wiara: tytuł sekcji',
+		'Przewiń do nawigacji wiary'                  => 'Wiara: przycisk przewijania',
 
 		// Search.
-		'Szukaj na stronie'                         => 'Wyszukiwanie: nazwa formularza',
-		'Czego szukasz?'                            => 'Wyszukiwanie: podpowiedź w polu',
-		'Szukaj'                                    => 'Wyszukiwanie: przycisk',
-		'Wyniki wyszukiwania: %s'                   => 'Wyszukiwanie: tytuł wyników',
-		'Brak wyników dla %s. Spróbuj innej frazy.' => 'Wyszukiwanie: brak wyników',
-		'Aktualność'                                => 'Wyszukiwanie: etykieta typu — wpis',
-		'Strona'                                    => 'Wyszukiwanie: etykieta typu — strona',
-		'Spotkanie'                                 => 'Wyszukiwanie: etykieta typu — spotkanie',
+		'Szukaj na stronie'                           => 'Wyszukiwanie: nazwa formularza',
+		'Czego szukasz?'                              => 'Wyszukiwanie: podpowiedź w polu',
+		'Szukaj'                                      => 'Wyszukiwanie: przycisk',
+		'Wyniki wyszukiwania: %s'                     => 'Wyszukiwanie: tytuł wyników',
+		'Brak wyników dla %s. Spróbuj innej frazy.'   => 'Wyszukiwanie: brak wyników',
+		'Aktualność'                                  => 'Wyszukiwanie: etykieta typu — wpis',
+		'Strona'                                      => 'Wyszukiwanie: etykieta typu — strona',
+		'Spotkanie'                                   => 'Wyszukiwanie: etykieta typu — spotkanie',
 
 		// Pagination.
-		'Paginacja'                                 => 'Paginacja: nazwa nawigacji',
-		'Poprzednia strona'                         => 'Paginacja: poprzednia',
-		'Następna strona'                           => 'Paginacja: następna',
-		'« Poprzednia'                              => 'Paginacja wyników: poprzednia',
-		'Następna »'                                => 'Paginacja wyników: następna',
-		'Brak postów.'                              => 'Lista wpisów: pusto',
+		'Paginacja'                                   => 'Paginacja: nazwa nawigacji',
+		'Poprzednia strona'                           => 'Paginacja: poprzednia',
+		'Następna strona'                             => 'Paginacja: następna',
+		'« Poprzednia'                                => 'Paginacja wyników: poprzednia',
+		'Następna »'                                  => 'Paginacja wyników: następna',
+		'Brak postów.'                                => 'Lista wpisów: pusto',
 
 		// 404.
-		'Nie znaleziono strony'                     => '404: tytuł',
-		'Wróć na stronę główną'                     => '404: powrót na stronę główną',
+		'Nie znaleziono strony'                       => '404: tytuł',
+		'Wróć na stronę główną'                       => '404: powrót na stronę główną',
 		'Strona, której szukasz, nie istnieje lub została przeniesiona. Spróbuj wyszukać poniżej albo wróć na stronę główną.' => '404: treść',
 
+		// Contact details. The data itself lives in one option and is never translated;
+		// only these words around it are. Placeholders must survive translation, which
+		// is why each label says what its `%s` carries.
+		'ul. %1$s, %2$s %3$s'                         => 'Kontakt: linia adresu (1 = ulica z numerem, 2 = kod, 3 = miasto)',
+		'tel.: %s – pastor Zboru, Dariusz R. Hapoń'   => 'Kontakt: linia telefonu (%s = numer)',
+		'Uwaga: z tego numeru nie odczytujemy smsów.' => 'Kontakt: uwaga o SMS-ach',
+		'W celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook).' => 'Kontakt: uwaga o kontakcie pisemnym',
+		'NIP: %s'                                     => 'Kontakt: linia NIP (%s = numer)',
+		'email: %s'                                   => 'Kontakt: linia e-mail (%s = adres z odnośnikiem)',
+		'konto: %s'                                   => 'Kontakt: linia konta (%s = numer)',
+
 		// Footer.
-		'Social media'                              => 'Stopka: nazwa sekcji z ikonami',
+		'Social media'                                => 'Stopka: nazwa sekcji z ikonami',
 		'Copyright %1$s. Wszelkie prawa zastrzeżone &copy; %2$s.' => 'Stopka: nota o prawach autorskich',
 	);
 

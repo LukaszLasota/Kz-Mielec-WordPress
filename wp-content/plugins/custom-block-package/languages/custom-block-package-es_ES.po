@@ -1,0 +1,19 @@
+# Translation of the visitor-facing strings of Custom Block Package.
+# Only the two scroll-arrow labels are translated here: they are the only
+# strings from this plugin that a visitor can perceive. Everything else in the
+# POT file is editor UI, which the editors read in Polish.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"Language: es_ES\n"
+"X-Domain: custom-block-package\n"
+
+#: src/blocks/scroll-arrow/render.php:28
+msgid "Przewiń w dół"
+msgstr "Desplazarse hacia abajo"
+
+#: src/blocks/scroll-arrow/render.php:29
+msgid "Przewiń w górę"
+msgstr "Desplazarse hacia arriba"

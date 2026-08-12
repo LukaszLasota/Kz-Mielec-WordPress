@@ -1,0 +1,2 @@
+<?php
+return ['domain'=>'custom-block-package','plural-forms'=>NULL,'language'=>'en_GB','project-id-version'=>'','pot-creation-date'=>'2026-08-11T15:37:30+02:00','po-revision-date'=>'2026-08-11T15:37:30+02:00','messages'=>['Przewiń w dół'=>'Scroll down','Przewiń w górę'=>'Scroll up']];

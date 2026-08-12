@@ -77,7 +77,14 @@
 		flex: 1 1 auto;
 		min-width: 0;
 		padding: space(3) space(4);
-		font-size: fs(meta);
+		// 1rem, not `fs(meta)` (0.875rem = 14px). Safari on iOS zooms the whole page
+		// in when a text field with a font smaller than 16px receives focus — the
+		// layout jumps, the visitor loses their place and has to pinch back out.
+		// Measured on an iPhone viewport: this field was the only one on the site
+		// under the threshold. 16px is the fix; there is no way to opt out of the
+		// behaviour other than the font size, since disabling zoom in the viewport
+		// tag would break WCAG 1.4.4.
+		font-size: 1rem;
 		color: $color-black;
 		background-color: $body-color;
 		border: 0.0625rem solid $color-main;

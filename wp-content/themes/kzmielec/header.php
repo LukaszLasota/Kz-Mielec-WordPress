@@ -5,6 +5,19 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php
+	/*
+	 * No `maximum-scale` and no `user-scalable=no` above, deliberately: both would
+	 * stop a visitor pinching to zoom, which WCAG 1.4.4 does not allow.
+	 *
+	 * `theme-color` tints the browser chrome on iOS Safari and Chrome for Android.
+	 * Black, because the first thing at the top of every page is the black
+	 * accessibility strip — the chrome then continues it instead of cutting a light
+	 * band above it. It stays right in high contrast too, where the whole page is
+	 * black, so no second value is needed for that mode.
+	 */
+	?>
+	<meta name="theme-color" content="#000000">
 	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/cinzel-v26-latin.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/webfont/cinzel-v26-latin-ext.woff2' ); ?>" as="font" type="font/woff2" crossorigin>
 	<?php wp_head(); ?>

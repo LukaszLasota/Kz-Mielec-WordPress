@@ -114,3 +114,44 @@ msgstr "Pagination"
 
 msgid "Wybór języka"
 msgstr "Language selection"
+
+#: template-parts/accessibility-bar.php
+#. translators: 1: language code, 2: language name.
+msgid "%1$s — język strony: %2$s. Rozwiń, aby zmienić język"
+msgstr "%1$s — page language: %2$s. Expand to change the language"
+
+#: footer.php
+msgid "Cytaty biblijne: Biblia Warszawska (w oświadczeniach Naczelnej Rady Kościoła) oraz Biblia Ewangeliczna, przekład literacki, © Ewangeliczny Instytut Biblijny."
+msgstr "Scripture quotations taken from The Holy Bible, New International Version® NIV®. Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by permission. All rights reserved worldwide."
+
+#: App/Seo/YoastFallbacks.php
+msgid "Kiedy się spotykamy w Mielcu, %s:"
+msgstr "When we meet in Mielec, %s — everyone is welcome:"
+
+#: App/Contact/ContactBindings.php
+msgid "ul. %1$s, %2$s %3$s"
+msgstr "ul. %1$s, %2$s %3$s"
+
+#: App/Contact/ContactBindings.php
+msgid "tel.: %s – pastor Zboru, Dariusz R. Hapoń"
+msgstr "Tel.: %s – Congregation Pastor, Dariusz R. Hapoń"
+
+#: App/Contact/ContactBindings.php
+msgid "Uwaga: z tego numeru nie odczytujemy smsów."
+msgstr "Please note: we do not read text messages sent to this number."
+
+#: App/Contact/ContactBindings.php
+msgid "W celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook)."
+msgstr "To contact us in writing, please use email or contact the Congregation via Messenger (Facebook)."
+
+#: App/Contact/ContactBindings.php
+msgid "NIP: %s"
+msgstr "Tax Identification Number (NIP): %s"
+
+#: App/Contact/ContactBindings.php
+msgid "email: %s"
+msgstr "email: %s"
+
+#: App/Contact/ContactBindings.php
+msgid "konto: %s"
+msgstr "account: %s"

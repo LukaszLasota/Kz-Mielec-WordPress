@@ -83,9 +83,15 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	// Languages left, accessibility controls right. Was `flex-end` when the
-	// controls were the only occupant.
-	justify-content: space-between;
+	/*
+	 * `flex-end`, with the language nav pushed left by its own auto margin —
+	 * NOT `space-between`. The difference only shows when Polylang is switched
+	 * off: the nav stops rendering, `space-between` is left with a single child
+	 * and drops it against the left edge, so the whole size-and-contrast group
+	 * jumped from right to left. With `flex-end` the controls stay on the right
+	 * whether or not the switcher is beside them.
+	 */
+	justify-content: flex-end;
 	gap: space(2);
 	max-width: var(--content-max-width);
 	margin: 0 auto;
@@ -227,18 +233,110 @@
 // Language switcher
 // -----------------------------------------------------------------------------
 
-.a11y-bar__lang-list {
-	display: flex;
-	flex-wrap: wrap;
+// A collapsed <details> showing the current language, opening onto the others.
+// Four inline links took the whole left half of the strip on a phone; one flag
+// takes a corner. Native disclosure, so it opens with the keyboard, announces its
+// own state and keeps working with JavaScript off.
+
+.a11y-bar__lang {
+	// No auto margin any more: the switcher sits at the right-hand end of the
+	// strip, beside the contrast button, and `justify-content: flex-end` on the row
+	// puts it there. It used to be pushed to the opposite edge with
+	// `margin-right: auto`.
+	// The panel is positioned against this box, and it has to paint OVER the main
+	// menu below, which is `position: sticky; z-index: 100`. Without a stacking
+	// level of its own the panel opened behind the menu.
+	position: relative;
+	z-index: 110;
+}
+
+.a11y-bar__lang-summary {
+	display: inline-flex;
 	align-items: center;
 	gap: space(1);
+	// Matches the size and contrast buttons, so all the controls in the row share
+	// one height, and clears the 24px floor of WCAG 2.2 target size (2.5.8).
+	min-height: 2rem;
+	padding: space(1) space(2);
+	border: 0.0625rem solid currentcolor;
+	border-radius: radius(sm);
+	font-size: 0.75rem;
+	line-height: 1;
+	cursor: pointer;
+	// Removes the browser's own disclosure triangle: `list-style` covers current
+	// Firefox and Chrome, the pseudo-element covers older WebKit. The caret in the
+	// markup replaces it, because a stroked SVG survives the high-contrast block's
+	// blanket `border-color` rule and a CSS triangle would not.
+	list-style: none;
+
+	&::-webkit-details-marker {
+		display: none;
+	}
+}
+
+.a11y-bar__lang-caret {
+	transition: transform 0.15s ease;
+}
+
+.a11y-bar__lang-switch[open] .a11y-bar__lang-caret {
+	transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.a11y-bar__lang-caret {
+		transition: none;
+	}
+}
+
+.a11y-bar__lang-list {
+	position: absolute;
+	// Clear of the summary's own border rather than flush against it, so the panel
+	// reads as a separate surface.
+	top: calc(100% + #{space(1)});
+	// Anchored to the right, following the switcher to that edge. Anchored left it
+	// would hang off the side of the viewport on a phone, where the control itself
+	// is within a few pixels of the screen edge.
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	// Never narrower than the control it hangs from, or the panel looks detached
+	// from it; free to grow past it for a longer language name.
+	min-width: 100%;
 	margin: 0;
-	padding: 0;
+	padding: space(1);
+	// The strip's own ground, not the page's. The high-contrast block swaps this
+	// for `paper` exactly as it does for `.a11y-bar`, so the panel follows the
+	// strip through the inversion instead of turning into a white island.
+	background-color: palette(ink);
+	// A visible edge against the page underneath. In high contrast the blanket
+	// border rule repaints this yellow along with every other border.
+	border: 0.0625rem solid palette(paper);
+	border-radius: radius(sm);
 	list-style: none;
 }
 
-.a11y-bar__lang-link {
+.a11y-bar__lang-flag {
 	display: inline-block;
+	width: 1.125rem;
+	height: 0.75rem;
+	// Optical alignment with the code beside it: the glyph's baseline sits lower
+	// than the rectangle's bottom edge, so the flag needs nudging down.
+	vertical-align: -0.125em;
+	margin-right: space(1);
+	// A hairline keeps the white band of the Polish flag from bleeding into the
+	// black strip, which otherwise reads as a floating red rectangle.
+	outline: 0.0625rem solid rgb(255 255 255 / 35%);
+	outline-offset: -0.0625rem;
+}
+
+// Stacked in the panel now rather than sitting in a row, so each one fills the
+// width and is a comfortable target from edge to edge.
+.a11y-bar__lang-link {
+	display: flex;
+	align-items: center;
+	// Same 2rem floor as every other control in the strip (WCAG 2.2, 2.5.8).
+	min-height: 2rem;
 	padding: space(1) space(2);
 	color: inherit;
 	font-size: 0.75rem;
@@ -246,6 +344,7 @@
 	text-decoration: none;
 	border: 0.0625rem solid transparent;
 	border-radius: 0.125rem;
+	white-space: nowrap;
 }
 
 .a11y-bar__lang-link:hover,
@@ -254,18 +353,9 @@
 	text-underline-offset: 0.15em;
 }
 
-// The active language reuses the size buttons' fill verbatim: `currentcolor`
-// means the swatch follows whatever colour the text has, so it comes out white
-// on the black strip and yellow in high contrast without a second rule. Only the
-// label has to flip to the opposite ink, exactly as the glyph does.
-.a11y-bar__lang-link[aria-current="true"] {
-	background-color: currentcolor;
-	border-color: currentcolor;
-}
-
-.a11y-bar__lang-link[aria-current="true"] .a11y-bar__lang-code {
-	color: palette(ink);
-}
+// The rules that used to style `[aria-current="true"]` are gone with the thing
+// they styled: the current language is now the summary, not an entry in the list,
+// so no link in the panel is ever the current one.
 
 
 // -----------------------------------------------------------------------------
@@ -497,10 +587,21 @@
 		color: palette(paper) !important;
 	}
 
-	// Same flip for the active language, same reason: its fill is `currentcolor`,
-	// which the blanket rule turns yellow, so the code on top has to go black.
-	.a11y-bar__lang-link[aria-current="true"] .a11y-bar__lang-code {
-		color: palette(paper) !important;
+	// The open panel takes the strip's ground rather than inverting on its own.
+	// Left alone it kept `ink`, which is white in this mode — a white card hanging
+	// off a black strip, and the only white object on the page.
+	.a11y-bar__lang-list {
+		background-color: palette(paper);
+	}
+
+	/*
+	 * Flags go away entirely in high contrast. They are decoration in fixed
+	 * national colours, and fixed colours are exactly what this mode exists to
+	 * override — a red-and-white rectangle beside yellow-on-black text is noise
+	 * for the people who switched the mode on. The code stays, so nothing is lost.
+	 */
+	.a11y-bar__lang-flag {
+		display: none !important;
 	}
 
 	// The Instagram follow button takes its background from

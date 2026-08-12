@@ -72,6 +72,36 @@ class MeetingsArchiveSlugs {
 		add_filter( 'pll_translation_url', array( $this, 'filter_translation_url' ), 10, 2 );
 
 		add_action( 'template_redirect', array( $this, 'redirect_untranslated_slug' ) );
+		add_action( 'deactivated_plugin', array( $this, 'invalidate_rules' ) );
+	}
+
+	/**
+	 * Drop the cached rewrite rules when Polylang is switched off.
+	 *
+	 * Gating `add_rules()` on Polylang is not enough on its own: WordPress serves
+	 * rewrite rules from the `rewrite_rules` option and only regenerates them when
+	 * that option is empty. Measured — deactivate Polylang and
+	 * `/en/plan-your-visit/` still answered 200 from the stale option, because
+	 * Polylang's own deactivation does not flush it.
+	 *
+	 * The option is deleted rather than flushed. Calling `flush_rewrite_rules()`
+	 * here would rebuild the rules inside the request that is still holding
+	 * Polylang in memory — its functions are defined, the gate passes, and the
+	 * language rules get written straight back in. Deleting defers the rebuild to
+	 * the next request, by which time Polylang is genuinely gone.
+	 *
+	 * @param mixed $plugin Plugin file that was deactivated. Typed loosely on purpose:
+	 *                      this is a hook callback, and the guard below is what makes it
+	 *                      safe. Declaring `string` would make PHPStan call that guard
+	 *                      dead code and refuse the file.
+	 * @return void
+	 */
+	public function invalidate_rules( $plugin ): void {
+		if ( ! is_string( $plugin ) || 0 !== strpos( $plugin, 'polylang/' ) ) {
+			return;
+		}
+
+		delete_option( 'rewrite_rules' );
 	}
 
 	/**
@@ -87,6 +117,17 @@ class MeetingsArchiveSlugs {
 	 */
 	public function redirect_untranslated_slug(): void {
 		if ( ! is_post_type_archive( self::POST_TYPE ) ) {
+			return;
+		}
+
+		/*
+		 * Second layer, for the one case the deactivation hook cannot cover: the
+		 * plugin folder deleted over FTP. No hook fires, the cached rules survive,
+		 * and a translated address would keep serving the Polish archive. Cheap to
+		 * check and it makes the guard independent of how Polylang went away.
+		 */
+		if ( ! function_exists( 'pll_current_language' ) ) {
+			$this->redirect_orphaned_slug();
 			return;
 		}
 
@@ -106,7 +147,7 @@ class MeetingsArchiveSlugs {
 			return;
 		}
 
-		$target = $this->archive_url( $lang );
+		$target = self::archive_url( $lang );
 
 		// Keep the visitor on the page they asked for.
 		if ( preg_match( '#/page/([0-9]+)$#', $path, $matches ) ) {
@@ -115,6 +156,31 @@ class MeetingsArchiveSlugs {
 
 		wp_safe_redirect( $target, 301 );
 		exit;
+	}
+
+	/**
+	 * Send a translated archive address back to the Polish one when Polylang is gone.
+	 *
+	 * @return void
+	 */
+	private function redirect_orphaned_slug(): void {
+		$request = isset( $_SERVER['REQUEST_URI'] )
+			? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+			: '';
+		$path    = trailingslashit( (string) wp_parse_url( $request, PHP_URL_PATH ) );
+
+		foreach ( self::SLUGS as $lang => $slug ) {
+			if ( 'pl' === $lang ) {
+				continue;
+			}
+
+			if ( false === strpos( $path, '/' . $lang . '/' . $slug . '/' ) ) {
+				continue;
+			}
+
+			wp_safe_redirect( self::archive_url( 'pl' ), 301 );
+			exit;
+		}
 	}
 
 	/**
@@ -127,6 +193,18 @@ class MeetingsArchiveSlugs {
 	 * @return void
 	 */
 	public function add_rules(): void {
+		/*
+		 * Only while Polylang is there to give the prefixes meaning. Registered
+		 * unconditionally, these rules survived Polylang being switched off and
+		 * `/en/plan-your-visit/` answered 200 with the Polish archive — Polish
+		 * content, Polish title, on an English address. Yoast's canonical pointed at
+		 * `/zaplanuj-wizyte/`, so the damage was limited to a duplicate URL, but the
+		 * address should not exist at all without the language it names.
+		 */
+		if ( ! function_exists( 'pll_current_language' ) ) {
+			return;
+		}
+
 		foreach ( self::SLUGS as $lang => $slug ) {
 			if ( 'pl' === $lang ) {
 				continue;
@@ -165,7 +243,7 @@ class MeetingsArchiveSlugs {
 			return $link;
 		}
 
-		return $this->archive_url( $lang );
+		return self::archive_url( $lang );
 	}
 
 	/**
@@ -183,7 +261,7 @@ class MeetingsArchiveSlugs {
 			return $url;
 		}
 
-		return $this->archive_url( $lang_slug );
+		return self::archive_url( $lang_slug );
 	}
 
 	/**
@@ -197,10 +275,14 @@ class MeetingsArchiveSlugs {
 	 * working code. The raw option is language-blind and therefore the only
 	 * stable base to prefix by hand.
 	 *
+	 * Public and static because `RegisterPosts` needs it too: a single meeting
+	 * redirects to its archive, and before this it redirected to the hardcoded
+	 * Polish one from every language.
+	 *
 	 * @param string $lang Language slug.
 	 * @return string
 	 */
-	private function archive_url( string $lang ): string {
+	public static function archive_url( string $lang ): string {
 		$base = trailingslashit( (string) get_option( 'home' ) );
 
 		return 'pl' === $lang

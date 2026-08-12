@@ -114,3 +114,44 @@ msgstr "Нумерація сторінок"
 
 msgid "Wybór języka"
 msgstr "Вибір мови"
+
+#: template-parts/accessibility-bar.php
+#. translators: 1: language code, 2: language name.
+msgid "%1$s — język strony: %2$s. Rozwiń, aby zmienić język"
+msgstr "%1$s — мова сторінки: %2$s. Розгорніть, щоб змінити мову"
+
+#: footer.php
+msgid "Cytaty biblijne: Biblia Warszawska (w oświadczeniach Naczelnej Rady Kościoła) oraz Biblia Ewangeliczna, przekład literacki, © Ewangeliczny Instytut Biblijny."
+msgstr "Біблійні цитати наведено за Сучасним перекладом Біблії (УТТ), © 2011 Українське Біблійне Товариство. Усі права застережено."
+
+#: App/Seo/YoastFallbacks.php
+msgid "Kiedy się spotykamy w Mielcu, %s:"
+msgstr "Коли ми збираємося в Мельці, %s — запрошуємо кожного:"
+
+#: App/Contact/ContactBindings.php
+msgid "ul. %1$s, %2$s %3$s"
+msgstr "вул. %1$s, %2$s %3$s"
+
+#: App/Contact/ContactBindings.php
+msgid "tel.: %s – pastor Zboru, Dariusz R. Hapoń"
+msgstr "тел.: %s — пастор громади, Даріуш Р. Гапонь"
+
+#: App/Contact/ContactBindings.php
+msgid "Uwaga: z tego numeru nie odczytujemy smsów."
+msgstr "Увага: з цього номера ми не читаємо SMS-повідомлення."
+
+#: App/Contact/ContactBindings.php
+msgid "W celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook)."
+msgstr "Для письмового зв’язку просимо скористатися електронною поштою або зв’язатися з громадою через месенджер (Facebook)."
+
+#: App/Contact/ContactBindings.php
+msgid "NIP: %s"
+msgstr "ІПН: %s"
+
+#: App/Contact/ContactBindings.php
+msgid "email: %s"
+msgstr "електронна пошта: %s"
+
+#: App/Contact/ContactBindings.php
+msgid "konto: %s"
+msgstr "рахунок: %s"

@@ -35,13 +35,29 @@ class AccordionCache {
 	public const TTL = 30 * MINUTE_IN_SECONDS;
 
 	/**
-	 * Build a cache key from block attributes.
+	 * Build a cache key from block attributes and the current language.
+	 *
+	 * The language is part of the key, and it has to be. The block renders the
+	 * comparison topics, which Polylang filters per language — so one key shared
+	 * by four languages means whichever language renders first is served to all of
+	 * them. Measured on `/en/differences-in-religious-beliefs/`: the English page
+	 * came out with Polish category names and 56 occurrences of "Kościół
+	 * Zielonoświątkowy" against 5 of "Pentecostal Church".
+	 *
+	 * The failure is invisible to a structural test: the accordion existed,
+	 * toggled and passed every functional check — only its contents came from the
+	 * wrong language.
+	 *
+	 * `function_exists()` keeps this working with Polylang switched off, where the
+	 * key simply loses its language part.
 	 *
 	 * @param array<string, mixed> $attributes Block attributes.
 	 * @return string
 	 */
 	public static function key( array $attributes ): string {
-		return self::PREFIX . md5( (string) wp_json_encode( $attributes ) );
+		$lang = function_exists( 'pll_current_language' ) ? (string) pll_current_language( 'slug' ) : '';
+
+		return self::PREFIX . md5( (string) wp_json_encode( $attributes ) . '|' . $lang );
 	}
 
 	/**
