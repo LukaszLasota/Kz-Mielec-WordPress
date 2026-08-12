@@ -1,8 +1,122 @@
 #!/bin/bash
-# Rebuild theme assets when theme source/config is staged, so committed
-# assets are always the optimized build. Skips when nothing theme-related
-# is staged.
+# Two jobs, in this order:
+#   1. refuse the commit if it carries production access data or a secret,
+#   2. rebuild theme assets when theme source is staged.
+#
+# The guard exists because this repository has been PUBLIC on GitHub since its first
+# commit, and the production SSH host, port, username, database name and server path were
+# published in it for a week before anyone noticed. No credential ever leaked — wp-config.php
+# was never tracked — but host plus username is half of an SSH login, and it cost nothing to
+# add. A rule nobody enforces is a wish; this one is enforced by the tool.
+#
+# Access data belongs in ~/private/connection-details.txt, outside every repository.
 set -e
+
+# --- 1. Secret and access-data guard ---------------------------------------------
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -n "$staged" ]; then
+	# Patterns are deliberately narrow: a guard that cries wolf gets bypassed with
+	# --no-verify and then protects nothing.
+	#
+	# Wzorce w skladni ERE (grep -E): nawias trzeba escapowac, a powtorzenia pisze sie
+	# {n,} bez ukosnikow. Pierwsza wersja mieszala obie skladnie i grep odpowiadal
+	# "Unmatched ( or \(" — czyli czesc wzorcow nie dzialala wcale, a hook i tak
+	# konczyl sukcesem. Blokada, ktora cicho nie sprawdza, jest gorsza od jej braku.
+	#
+	# Ciagi specyficzne dla tego projektu — host SSH i nazwa uzytkownika — NIE sa tutaj.
+	# Pierwsza wersja hooka je wypisywala i natychmiast zablokowala swoj wlasny commit,
+	# co bylo trafna odpowiedzia na plik, ktory ujawnia to, czego zakazuje. Leza w
+	# ~/private/git-forbidden-strings.txt: jeden na wiersz, poza jakimkolwiek
+	# repozytorium, wspolne dla wszystkich projektow na tej maszynie.
+	patterns=(
+		'BEGIN [A-Z ]*PRIVATE KEY'
+		'EAA[A-Za-z0-9]{60,}'
+		'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:fx'
+		"define\\([[:space:]]*'DB_PASSWORD'[[:space:]]*,[[:space:]]*'[^']{4,}'"
+		# Wartosc musi wygladac na literal, nie na kod ani placeholder: pierwszy znak
+		# nie moze byc $ " \ < ' ani spacja. Bez tego hook zglaszal dokumentacje, w ktorej
+		# `password=" . $v["DB_PASSWORD"]` tylko CZYTA haslo w czasie dzialania — a to
+		# akurat wzor do nasladowania, nie wyciek.
+		'(hasło|haslo|password)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9!@#%^&*_+=-]{6,}'
+	)
+
+	# Ciagi z pliku prywatnego dochodza do listy. Jego brak jest ostrzezeniem, nie cicha
+	# zgoda: hook, ktory nie wie, czego szukac, i nic nie mowi, jest gorszy od jego braku.
+	forbidden_file="$HOME/private/git-forbidden-strings.txt"
+
+	if [ -r "$forbidden_file" ]; then
+		while IFS= read -r line; do
+			case "$line" in
+				''|'#'*) continue ;;
+			esac
+			patterns+=("$line")
+		done < "$forbidden_file"
+	else
+		echo "pre-commit: UWAGA — brak $forbidden_file, sprawdzam tylko wzorce ogolne." >&2
+	fi
+
+	# Ciagi, ktore wygladaja jak sekret i sekretem nie sa. Kazdy z nich jest tu
+	# wymieniony celowo, z powodem — lista wyjatkow bez uzasadnien zamienia sie z czasem
+	# w liste wszystkiego.
+	allow=(
+		'12ab34cd-5e6f-7890-abcd-ef1234567890'   # fikcyjny klucz DeepL w tescie i w dokumentacji
+		'password_here'                          # placeholder z wp-config-sample.php
+	)
+
+	hits=""
+
+	for file in $staged; do
+		[ -f "$file" ] || continue
+
+		# Binaries and build output are not where secrets are typed by hand.
+		case "$file" in
+			*.png|*.jpg|*.jpeg|*.webp|*.avif|*.gif|*.ico|*.woff|*.woff2|*.ttf|*.eot|*.zip|*.gz|*.mo) continue ;;
+			*/node_modules/*|*/vendor/*|*/build/*|wp-admin/*|wp-includes/*) continue ;;
+		esac
+
+		content=$(git show ":$file" 2>/dev/null || true)
+
+		for pattern in "${patterns[@]}"; do
+			match=$(printf '%s' "$content" | grep -nE "$pattern" | head -1 || true)
+
+			[ -n "$match" ] || continue
+
+			# Znany, uzasadniony wyjatek? Wtedy to nie trafienie.
+			skip=""
+			for safe in "${allow[@]}"; do
+				case "$match" in
+					*"$safe"*) skip="yes" ;;
+				esac
+			done
+
+			[ -n "$skip" ] && continue
+
+			hits="${hits}  ${file}: $(printf '%s' "$match" | cut -c1-70)\n"
+			break
+		done
+	done
+
+	if [ -n "$hits" ]; then
+		echo "" >&2
+		echo "pre-commit: PRZERWANE — w zmianach są dane, które nie mogą trafić do repozytorium." >&2
+		echo "" >&2
+		printf '%b' "$hits" >&2
+		echo "" >&2
+		echo "  To repozytorium jest publiczne. Dane dostępowe trzymamy w" >&2
+		echo "  ~/private/connection-details.txt, a w dokumentach używamy \$PRODHOST/\$PRODUSER." >&2
+		echo "" >&2
+		echo "  Jeśli to fałszywy alarm (np. opis błędu), zawęź wzorzec w .githooks/pre-commit" >&2
+		echo "  zamiast obchodzić hook przez --no-verify." >&2
+		echo "" >&2
+		exit 1
+	fi
+fi
+
+# --- 2. Theme assets -------------------------------------------------------------
+# Rebuild theme assets when theme source/config is staged, so committed assets are
+# always the optimized build. Skips when nothing theme-related is staged.
 
 THEME="wp-content/themes/kzmielec"
 if git diff --cached --name-only | grep -qE "^${THEME}/(src/|webpack\.config\.js|package\.json|tsconfig\.json)"; then
