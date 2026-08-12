@@ -10,6 +10,7 @@ hold, and the traps that cost time to find.
 Then greet in Polish and ask what we are working on today.
 
 The working rules -- Polish in conversation, English in everything committed, ask
-before changing code -- live in the CLAUDE.md files and load on their own. Note
-they load from `~/projects/CLAUDE.md`, which is outside this repository: on a fresh
-machine that file is absent and those rules arrive with nothing to state them.
+before changing code, commit only on consent -- are in `CLAUDE.md` at the root of
+this repository, which loads on its own. They are stated there rather than only in
+the shared `~/projects/CLAUDE.md`, because that file is not part of this repository
+and is absent on any other machine.

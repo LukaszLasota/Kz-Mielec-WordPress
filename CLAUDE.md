@@ -1,3 +1,53 @@
+# kzmielec.pl — working rules
+
+These rules are repeated here on purpose. They also live in `~/projects/CLAUDE.md`,
+which is shared by every Paradise Media project and **is not part of this
+repository** — on any other machine it is absent, and then nothing states them.
+Where the two disagree, this file wins: it describes this site.
+
+## How we work
+
+- **Ask before acting.** No code changes without a green light, and no code shown
+  in a reply without being asked for.
+- **Polish in conversation. English in everything committed** — commit messages,
+  PR descriptions, code comments, script output and documentation — and without
+  Polish diacritics.
+- **Commit only on explicit consent, and push on a separate one.** Finished work
+  waits in the working tree until then.
+- **Work on `main` directly.** No branches, no worktrees, no PRs: DDEV serves the
+  main checkout only, so work on a branch is invisible in the browser. This is the
+  one place the shared rules say the opposite.
+- **Nothing on production without consent for that specific change.**
+- SOLID, DRY, WordPress Coding Standards. PHPStan level 8 in all four own packages.
+- Sizes in `rem`, never `px` (16px = 1rem).
+
+## How this project differs from the shared rules
+
+The shared file assumes Kinsta and a GitHub Actions deployment through the DevOps
+reusable workflow. Neither applies here: this site runs on a LiteSpeed host and is
+deployed by hand with rsync, following a runbook kept outside the repository.
+Access data belongs outside every repository — the pre-commit hook refuses a commit
+that carries it, and `scripts/scan-secrets.sh` checks the history.
+
+This repository is **public**, and it holds the whole WordPress install.
+
+## Local environment
+
+DDEV. The `php` on PATH is the Windows build and hangs PHPStan, so quality gates
+run through the container:
+
+```bash
+ddev exec 'cd wp-content/themes/kzmielec && php vendor/bin/phpstan analyse --no-progress'
+bash scripts/tests/run-all.sh    # from the HOST: the runner drives `ddev wp` itself
+```
+
+## Where to read next
+
+`.claude/PROJECT-NOTES.md` for the current state, the decisions that still hold and
+the traps that cost time to find. `README.md` for the shape of the install, linking
+to a README in each of the five own packages — a fact lives in the package that
+owns it.
+
 <!-- cce-block-version: 4 -->
 ## Context Engine (CCE)
 

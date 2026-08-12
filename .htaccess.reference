@@ -19,38 +19,35 @@
 #   # BEGIN WordPress ... # END WordPress          (core, via flush_rewrite_rules)
 #   # BEGIN LSCACHE ... # END LSCACHE              (LiteSpeed Cache plugin)
 #   # BEGIN NON_LSCACHE ... # END NON_LSCACHE      (LiteSpeed Cache plugin)
+#
+# This repository is public, so this file states what the rules do and stops
+# there. Which of them the hosting layer honours, what is deliberately not set
+# and why, and the open question with the host are in the operator note kept
+# outside the repository -- a public list of a site's soft spots is a favour to
+# nobody.
 
 # BEGIN SECURITY HEADERS
 # Deliberately kept OUTSIDE the sections managed by plugins and by core
 # (LSCACHE, NON_LSCACHE, WordPress): those are rewritten automatically, this one
 # is left alone.
 #
-# Only two of the five reach visitors. The hosting layer strips
-# Strict-Transport-Security, X-Frame-Options and X-Content-Type-Options on the
-# way out. The block does execute -- a test header added next to them arrives
-# immediately -- so a missing header here is the host, not a broken rule. They
-# stay because the day the host stops stripping them, they start working.
-#
 # When testing: LiteSpeed caches its read of .htaccess for about two minutes, so
 # a freshly added header does not show up at once. Absence right after saving is
 # not yet a misconfiguration.
 <IfModule mod_headers.c>
-	# Do not guess a file's type against its Content-Type. Blocks the trick of
-	# serving a script as an image. Matters here because SVG upload is enabled,
-	# which is a format that can hide a script -- though every SVG already goes
-	# through the svg-sanitize library, so this is the second lock on one door.
+	# Do not guess a file's type against its Content-Type. Every uploaded SVG
+	# already passes through the svg-sanitize library; this is the second lock on
+	# that door.
 	Header always set X-Content-Type-Options "nosniff"
 
 	# The page may not be framed on a foreign domain (clickjacking). Safe to set:
-	# the site contains no <iframe> of its own, and the Facebook and Instagram
-	# embeds are outbound traffic, which this does not cover. Core sends this
-	# header itself, but only on the login screen (login_init), so ours covers
-	# the front end and the admin too.
+	# the site frames nothing of its own, and the Facebook and Instagram embeds
+	# are outbound traffic, which this does not cover. Core sends this header on
+	# the login screen only, so ours covers the front end and the admin too.
 	Header always set X-Frame-Options "SAMEORIGIN"
 
-	# Leaving for a foreign domain sends the domain only, not the full address of
-	# the page the visitor came from. Modern browsers default to this anyway; it
-	# earns its place the day analytics is added.
+	# Leaving for a foreign domain sends the domain only, not the address of the
+	# page the visitor came from. It earns its place the day analytics is added.
 	Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
 	# Browser APIs the site does not use. Verified: no navigator.geolocation and
@@ -59,9 +56,9 @@
 	# hijacked plugin could not even ASK for the camera.
 	Header always set Permissions-Policy "geolocation=(), camera=(), microphone=(), payment=(), usb=()"
 
-	# HSTS: the browser uses HTTPS on its own, without asking the server. The
-	# site already redirects HTTP to HTTPS, but a redirect only happens AFTER the
-	# first connection -- that first request over hotel Wi-Fi is interceptable.
+	# HSTS: the browser reaches for HTTPS without asking the server. The redirect
+	# below only helps AFTER a first request has travelled unencrypted, which is
+	# why both exist.
 	#
 	# max-age is deliberately short (one day). This header cannot be withdrawn
 	# quickly: browsers honour the remembered value regardless of what the server
@@ -72,32 +69,23 @@
 # END SECURITY HEADERS
 
 # BEGIN CORE FINGERPRINT
-# Three files from the core distribution answer "which WordPress is this?" to
-# anyone who asks, and readme.html prints the exact version in its headline.
-# That is what puts a site on an automated list of targets for a version-specific
-# exploit, so it is worth the four lines even though none of them is a hole.
-#
-# Denying rather than only deleting: a core update restores readme.html and
-# license.txt every time, and this block survives the update.
-#
-# Not security by itself -- the version is still inferable from asset query
-# strings and from the generator meta tag. This closes the cheapest of the three.
+# readme.html prints the exact WordPress version in its headline; the other two
+# confirm the platform. Denied rather than only deleted, because a core update
+# restores readme.html and license.txt every time and this block survives it.
 <FilesMatch "^(readme\.html|license\.txt|wp-config-sample\.php)$">
 	Require all denied
 </FilesMatch>
 # END CORE FINGERPRINT
 
 # BEGIN HOSTING
-# Host-specific (CyberFolks): the PHP handler is selected per directory, and the
-# default memory limit is too low for the admin with Yoast and LiteSpeed active.
+# Host-specific: the PHP handler is selected per directory, and the default
+# memory limit is too low for the admin with Yoast and LiteSpeed active.
 AddHandler application/x-httpd-php81 php
 php_value memory_limit 256M
 # END HOSTING
 
 # BEGIN HTTPS
-# Redirect HTTP to HTTPS. Works from the first request, unlike HSTS, but only
-# after that request has already travelled unencrypted -- which is why both
-# exist.
+# Redirect HTTP to HTTPS.
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{HTTPS} off
