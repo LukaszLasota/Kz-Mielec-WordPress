@@ -56,6 +56,34 @@ if ( ! $is_rest ) {
 // Start output buffering — everything rendered below will be captured and cached.
 ob_start();
 
+// --- Step 0: Language this block must narrow to ---
+// On the front end Polylang narrows every query to the language of the request, so
+// nothing has to be said out loud. The block editor has no such request: it renders
+// through the `/wp/v2/block-renderer/` route, and an unqualified query answers with
+// every language at once — 148 topics instead of 37 and 36 accordion headings instead
+// of 9. The cache above hides none of it, because the cache is skipped under REST on
+// purpose.
+//
+// The language is taken from the post being rendered, which that route makes the
+// current post, and only then from the request. An empty string means "do not narrow",
+// which is the right answer with Polylang switched off: there is one language then and
+// every topic is in it.
+$block_lang = '';
+
+if ( function_exists( 'pll_get_post_language' ) ) {
+	$rendered_post = get_post();
+
+	if ( $rendered_post instanceof WP_Post ) {
+		$found      = pll_get_post_language( $rendered_post->ID );
+		$block_lang = is_string( $found ) ? $found : '';
+	}
+
+	if ( '' === $block_lang && function_exists( 'pll_current_language' ) ) {
+		$found      = pll_current_language( 'slug' );
+		$block_lang = is_string( $found ) ? $found : '';
+	}
+}
+
 // --- Step 1: Fetch taxonomy terms (accordion panel headings) ---
 // Sorted by term meta 'sort_order' (set in admin when editing the term).
 $tax_args = [
@@ -65,6 +93,10 @@ $tax_args = [
 	'orderby'    => 'meta_value_num',
 	'order'      => 'ASC',
 ];
+
+if ( '' !== $block_lang ) {
+	$tax_args['lang'] = $block_lang;
+}
 if ( ! empty( $selected_categories ) ) {
 	$tax_args['include'] = array_map( 'absint', $selected_categories );
 }
@@ -86,6 +118,9 @@ $query_args = [
 	'no_found_rows'  => true,
 	'cache_results'  => false,
 ];
+if ( '' !== $block_lang ) {
+	$query_args['lang'] = $block_lang;
+}
 if ( ! empty( $selected_categories ) ) {
 	$query_args['tax_query'] = [
 		[

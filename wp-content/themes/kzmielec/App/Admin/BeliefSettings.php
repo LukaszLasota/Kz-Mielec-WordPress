@@ -122,12 +122,31 @@ class BeliefSettings implements ActionHookInterface {
 		$selected_ids = (array) get_option( self::OPTION_BELIEF_PAGES, array() );
 		$selected_ids = array_filter( array_map( 'intval', $selected_ids ) );
 
-		$all_pages = get_pages(
-			array(
-				'sort_column' => 'post_title',
-				'sort_order'  => 'ASC',
-			)
+		/*
+		 * Only the default language is offered, and that is a decision rather than a
+		 * convenience. The chosen ids are stored once and resolved to each language when
+		 * the tiles render, so one choice already covers all four versions. Listing all
+		 * of them would show 72 pages where 18 are meaningful, and invite storing a
+		 * Ukrainian id whose Polish sibling would then be reached the long way round.
+		 *
+		 * With Polylang inactive the argument is dropped and every page is listed, which
+		 * is correct: there is one language then.
+		 */
+		$page_args = array(
+			'sort_column' => 'post_title',
+			'sort_order'  => 'ASC',
 		);
+
+		if ( function_exists( 'pll_default_language' ) ) {
+			$default = pll_default_language( 'slug' );
+
+			if ( is_string( $default ) && '' !== $default ) {
+				$page_args['lang'] = $default;
+			}
+		}
+
+		$all_pages = get_pages( $page_args );
+
 		if ( ! is_array( $all_pages ) ) {
 			$all_pages = array();
 		}

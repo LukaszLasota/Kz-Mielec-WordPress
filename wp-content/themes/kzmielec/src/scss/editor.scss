@@ -11,6 +11,7 @@
 
 @use "abstracts/tokens";
 @use "abstracts/type" as *;
+@use "abstracts/variables" as *;
 
 :root {
 
@@ -71,4 +72,30 @@
 
 		@include type(body);
 	}
+}
+
+// The two tile blocks are measured, not guessed: on the front page every
+// top-level block gets `padding-inline: space(4)` from front-page.scss, which the
+// canvas cannot inherit — it has no `.home` body class and no `.site-main`
+// wrapper. Without it a row of tiles is laid out at 1200px in the editor and at
+// 1168px on the page, so every tile and every circular overlay image renders
+// about 3% larger than it will be published. Same inset here, same width there.
+// The canvas needs the same image normalisation the front end gets from
+// base/normalize.scss. Without `height: auto` the browser takes an image's height from
+// its `height` attribute rather than from its width and aspect ratio — so the hover icon
+// inside a tile, which CSS sizes to 80% of a 228px circle, kept its natural 633px and
+// spilled 202px above the tile. `frontend.css` carries `img{height:auto;max-width:100%}`;
+// `editor.css` carried no rule for `img` at all.
+.editor-styles-wrapper img {
+	height: auto;
+	max-width: 100%;
+}
+
+// The width is capped on the grid rather than padded on the block root. Padding
+// the root widens the block instead of narrowing the row, because in the canvas the
+// root is a `.wp-block` whose width core computes for itself; capping the grid gives
+// the published width whatever the wrapper does.
+.editor-styles-wrapper .wp-block-custom-block-package-navigable-tiles .navigable-tiles__grid {
+	margin-inline: auto;
+	max-inline-size: calc(100% - #{space(4)} * 2);
 }

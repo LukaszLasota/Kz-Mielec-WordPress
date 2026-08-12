@@ -33,20 +33,69 @@ class NavigableTilesService {
 	private const META_BELIEF_HOVER_IMAGE = '_belief_hover_image';
 
 	/**
+	 * Language the tiles should be built for.
+	 *
+	 * On the front end Polylang narrows every query to the language of the request, so
+	 * nothing has to be said out loud. In the block editor there is no such request: the
+	 * block renders through the `/wp/v2/block-renderer/` route, Polylang has no language
+	 * to narrow by, and an unqualified query answers with every language at once — twelve
+	 * meetings instead of three, which both duplicates the tiles and bursts the layout the
+	 * captions sit in.
+	 *
+	 * The language is therefore taken from the post being rendered, which that route makes
+	 * the current post, and only then from the request. An empty string means "do not
+	 * narrow" — which is the right answer when Polylang is switched off, because then there
+	 * is one language and every post is in it.
+	 *
+	 * @return string Language slug, or an empty string.
+	 */
+	private static function current_language(): string {
+		if ( ! function_exists( 'pll_get_post_language' ) ) {
+			return '';
+		}
+
+		$post = get_post();
+
+		if ( $post instanceof \WP_Post ) {
+			$lang = pll_get_post_language( $post->ID );
+
+			if ( is_string( $lang ) && '' !== $lang ) {
+				return $lang;
+			}
+		}
+
+		if ( function_exists( 'pll_current_language' ) ) {
+			$lang = pll_current_language( 'slug' );
+
+			if ( is_string( $lang ) && '' !== $lang ) {
+				return $lang;
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Get all meetings as normalized items.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_meetings(): array {
-		$query = new \WP_Query(
-			array(
-				'post_type'      => 'meetings',
-				'posts_per_page' => -1,
-				'orderby'        => 'menu_order',
-				'order'          => 'ASC',
-				'no_found_rows'  => true,
-			)
+		$args = array(
+			'post_type'      => 'meetings',
+			'posts_per_page' => -1,
+			'orderby'        => 'menu_order',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
 		);
+
+		$lang = self::current_language();
+
+		if ( '' !== $lang ) {
+			$args['lang'] = $lang;
+		}
+
+		$query = new \WP_Query( $args );
 
 		$items = array();
 
@@ -70,8 +119,31 @@ class NavigableTilesService {
 			$hover_id  = (int) get_post_meta( $post_id, MeetingMeta::META_HOVER_IMAGE, true );
 			$base_id   = (int) get_post_thumbnail_id( $post_id );
 
-			$link = $anchor
-				? home_url( '/zaplanuj-wizyte/#' . rawurlencode( $anchor ) )
+			/*
+			 * The archive slug is asked for, never spelled out. It used to be
+			 * hardcoded as `/zaplanuj-wizyte/`, which bypassed the per-language
+			 * archive addresses entirely: on every foreign version all three
+			 * meeting tiles pointed at the Polish archive — 342 links across the
+			 * site, each carrying a correctly translated anchor to a page in the
+			 * wrong language.
+			 *
+			 * `get_post_type_archive_link()` is filtered by
+			 * MeetingsArchiveSlugs::filter_archive_link and returns
+			 * `/en/plan-your-visit/`, `/uk/zaplanuyte-vizyt/` or
+			 * `/es/planifica-tu-visita/` as appropriate — and the Polish slug when
+			 * Polylang is off.
+			 */
+			$archive = get_post_type_archive_link( 'meetings' );
+
+			/*
+			 * Decoded before encoding, because a Cyrillic or accented slug is
+			 * already percent-encoded in the database and encoding it again turns
+			 * `%d0%b2` into `%25d0%25b2` — an anchor that matches nothing on the
+			 * page. Decode-then-encode is idempotent and safe for plain ASCII
+			 * slugs too.
+			 */
+			$link = ( $anchor && is_string( $archive ) )
+				? trailingslashit( $archive ) . '#' . rawurlencode( rawurldecode( $anchor ) )
 				: (string) get_permalink( $post_id );
 
 			$items[] = array(
@@ -155,7 +227,15 @@ class NavigableTilesService {
 			return $post_id;
 		}
 
-		$translated = pll_get_post( $post_id );
+		/*
+		 * The language is named rather than left to Polylang for the same reason as in
+		 * `get_meetings()`: asked without one, `pll_get_post()` answers in the language of
+		 * the current request, and the block editor's rendering route has none. The belief
+		 * tiles would then show Polish pages while the Ukrainian page is open in the editor.
+		 */
+		$lang       = self::current_language();
+		$translated = '' !== $lang ? pll_get_post( $post_id, $lang ) : pll_get_post( $post_id );
+
 		return $translated ? (int) $translated : $post_id;
 	}
 }
