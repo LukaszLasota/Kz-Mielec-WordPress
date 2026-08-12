@@ -1,17 +1,17 @@
 <?php
 /**
- * Pary podmian cytatow Pisma: parafraza DeepL -> tekst uznanego przekladu.
+ * Scripture substitution pairs: DeepL's paraphrase -> the text of a published translation.
  *
- * Wyciagniete z `scripts/substitute-bible-quotes.php`, zeby ten sam zestaw mogl czytac
- * skrypt podmieniajacy I test `scripts/tests/kzt-bible-quotes.php`. Bez tego test musialby
- * zgadywac, co skrypt wstawia — a zgadl zle: zalozyl pelne wersety, podczas gdy szesc
- * pozycji to krotkie frazy cytowane w zdaniu.
+ * Extracted from `scripts/substitute-bible-quotes.php` so that the same table can be read
+ * by the substitution script AND by the test `scripts/tests/kzt-bible-quotes.php`. Without
+ * it the test had to guess what the script inserts, and guessed wrong: it assumed whole
+ * verses, while six of these entries are short phrases quoted inside a sentence.
  *
- * Klucze najwyzszego poziomu to numery wpisow z czasu zbierania tekstow. NIE sluza do
- * wyszukiwania — skrypt splaszcza tablice i szuka po wszystkich wpisach danego jezyka.
- * Zostaja jako zapis, gdzie te fragmenty wtedy stały.
+ * The top-level keys are the post ids from the time the texts were collected. They are NOT
+ * used for lookup — the script flattens the table and searches every post of the language
+ * concerned. They remain as a record of where each fragment stood back then.
  *
- * Zrodla przekladow i obowiazek atrybucji: `scripts/data/bible-quotes.php`.
+ * Translation sources and the attribution owed: `scripts/data/bible-quotes.php`.
  *
  * @package Kzmielec
  */

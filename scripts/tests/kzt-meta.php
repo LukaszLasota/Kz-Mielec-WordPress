@@ -1,7 +1,7 @@
 <?php
 /**
- * Pola meta: zserializowana tablica churches, pola spotkan, Yoast.
- * Najwazniejsza asercja: identyfikatory i liczby przechodza BEZ ZMIAN.
+ * Meta fields: the serialised churches array, the meeting fields, Yoast.
+ * The assertion that matters: ids and numbers pass through UNCHANGED.
  */
 $fails = array();
 $ct_c  = '\KzmielecTranslate\Translators\ChurchesTranslator';
@@ -47,7 +47,7 @@ $r_ch = ( new $ct_c( $stub ) )->translate( (int) $src, (int) $dst, 'EN-GB', true
 $got  = get_post_meta( $dst, 'churches', true );
 
 if ( ! is_array( $got ) || 2 !== count( $got ) ) {
-	$fails[] = 'churches: oczekiwano 2 wpisow, jest ' . ( is_array( $got ) ? count( $got ) : 'nie-tablica' );
+	$fails[] = 'churches: expected 2 entries, got ' . ( is_array( $got ) ? count( $got ) : 'not-an-array' );
 } else {
 	if ( false === strpos( (string) $got[0]['description'], '[EN-GB]' ) ) {
 		$fails[] = 'churches: opis nieprzetlumaczony';
@@ -63,17 +63,17 @@ if ( ! is_array( $got ) || 2 !== count( $got ) ) {
 	}
 }
 if ( '7' !== (string) get_post_meta( $dst, 'sort_order', true ) ) {
-	$fails[] = 'sort_order nie zostal skopiowany bez zmian';
+	$fails[] = 'sort_order was not copied unchanged';
 }
 if ( $r_ch['segments'] < 4 ) {
 	$fails[] = 'churches: zgloszono ' . $r_ch['segments'] . ' segmentow, oczekiwano 4';
 }
 
-// Tryb raportowania nie zapisuje.
+// The reporting mode does not write.
 $dst2 = wp_insert_post( array( 'post_type' => 'comparison_topic', 'post_status' => 'publish', 'post_title' => 'x' ) );
 ( new $ct_c( $stub ) )->translate( (int) $src, (int) $dst2, 'EN-GB', false );
 if ( '' !== (string) get_post_meta( $dst2, 'churches', true ) && array() !== (array) get_post_meta( $dst2, 'churches', true ) ) {
-	$fails[] = 'churches: tryb raportowania zapisal dane';
+	$fails[] = 'churches: the reporting mode wrote data';
 }
 wp_delete_post( (int) $dst2, true );
 
@@ -95,10 +95,10 @@ if ( false === strpos( (string) get_post_meta( $mdst, '_meeting_place', true ), 
 	$fails[] = '_meeting_place nieprzetlumaczone';
 }
 if ( '208' !== (string) get_post_meta( $mdst, '_meeting_hover_image', true ) ) {
-	$fails[] = '_meeting_hover_image ZMIENIONE — ID obrazka musi przejsc bez zmian';
+	$fails[] = '_meeting_hover_image CHANGED — an image id must pass through untouched';
 }
 if ( '10' !== (string) get_post_meta( $mdst, '_meeting_anchor', true ) ) {
-	$fails[] = '_meeting_anchor ZMIENIONE — kotwica musi przejsc bez zmian';
+	$fails[] = '_meeting_anchor CHANGED — an anchor must pass through untouched';
 }
 
 // ── Yoast ─────────────────────────────────────────────────────────────────
@@ -118,15 +118,15 @@ if ( '' !== (string) get_post_meta( $dst, '_yoast_wpseo_content_score', true ) )
 	$fails[] = 'content_score przeniesiony — Yoast ma go przeliczyc sam';
 }
 
-// ── pary zapisane dla wszystkich trzech ───────────────────────────────────
+// ── pairs recorded for all three ───────────────────────────────────────────
 $pary = \KzmielecTranslate\Services\SegmentStore::all( (int) $dst );
 if ( count( $pary ) < 6 ) {
-	$fails[] = 'zapisano ' . count( $pary ) . ' par dla meta, oczekiwano >=6 (4 churches + 2 Yoast)';
+	$fails[] = 'recorded ' . count( $pary ) . ' meta pairs, expected >=6 (4 churches + 2 Yoast)';
 }
-$pola = wp_list_pluck( $pary, 'field' );
-foreach ( array( 'churches[0].description', '_yoast_wpseo_title' ) as $oczekiwane ) {
-	if ( ! in_array( $oczekiwane, $pola, true ) ) {
-		$fails[] = "brak pary dla pola \"$oczekiwane\" (jest: " . implode( ', ', $pola ) . ')';
+$fields = wp_list_pluck( $pary, 'field' );
+foreach ( array( 'churches[0].description', '_yoast_wpseo_title' ) as $expected ) {
+	if ( ! in_array( $expected, $fields, true ) ) {
+		$fails[] = "no pair for field \"$expected\" (present: " . implode( ', ', $fields ) . ')';
 	}
 }
 
@@ -141,4 +141,4 @@ if ( $fails ) {
 	}
 	exit( 1 );
 }
-echo "PASS: pola meta tlumaczone, identyfikatory i liczby nietkniete\n";
+echo "PASS: meta fields translated, ids and numbers untouched\n";

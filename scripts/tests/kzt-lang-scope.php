@@ -1,29 +1,31 @@
 <?php
 /**
- * Bloki, ktore pobieraja tresc, musza ja zawezac do jezyka renderowanego wpisu.
+ * Blocks that fetch content must narrow it to the language of the rendered post.
  *
- * Ten test istnieje, bo tego bledu NIE WIDAC na froncie. Polylang zawezal zapytania
- * sam, po jezyku zadania, wiec strona wygladala poprawnie, a edytor — ktory renderuje
- * bloki przez trase REST bez kontekstu jezyka — dostawal wszystkie cztery wersje naraz:
- * 12 spotkan zamiast 3, 148 tematow zamiast 37, 36 naglowkow zamiast 9.
+ * This test exists because the defect is INVISIBLE on the front end. Polylang narrowed the
+ * queries by itself, using the language of the request, so the page looked right while the
+ * editor — which renders blocks through a REST route with no language context — received all
+ * four versions at once: 12 meetings instead of 3, 148 topics instead of 37, 36 headings
+ * instead of 9.
  *
- * Sedno testu: ustawiamy wpis obcojezyczny jako biezacy, ZOSTAWIAJAC jezyk zadania
- * polski. To dokladnie sytuacja edytora. Blok ma odpowiedziec w jezyku wpisu.
+ * The heart of the test: make a foreign-language post current while LEAVING the request in
+ * Polish. That is exactly the editor's situation. The block must answer in the post's
+ * language.
  */
 $fails = array();
 $svc   = '\CustomBlockPackage\Services\NavigableTilesService';
 
 if ( ! class_exists( $svc ) ) {
-	echo "FAIL\n  - brak klasy $svc\n";
+	echo "FAIL\n  - missing class $svc\n";
 	exit( 1 );
 }
 
 if ( ! function_exists( 'pll_get_post' ) ) {
-	echo "PASS: Polylang nieaktywny — zawezanie nie ma zastosowania\n";
+	echo "PASS: Polylang inactive — narrowing does not apply\n";
 	exit( 0 );
 }
 
-/** Strona glowna po polsku i jej tlumaczenia. */
+/** The Polish front page and its translations. */
 $front = array( 'pl' => 131 );
 foreach ( array( 'en', 'uk', 'es' ) as $l ) {
 	$t = pll_get_post( 131, $l );
@@ -33,10 +35,10 @@ foreach ( array( 'en', 'uk', 'es' ) as $l ) {
 }
 
 if ( 4 !== count( $front ) ) {
-	$fails[] = 'nie znalazlem czterech wersji strony glownej, jest ' . count( $front );
+	$fails[] = 'did not find four versions of the front page, found ' . count( $front );
 }
 
-// ── kafelki: liczba i jezyk ────────────────────────────────────────────────
+// ── tiles: count and language ──────────────────────────────────────────────
 foreach ( $front as $lang => $id ) {
 	$GLOBALS['post'] = get_post( $id );
 	setup_postdata( $GLOBALS['post'] );
@@ -45,17 +47,17 @@ foreach ( $front as $lang => $id ) {
 	$beliefs  = $svc::get_beliefs();
 
 	if ( 3 !== count( $meetings ) ) {
-		$fails[] = "$lang: spotkan " . count( $meetings ) . ', oczekiwano 3';
+		$fails[] = "$lang: meetings " . count( $meetings ) . ', expected 3';
 	}
 	if ( 8 !== count( $beliefs ) ) {
-		$fails[] = "$lang: stron wiary " . count( $beliefs ) . ', oczekiwano 8';
+		$fails[] = "$lang: belief pages " . count( $beliefs ) . ', expected 8';
 	}
 
-	foreach ( array( 'spotkania' => $meetings, 'wiara' => $beliefs ) as $what => $items ) {
+	foreach ( array( 'meetings' => $meetings, 'beliefs' => $beliefs ) as $what => $items ) {
 		foreach ( $items as $item ) {
 			$got = (string) pll_get_post_language( (int) $item['id'] );
 			if ( $got !== $lang ) {
-				$fails[] = "$lang: $what — kafelek #" . $item['id'] . " jest w jezyku '$got'";
+				$fails[] = "$lang: $what — tile #" . $item['id'] . " is in language '$got'";
 				break;
 			}
 		}
@@ -64,7 +66,7 @@ foreach ( $front as $lang => $id ) {
 	wp_reset_postdata();
 }
 
-// ── akordeon porownania: tematy i naglowki ─────────────────────────────────
+// ── comparison accordion: topics and headings ──────────────────────────────
 $cmp = array( 'pl' => 83 );
 foreach ( array( 'en', 'uk', 'es' ) as $l ) {
 	$t = pll_get_post( 83, $l );
@@ -92,14 +94,14 @@ foreach ( $cmp as $lang => $id ) {
 	);
 
 	if ( 37 !== count( $topics ) ) {
-		$fails[] = "$lang: tematow porownania " . count( $topics ) . ', oczekiwano 37';
+		$fails[] = "$lang: comparison topics " . count( $topics ) . ', expected 37';
 	}
 	if ( ! is_array( $terms ) || 9 !== count( $terms ) ) {
-		$fails[] = "$lang: naglowkow akordeonu " . ( is_array( $terms ) ? count( $terms ) : 0 ) . ', oczekiwano 9';
+		$fails[] = "$lang: naglowkow akordeonu " . ( is_array( $terms ) ? count( $terms ) : 0 ) . ', expected 9';
 	}
 }
 
-// ── kolejnosc akordeonu ta sama w kazdym jezyku ────────────────────────────
+// ── the accordion order is the same in every language ──────────────────────
 $by_lang = array();
 foreach ( array_keys( $cmp ) as $lang ) {
 	$ordered = get_terms(
@@ -127,7 +129,7 @@ if ( function_exists( 'pll_get_term' ) && $by_lang ) {
 			$found      = array_search( $translated, $by_lang[ $lang ], true );
 
 			if ( $found !== $position ) {
-				$fails[] = "kolejnosc akordeonu: pozycja $position w pl to pozycja " . var_export( $found, true ) . " w $lang";
+				$fails[] = "accordion order: position $position in pl is position " . var_export( $found, true ) . " in $lang";
 			}
 		}
 	}
@@ -141,4 +143,4 @@ if ( $fails ) {
 	exit( 1 );
 }
 
-echo "PASS: bloki zawezaja tresc do jezyka wpisu, akordeon zgodny co do liczby i kolejnosci\n";
+echo "PASS: blocks narrow content to the post language; accordion agrees in count and order\n";

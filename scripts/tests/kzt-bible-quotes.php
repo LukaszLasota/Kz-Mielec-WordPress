@@ -1,36 +1,35 @@
 <?php
 /**
- * Czy cytaty Pisma stoja w tresci w uznanym przekladzie, a nie w parafrazie DeepL.
+ * Are the Scripture quotations in the content a published translation, or DeepL's paraphrase?
  *
- * Ten test istnieje z powodu, ktory ujawnila proba generalna na kopii bazy produkcyjnej:
- * `substitute-bible-quotes.php` dopasowuje DOSLOWNE wyjscie DeepL, a DeepL nie jest
- * deterministyczny. Przy odtworzeniu dwie z 52 podmian nie znalazly swojego tekstu, wiec
- * dwa cytaty zostaly parafraza. Na stronie nie widac tego wcale: akapit jest poprawny
- * jezykowo, brzmi sensownie i po prostu nie jest tym, co czytelnik znajdzie w swojej
- * Biblii.
+ * This test exists because of what the dress rehearsal on a copy of the production database
+ * revealed: `substitute-bible-quotes.php` matches DeepL's LITERAL output, and DeepL is not
+ * deterministic. On reproduction two of 52 substitutions failed to find their text, so two
+ * quotations stayed paraphrases. Nothing shows on the page: the paragraph is grammatical, it
+ * reads sensibly, and it simply is not what the reader will find in their own Bible.
  *
- * Sprawdzana jest strona DOCELOWA kazdej pary z `scripts/data/bible-substitutions.php` —
- * czyli dokladnie ten tekst, ktory skrypt wstawia. Pierwsza wersja tego testu zakladala
- * pelne wersety z `bible-quotes.php` i zglaszala 42 bledy na zdrowej bazie, bo szesc
- * pozycji to krotkie frazy cytowane w zdaniu, a nie cale wersety.
+ * What is checked is the TARGET side of every pair in `scripts/data/bible-substitutions.php`
+ * — exactly the text the script inserts. The first version of this test assumed whole verses
+ * from `bible-quotes.php` and reported 42 failures on a healthy database, because six of the
+ * entries are short phrases quoted inside a sentence rather than complete verses.
  */
 $fails = array();
 $data  = ABSPATH . 'scripts/data/bible-substitutions.php';
 
 if ( ! file_exists( $data ) ) {
-	echo "FAIL\n  - brak pliku $data\n";
+	echo "FAIL\n  - missing file $data\n";
 	exit( 1 );
 }
 
 $table = include $data;
 
 if ( ! is_array( $table ) || ! $table ) {
-	echo "FAIL\n  - tablica podmian pusta\n";
+	echo "FAIL\n  - the substitution table is empty\n";
 	exit( 1 );
 }
 
 if ( ! function_exists( 'pll_languages_list' ) ) {
-	echo "PASS: Polylang nieaktywny — obce cytaty nie maja gdzie stac\n";
+	echo "PASS: Polylang inactive — the foreign quotations have nowhere to be\n";
 	exit( 0 );
 }
 
@@ -59,9 +58,9 @@ foreach ( $table as $group ) {
 			++$checked;
 
 			/*
-			 * Szukamy fragmentu, nie calosci: wstawiony tekst siedzi w akapicie, ktory
-			 * niesie wlasna interpunkcje i znaczniki wokol. 50 znakow wystarcza, zeby
-			 * odroznic przeklad od parafrazy, i nie wywraca sie na koncowce zdania.
+			 * A fragment, not the whole string: the inserted text sits in a paragraph that
+			 * carries its own punctuation and markup around it. Fifty characters is enough to
+			 * tell a translation from a paraphrase, and does not trip over the sentence end.
 			 */
 			$needle = mb_substr( $wanted, 0, 50 );
 
@@ -72,7 +71,7 @@ foreach ( $table as $group ) {
 				)
 			);
 
-			// Kolumny tabeli porownania siedza w polu meta, nie w tresci wpisu.
+			// The comparison table's columns live in post meta, not in the post content.
 			if ( 0 === $hits ) {
 				$hits = (int) $wpdb->get_var(
 					$wpdb->prepare(
@@ -83,7 +82,7 @@ foreach ( $table as $group ) {
 			}
 
 			if ( 0 === $hits ) {
-				$fails[] = sprintf( '[%s] brak wstawionego przekladu: %s…', $lang, mb_substr( $needle, 0, 54 ) );
+				$fails[] = sprintf( '[%s] inserted translation missing: %s…', $lang, mb_substr( $needle, 0, 54 ) );
 				continue;
 			}
 
@@ -97,8 +96,8 @@ if ( $fails ) {
 	foreach ( $fails as $f ) {
 		echo "  - $f\n";
 	}
-	printf( "  (obecnych %d z %d sprawdzanych)\n", $present, $checked );
+	printf( "  (%d of %d checked are present)\n", $present, $checked );
 	exit( 1 );
 }
 
-printf( "PASS: cytaty Pisma w uznanych przekladach, %d z %d obecnych w tresci\n", $present, $checked );
+printf( "PASS: Scripture in published translations, %d of %d present in the content\n", $present, $checked );

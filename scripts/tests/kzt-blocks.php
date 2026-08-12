@@ -1,11 +1,11 @@
 <?php
 /**
- * Ochrona markupu blokow — najwazniejszy test silnika tlumaczacego.
+ * Block markup protection — the most important test of the translation engine.
  *
- * Blad tutaj oznacza wpisy, ktorych nie da sie otworzyc w edytorze, albo
- * przetlumaczone `targetId`, ktore cicho psuje strzalki przewijania.
+ * A failure here means posts that cannot be opened in the editor, or a translated
+ * `targetId` that quietly breaks the scroll arrows.
  *
- * Uruchamianie: ddev wp eval-file - < scripts/tests/kzt-blocks.php
+ * Run with: ddev wp eval-file - < scripts/tests/kzt-blocks.php
  *
  * @package KzmielecTranslate
  */
@@ -96,7 +96,7 @@ foreach ( array(
 	}
 }
 
-// 4. Atrybuty techniczne NIETKNIETE — asercja chroniaca dzialanie strony.
+// 4. Technical attributes UNTOUCHED — the assertion that keeps the site working.
 foreach ( array(
 	array( 'custom-block-package/scroll-arrow', 'targetId', 'three' ),
 	array( 'custom-block-package/scroll-arrow', 'direction', 'up' ),
@@ -113,9 +113,9 @@ foreach ( array(
 	}
 }
 
-// 5. Wynik da sie sparsowac i zserializowac — czyli otworzy sie w edytorze.
+// 5. The result parses and serialises — meaning it will open in the editor.
 if ( '' === trim( serialize_blocks( parse_blocks( $wynik ) ) ) ) {
-	$fails[] = 'wynik nie serializuje sie';
+	$fails[] = 'the result does not serialise';
 }
 
 // 6. segments() zglasza tyle, ile faktycznie zostanie wyslane.
@@ -135,12 +135,12 @@ if ( $nazwy( $b_cls::translate_content( $wynik, $stub, 'UK' ) ) !== $nazwy( $zro
 	$fails[] = 'drugi przebieg zmienil strukture blokow';
 }
 
-// 8. Pusta tresc nie wybucha.
+// 8. Empty content does not blow up.
 if ( '' !== $b_cls::translate_content( '', $stub, 'EN-GB' ) ) {
-	$fails[] = 'pusta tresc nie zwrocila pustego wyniku';
+	$fails[] = 'empty content did not return an empty result';
 }
 
-// 9. Prawdziwa strona glowna: struktura i atrybuty techniczne bez zmian.
+// 9. The real front page: structure and technical attributes unchanged.
 $front = (int) get_option( 'page_on_front' );
 
 if ( $front > 0 ) {
@@ -152,7 +152,7 @@ if ( $front > 0 ) {
 	}
 	foreach ( array( 'targetId', 'anchor', 'dataSource', 'className', 'imgDesktopURL', 'tileStyle' ) as $a ) {
 		if ( substr_count( $src, '"' . $a . '":' ) !== substr_count( $dst, '"' . $a . '":' ) ) {
-			$fails[] = "strona glowna: zmieniona liczba atrybutow \"$a\"";
+			$fails[] = "front page: the number of \"$a\" attributes changed";
 		}
 	}
 }
@@ -164,4 +164,4 @@ if ( $fails ) {
 	}
 	exit( 1 );
 }
-echo 'PASS: markup blokow chroniony, biala lista dziala (' . count( $segs ) . " segmentow na probce)\n";
+echo 'PASS: block markup protected, the allow-list works (' . count( $segs ) . " segments in the sample)\n";

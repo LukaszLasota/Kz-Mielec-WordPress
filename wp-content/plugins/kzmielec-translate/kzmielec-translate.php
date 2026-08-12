@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Kzmielec Translate
- * Description: Narzędzie migracyjne: wypełnia tłumaczenia treści przez DeepL. Po wypełnieniu można dezaktywować.
+ * Description: Migration tool: fills content translations via DeepL. Can be deactivated once the content is filled.
  * Version: 1.0.0
  * Author: Łukasz Lasota
  * Text Domain: kzmielec-translate

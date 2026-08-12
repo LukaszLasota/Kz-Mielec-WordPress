@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# Uruchamia wszystkie testy PHP silnika tlumaczacego i zbiorczo raportuje wynik.
+# Runs every PHP test in this directory and reports the result as a whole.
 #
-# Testy podawane sa przez stdin, bo sciezki hosta nie istnieja w kontenerze DDEV
-# — `ddev wp eval-file <sciezka>` konczy sie bledem "does not exist".
+# The tests are piped through stdin because host paths do not exist inside the DDEV
+# container — `ddev wp eval-file <path>` fails with "does not exist".
 #
-# Uzycie:
+# Usage:
 #   scripts/tests/run-all.sh
 #
 set -uo pipefail
@@ -29,5 +29,5 @@ for t in scripts/tests/kzt-*.php; do
 	fi
 done
 
-printf '\n  %d/%d przeszlo\n' "$pass" "$((pass + fail))"
+printf '\n  %d/%d passed\n' "$pass" "$((pass + fail))"
 [ "$fail" -eq 0 ] || exit 1

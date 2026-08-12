@@ -1,6 +1,6 @@
 <?php
 /**
- * Slownik terminow: pliki istnieja, parsuja sie, pokrywaja trzy jezyki.
+ * Terminology glossary: the files exist, they parse, and they cover three languages.
  *
  * Uruchamianie: ddev wp eval-file - < scripts/tests/kzt-glossary.php
  *
@@ -19,15 +19,15 @@ foreach ( array( 'EN-GB', 'UK', 'ES' ) as $lang ) {
 	$pary = $g_cls::pairs( $lang );
 
 	if ( count( $pary ) < 11 ) {
-		$fails[] = "[$lang] slownik ma " . count( $pary ) . ' par, oczekiwano co najmniej 11';
+		$fails[] = "[$lang] the glossary has " . count( $pary ) . ' pairs, expected at least 11';
 	}
 
-	// Nazwa wyznania musi byc wymuszona — bez niej rozjedzie sie miedzy 37 tematami.
+	// The denomination name has to be forced — without it, it drifts across 37 topics.
 	if ( ! isset( $pary['Kościół Zielonoświątkowy'] ) ) {
-		$fails[] = "[$lang] brak wpisu dla \"Kościół Zielonoświątkowy\"";
+		$fails[] = "[$lang] no entry for \"Kościół Zielonoświątkowy\"";
 	}
 	if ( ! isset( $pary['Kościół Rzymskokatolicki'] ) ) {
-		$fails[] = "[$lang] brak wpisu dla \"Kościół Rzymskokatolicki\"";
+		$fails[] = "[$lang] no entry for \"Kościół Rzymskokatolicki\"";
 	}
 
 	foreach ( $pary as $zrodlo => $cel ) {
@@ -40,19 +40,19 @@ foreach ( array( 'EN-GB', 'UK', 'ES' ) as $lang ) {
 	}
 }
 
-// Nieznany jezyk zwraca pusta tablice, nie wyjatek.
+// An unknown language returns an empty array, not an exception.
 if ( array() !== $g_cls::pairs( 'DE' ) ) {
-	$fails[] = 'nieznany jezyk nie zwrocil pustej tablicy';
+	$fails[] = 'an unknown language did not return an empty array';
 }
 
 /*
- * Bez klucza ensure() musi zwrocic pusty ciag, nie wyjatek: brak slownika nie
- * moze blokowac przebiegu, tylko obnizac spojnosc.
+ * Without a key, ensure() must return an empty string rather than throw: a missing glossary
+ * may lower consistency, but it must not block the run.
  */
 if ( ! defined( 'KZMIELEC_DEEPL_API_KEY' ) && '' === (string) get_option( \KzmielecTranslate\Admin\DeeplSettings::OPTION_KEY, '' ) ) {
 	foreach ( array( 'EN-GB', 'UK', 'ES', 'DE' ) as $lang ) {
 		if ( '' !== $g_cls::ensure( $lang ) ) {
-			$fails[] = "[$lang] ensure() bez klucza zwrocilo niepusta wartosc";
+			$fails[] = "[$lang] ensure() without a key returned a non-empty value";
 		}
 	}
 }
@@ -64,4 +64,4 @@ if ( $fails ) {
 	}
 	exit( 1 );
 }
-echo "PASS: slowniki poprawne dla trzech jezykow\n";
+echo "PASS: the glossaries are correct for all three languages\n";

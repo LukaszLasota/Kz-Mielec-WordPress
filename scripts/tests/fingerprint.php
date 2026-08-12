@@ -1,14 +1,13 @@
 <?php
 /**
- * Odcisk stanu tresci — do porownania przed i po probie generalnej.
+ * A fingerprint of the content state — for comparing before and after a dress rehearsal.
  *
- * Wypisuje jedna liczbe albo jeden napis na wiersz, w stalej kolejnosci, zeby dwa
- * przebiegi dawaly sie porownac zwyklym `diff`. Zadnych identyfikatorow, bo te po
- * odtworzeniu z produkcji BEDA inne i to jest w porzadku — porownujemy tresc, nie
- * numery wierszy w bazie.
+ * Prints one number or one string per line, in a fixed order, so that two runs can be
+ * compared with a plain `diff`. No post ids: after reproducing from production they WILL be
+ * different, and that is fine — what is compared is the content, not row numbers.
  *
- * Uzycie:
- *   ddev wp eval-file scripts/tests/fingerprint.php > przed.txt
+ * Usage:
+ *   ddev wp eval-file scripts/tests/fingerprint.php > before.txt
  */
 
 if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
@@ -18,9 +17,9 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 $langs = function_exists( 'pll_languages_list' ) ? (array) pll_languages_list() : array( 'pl' );
 sort( $langs );
 
-echo "jezyki: " . implode( ',', $langs ) . "\n";
+echo "languages: " . implode( ',', $langs ) . "\n";
 
-// ── liczby tresci na jezyk ─────────────────────────────────────────────────
+// ── content counts per language ────────────────────────────────────────────
 foreach ( $langs as $lang ) {
 	foreach ( array( 'page', 'post', 'meetings', 'comparison_topic' ) as $type ) {
 		$ids = get_posts(
@@ -33,11 +32,11 @@ foreach ( $langs as $lang ) {
 			)
 		);
 
-		printf( "liczba %s/%s: %d\n", $lang, $type, count( $ids ) );
+		printf( "count %s/%s: %d\n", $lang, $type, count( $ids ) );
 	}
 }
 
-// ── terminy taksonomii ────────────────────────────────────────────────────
+// ── taxonomy terms ─────────────────────────────────────────────────────────
 foreach ( $langs as $lang ) {
 	$terms = get_terms(
 		array(
@@ -47,10 +46,10 @@ foreach ( $langs as $lang ) {
 		)
 	);
 
-	printf( "terminy %s: %d\n", $lang, is_array( $terms ) ? count( $terms ) : 0 );
+	printf( "terms %s: %d\n", $lang, is_array( $terms ) ? count( $terms ) : 0 );
 }
 
-// ── tytuly stron, alfabetycznie, per jezyk ────────────────────────────────
+// ── page titles, alphabetically, per language ──────────────────────────────
 foreach ( $langs as $lang ) {
 	$titles = array();
 
@@ -61,21 +60,21 @@ foreach ( $langs as $lang ) {
 	sort( $titles );
 
 	foreach ( $titles as $title ) {
-		printf( "tytul %s: %s\n", $lang, $title );
+		printf( "title %s: %s\n", $lang, $title );
 	}
 }
 
-// ── dane kontaktowe ───────────────────────────────────────────────────────
+// ── contact data ───────────────────────────────────────────────────────────
 if ( class_exists( '\Kzmielec\Contact\ContactData' ) ) {
 	foreach ( \Kzmielec\Contact\ContactData::all() as $key => $value ) {
-		printf( "kontakt %s: %s\n", $key, $value );
+		printf( "contact %s: %s\n", $key, $value );
 	}
 }
 
-// ── linie kontaktowe w kazdym jezyku, tak jak je widzi odwiedzajacy ───────
+// ── the contact lines in every language, as a visitor sees them ────────────
 if ( class_exists( '\Kzmielec\Contact\ContactBindings' ) ) {
-	// Slug -> locale, zbudowane para po parze. Sortowanie listy slugow zerwaloby
-	// odpowiednioscz osobno pobrana lista locale, wiec bierzemy je razem.
+	// Slug -> locale, built pair by pair. Sorting the slug list would break the
+	// correspondence with a separately fetched list of locales, so both are read together.
 	$locales = array();
 
 	if ( function_exists( 'pll_languages_list' ) ) {
@@ -96,12 +95,12 @@ if ( class_exists( '\Kzmielec\Contact\ContactBindings' ) ) {
 				}
 			);
 
-			printf( "linia %s/%s: %s\n", $lang, $key, preg_replace( '/\s+/', ' ', (string) $line ) );
+			printf( "line %s/%s: %s\n", $lang, $key, preg_replace( '/\s+/', ' ', (string) $line ) );
 		}
 	}
 }
 
-// ── pola meta spotkan ─────────────────────────────────────────────────────
+// ── meeting meta fields ────────────────────────────────────────────────────
 $places = array();
 
 foreach ( get_posts( array( 'post_type' => 'meetings', 'post_status' => 'publish', 'posts_per_page' => -1, 'suppress_filters' => true ) ) as $meeting ) {
@@ -112,16 +111,16 @@ foreach ( get_posts( array( 'post_type' => 'meetings', 'post_status' => 'publish
 sort( $places );
 
 foreach ( $places as $place ) {
-	printf( "spotkanie %s\n", $place );
+	printf( "meeting %s\n", $place );
 }
 
-// ── slady uszkodzen, ktore juz raz wystapily ──────────────────────────────
+// ── traces of damage that has happened once already ────────────────────────
 global $wpdb;
 
 foreach ( array(
-	'zjedzony ukosnik uXXXX' => 'u01',
-	'martwy email ddev'      => 'zbor@kzmielec.ddev.site',
-	'cyrylicka ulica'        => 'Промислова',
+	'swallowed backslash uXXXX' => 'u01',
+	'dead ddev e-mail'      => 'zbor@kzmielec.ddev.site',
+	'Cyrillic street name'        => 'Промислова',
 ) as $label => $needle ) {
 	$count = (int) $wpdb->get_var(
 		$wpdb->prepare(
@@ -130,5 +129,5 @@ foreach ( array(
 		)
 	);
 
-	printf( "uszkodzenie %s: %d\n", $label, $count );
+	printf( "damage %s: %d\n", $label, $count );
 }

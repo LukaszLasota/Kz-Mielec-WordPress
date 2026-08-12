@@ -65,14 +65,14 @@ $kz_go = in_array( 'go', (array) $args, true );
  */
 function kz_quote_substitutions(): array {
 	/*
-	 * Czytane z pliku danych, wspolnego z testem `kzt-bible-quotes.php`. Test sprawdza
-	 * obecnosc wstawionych tekstow, a nie potrafil tego robic, dopoki zestaw byl zamkniety
-	 * w tym pliku.
+	 * Read from a data file shared with the test `kzt-bible-quotes.php`. The test checks
+	 * that the substituted texts are present, and could not do so while the table was
+	 * locked inside this script.
 	 */
 	$data = ABSPATH . 'scripts/data/bible-substitutions.php';
 
 	if ( ! file_exists( $data ) ) {
-		WP_CLI::error( 'Brak scripts/data/bible-substitutions.php' );
+		WP_CLI::error( 'Missing scripts/data/bible-substitutions.php' );
 	}
 
 	$pairs = include $data;
@@ -176,24 +176,25 @@ foreach ( $kz_pairs as $kz_lang => $kz_list ) {
 			continue;
 		}
 
-		$kz_notfound[] = sprintf( '[%s] nie znaleziono ani starego, ani nowego: %s', $kz_lang, mb_substr( $kz_pair[0], 0, 60 ) );
+		$kz_notfound[] = sprintf( '[%s] neither the old nor the new text found: %s', $kz_lang, mb_substr( $kz_pair[0], 0, 60 ) );
 	}
 }
 
-WP_CLI::log( sprintf( 'juz podmienionych wczesniej: %d', $kz_already ) );
+WP_CLI::log( sprintf( 'already substituted by an earlier run: %d', $kz_already ) );
 
 /*
- * Oznaczenie wpisow, w ktorych stoi tekst chronionego przekladu.
+ * Mark the posts that carry the text of a copyrighted translation.
  *
- * NIV i NVI naleza do Biblica, ukrainski UTT do Ukrainskiego Towarzystwa Biblijnego —
- * kazdy z nich wymaga noty o zrodle tam, gdzie cytuje sie jego tekst. Nota stala kiedys
- * w glownej stopce, czyli na kazdej podstronie, takze tam, gdzie zadnego cytatu nie ma.
- * Teraz motyw doklada ja tylko do oznaczonych wpisow (`Kzmielec\Seo\ScriptureNotice`).
+ * NIV and NVI belong to Biblica and the Ukrainian UTT to the Ukrainian Bible Society; each
+ * of them asks for a source note wherever its text is quoted. That note used to sit in the
+ * main footer, which put it on every page of the site including the great majority that
+ * quote nothing. The theme now appends it only to marked posts, in
+ * `Kzmielec\Seo\ScriptureNotice`.
  *
- * Znacznik ustawia sie tutaj, a nie recznie w panelu, bo inaczej po odtworzeniu tresci na
- * produkcji cytaty byłyby, a noty nie — i nikt by tego nie zauwazyl. Sprawdzana jest
- * OBECNOSC tekstu docelowego, wiec przebieg jest idempotentny i dziala takze wtedy, gdy
- * podmiana nastapila w poprzednim uruchomieniu.
+ * The marker is set here rather than by hand in the admin, because reproducing the content
+ * on production would otherwise bring the quotations without the note and nobody would
+ * notice. What is checked is the PRESENCE of the replacement text, so the pass is
+ * idempotent and works even when the substitution happened in an earlier run.
  */
 $kz_marked   = 0;
 $kz_unmarked = 0;
@@ -221,19 +222,20 @@ foreach ( $kz_pairs as $kz_lang => $kz_list ) {
 		}
 
 		/*
-		 * Odsylacz biblijny w nawiasie liczy sie tak samo jak podmieniony tekst.
+		 * A parenthesised Scripture reference counts the same as substituted text.
 		 *
-		 * Bez tego osiem polskich stron z oswiadczeniami Naczelnej Rady zostawaloby bez
-		 * noty: po polsku podmieniono cytaty tylko na wlasnych stronach zboru (EIB),
-		 * a oswiadczenia przytaczaja Biblie Warszawska — rowniez chroniona, Towarzystwo
-		 * Biblijne w Polsce. Znaczek wypada wiec po stronie ostrozniejszej: strona, ktora
-		 * odsyla do wersetu, dostaje note o zrodlach.
+		 * Without this, the seven Polish statements of the Supreme Church Council would
+		 * stay unmarked: in Polish the quotations were replaced only on the congregation's
+		 * own pages (EIB), while the statements quote Biblia Warszawska — also copyrighted,
+		 * by the Bible Society in Poland. The marker therefore errs on the careful side: a
+		 * page that cites a verse gets the source note.
 		 */
 		/*
-		 * Wielka litera lacinska ALBO cyrylicka: ukrainskie skroty ksiag to «Бут.»,
-		 * «1 Кор.», «Мт.». Pierwsza wersja tego wzorca dopuszczala tylko lacinske i przez
-		 * to pominela trzy ukrainskie strony — 7 oznaczonych wobec 10 w pozostalych
-		 * jezykach. Roznica w liczbach byla jedynym sygnalem, ze wzorzec jest za waski.
+		 * A capital letter in Latin OR Cyrillic: the Ukrainian book abbreviations are
+		 * «Бут.», «1 Кор.», «Мт.». The first version of this pattern allowed Latin only and
+		 * therefore missed three Ukrainian pages — 7 marked against 10 in every other
+		 * language. That difference in the counts was the only signal that the pattern was
+		 * too narrow.
 		 */
 		if ( ! $kz_has && preg_match( '/\((?:por\.\s*)?[1-3]?\s?[A-ZŁŚŻА-ЯЄІЇҐ][\p{L}]{1,14}\.?\s+\d+[,:]\s?\d+/u', $kz_content ) ) {
 			$kz_has = true;
@@ -261,19 +263,19 @@ foreach ( $kz_pairs as $kz_lang => $kz_list ) {
 	}
 }
 
-WP_CLI::log( sprintf( 'znacznik noty o zrodlach: do oznaczenia %d, do zdjecia %d', $kz_marked, $kz_unmarked ) );
+WP_CLI::log( sprintf( 'source-note marker: to set %d, to clear %d', $kz_marked, $kz_unmarked ) );
 
 if ( $kz_notfound ) {
-	WP_CLI::warning( sprintf( 'NIEZNALEZIONE: %d', count( $kz_notfound ) ) );
+	WP_CLI::warning( sprintf( 'NOT FOUND: %d', count( $kz_notfound ) ) );
 	foreach ( $kz_notfound as $kz_n ) {
 		WP_CLI::log( '   ' . $kz_n );
 	}
 }
 
-WP_CLI::log( sprintf( 'podmienionych cytatow: %d, wpisow: %d', $kz_done, $kz_posts ) );
+WP_CLI::log( sprintf( 'quotations substituted: %d, in %d posts', $kz_done, $kz_posts ) );
 
 if ( $kz_go ) {
-	WP_CLI::success( 'Zapisane.' );
+	WP_CLI::success( 'Written.' );
 } else {
-	WP_CLI::warning( 'PRÓBA — nic nie zapisano. Dodaj `-- go`, aby zapisać.' );
+	WP_CLI::warning( 'DRY RUN — nothing written. Add `-- go` to write.' );
 }

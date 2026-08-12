@@ -1,7 +1,7 @@
 <?php
 /**
- * Tworzenie tlumaczenia wpisu: powiazanie jezykowe, tresc, slug, idempotencja,
- * zapis par zrodlo-tlumaczenie.
+ * Creating a post translation: the language link, content, slug, idempotence and the
+ * recorded source-translation pairs.
  *
  * Uruchamianie: ddev wp eval-file - < scripts/tests/kzt-post.php
  *
@@ -39,20 +39,20 @@ pll_set_post_language( $src, 'pl' );
 $t   = new $pt_c( new \KzmielecTranslate\Services\StubTranslator() );
 $tid = 0;
 
-// 1. Tryb raportowania nie zapisuje niczego.
+// 1. The reporting mode writes nothing.
 $raport = $t->translate( $src, 'en', false );
 
 if ( 0 !== $raport['created'] ) {
-	$fails[] = 'tryb raportowania utworzyl wpis';
+	$fails[] = 'the reporting mode created a post';
 }
 if ( $raport['segments'] < 1 || $raport['chars'] < 1 ) {
-	$fails[] = 'raport nie policzyl segmentow lub znakow';
+	$fails[] = 'the report counted no segments or characters';
 }
 if ( pll_get_post( $src, 'en' ) ) {
 	$fails[] = 'tryb raportowania powiazal tlumaczenie';
 }
 
-// 2. Zapis tworzy powiazany wpis w docelowym jezyku.
+// 2. Writing creates a linked post in the target language.
 $wynik = $t->translate( $src, 'en', true );
 $tid   = (int) $wynik['target_id'];
 
@@ -60,10 +60,10 @@ if ( ! $tid ) {
 	$fails[] = 'nie zwrocono target_id';
 } else {
 	if ( 'en' !== pll_get_post_language( $tid ) ) {
-		$fails[] = 'jezyk tlumaczenia to ' . var_export( pll_get_post_language( $tid ), true );
+		$fails[] = 'the translation language is ' . var_export( pll_get_post_language( $tid ), true );
 	}
 	if ( (int) pll_get_post( $src, 'en' ) !== $tid ) {
-		$fails[] = 'brak powiazania zrodlo->tlumaczenie';
+		$fails[] = 'the source->translation link is missing';
 	}
 
 	$tp = get_post( $tid );
@@ -84,11 +84,11 @@ if ( ! $tid ) {
 		$fails[] = 'slug nie zostal przeliczony: ' . $tp->post_name;
 	}
 
-	// 5. Pary zrodlo-tlumaczenie zapisane — bez nich Planu C nie da sie wykonac.
+	// 5. Source-translation pairs recorded — without them the editorial pass is impossible.
 	$pary = $ss_c::all( $tid );
 
 	if ( count( $pary ) < 2 ) {
-		$fails[] = 'zapisano ' . count( $pary ) . ' par, oczekiwano >=2 (tytul + tresc)';
+		$fails[] = 'recorded ' . count( $pary ) . ' pairs, expected >=2 (title + content)';
 	}
 	foreach ( $pary as $p ) {
 		if ( '' === trim( $p['source'] ) || '' === trim( $p['translation'] ) ) {
@@ -96,19 +96,19 @@ if ( ! $tid ) {
 		}
 	}
 
-	// 6. Idempotencja: drugie uruchomienie bez --force nie tworzy duplikatu.
+	// 6. Idempotence: a second run without --force creates no duplicate.
 	$drugie = $t->translate( $src, 'en', true );
 
 	if ( 0 !== $drugie['created'] ) {
-		$fails[] = 'drugie uruchomienie utworzylo duplikat';
+		$fails[] = 'the second run created a duplicate';
 	}
 	if ( (int) $drugie['target_id'] !== $tid ) {
 		$fails[] = 'drugie uruchomienie zwrocilo inne target_id';
 	}
 
-	// 7. Nieznany jezyk nie wybucha i nic nie tworzy.
+	// 7. An unknown language neither blows up nor creates anything.
 	if ( 0 !== (int) $t->translate( $src, 'de', true )['target_id'] ) {
-		$fails[] = 'nieznany jezyk utworzyl wpis';
+		$fails[] = 'an unknown language created a post';
 	}
 }
 
@@ -124,4 +124,4 @@ if ( $fails ) {
 	}
 	exit( 1 );
 }
-echo "PASS: tlumaczenie wpisu, powiazanie i zapis par dzialaja\n";
+echo "PASS: post translation, linking and pair recording all work\n";
