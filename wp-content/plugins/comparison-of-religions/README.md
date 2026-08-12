@@ -1,6 +1,11 @@
 # Comparison of Religions
 
-Side-by-side comparison of Christian denominations displayed as a responsive accordion. Built on a Custom Post Type architecture with server-side rendered Gutenberg block.
+Side-by-side comparison of Christian denominations, rendered as a responsive
+accordion. A Custom Post Type plus one server-side Gutenberg block, in four
+languages.
+
+See the [project README](../../../README.md) for how this plugin relates to the
+theme and the other three.
 
 ## Plugin Info
 
@@ -13,121 +18,113 @@ Side-by-side comparison of Christian denominations displayed as a responsive acc
 ## Data Model
 
 ```
-CPT:  comparison_topic        — One post per sub-topic (e.g. "Baptism", "Holy Scripture")
-Tax:  comparison_category     — Groups topics into accordion panels (e.g. "Sacraments", "Eschatology")
-Meta: churches (post)         — [{church_name: string, description: string (HTML)}, ...]
-Meta: sort_order (post)       — Integer, display order within a category
-Meta: sort_order (term)       — Integer, display order of categories in the accordion
+CPT:  comparison_topic     — one post per sub-topic (e.g. "Baptism", "Holy Scripture")
+Tax:  comparison_category  — groups topics into accordion panels (e.g. "Sacraments")
+Meta: churches (post)      — [{church_name: string, description: HTML}, ...]
+Meta: sort_order (post)    — display order within a category
+Meta: sort_order (term)    — display order of the categories in the accordion
 ```
 
-The CPT has `public = false` (topics are not individually viewable — all content is rendered by the accordion block). The `churches` meta field supports any number of denominations.
+The CPT is `public = false`: topics are never viewable on their own, because all
+content is rendered by the accordion block. The `churches` meta takes any number
+of denominations — the column count is discovered from the data, not configured.
+
+**Current content: 37 topics across 9 categories, in each of the four
+languages** — one translation group per topic and per category, linked by
+Polylang.
+
+`churches` is the one field on this site that holds editorial prose in post meta
+rather than in post content. That is why it needs its own translator in
+`kzmielec-translate` and its own entry in the content fingerprint.
 
 ## Architecture
 
 ```
 comparison-of-religions/
-├── index.php                          # Plugin entry, cache hooks, admin import page
-├── uninstall.php                      # Cleanup: deletes all posts and terms
+├── index.php                              # entry: cache hooks, admin import page
+├── uninstall.php                          # deletes all posts and terms
 ├── app/
-│   ├── Autoloader.php                 # PSR-4 autoloader (ComparisonOfReligions namespace)
-│   ├── PostTypes/ComparisonTopic.php  # CPT registration
-│   ├── Taxonomies/ComparisonCategory.php  # Taxonomy registration (hierarchical)
-│   ├── Meta/ChurchesMeta.php          # Meta field schema + JSON validation + sanitization
-│   ├── MetaBoxes/ChurchesMetaBox.php  # Admin repeater meta box (TinyMCE per church)
-│   ├── MetaBoxes/meta-box.js          # Repeater JS: add/remove rows, TinyMCE init
-│   ├── MetaBoxes/meta-box.css         # Repeater styles
-│   ├── Blocks/RegisterBlocks.php      # Auto-discovers blocks from build/blocks/
-│   ├── Cache/AccordionCache.php       # Transient cache helper (key prefix, TTL, flush)
-│   └── Admin/AdminColumns.php         # Custom columns: church count, sort order (sortable)
-├── src/blocks/comparison-accordion/   # Gutenberg block source
-│   ├── block.json                     # Block metadata
-│   ├── edit.js                        # Editor: ServerSideRender (WYSIWYG preview)
-│   ├── render.php                     # Server-side render (CSS Grid table, FAQ schema)
-│   ├── frontend.js                    # Accordion toggle, keyboard nav (WCAG 2.1 AA)
-│   └── style.scss                     # Responsive styles (grid desktop, stacked mobile)
-├── build/                             # Compiled block (npm run build)
-└── tools/
-    └── import-html-data.php           # JSON import/export + hardcoded seed data
+│   ├── Autoloader.php                     # PSR-4 (ComparisonOfReligions namespace)
+│   ├── PostTypes/ComparisonTopic.php      # CPT: public=false, show_in_rest, no editor
+│   ├── Taxonomies/ComparisonCategory.php  # taxonomy: hierarchical, public=false
+│   ├── Meta/ChurchesMeta.php              # meta schema, JSON validation, sanitisation
+│   ├── MetaBoxes/ChurchesMetaBox.php      # admin repeater, one TinyMCE per church
+│   ├── Blocks/RegisterBlocks.php          # auto-discovers blocks from build/blocks/
+│   ├── Cache/AccordionCache.php           # transient cache: key, TTL, flush
+│   └── Admin/AdminColumns.php             # church count and sort order, sortable
+├── src/blocks/comparison-accordion/
+│   ├── block.json  edit.js  render.php  frontend.js  style.scss
+├── build/                                 # compiled block (npm run build)
+└── tools/import-html-data.php             # JSON import/export + seed data
 ```
 
-## PHP Classes
+`ChurchesMeta` sanitises church names with `sanitize_text_field()` and
+descriptions with `wp_kses_post()`; the auth callback requires `edit_posts`.
 
-### ComparisonTopic
+## The accordion block
 
-Registers `comparison_topic` CPT. `public = false`, `show_in_rest = true`, supports: title, custom-fields, revisions. No editor — content lives in `churches` meta.
+**Dynamic block** — nothing is saved client-side, all output comes from
+`render.php`. The editor previews it through `ServerSideRender`, with editor
+styles forcing every panel open.
 
-### ComparisonCategory
+What `render.php` does, in order:
 
-Registers `comparison_category` taxonomy. Hierarchical, `public = false`, `show_in_rest = true`, `show_admin_column = true`. Attached to `comparison_topic` only.
+1. Resolves the **language to render** (see below)
+2. Checks the transient cache — skipped during REST requests, so the editor
+   preview is always fresh
+3. Fetches categories ordered by term `sort_order`, topics by post `sort_order`
+4. Discovers the church names from the meta, with no hardcoded limit
+5. Renders one CSS Grid table per category
+6. Emits FAQ JSON-LD for rich snippets
+7. Caches the HTML
 
-### ChurchesMeta
+**Desktop layout:** CSS Grid, columns `[Topic | Church A | Church B | ...]`, count
+driven by the `--cor-church-count` custom property. Each paragraph gets its own
+grid cell so rows align across churches.
 
-Registers post meta (`churches`, `sort_order`) and term meta (`sort_order`) with JSON schema validation. Sanitizes church names with `sanitize_text_field()`, descriptions with `wp_kses_post()`. Auth callback requires `edit_posts`.
+**Mobile (<=768px):** `display: block`, stacked, with the church label shown
+before each description.
 
-### ChurchesMetaBox
+**Keyboard and ARIA** (`frontend.js`, WCAG 2.1 AA): Arrow Up/Down to move,
+Home/End to jump, Enter/Space to toggle, and `aria-expanded` / `aria-hidden` /
+`aria-controls` kept in step. Panel height animates through `max-height`.
 
-Admin repeater meta box "Stanowiska kosciolow" on the topic edit screen:
-- Sort order input
-- Dynamic repeater: add/remove churches
-- Full TinyMCE editor per church description
-- JS handles dynamic TinyMCE initialization and cleanup
-- Nonce verification, capability check, autosave skip
+### Rendering the right language
 
-### AdminColumns
+The block must narrow its queries to the language of the **post being rendered**,
+not the language of the request. `render.php` resolves `$block_lang` from
+`pll_get_post_language()` on the rendered post, falls back to
+`pll_current_language()`, and passes the result as `lang` in both the term query
+and the post query. An empty result narrows nothing — which is the correct
+behaviour with Polylang inactive, and the reason every call sits behind
+`function_exists()`.
 
-Adds custom columns to CPT list table:
-- **Koscioly** — number of churches assigned
-- **Kolejnosc** — sort order value (sortable, queries by `meta_value_num`)
+Relying on the request is what the original code did, and the defect is
+**invisible on the front end** — Polylang narrows the query itself there, so every
+page looked right. The editor renders blocks through a REST route that carries no
+language context, so it received all four languages at once: 148 topics instead
+of 37 and 36 accordion headings instead of 9.
 
-### RegisterBlocks
+### Cache invalidation
 
-Auto-discovers blocks from `build/blocks/` and registers via `register_block_type_from_metadata()`.
+`AccordionCache` owns the key prefix and the 30-minute TTL as class constants, so
+the render template and the flush logic cannot disagree.
 
-## Gutenberg Block: comparison-accordion
+**The language is part of the cache key**, and it has to be. The block renders
+content Polylang filters per language, so one key shared by four languages means
+whichever language renders first is served to all of them — a Ukrainian visitor
+gets the Spanish table, and the cache makes it stick for half an hour.
+`function_exists()` keeps this working with Polylang switched off, where the key
+simply loses its language part.
 
-**Dynamic block** — no client-side save, all output from `render.php`.
-
-### Editor (edit.js)
-
-Uses `ServerSideRender` for WYSIWYG preview. Editor styles force all panels open and hide chevrons.
-
-### Render (render.php)
-
-1. Checks transient cache (30-minute TTL, skipped during REST requests for fresh editor preview)
-2. Fetches categories sorted by term `sort_order`
-3. Fetches all published topics sorted by post `sort_order`
-4. Discovers church names dynamically from meta (no hardcoded limit)
-5. Renders accordion with CSS Grid table per category
-6. Generates FAQ JSON-LD schema for SEO rich snippets
-7. Caches rendered HTML in transient
-
-**Desktop layout:** CSS Grid with columns `[Topic | Church A | Church B | ...]`. Column count driven by `--cor-church-count` CSS custom property. Each paragraph gets its own grid cell for cross-church alignment.
-
-**Mobile layout (<=768px):** `display: block`, stacked flow. Church labels become visible before each description block.
-
-### Frontend (frontend.js)
-
-Accordion toggle with WCAG 2.1 AA compliance:
-- Smooth `max-height` transitions with browser reflow tricks
-- Keyboard: Arrow Up/Down (navigate), Home/End (jump), Enter/Space (toggle)
-- ARIA: `aria-expanded`, `aria-hidden`, `aria-controls`
-
-### Cache Invalidation
-
-Managed by `AccordionCache` class (`app/Cache/AccordionCache.php`). Key prefix and TTL defined as class constants — single source of truth for both render template and flush logic. Caches cleared automatically via hooks:
-- `save_post_comparison_topic` → `AccordionCache::flush()`
-- `created_comparison_category` / `edited_comparison_category` / `delete_comparison_category` → `AccordionCache::flush()`
+Flushed automatically on `save_post_comparison_topic` and on any
+create / edit / delete of a `comparison_category` term.
 
 ## Data Import/Export
 
-Admin page: **wp-admin > Porownania > Import danych** (requires `manage_options`)
+Admin page: **Porownania > Import danych** (requires `manage_options`). Import
+from JSON, export to JSON, or run the one-time built-in seed.
 
-Three operations:
-1. **Import from JSON** — Upload `.json` file with categories + topics
-2. **Export to JSON** — Download current data as `.json`
-3. **Built-in import** — One-time seed with hardcoded data (Catholic vs Pentecostal, ~40 topics across 9 categories)
-
-**JSON format:**
 ```json
 [
   {
@@ -142,21 +139,28 @@ Three operations:
 ]
 ```
 
+The importer creates Polish content. Translations are produced afterwards by
+`kzmielec-translate`, which links each topic and each term across languages —
+translating topics without their terms leaves translated rows filed under Polish
+categories, which shows up as nine Polish headings above English content.
+
 ## Build
 
 ```bash
-npm run build    # Production (wp-scripts build)
-npm start        # Watch mode (wp-scripts start)
+npm run build    # production (wp-scripts build)
+npm start        # watch mode
 ```
 
 ## Code Quality
 
 ```bash
-composer phpstan    # PHPStan level 6
+composer install
+composer phpstan    # PHPStan level 8
 composer phpcs      # WordPress Coding Standards
-composer check      # Both
+composer check      # both
 ```
 
 ## Uninstall
 
-On plugin deletion (`uninstall.php`): deletes all `comparison_topic` posts (force delete) and all `comparison_category` terms. Transients expire naturally.
+`uninstall.php` force-deletes all `comparison_topic` posts and all
+`comparison_category` terms. Transients expire on their own.

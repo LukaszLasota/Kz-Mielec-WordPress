@@ -1,6 +1,11 @@
 # Custom Block Package
 
-Collection of custom Gutenberg blocks for kzmielec.pl. Each block uses server-side rendering (`render.php`) and registers via `block.json`.
+Collection of custom Gutenberg blocks for kzmielec.pl. Every block registers via
+`block.json`, and all but one render server-side from a `render.php` inside the
+plugin — so their markup does not depend on theme code.
+
+See the [project README](../../../README.md) for how this plugin relates to the
+theme and the other three.
 
 ## Plugin Info
 
@@ -30,16 +35,29 @@ custom-block-package/
 
 ## Blocks
 
+Eleven blocks. **Ten render server-side** from a `render.php` inside the plugin,
+so their markup does not depend on theme code; only `pdf-block` is static.
+
 | Block | Description |
 |-------|-------------|
-| **Section Block** | Section container with grid/flex layout options |
-| **Custom Accordion** + **Accordion Item** | Accordion with animations and keyboard navigation |
-| **Dynamic Images** | Responsive `<picture>` (desktop/tablet/mobile) |
-| **Map Block** | Leaflet.js map with lazy-loading (IntersectionObserver) |
-| **Image Text** | Image with text overlay and optional link |
-| **Meeting List** | Meeting cards from CPT meetings (flipping cards, cached) |
-| **PDF Block** | Embedded PDF with download button |
-| **Circle Cards** | Universal circle cards with 3 data sources [TODO] |
+| `section-block` | Section container with grid/flex layout options |
+| `custom-accordion` + `accordion-item` | Accordion with animations and keyboard navigation |
+| `dynamic-images` | Responsive `<picture>` (desktop/tablet/mobile) |
+| `map-block` | Leaflet.js map, lazy-loaded via IntersectionObserver; coordinates come from the theme's shared contact option |
+| `image-text` | Image with text overlay and optional link |
+| `navigable-tiles` | Tiles built from the `meetings` CPT or the belief pages, narrowed to the language of the post being rendered |
+| `facebook-feed` | Page feed, cached, in the language of the post |
+| `custom-svg` | Inline SVG with sanitisation |
+| `scroll-arrow` | Anchor navigation arrow |
+| `pdf-block` | Embedded PDF with download button (static) |
+
+**Blocks that fetch content must narrow it to the language of the rendered
+post.** `Services/NavigableTilesService::current_language()` takes the post's
+language first and the request's second. Relying on the request is what the
+original code did, and it is invisible on the front end — Polylang narrows the
+query itself there. The editor renders blocks through a REST route with no
+language context, so it received all four languages at once: 12 meetings instead
+of 3.
 
 ## Build
 
@@ -53,7 +71,7 @@ npm start        # Watch mode
 
 ```bash
 composer install
-composer phpstan    # Static analysis
+composer phpstan    # PHPStan level 8
 composer phpcs      # WordPress Coding Standards
 composer check      # Both
 ```
