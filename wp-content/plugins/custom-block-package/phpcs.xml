@@ -6,10 +6,15 @@
 	<file>index.php</file>
 	<file>app/</file>
 	<file>phpstan-bootstrap.php</file>
+	<file>src/blocks/accordion-item/render.php</file>
+	<file>src/blocks/custom-accordion/render.php</file>
+	<file>src/blocks/custom-svg/render.php</file>
 	<file>src/blocks/dynamic-images/render.php</file>
+	<file>src/blocks/facebook-feed/render.php</file>
 	<file>src/blocks/image-text/render.php</file>
 	<file>src/blocks/map-block/render.php</file>
-	<file>src/blocks/meeting-list/render.php</file>
+	<file>src/blocks/navigable-tiles/render.php</file>
+	<file>src/blocks/scroll-arrow/render.php</file>
 	<file>src/blocks/section-block/render.php</file>
 
 	<!-- Exclude directories -->
