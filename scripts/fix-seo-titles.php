@@ -41,16 +41,21 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 $kz_go = in_array( 'go', (array) $args, true );
 
 /**
- * Post id => [ exact current title, corrected title ].
+ * Polish source slug => language => [ exact current title, corrected title ].
  *
- * Keyed by the id in each language rather than by the Polish source, because a
- * hand-written SEO title is not a translation of another one — each was written for
- * its own language.
+ * The VALUES are per language and not translations of one another: a hand-written
+ * SEO title is written for its own language. The LOOKUP, however, goes through the
+ * Polish source page, because post ids differ between environments.
+ *
+ * An earlier version keyed this table by post id, and the ids were the local ones.
+ * On production those ids pointed at nothing — five of six entries silently
+ * reported a mismatch instead of correcting anything, and the deployment of
+ * 13 August 2026 had to map them by hand. Ids are not portable; slugs are.
  */
 $kz_titles = array(
 
 	/*
-	 * prawo (pl) — two defects in one string. "Koscioła" was missing its ś, and the
+	 * prawo — two defects in one string. "Koscioła" was missing its ś, and the
 	 * trailing `%%title%%` placeholder appends the PAGE title to a sentence that
 	 * already names the subject, so the tab and the search result both read
 	 * "Dokumenty prawne Kościoła Zielonoświątkowego prawo". The same placeholder sat
@@ -58,47 +63,76 @@ $kz_titles = array(
 	 * "… Пентекостальної церкви право", "… Iglesia Pentecostal derecho". Replaced with
 	 * the separator and site name, which is what the comparison pages already use.
 	 */
-	88  => array(
-		'Dokumenty prawne Koscioła Zielonoświątkowego %%title%%',
-		'Dokumenty prawne Kościoła Zielonoświątkowego %%sep%% %%sitename%%',
+	'prawo'          => array(
+		'pl' => array(
+			'Dokumenty prawne Koscioła Zielonoświątkowego %%title%%',
+			'Dokumenty prawne Kościoła Zielonoświątkowego %%sep%% %%sitename%%',
+		),
+		'en' => array(
+			'Legal documents of the Pentecostal Church %%title%%',
+			'Legal documents of the Pentecostal Church %%sep%% %%sitename%%',
+		),
+		'es' => array(
+			'Documentos jurídicos de la Iglesia Pentecostal %%title%%',
+			'Documentos jurídicos de la Iglesia Pentecostal %%sep%% %%sitename%%',
+		),
+		// Third variant of the denomination name on one site, unified.
+		'uk' => array(
+			'Юридичні документи Церкви П&#x27;ятидесятників %%title%%',
+			'Юридичні документи Пентекостальної церкви %%sep%% %%sitename%%',
+		),
 	),
 
-	// law (en).
-	488 => array(
-		'Legal documents of the Pentecostal Church %%title%%',
-		'Legal documents of the Pentecostal Church %%sep%% %%sitename%%',
-	),
-
-	// derecho (es).
-	686 => array(
-		'Documentos jurídicos de la Iglesia Pentecostal %%title%%',
-		'Documentos jurídicos de la Iglesia Pentecostal %%sep%% %%sitename%%',
-	),
-
-	// differences in religious beliefs (en) — one Catholic Church, not several.
-	489 => array(
-		'A comparison of the Pentecostal Church and Catholic churches %%page%% %%sep%% %%sitename%%',
-		'A comparison of the Pentecostal Church and the Roman Catholic Church %%page%% %%sep%% %%sitename%%',
-	),
-
-	// релігійна різниця (uk) — unified denomination name, and the Catholic
-	// church's name capitalised as a proper name, as it is in the table.
-	629 => array(
-		'Порівняння Церкви Християн Віри Євангельської та католицької церкви %%page%% %%sep%% %%sitename%%',
-		'Порівняння Пентекостальної церкви та Римо-Католицької Церкви %%page%% %%sep%% %%sitename%%',
-	),
-
-	// право (uk) — third variant of the denomination name, unified.
-	628 => array(
-		'Юридичні документи Церкви П&#x27;ятидесятників %%title%%',
-		'Юридичні документи Пентекостальної церкви %%sep%% %%sitename%%',
+	'roznica-wyznan' => array(
+		// One Catholic Church, not several.
+		'en' => array(
+			'A comparison of the Pentecostal Church and Catholic churches %%page%% %%sep%% %%sitename%%',
+			'A comparison of the Pentecostal Church and the Roman Catholic Church %%page%% %%sep%% %%sitename%%',
+		),
+		// Unified denomination name, and the Catholic church's name capitalised as a
+		// proper name, as it is in the comparison table.
+		'uk' => array(
+			'Порівняння Церкви Християн Віри Євангельської та католицької церкви %%page%% %%sep%% %%sitename%%',
+			'Порівняння Пентекостальної церкви та Римо-Католицької Церкви %%page%% %%sep%% %%sitename%%',
+		),
 	),
 );
 
-$kz_done    = 0;
-$kz_problem = array();
+/**
+ * Resolve the table into `post id => [ old, new ]` for this database.
+ *
+ * The Polish page is found by slug, and its sisters through Polylang. A language
+ * that cannot be resolved is reported rather than skipped quietly — a missing
+ * translation is exactly the kind of thing this script exists to catch.
+ */
+$kz_resolved = array();
+$kz_problem  = array();
 
-foreach ( $kz_titles as $kz_id => $kz_pair ) {
+foreach ( $kz_titles as $kz_slug => $kz_langs ) {
+	$kz_source = get_page_by_path( $kz_slug );
+
+	if ( ! $kz_source instanceof WP_Post ) {
+		$kz_problem[] = sprintf( 'polska strona "%s" nie znaleziona — pomijam jej wszystkie jezyki', $kz_slug );
+		continue;
+	}
+
+	$kz_pll = function_exists( 'pll_get_post_translations' )
+		? pll_get_post_translations( $kz_source->ID )
+		: array( 'pl' => $kz_source->ID );
+
+	foreach ( $kz_langs as $kz_lang => $kz_pair ) {
+		if ( empty( $kz_pll[ $kz_lang ] ) ) {
+			$kz_problem[] = sprintf( '"%s" nie ma wersji %s', $kz_slug, $kz_lang );
+			continue;
+		}
+
+		$kz_resolved[ (int) $kz_pll[ $kz_lang ] ] = $kz_pair;
+	}
+}
+
+$kz_done = 0;
+
+foreach ( $kz_resolved as $kz_id => $kz_pair ) {
 	list( $kz_old, $kz_new ) = $kz_pair;
 
 	$kz_current = (string) get_post_meta( $kz_id, '_yoast_wpseo_title', true );
@@ -133,7 +167,7 @@ if ( $kz_go && $kz_done ) {
 	$kz_table = $wpdb->prefix . 'yoast_indexable';
 
 	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $kz_table ) ) === $kz_table ) {
-		$kz_in = implode( ',', array_map( 'intval', array_keys( $kz_titles ) ) );
+		$kz_in = implode( ',', array_map( 'intval', array_keys( $kz_resolved ) ) );
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- ids cast to int.
 		$wpdb->query( "DELETE FROM {$kz_table} WHERE object_type = 'post' AND object_id IN ({$kz_in})" );
 	}
