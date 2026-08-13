@@ -1,0 +1,2 @@
+<?php
+return ['domain'=>'comparison-of-religions','plural-forms'=>'nplurals=2; plural=(n != 1);','language'=>'es-ES','project-id-version'=>'Comparison of Religions','pot-creation-date'=>'2026-08-13T11:32:43+02:00','po-revision-date'=>'2026-08-13T11:32:43+02:00','messages'=>['Temat'=>'Tema']];

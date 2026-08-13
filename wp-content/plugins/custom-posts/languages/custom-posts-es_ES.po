@@ -1,0 +1,70 @@
+# Translation of the custom-posts plugin into Spanish (Spain).
+# The source strings are Polish: this plugin was written for a Polish site and
+# gained its other languages later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Posts 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es-ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: custom-posts\n"
+
+msgid "Autor"
+msgstr "Autor"
+
+msgid "Brak kategorii"
+msgstr "Sin categorías"
+
+msgid "Brak tagów"
+msgstr "Sin etiquetas"
+
+msgid "Data"
+msgstr "Fecha"
+
+msgid "Dodaj Nowe"
+msgstr "Añadir nueva"
+
+msgid "Dodaj Nowe Spotkanie"
+msgstr "Añadir nueva reunión"
+
+msgid "Edytuj Spotkanie"
+msgstr "Editar reunión"
+
+msgid "Kategorie"
+msgstr "Categorías"
+
+msgid "Nie znaleziono spotkań"
+msgstr "No se han encontrado reuniones"
+
+msgid "Nie znaleziono spotkań w Koszu"
+msgstr "No se han encontrado reuniones en la papelera"
+
+msgid "Nowe Spotkanie"
+msgstr "Nueva reunión"
+
+msgid "Ostatnia modyfikacja"
+msgstr "Última modificación"
+
+msgid "Spotkania"
+msgstr "Reuniones"
+
+msgid "Spotkanie"
+msgstr "Reunión"
+
+msgid "Szukaj Spotkań"
+msgstr "Buscar reuniones"
+
+msgid "Tagi"
+msgstr "Etiquetas"
+
+msgid "Tytuł"
+msgstr "Título"
+
+msgid "Wszystkie Spotkania"
+msgstr "Todas las reuniones"
+
+msgid "Zobacz Spotkania"
+msgstr "Ver reuniones"

@@ -17,3 +17,65 @@ msgstr "Scroll down"
 #: src/blocks/scroll-arrow/render.php:29
 msgid "Przewiń w górę"
 msgstr "Scroll up"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "W co wierzymy"
+msgstr "What we believe in"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "Spotkania"
+msgstr "Meetings"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera w nowej karcie)"
+msgstr "(opens in a new tab)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera się w nowej karcie)"
+msgstr "(opens in a new tab)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(aktualna strona)"
+msgstr "(current page)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Mapa lokalizacji"
+msgstr "Location map"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nasza lokalizacja"
+msgstr "Our location"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Strona na Facebooku"
+msgstr "Facebook page"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź stronę"
+msgstr "Visit the page"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź naszą stronę na Facebooku"
+msgstr "Visit our Facebook page"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Zobacz na Facebooku"
+msgstr "View on Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nie udało się pobrać postów."
+msgstr "Could not load posts."
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Ładowanie kolejnych postów…"
+msgstr "Loading more posts…"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "%s temu"
+msgstr "%s ago"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "przed chwilą"
+msgstr "just now"

@@ -1,0 +1,70 @@
+# Translation of the custom-posts plugin into English (UK).
+# The source strings are Polish: this plugin was written for a Polish site and
+# gained its other languages later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Posts 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en-GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: custom-posts\n"
+
+msgid "Autor"
+msgstr "Author"
+
+msgid "Brak kategorii"
+msgstr "No categories"
+
+msgid "Brak tagów"
+msgstr "No tags"
+
+msgid "Data"
+msgstr "Date"
+
+msgid "Dodaj Nowe"
+msgstr "Add New"
+
+msgid "Dodaj Nowe Spotkanie"
+msgstr "Add New Meeting"
+
+msgid "Edytuj Spotkanie"
+msgstr "Edit Meeting"
+
+msgid "Kategorie"
+msgstr "Categories"
+
+msgid "Nie znaleziono spotkań"
+msgstr "No meetings found"
+
+msgid "Nie znaleziono spotkań w Koszu"
+msgstr "No meetings found in Trash"
+
+msgid "Nowe Spotkanie"
+msgstr "New Meeting"
+
+msgid "Ostatnia modyfikacja"
+msgstr "Last modified"
+
+msgid "Spotkania"
+msgstr "Meetings"
+
+msgid "Spotkanie"
+msgstr "Meeting"
+
+msgid "Szukaj Spotkań"
+msgstr "Search Meetings"
+
+msgid "Tagi"
+msgstr "Tags"
+
+msgid "Tytuł"
+msgstr "Title"
+
+msgid "Wszystkie Spotkania"
+msgstr "All Meetings"
+
+msgid "Zobacz Spotkania"
+msgstr "View Meetings"

@@ -17,3 +17,65 @@ msgstr "Прокрутити вниз"
 #: src/blocks/scroll-arrow/render.php:29
 msgid "Przewiń w górę"
 msgstr "Прокрутити вгору"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "W co wierzymy"
+msgstr "У що ми віримо"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "Spotkania"
+msgstr "Зустрічі"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera w nowej karcie)"
+msgstr "(відкривається в новій вкладці)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera się w nowej karcie)"
+msgstr "(відкривається в новій вкладці)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(aktualna strona)"
+msgstr "(поточна сторінка)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Mapa lokalizacji"
+msgstr "Карта розташування"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nasza lokalizacja"
+msgstr "Наше розташування"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Strona na Facebooku"
+msgstr "Сторінка у Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź stronę"
+msgstr "Відвідати сторінку"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź naszą stronę na Facebooku"
+msgstr "Відвідайте нашу сторінку у Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Zobacz na Facebooku"
+msgstr "Дивитися у Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nie udało się pobrać postów."
+msgstr "Не вдалося завантажити публікації."
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Ładowanie kolejnych postów…"
+msgstr "Завантаження інших публікацій…"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "%s temu"
+msgstr "%s тому"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "przed chwilą"
+msgstr "щойно"

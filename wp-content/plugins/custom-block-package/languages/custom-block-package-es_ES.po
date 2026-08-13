@@ -17,3 +17,65 @@ msgstr "Desplazarse hacia abajo"
 #: src/blocks/scroll-arrow/render.php:29
 msgid "Przewiń w górę"
 msgstr "Desplazarse hacia arriba"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "W co wierzymy"
+msgstr "En qué creemos"
+
+#. Fallback landmark label for the tile block, used when the author
+#. supplied no section heading.
+msgid "Spotkania"
+msgstr "Reuniones"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera w nowej karcie)"
+msgstr "(se abre en una pestaña nueva)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(otwiera się w nowej karcie)"
+msgstr "(se abre en una pestaña nueva)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "(aktualna strona)"
+msgstr "(página actual)"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Mapa lokalizacji"
+msgstr "Mapa de ubicación"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nasza lokalizacja"
+msgstr "Nuestra ubicación"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Strona na Facebooku"
+msgstr "Página de Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź stronę"
+msgstr "Visitar la página"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Odwiedź naszą stronę na Facebooku"
+msgstr "Visita nuestra página de Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Zobacz na Facebooku"
+msgstr "Ver en Facebook"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Nie udało się pobrać postów."
+msgstr "No se han podido cargar las publicaciones."
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "Ładowanie kolejnych postów…"
+msgstr "Cargando más publicaciones…"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "%s temu"
+msgstr "hace %s"
+
+#. Visible on the public pages: feed, map block or screen-reader text.
+msgid "przed chwilą"
+msgstr "ahora mismo"
