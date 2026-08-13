@@ -415,15 +415,27 @@ class YoastFallbacks implements FilterHookInterface {
 	}
 
 	/**
-	 * Describe each published meeting as an Event.
+	 * Describe each published meeting as a series of dated Events.
 	 *
-	 * The day and hour are stored as free text ("Niedziela 10:30"), which is not
-	 * a machine-readable schedule, so it goes into `description` rather than a
-	 * `startDate` this code would have to guess at.
+	 * This used to put "Niedziela 10:30" into `description` and point `location`
+	 * at the Church node by reference. Google's Rich Results Test called both
+	 * events invalid, and it was right on two counts: `startDate` is required
+	 * and there was none, and `location.address` is required where an `@id`
+	 * reference does not satisfy it.
+	 *
+	 * Both now come from MeetingSchedule, which holds the weekday and the hour
+	 * as data rather than prose. Each occurrence is emitted separately, which is
+	 * what Google asks for with a recurring event — and see
+	 * MeetingSchedule::OCCURRENCES for why a single "next Sunday" would have
+	 * been a date in the past for anyone served a cached page.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	private function meeting_events(): array {
+		if ( ! class_exists( '\CustomBlockPackage\Services\MeetingSchedule' ) ) {
+			return array();
+		}
+
 		$meetings = get_posts(
 			array(
 				'post_type'        => 'meetings',
@@ -433,23 +445,70 @@ class YoastFallbacks implements FilterHookInterface {
 			)
 		);
 
-		$events = array();
+		$location = $this->event_location();
+		$events   = array();
 
 		foreach ( $meetings as $meeting ) {
-			$when = (string) get_post_meta( $meeting->ID, '_meeting_day_hour', true );
+			$dates = \CustomBlockPackage\Services\MeetingSchedule::occurrences( $meeting->ID );
 
-			if ( '' === trim( $when ) ) {
+			if ( array() === $dates ) {
 				continue;
 			}
 
-			$events[] = array(
-				'@type'       => 'Event',
-				'name'        => get_the_title( $meeting ),
-				'description' => $when,
-				'location'    => array( '@id' => home_url( '/#church' ) ),
-			);
+			$label     = \CustomBlockPackage\Services\MeetingSchedule::label( $meeting->ID );
+			$permalink = get_permalink( $meeting );
+
+			foreach ( $dates as $start ) {
+				$event = array(
+					'@type'               => 'Event',
+					'name'                => get_the_title( $meeting ),
+					'startDate'           => $start,
+					'eventStatus'         => 'https://schema.org/EventScheduled',
+					'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+					'location'            => $location,
+					'organizer'           => array( '@id' => home_url( '/#church' ) ),
+					// A church service is free to attend, and saying so plainly
+					// keeps Google from looking for an `offers` node.
+					'isAccessibleForFree' => true,
+				);
+
+				if ( '' !== $label ) {
+					$event['description'] = $label;
+				}
+
+				if ( is_string( $permalink ) && '' !== $permalink ) {
+					$event['url'] = $permalink;
+				}
+
+				$events[] = $event;
+			}
 		}
 
 		return $events;
+	}
+
+	/**
+	 * The one place every meeting happens, with the address written out in full.
+	 *
+	 * The `@id` ties it back to the Church node so the graph still has a single
+	 * subject, while the inline address is what Google requires of an Event.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function event_location(): array {
+		$contact = \Kzmielec\Contact\ContactData::all();
+
+		return array(
+			'@type'   => 'Place',
+			'@id'     => home_url( '/#church' ),
+			'name'    => get_bloginfo( 'name' ),
+			'address' => array(
+				'@type'           => 'PostalAddress',
+				'streetAddress'   => 'ul. ' . $contact['street'],
+				'postalCode'      => $contact['postcode'],
+				'addressLocality' => $contact['city'],
+				'addressCountry'  => 'PL',
+			),
+		);
 	}
 }

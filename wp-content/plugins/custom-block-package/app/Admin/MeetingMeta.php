@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace CustomBlockPackage\Admin;
 
+use CustomBlockPackage\Services\MeetingSchedule;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -27,6 +29,11 @@ class MeetingMeta {
 
 	/**
 	 * Meta key: day and hour text.
+	 *
+	 * Derived, not authored. Regenerated from the weekday/time pair held by
+	 * MeetingSchedule every time a meeting is saved. It stays in the database
+	 * because the theme indexes it for site search, so a visitor searching
+	 * "niedziela" still finds the Sunday service.
 	 */
 	public const META_DAY_HOUR = '_meeting_day_hour';
 
@@ -54,6 +61,15 @@ class MeetingMeta {
 		// (which uses add_meta_boxes), so it renders above the Yoast box.
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ), 1 );
 		add_action( 'save_post_meetings', array( $this, 'save_meta' ), 10, 1 );
+
+		/*
+		 * Deliberately a second hook, and deliberately not inside save_meta():
+		 * the derived label has to be rebuilt after a programmatic save too —
+		 * the migration plugin creates the three translations with
+		 * wp_insert_post() and sends no nonce, so the guarded save path returns
+		 * early and would leave them with no searchable day and hour at all.
+		 */
+		add_action( 'save_post_meetings', array( $this, 'refresh_derived_label' ), 20, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 	}
 
@@ -105,6 +121,46 @@ class MeetingMeta {
 				)
 			)
 		);
+		register_post_meta(
+			'meetings',
+			MeetingSchedule::META_WEEKDAY,
+			array_merge(
+				$common,
+				array(
+					'type'    => 'integer',
+					'default' => 0,
+				)
+			)
+		);
+		register_post_meta(
+			'meetings',
+			MeetingSchedule::META_TIME,
+			array_merge(
+				$common,
+				array(
+					'type'    => 'string',
+					'default' => '',
+				)
+			)
+		);
+	}
+
+	/**
+	 * Rebuild the derived, searchable day-and-hour label after any save.
+	 *
+	 * @param int $post_id Post being saved.
+	 * @return void
+	 */
+	public function refresh_derived_label( int $post_id ): void {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		MeetingSchedule::refresh_index( $post_id );
 	}
 
 	/**
@@ -158,6 +214,20 @@ class MeetingMeta {
 		$day_hour       = (string) get_post_meta( $post->ID, self::META_DAY_HOUR, true );
 		$place          = (string) get_post_meta( $post->ID, self::META_PLACE, true );
 
+		/*
+		 * The pair is edited on the Polish post and read from there by every
+		 * translation. Showing live fields on a translation would invite an
+		 * editor to change a Sunday that is not theirs to change, so the
+		 * translations get the same controls disabled, with a link to the post
+		 * that owns them.
+		 */
+		$source_id  = MeetingSchedule::source_post_id( $post->ID );
+		$is_source  = $source_id === $post->ID;
+		$source_url = $is_source ? '' : (string) get_edit_post_link( $source_id, '' );
+		$weekday    = (int) get_post_meta( $source_id, MeetingSchedule::META_WEEKDAY, true );
+		$time       = (string) get_post_meta( $source_id, MeetingSchedule::META_TIME, true );
+		$weekdays   = MeetingSchedule::weekday_names();
+
 		$hover_image_url = $hover_image_id ? (string) wp_get_attachment_image_url( $hover_image_id, 'thumbnail' ) : '';
 
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_FIELD );
@@ -169,9 +239,40 @@ class MeetingMeta {
 			#meeting_details .inside .description { display: block; margin-bottom: 0.5rem; }
 		</style>
 		<p>
-			<label for="cbp_meeting_day_hour"><strong><?php esc_html_e( 'Dzień i godzina', 'custom-block-package' ); ?></strong></label>
-			<input type="text" id="cbp_meeting_day_hour" name="cbp_meeting_day_hour" value="<?php echo esc_attr( $day_hour ); ?>" class="widefat" placeholder="<?php esc_attr_e( 'np. Niedziela 10:30', 'custom-block-package' ); ?>">
+			<label for="cbp_meeting_weekday"><strong><?php esc_html_e( 'Dzień i godzina', 'custom-block-package' ); ?></strong></label>
+			<span class="description">
+				<?php if ( $is_source ) : ?>
+					<?php esc_html_e( 'Wspólne dla wszystkich języków. Opis pod kafelkiem i daty dla Google powstają z tych dwóch pól.', 'custom-block-package' ); ?>
+				<?php else : ?>
+					<?php esc_html_e( 'Ustawiane na polskiej wersji spotkania i wspólne dla wszystkich języków.', 'custom-block-package' ); ?>
+					<?php if ( '' !== $source_url ) : ?>
+						<a href="<?php echo esc_url( $source_url ); ?>"><?php esc_html_e( 'Przejdź do polskiej wersji', 'custom-block-package' ); ?></a>
+					<?php endif; ?>
+				<?php endif; ?>
+			</span>
+			<select id="cbp_meeting_weekday" name="cbp_meeting_weekday"<?php echo $is_source ? '' : ' disabled'; ?>>
+				<option value="0"<?php selected( 0, $weekday ); ?>><?php esc_html_e( '— bez stałego terminu —', 'custom-block-package' ); ?></option>
+				<?php foreach ( $weekdays as $number => $name ) : ?>
+					<option value="<?php echo esc_attr( (string) $number ); ?>"<?php selected( $number, $weekday ); ?>><?php echo esc_html( $name ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php // The visible label belongs to the select, so the hour needs its own name. ?>
+			<input type="time" id="cbp_meeting_time" name="cbp_meeting_time" value="<?php echo esc_attr( $time ); ?>" aria-label="<?php esc_attr_e( 'Godzina rozpoczęcia', 'custom-block-package' ); ?>"<?php echo $is_source ? '' : ' disabled'; ?>>
 		</p>
+
+		<?php if ( '' !== $day_hour ) : ?>
+			<p>
+				<span class="description">
+					<?php
+					printf(
+						/* translators: %s: the generated label, e.g. "Sunday 10.30 am". */
+						esc_html__( 'Na stronie w tym języku wyświetla się: %s', 'custom-block-package' ),
+						'<strong>' . esc_html( $day_hour ) . '</strong>'
+					);
+					?>
+				</span>
+			</p>
+		<?php endif; ?>
 
 		<p>
 			<label for="cbp_meeting_place"><strong><?php esc_html_e( 'Miejsce', 'custom-block-package' ); ?></strong></label>
@@ -248,12 +349,41 @@ class MeetingMeta {
 			return;
 		}
 
-		$day_hour = isset( $_POST['cbp_meeting_day_hour'] ) ? sanitize_text_field( wp_unslash( $_POST['cbp_meeting_day_hour'] ) ) : '';
-		$place    = isset( $_POST['cbp_meeting_place'] ) ? sanitize_text_field( wp_unslash( $_POST['cbp_meeting_place'] ) ) : '';
-		$hover    = isset( $_POST['cbp_meeting_hover_image'] ) ? absint( $_POST['cbp_meeting_hover_image'] ) : 0;
+		$place = isset( $_POST['cbp_meeting_place'] ) ? sanitize_text_field( wp_unslash( $_POST['cbp_meeting_place'] ) ) : '';
+		$hover = isset( $_POST['cbp_meeting_hover_image'] ) ? absint( $_POST['cbp_meeting_hover_image'] ) : 0;
 
-		update_post_meta( $post_id, self::META_DAY_HOUR, $day_hour );
 		update_post_meta( $post_id, self::META_PLACE, $place );
 		update_post_meta( $post_id, self::META_HOVER_IMAGE, $hover );
+
+		/*
+		 * META_DAY_HOUR is not read from the form any more — it is generated by
+		 * refresh_derived_label() further down the same hook.
+		 *
+		 * The pair itself is only accepted from the post that owns it. On a
+		 * translation the two controls are rendered disabled, and a disabled
+		 * control submits nothing, so without the isset() guard every save of an
+		 * English meeting would quietly reset the shared weekday to 0.
+		 */
+		if ( MeetingSchedule::source_post_id( $post_id ) !== $post_id ) {
+			return;
+		}
+
+		if ( isset( $_POST['cbp_meeting_weekday'] ) ) {
+			$weekday = absint( $_POST['cbp_meeting_weekday'] );
+			update_post_meta( $post_id, MeetingSchedule::META_WEEKDAY, $weekday > 7 ? 0 : $weekday );
+		}
+
+		if ( isset( $_POST['cbp_meeting_time'] ) ) {
+			$time = sanitize_text_field( wp_unslash( $_POST['cbp_meeting_time'] ) );
+
+			// A browser's time input sends `HH:MM`, but nothing stops a crafted
+			// request, and an unparseable time would silently drop the meeting
+			// out of the schema graph rather than fail loudly.
+			if ( 1 !== preg_match( '/^([01]\d|2[0-3]):[0-5]\d$/', $time ) ) {
+				$time = '';
+			}
+
+			update_post_meta( $post_id, MeetingSchedule::META_TIME, $time );
+		}
 	}
 }

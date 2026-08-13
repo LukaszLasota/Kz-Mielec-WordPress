@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use CustomBlockPackage\Admin\MeetingMeta;
+use CustomBlockPackage\Services\MeetingSchedule;
 
 get_header();
 ?>
@@ -53,8 +54,12 @@ get_header();
 			$GLOBALS['post'] = $post_obj; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			setup_postdata( $post_obj );
 
+			// $day_hour is built from the shared weekday/time pair in the language
+			// of this page, rather than read from the derived meta of the same
+			// name, so the visible text cannot lag behind an edit. That stored
+			// copy is an index for site search and nothing else.
 			$anchor         = $post_obj->post_name;
-			$day_hour       = (string) get_post_meta( $meeting_id, MeetingMeta::META_DAY_HOUR, true );
+			$day_hour       = MeetingSchedule::label( $meeting_id );
 			$hover_image_id = (int) get_post_meta( $meeting_id, MeetingMeta::META_HOVER_IMAGE, true );
 			$base_image     = get_the_post_thumbnail(
 				$meeting_id,

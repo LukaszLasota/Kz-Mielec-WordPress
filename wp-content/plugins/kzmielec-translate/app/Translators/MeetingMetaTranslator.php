@@ -17,13 +17,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Two short strings translated, two identifiers copied.
+ * One short string translated, two identifiers copied.
  *
- * The split matters more than the size suggests. `_meeting_day_hour` is
- * "Niedziela 10:30" and belongs in the visitor's language; `_meeting_anchor` is
- * the number 10 and `_meeting_hover_image` is attachment id 208. Translating
+ * The split matters more than the size suggests. `_meeting_place` is
+ * "ul. Przemysłowa 2" and belongs in the visitor's language; `_meeting_anchor`
+ * is the number 10 and `_meeting_hover_image` is attachment id 208. Translating
  * either of the latter would break the anchors or blank the images while the page
  * still rendered — a failure nobody would notice from a screenshot.
+ *
+ * `_meeting_day_hour` used to be translated here and no longer is. It is now
+ * generated from the weekday and hour held once on the Polish post, so sending
+ * it through a machine translator would overwrite a value built from the
+ * catalogue with a guess at the same thing — and DeepL does not return the same
+ * wording twice.
  */
 class MeetingMetaTranslator {
 
@@ -32,7 +38,7 @@ class MeetingMetaTranslator {
 	 *
 	 * @var array<int, string>
 	 */
-	private const TRANSLATE = array( '_meeting_day_hour', '_meeting_place' );
+	private const TRANSLATE = array( '_meeting_place' );
 
 	/**
 	 * Fields carrying identifiers or numbers.

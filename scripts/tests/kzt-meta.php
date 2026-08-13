@@ -88,8 +88,16 @@ update_post_meta( $msrc, '_meeting_anchor', 10 );
 
 ( new $mt_c( $stub ) )->translate( (int) $msrc, (int) $mdst, 'EN-GB', true );
 
-if ( false === strpos( (string) get_post_meta( $mdst, '_meeting_day_hour', true ), '[EN-GB]' ) ) {
-	$fails[] = '_meeting_day_hour nieprzetlumaczony';
+/*
+ * The reverse of what this used to assert, and deliberately so. The day and
+ * hour are no longer prose typed per language: they are generated from the
+ * weekday/time pair on the Polish post. Sending them through a translator would
+ * overwrite a value built from the catalogue with a machine's guess at the same
+ * thing, so the translator has to leave the field alone — and this fails if
+ * anyone puts it back on the TRANSLATE list.
+ */
+if ( '' !== (string) get_post_meta( $mdst, '_meeting_day_hour', true ) ) {
+	$fails[] = '_meeting_day_hour TRANSLATED — it is generated from the schedule, not translated';
 }
 if ( false === strpos( (string) get_post_meta( $mdst, '_meeting_place', true ), '[EN-GB]' ) ) {
 	$fails[] = '_meeting_place nieprzetlumaczone';

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-01T21:24:11+02:00\n"
+"POT-Creation-Date: 2026-08-13T13:37:12+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: custom-block-package\n"
@@ -218,49 +218,67 @@ msgstr ""
 msgid "Mock data loaded. Open a page with the Facebook Feed block to preview."
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:123
+#: app/Admin/MeetingMeta.php:178
 msgid "Szczegóły spotkania"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:172
+#: app/Admin/MeetingMeta.php:241
 msgid "Dzień i godzina"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:173
-msgid "np. Niedziela 10:30"
+#: app/Admin/MeetingMeta.php:244
+msgid "Wspólne dla wszystkich języków. Opis pod kafelkiem i daty dla Google powstają z tych dwóch pól."
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:177
+#: app/Admin/MeetingMeta.php:246
+msgid "Ustawiane na polskiej wersji spotkania i wspólne dla wszystkich języków."
+msgstr ""
+
+#: app/Admin/MeetingMeta.php:248
+msgid "Przejdź do polskiej wersji"
+msgstr ""
+
+#: app/Admin/MeetingMeta.php:253
+msgid "— bez stałego terminu —"
+msgstr ""
+
+#. translators: %s: the generated label, e.g. "Sunday 10.30 am".
+#: app/Admin/MeetingMeta.php:267
+#, php-format
+msgid "Na stronie w tym języku wyświetla się: %s"
+msgstr ""
+
+#: app/Admin/MeetingMeta.php:276
 msgid "Miejsce"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:178
+#: app/Admin/MeetingMeta.php:277
 msgid "np. ul. Przemysłowa 2"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:182
+#: app/Admin/MeetingMeta.php:281
 msgid "Obraz po najechaniu"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:183
+#: app/Admin/MeetingMeta.php:282
 msgid "Obraz nakładki, który znika po najechaniu myszką."
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:190
+#: app/Admin/MeetingMeta.php:289
 #: src/blocks/dynamic-images/edit.js:30
 #: src/blocks/image-text/edit.js:53
 msgid "Wybierz obraz"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:191
+#: app/Admin/MeetingMeta.php:290
 msgid "Usuń"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:202
+#: app/Admin/MeetingMeta.php:301
 msgid "Wybierz hover image"
 msgstr ""
 
-#: app/Admin/MeetingMeta.php:203
+#: app/Admin/MeetingMeta.php:302
 msgid "Użyj"
 msgstr ""
 
@@ -302,24 +320,71 @@ msgstr ""
 msgid "API returned no posts."
 msgstr ""
 
-#: app/Services/FacebookFeedService.php:324
+#: app/Services/FacebookFeedService.php:337
 msgid "Page ID or access token not set. Save them first."
 msgstr ""
 
 #. translators: %d: number of posts fetched
-#: app/Services/FacebookFeedService.php:345
+#: app/Services/FacebookFeedService.php:358
 #, php-format
 msgid "Connection successful. Retrieved %d posts."
 msgstr ""
 
 #. translators: %d: HTTP status code
-#: app/Services/FacebookFeedService.php:399
+#: app/Services/FacebookFeedService.php:412
 #, php-format
 msgid "API returned status %d"
 msgstr ""
 
-#: app/Services/FacebookFeedService.php:406
+#: app/Services/FacebookFeedService.php:419
 msgid "Invalid JSON response from API."
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:78
+msgctxt "weekday of a meeting"
+msgid "Poniedziałek"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:79
+msgctxt "weekday of a meeting"
+msgid "Wtorek"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:80
+msgctxt "weekday of a meeting"
+msgid "Środa"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:81
+msgctxt "weekday of a meeting"
+msgid "Czwartek"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:82
+msgctxt "weekday of a meeting"
+msgid "Piątek"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:83
+msgctxt "weekday of a meeting"
+msgid "Sobota"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:84
+msgctxt "weekday of a meeting"
+msgid "Niedziela"
+msgstr ""
+
+#: app/Services/MeetingSchedule.php:164
+msgctxt "meeting time format, PHP date() syntax"
+msgid "H:i"
+msgstr ""
+
+#. translators: 1: weekday name, 2: time of day. Only the separator differs per language.
+#: app/Services/MeetingSchedule.php:178
+#, php-format
+msgctxt "weekday and time of a meeting"
+msgid "%1$s %2$s"
 msgstr ""
 
 #: src/blocks/facebook-feed/render.php:74
@@ -346,32 +411,12 @@ msgstr ""
 msgid "(otwiera w nowej karcie)"
 msgstr ""
 
-#: src/blocks/map-block/render.php:18
+#: src/blocks/map-block/render.php:55
 msgid "Nasza lokalizacja"
 msgstr ""
 
-#: src/blocks/map-block/render.php:35
+#: src/blocks/map-block/render.php:72
 msgid "Mapa lokalizacji"
-msgstr ""
-
-#: src/blocks/meeting-list/render.php:16
-msgid "Nasze spotkania"
-msgstr ""
-
-#: src/blocks/meeting-list/render.php:61
-msgid "Brak godziny"
-msgstr ""
-
-#: src/blocks/meeting-list/render.php:67
-msgid "Brak miejsca"
-msgstr ""
-
-#: src/blocks/meeting-list/render.php:69
-msgid "Zobacz więcej"
-msgstr ""
-
-#: src/blocks/meeting-list/render.php:79
-msgid "Brak dostępnych spotkań."
 msgstr ""
 
 #: src/blocks/navigable-tiles/render.php:72
@@ -501,7 +546,6 @@ msgid "Ustawienia feedu"
 msgstr ""
 
 #: src/blocks/facebook-feed/edit.js:16
-#: src/blocks/meeting-list/index.js:26
 msgid "Liczba postów"
 msgstr ""
 
@@ -602,13 +646,8 @@ msgstr ""
 msgid "Styl mapy"
 msgstr ""
 
-#: src/blocks/meeting-list/index.js:19
 #: src/blocks/navigable-tiles/edit.js:21
 msgid "Ustawienia bloku"
-msgstr ""
-
-#: src/blocks/meeting-list/index.js:21
-msgid "Tytuł bloku"
 msgstr ""
 
 #: src/blocks/navigable-tiles/edit.js:23
@@ -999,31 +1038,6 @@ msgstr ""
 #: src/blocks/map-block/block.json
 msgctxt "block description"
 msgid "Blok mapu zbudowanu przu użyciu Leaflet.js."
-msgstr ""
-
-#: src/blocks/meeting-list/block.json
-msgctxt "block title"
-msgid "Nasze spotkania"
-msgstr ""
-
-#: src/blocks/meeting-list/block.json
-msgctxt "block description"
-msgid "Blok wyświetlający listę niestandardowych postów typu spotkania."
-msgstr ""
-
-#: src/blocks/meeting-list/block.json
-msgctxt "block keyword"
-msgid "meetings"
-msgstr ""
-
-#: src/blocks/meeting-list/block.json
-msgctxt "block keyword"
-msgid "events"
-msgstr ""
-
-#: src/blocks/meeting-list/block.json
-msgctxt "block keyword"
-msgid "list"
 msgstr ""
 
 #: src/blocks/navigable-tiles/block.json

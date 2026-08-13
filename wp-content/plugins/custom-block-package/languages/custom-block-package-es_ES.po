@@ -79,3 +79,49 @@ msgstr "hace %s"
 #. Visible on the public pages: feed, map block or screen-reader text.
 msgid "przed chwilą"
 msgstr "ahora mismo"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Poniedziałek"
+msgstr "Lunes"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Wtorek"
+msgstr "Martes"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Środa"
+msgstr "Miércoles"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Czwartek"
+msgstr "Jueves"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Piątek"
+msgstr "Viernes"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Sobota"
+msgstr "Sábado"
+
+#. Weekday of a meeting; forms part of the visible day-and-hour label.
+msgctxt "weekday of a meeting"
+msgid "Niedziela"
+msgstr "Domingo"
+
+#. PHP date() format for the hour a meeting starts. English keeps a
+#. twelve-hour clock because that is what the page already showed.
+msgctxt "meeting time format, PHP date() syntax"
+msgid "H:i"
+msgstr "H:i"
+
+#. 1: weekday name, 2: time of day. Only the separator differs per language.
+msgctxt "weekday and time of a meeting"
+msgid "%1$s %2$s"
+msgstr "%1$s, %2$s"

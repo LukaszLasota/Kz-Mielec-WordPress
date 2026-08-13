@@ -113,9 +113,13 @@ class NavigableTilesService {
 
 			// get_post_field() is declared as returning array|int|string, so it
 			// cannot be cast straight to string — narrow it instead.
+			//
+			// $day_hour is built in the language of this page from the shared
+			// weekday/time pair; the derived meta of the same name is only a
+			// search index.
 			$post_name = get_post_field( 'post_name', $post_id );
 			$anchor    = is_string( $post_name ) ? $post_name : '';
-			$day_hour  = (string) get_post_meta( $post_id, MeetingMeta::META_DAY_HOUR, true );
+			$day_hour  = MeetingSchedule::label( $post_id );
 			$hover_id  = (int) get_post_meta( $post_id, MeetingMeta::META_HOVER_IMAGE, true );
 			$base_id   = (int) get_post_thumbnail_id( $post_id );
 
