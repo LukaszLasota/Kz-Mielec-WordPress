@@ -219,11 +219,25 @@ $kzmielec_caret = '<svg class="a11y-bar__lang-caret" width="10" height="6" viewB
 						<span class="a11y-bar__lang-code" aria-hidden="true"><?php echo esc_html( $kzmielec_current_code ); ?></span>
 						<?php
 						/*
-						 * Same shape as the A+ / A++ buttons: the code is what you read, the
-						 * sentence is what you hear, and the accessible name BEGINS with the
-						 * visible text, which is what WCAG 2.5.3 (Label in Name) asks for.
-						 * "PL" on its own says nothing out loud, and a control that opens a
-						 * panel has to say so.
+						 * The full name for wide screens, the code for narrow ones — the
+						 * stylesheet shows exactly one of the two, never both. Measured on the
+						 * live strip: a desktop row leaves 842px unused, so a name costs
+						 * nothing there, while a 390px phone leaves 112px and cannot spare it.
+						 *
+						 * Both spellings sit in the sentence below, which is what keeps this
+						 * within WCAG 2.5.3 (Label in Name) at every width: the criterion asks
+						 * for the accessible name to CONTAIN the visible text. It used to also
+						 * BEGIN with it, which is stricter than the criterion and no longer
+						 * possible once the visible text changes with the viewport — the markup
+						 * is one string and the width is not known to it.
+						 */
+						?>
+						<span class="a11y-bar__lang-name" aria-hidden="true"><?php echo esc_html( $kzmielec_current_name ); ?></span>
+						<?php
+						/*
+						 * Same shape as the A+ / A++ buttons: what you read is short, and the
+						 * sentence is what you hear. "PL" on its own says nothing out loud, and
+						 * a control that opens a panel has to say so.
 						 */
 						?>
 						<span class="visually-hidden">
@@ -251,6 +265,7 @@ $kzmielec_caret = '<svg class="a11y-bar__lang-caret" width="10" height="6" viewB
 								>
 									<?php echo \Kzmielec\Core\LanguageFlags::get( (string) ( $kzmielec_lang['slug'] ?? '' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed inline SVG, no external input. ?>
 									<span class="a11y-bar__lang-code" aria-hidden="true"><?php echo esc_html( $kzmielec_code ); ?></span>
+									<span class="a11y-bar__lang-name" aria-hidden="true"><?php echo esc_html( (string) ( $kzmielec_lang['name'] ?? '' ) ); ?></span>
 									<span class="visually-hidden"><?php echo esc_html( $kzmielec_code . ' — ' . (string) ( $kzmielec_lang['name'] ?? '' ) ); ?></span>
 								</a>
 							</li>

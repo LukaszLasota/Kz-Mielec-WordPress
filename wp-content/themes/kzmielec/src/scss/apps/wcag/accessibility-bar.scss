@@ -330,6 +330,29 @@
 	outline-offset: -0.0625rem;
 }
 
+// Exactly one of the two spellings is on screen at a time: the two-letter code on
+// a phone, the language's own name from the tablet breakpoint up. Never both — the
+// accessible name reads "PL — Polski", and WCAG 2.5.3 (Label in Name) wants the
+// visible text to appear in it, which "PL Polski" as one run of text would not.
+//
+// The widths are measured, not guessed. On the live strip a desktop row leaves
+// about 52.6rem unused beside the buttons, so a name costs nothing there; a phone
+// leaves 7rem, and "Українська" would push the row onto a second line.
+.a11y-bar__lang-name {
+	display: none;
+}
+
+@media (min-width: $bp-tablet) {
+
+	.a11y-bar__lang-name {
+		display: inline;
+	}
+
+	.a11y-bar__lang-code {
+		display: none;
+	}
+}
+
 // Stacked in the panel now rather than sitting in a row, so each one fills the
 // width and is a comfortable target from edge to edge.
 .a11y-bar__lang-link {
