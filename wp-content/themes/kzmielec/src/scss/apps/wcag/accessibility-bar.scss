@@ -618,14 +618,19 @@
 	}
 
 	/*
-	 * Flags go away entirely in high contrast. They are decoration in fixed
-	 * national colours, and fixed colours are exactly what this mode exists to
-	 * override — a red-and-white rectangle beside yellow-on-black text is noise
-	 * for the people who switched the mode on. The code stays, so nothing is lost.
+	 * Flags STAY in high contrast, by an explicit decision on 13 August 2026 —
+	 * do not "restore" the rule that used to hide them here.
+	 *
+	 * The argument for hiding them still stands and is worth knowing: they are
+	 * decoration in fixed national colours, and overriding fixed colours is what
+	 * this mode is for. The Polish flag also puts a white band beside
+	 * yellow-on-black text, which is why `whiteall` counts it.
+	 *
+	 * It is allowed regardless: the flag carries `aria-hidden`, so it is decorative
+	 * and exempt from the contrast criteria (WCAG 1.4.3 and 1.4.11), and keeping it
+	 * means the strip does not change width when the mode is toggled. What the
+	 * control says out loud and on screen is the language name, which is unaffected.
 	 */
-	.a11y-bar__lang-flag {
-		display: none !important;
-	}
 
 	// The Instagram follow button takes its background from
 	// `--color-link-accessible`, which is a link colour here and turns yellow —
