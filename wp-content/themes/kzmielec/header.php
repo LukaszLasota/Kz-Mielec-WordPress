@@ -81,7 +81,22 @@ if ( has_nav_menu( 'primary' ) ) {
 ?>
 
 <header class="site-header" id="zero">
-	<div class="menu">
+	<?php
+	/*
+	 * `data-nosnippet` keeps the chrome out of Google's search-result descriptions.
+	 * Left alone, Google ignored the page's own meta description and built the
+	 * snippet from whatever text came first, which was this menu: the result read
+	 * "Aktualnosci Zaplanuj wizyte W co i jak wierzymy Znajdz nas" before it reached
+	 * a single sentence about the congregation.
+	 *
+	 * The attribute goes on these two existing wrappers on purpose. Google honours
+	 * it only on `span`, `div` and `section` - on the `nav` elements inside it would
+	 * be silently ignored, and wrapping the lists in a new div would have made them
+	 * anonymous flex items and moved the menu. Nothing here is content: a logo, a
+	 * hamburger and the navigation labels.
+	 */
+	?>
+	<div class="menu" data-nosnippet>
 		<<?php echo tag_escape( $logo_tag ); ?> class="site-logo">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" class="site-logo__link" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?> — <?php esc_attr_e( 'strona główna', 'kzmielec' ); ?>">
 				<?php echo wp_kses( $logo_img, $allowed_img ); ?>
@@ -111,7 +126,7 @@ if ( has_nav_menu( 'primary' ) ) {
 		</nav>
 	</div>
 
-	<div class="menu fixed" aria-hidden="true">
+	<div class="menu fixed" aria-hidden="true" data-nosnippet>
 		<div class="three">
 			<button class="hamburger" aria-controls="fixed-menu" aria-expanded="false" tabindex="-1">
 				<span class="hamburger__sr-only"><?php esc_html_e( 'Otwórz/zamknij menu', 'kzmielec' ); ?></span>
