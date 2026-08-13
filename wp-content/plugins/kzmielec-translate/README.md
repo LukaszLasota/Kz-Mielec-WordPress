@@ -59,7 +59,7 @@ app/
     ├── TermTranslator.php       # taxonomy terms, linked across languages
     ├── ChurchesTranslator.php   # the serialised `churches` array in post meta
     ├── PageMetaTranslator.php   # the two page fields that decide how a page renders
-    ├── MeetingMetaTranslator.php
+    ├── MeetingMetaTranslator.php  # the place only: day and hour are generated, not translated
     └── YoastTranslator.php      # SEO title and meta description, nothing else
 ```
 

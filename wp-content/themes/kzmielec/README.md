@@ -95,13 +95,46 @@ aside the moment an editor fills the field itself:
 | `og:image` | missing everywhere — a shared link had no picture | site logo as the fallback |
 | `meta description` | missing on 12 of 19 Polish pages | hand-written per page and per language, 84 in total |
 | `<title>` length | up to 117 characters, half truncated by Google | site name dropped past 60; longest is now 76 |
-| schema | Organization only | a `Church` node with address, phone and service times, from the contact option and the meetings CPT |
+| schema | Organization only | a `Church` node with address and phone, plus 12 dated `Event` nodes per language — see below |
 | tile images | raw `<img src>` at full size, 131 KB per photo | `wp_get_attachment_image()` with srcset and `sizes` from the column count |
 | `hreflang` | absent — Yoast does not emit it for Polylang free | reciprocal set on every translated URL (`Seo/Hreflang.php`) |
 
 `Seo/ScriptureNotice.php` appends the required source note to the posts marked
 `_kzt_scripture`, rather than to the global footer where it used to sit — most
 pages quote nothing.
+
+### Meetings as `Event` nodes
+
+Google reported both events on the front page as **invalid** for two reasons, and
+both are easy to get wrong:
+
+- **`startDate` is required, and a weekday is not a date.** The day and hour used to
+  be prose typed once per language, so nothing could turn them into a timestamp.
+  They are now one structured pair, owned by
+  [`custom-block-package`](../../plugins/custom-block-package/README.md#the-meeting-schedule);
+  `YoastFallbacks::meeting_events()` asks it for the next six dates of each meeting
+  and emits one node per date, which is why there are 12 per language.
+- **`location.address` must be a value, not a reference.** Pointing `location` at
+  the `Church` node with `@id` looks correct, validates as JSON-LD and is still
+  rejected — Google wants the address written out inside the event. The `Place`
+  therefore repeats it, and deliberately carries **no `@id` of its own**: while it
+  shared `https://kzmielec.pl/#church` with the church node, Google merged the two
+  and reported the venue of the service as a church that had a list of services.
+  The link to the congregation is carried by `organizer` instead.
+
+**No structured data can put an address under a search result.** There is no rich
+result for a church's or a business's address and hours — that box comes from a
+Google Business Profile. The markup here earns the event carousel and nothing else;
+anything more has to be claimed outside the site.
+
+`header.php` marks the two menu wrappers `data-nosnippet`. Left alone, Google
+ignored the page's own description and built the snippet from the first text it
+found, which was the navigation: the result read *"Aktualnosci Zaplanuj wizyte W co
+i jak wierzymy Znajdz nas"* before it reached one sentence about the congregation.
+The attribute sits on those two `div`s because Google honours it only on `span`,
+`div` and `section` — on the `nav` inside it is accepted by the browser and ignored
+by the crawler, and a new wrapper would have turned the lists into anonymous flex
+items and moved the menu.
 
 ### Modern image formats
 

@@ -48,9 +48,19 @@ language — see below.
 - Supports: title, editor, thumbnail, excerpt, comments, custom-fields, revisions
   (set once in `CptBuilder`, shared by any future post type)
 
-The meeting fields themselves (`_meeting_place`, `_meeting_day_hour`,
-`_meeting_hover_image`) are registered by `custom-block-package`, which owns the
-block that renders them.
+The meeting fields themselves are registered by `custom-block-package`, which owns
+the block that renders them:
+
+| field | entered where |
+|---|---|
+| `_meeting_weekday`, `_meeting_time` | on the **Polish** post only; the translations read them through Polylang |
+| `_meeting_place` | per language, it is prose |
+| `_meeting_hover_image` | per language |
+| `_meeting_day_hour` | **nowhere — it is generated** from the two fields above on every save |
+
+Do not write to `_meeting_day_hour`: the next save overwrites it. It survives only
+because the theme's search indexes it, and the visible text is computed at render
+time. See [`custom-block-package`](../custom-block-package/README.md#the-meeting-schedule).
 
 ## Per-language archive slugs
 

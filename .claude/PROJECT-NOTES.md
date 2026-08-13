@@ -1,6 +1,6 @@
 # kzmielec.pl — project notes
 
-Verified against the running site on 2026-08-12. The previous version of this file
+Verified against the running site on 2026-08-13. The previous version of this file
 described the state around the first commit: it listed two blocks that no longer exist
 (`emaus-news-slider`, `meeting-list`), omitted seven that do, named eight theme components
 where there are twenty-five, and missed the comparison plugin and the multilingual work
@@ -12,6 +12,9 @@ the code does not say.
 
 A WordPress site for a Pentecostal congregation in Mielec, Poland, in four languages
 (Polish at the root, plus `/en/`, `/uk/`, `/es/`). WordPress 7.0.2, PHP 8.2, DDEV locally.
+
+**All four languages have been live since 2026-08-13**; production served Polish only
+before that. The local database is a copy of production, not the other way round.
 
 Own code, all in this repository:
 
@@ -44,8 +47,15 @@ ddev exec 'cd wp-content/themes/kzmielec && php vendor/bin/phpstan analyse --no-
 ddev exec 'cd wp-content/themes/kzmielec && php vendor/bin/phpcs --report=summary'
 ```
 
-The theme and all three plugins pass PHPStan at level 8. PHPCS is clean apart from two
-deliberate warnings in `TranslationGuard` for direct SQL.
+The theme and all three plugins pass PHPStan at level 8 — verified 2026-08-13, not assumed.
+
+PHPCS is **not** entirely clean, and the earlier version of this file said it was. The
+theme reports two deliberate warnings for the direct SQL in `TranslationGuard`;
+`custom-posts` and `comparison-of-religions` report nothing; and
+`custom-block-package/src/blocks/custom-svg/render.php` reports 7 errors — 2 comment
+end-characters and 5 `EscapeOutput`, on values escaped a statement earlier
+(`esc_url`/`esc_attr` at lines 399-401) and on sanitised SVG that must not be escaped
+again. Open work, small and known, not a false alarm to be ignored.
 
 ## Things that cost time to learn
 
@@ -80,6 +90,23 @@ explicitly.
 `kzmielec.pl → kzmielec.ddev.site` also rewrites `zbor@kzmielec.pl` into a dead address, and
 a wrong e-mail looks exactly like a right one.
 
+**`wp eval-file` runs the file through `eval()`.** A `declare(strict_types=1)` is then no
+longer the first statement in the compilation unit and PHP refuses the file outright. Every
+script in `scripts/` says so in a comment; the comment is the reason, not decoration.
+
+**MySQL's default collation treats `Ę` and `ę` as the same letter.** A `LIKE '%wizytĘ%'`
+looking for a capitalisation error reports a match on every page that spells the word
+correctly, so it looks found when it is not there. `LIKE BINARY` is the only honest search
+for a diacritic or a case.
+
+**`wp db query` and `wp db export` do not work on production.** Use `wp eval` with `$wpdb`
+for queries, and `mariadb-dump` over the socket for a dump. The reason is in the private
+operator note, and it is load-bearing — do not "fix" it.
+
+**`data-nosnippet` is honoured only on `span`, `div` and `section`.** On any other element,
+`nav` included, the browser accepts the attribute and the crawler ignores it, so the markup
+looks right and does nothing.
+
 ## Decisions that still hold
 
 Carried over from the migration plan of 2026-04-21, which is otherwise deleted: it
@@ -99,6 +126,9 @@ pages. What was worth keeping is the reasoning, and only where it still matches 
 | The Facebook feed is our own block | it replaced a stalling iframe that shipped ~350KB of third-party JS and set cookies |
 | Each plugin mirrors the scale files | a plugin builds separately and must work under any theme; `check:mirrors` catches the drift |
 | Pages are flat, no parents | verified: every published page has `post_parent = 0` |
+| Day and hour of a meeting are one structured pair on the Polish post | prose in four languages cannot be turned back into the `startDate` Google requires. `_meeting_day_hour` stays, generated on save, because the theme's search indexes it — deleting it would have broken `/?s=niedziela` while every page still rendered perfectly |
+| Six dates per meeting in the schema, not one | production can serve the same HTML for seven days, so one "next Sunday" computed at render time is a past date for part of the audience |
+| An address in the search result needs a Google Business Profile | there is no rich result for a church's address and hours; no amount of markup produces that box, and this was checked against Google's documentation rather than guessed |
 
 ## Where things live
 
@@ -106,5 +136,6 @@ pages. What was worth keeping is the reasoning, and only where it still matches 
   The pre-commit hook enforces this and reads the forbidden strings from
   `~/private/git-forbidden-strings.txt`.
 - Deployment procedure, audits, plans: `docs/` on disk, currently outside version control.
-- Content changes are reproduced on the server by the twenty scripts in `scripts/`, each
-  with a dry run by default and writes only after `-- go`.
+- Content changes are reproduced on the server by the 23 scripts in `scripts/`. Eighteen are
+  a dry run by default and write only after `go` (`convert-uploads.php` takes `--dry-run`
+  instead); the remaining five are one-off setup steps that write straight away.

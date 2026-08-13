@@ -33,6 +33,7 @@ custom-block-package/
 │   │   └── MeetingMeta.php       # Meeting fields (owned here, the post type is not)
 │   ├── Services/
 │   │   ├── FacebookFeedService.php   # Graph API client, cache, fallback, mock data
+│   │   ├── MeetingSchedule.php       # Day and hour: the one source, and the dates from it
 │   │   └── NavigableTilesService.php # Tile data, narrowed to the post's language
 │   ├── Cron/
 │   │   └── FacebookFeedCron.php  # Background refresh, interval from the TTL option
@@ -68,6 +69,53 @@ original code did, and it is invisible on the front end — Polylang narrows the
 query itself there. The editor renders blocks through a REST route with no
 language context, so it received all four languages at once: 12 meetings instead
 of 3.
+
+## The meeting schedule
+
+`Services/MeetingSchedule.php` holds the day and hour of a meeting **once**, as a
+pair of values on the Polish post: `_meeting_weekday` (ISO 1-7) and `_meeting_time`
+(`HH:MM`). Everything else is derived from that pair — the text on the archive, the
+text on the tiles, the search index, and the dated `Event` nodes the theme puts in
+the schema graph.
+
+Before this, the day and hour were prose typed once per language, and the four
+copies had drifted into four incompatible shapes: `Niedziela 10:30`,
+`Sunday 10.30 am`, `Viernes las 18:00`. Google rejected both events on the front
+page as invalid, because `Event` requires a real `startDate` and no parser turns
+those four strings back into one.
+
+**`_meeting_day_hour` was kept, and is now generated.** Deleting it looked obvious
+and would have been the wrong move: the theme lists it in
+`Setup::SEARCHABLE_META_KEYS`, so without it a search for `niedziela` stops finding
+the Sunday service — while every page still renders perfectly. Nothing would have
+announced the loss. It is rewritten on save for the post and its translations, and
+the front end never reads it: visible text comes from `MeetingSchedule::label()` at
+render time.
+
+Three details that are not obvious from the code:
+
+- **The regeneration hangs on its own hook at priority 20**, outside the metabox
+  save path. That path returns early without a nonce, and the migration plugin
+  creates the three translations with `wp_insert_post()`, which sends none — so the
+  translations would have been left with no searchable day and hour at all.
+- **`occurrences()` returns six dates, not one.** The production cache can serve
+  the same HTML for up to seven days, so a single "next Sunday" computed while
+  rendering would already be in the past for part of the audience, and for the
+  crawler. The walk steps a day at a time rather than adding a week, which keeps
+  the wall-clock time fixed across the March and October transitions.
+- **The weekday names are this plugin's own `_x()` strings**, not `WP_Locale` and
+  not `wp_date()`. Those read the core catalogue, which `switch_to_locale()`
+  rebuilds — and on this site that has already returned Polish for a non-Polish
+  locale. The time format is translated too, which is how English keeps
+  `Sunday 10.30 am` while Polish keeps `Niedziela 10:30`.
+
+In the metabox the two fields are editable on the Polish post and **disabled on a
+translation**, with a link to the original. A translator changing the hour in one
+language only is exactly the drift this replaced.
+
+Backfilling from the old prose: `scripts/backfill-meeting-schedule.php` in the
+repository root (dry run by default). Behaviour is pinned by
+`scripts/tests/kzt-schedule.php`.
 
 ## The Facebook feed
 
