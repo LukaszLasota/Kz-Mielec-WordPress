@@ -152,6 +152,24 @@ final class Locale {
 	 * @return void
 	 */
 	private static function reload(): void {
+		/*
+		 * WordPress core's catalogue, not only this plugin's. Since 6.5 a lookup
+		 * asks for the locale that applies when it runs, and a catalogue has to
+		 * have been registered for that locale - loading pl_PL at boot does
+		 * nothing for a request answered in Ukrainian. Reloading only the plugin
+		 * left the date on a feed post reading "20 hours тому": the word came
+		 * from here and the number from `human_time_diff()`, which is core.
+		 *
+		 * This needs wp-content/languages to hold the locale as well. It is what
+		 * `wp language core install` puts there, and the files are in the
+		 * repository.
+		 */
+		if ( is_textdomain_loaded( 'default' ) ) {
+			unload_textdomain( 'default', true );
+		}
+
+		load_default_textdomain( determine_locale() );
+
 		unload_textdomain( self::DOMAIN, true );
 
 		if ( ! defined( 'UP_PLUGIN_FILE' ) ) {
