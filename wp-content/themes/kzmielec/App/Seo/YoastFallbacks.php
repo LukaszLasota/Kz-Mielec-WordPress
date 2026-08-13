@@ -457,6 +457,7 @@ class YoastFallbacks implements FilterHookInterface {
 
 			$label     = \CustomBlockPackage\Services\MeetingSchedule::label( $meeting->ID );
 			$permalink = get_permalink( $meeting );
+			$image     = $this->meeting_image( $meeting->ID );
 
 			foreach ( $dates as $start ) {
 				$event = array(
@@ -480,6 +481,10 @@ class YoastFallbacks implements FilterHookInterface {
 					$event['url'] = $permalink;
 				}
 
+				if ( '' !== $image ) {
+					$event['image'] = $image;
+				}
+
 				$events[] = $event;
 			}
 		}
@@ -488,10 +493,43 @@ class YoastFallbacks implements FilterHookInterface {
 	}
 
 	/**
+	 * The picture that stands for a meeting in a search result.
+	 *
+	 * Google lists `image` as recommended on an Event, and the meetings already
+	 * carry a featured image — the same one the tiles use — so nothing has to be
+	 * invented. A meeting without one falls back to the site icon, which is what
+	 * the Church node already advertises.
+	 *
+	 * @param int $meeting_id Meeting post ID.
+	 * @return string Image URL, or an empty string when there is none to give.
+	 */
+	private function meeting_image( int $meeting_id ): string {
+		$attachment_id = (int) get_post_thumbnail_id( $meeting_id );
+
+		if ( 0 === $attachment_id ) {
+			$attachment_id = (int) get_option( 'site_icon' );
+		}
+
+		if ( 0 === $attachment_id ) {
+			return '';
+		}
+
+		$url = wp_get_attachment_image_url( $attachment_id, 'full' );
+
+		return is_string( $url ) ? $url : '';
+	}
+
+	/**
 	 * The one place every meeting happens, with the address written out in full.
 	 *
-	 * The `@id` ties it back to the Church node so the graph still has a single
-	 * subject, while the inline address is what Google requires of an Event.
+	 * Deliberately WITHOUT an `@id`. It carried `#church` at first, the same
+	 * identifier as the Church node, which is wrong: in JSON-LD one `@id` names
+	 * one thing, so a consumer merges the Place into the Church. Google did
+	 * exactly that — its preview reported this location as a Church and then
+	 * resolved the reference back into the Church's own list of events, over and
+	 * over. The events validated anyway, but the graph described two things as
+	 * one. The link to the congregation is carried by `organizer` instead, which
+	 * is what that property is for.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -500,7 +538,6 @@ class YoastFallbacks implements FilterHookInterface {
 
 		return array(
 			'@type'   => 'Place',
-			'@id'     => home_url( '/#church' ),
 			'name'    => get_bloginfo( 'name' ),
 			'address' => array(
 				'@type'           => 'PostalAddress',
