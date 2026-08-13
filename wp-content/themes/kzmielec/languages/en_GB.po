@@ -155,3 +155,28 @@ msgstr "email: %s"
 #: App/Contact/ContactBindings.php
 msgid "konto: %s"
 msgstr "account: %s"
+
+#. Name of the home crumb in the breadcrumb structured data. Yoast keeps it in
+#. one global option, so it has to be translated in the theme.
+msgid "Strona główna"
+msgstr "Home"
+
+#. Wording Yoast keeps in one global title template for the whole site, so it
+#. has to be translated in the theme rather than in the plugin settings.
+msgid "Strony nie znaleziono"
+msgstr "Page not found"
+
+#. Wording Yoast keeps in one global title template for the whole site, so it
+#. has to be translated in the theme rather than in the plugin settings.
+msgid "Błąd 404: Strony nie znaleziono"
+msgstr "Error 404: page not found"
+
+#. Wording Yoast keeps in one global title template for the whole site, so it
+#. has to be translated in the theme rather than in the plugin settings.
+msgid "Wyniki wyszukiwania"
+msgstr "Search results"
+
+#. Wording Yoast keeps in one global title template for the whole site, so it
+#. has to be translated in the theme rather than in the plugin settings.
+msgid "Archiwum dla"
+msgstr "Archive for"

@@ -83,6 +83,131 @@ class YoastFallbacks implements FilterHookInterface {
 		add_filter( 'wpseo_opengraph_desc', array( $this, 'fallback_description' ) );
 		add_filter( 'wpseo_add_opengraph_images', array( $this, 'fallback_social_image' ) );
 		add_filter( 'wpseo_schema_graph', array( $this, 'add_church_schema' ), 10, 1 );
+		add_filter( 'wpseo_breadcrumb_links', array( $this, 'translate_breadcrumbs' ) );
+		add_filter( 'option_wpseo_titles', array( $this, 'translate_yoast_templates' ) );
+	}
+
+	/**
+	 * Polish wording sitting inside Yoast's global title templates.
+	 *
+	 * Option key => the literal to translate. Only the words are replaced, so the
+	 * `%%sep%%`, `%%sitename%%`, `%%page%%` and `%%searchphrase%%` placeholders
+	 * survive untouched — which is why this filters the TEMPLATE rather than the
+	 * finished title.
+	 *
+	 * @var array<string, string>
+	 */
+	private const TEMPLATE_STRINGS = array(
+		'title-404-wpseo'           => 'Strony nie znaleziono',
+		'breadcrumbs-404crumb'      => 'Błąd 404: Strony nie znaleziono',
+		'title-search-wpseo'        => 'Wyniki wyszukiwania',
+		'breadcrumbs-searchprefix'  => 'Wyniki wyszukiwania',
+		'breadcrumbs-archiveprefix' => 'Archiwum dla',
+	);
+
+	/**
+	 * Translate the Polish words in Yoast's global title templates.
+	 *
+	 * Yoast keeps one template per page kind for the whole site, with the wording
+	 * typed in by hand — so the 404 page and the search results page announced
+	 * themselves in Polish in every language. Neither page is in the sitemap, which
+	 * is why the audit of 76 URLs could not see them; they were found on 13 August
+	 * 2026 by requesting them directly.
+	 *
+	 * The search wording leaks widest: it lands in `<title>`, `og:title` and the
+	 * Twitter title from that single option, so five copies of "Wyniki wyszukiwania"
+	 * sat on every foreign search page.
+	 *
+	 * @param mixed $titles The `wpseo_titles` option.
+	 * @return mixed
+	 */
+	public function translate_yoast_templates( $titles ) {
+		if ( ! is_array( $titles ) ) {
+			return $titles;
+		}
+
+		foreach ( self::TEMPLATE_STRINGS as $key => $polish ) {
+			if ( ! isset( $titles[ $key ] ) || ! is_string( $titles[ $key ] ) || '' === $titles[ $key ] ) {
+				continue;
+			}
+
+			// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText -- the literals are the const above, not user input.
+			$translated = translate( $polish, 'kzmielec' );
+
+			if ( $translated === $polish ) {
+				continue;
+			}
+
+			$titles[ $key ] = str_replace( $polish, $translated, $titles[ $key ] );
+		}
+
+		return $titles;
+	}
+
+	/**
+	 * Translate the breadcrumb structured data, which Yoast leaves in one language.
+	 *
+	 * The visible breadcrumb trail is switched off on this site, which is why nobody
+	 * saw any of this — but Yoast still writes a `BreadcrumbList` into the JSON-LD of
+	 * every page. The audit of 13 August 2026 found Polish in it on all 57
+	 * foreign-language pages, for two different reasons:
+	 *
+	 * 1. THE HOME CRUMB comes from ONE global option, `breadcrumbs-home`, so every
+	 *    language was served the Polish "Strona główna".
+	 *
+	 * 2. THE POST TYPE ARCHIVE CRUMB comes from Yoast's indexable table, which holds a
+	 *    SINGLE row per archive with no language column. Its `breadcrumb_title` is
+	 *    therefore frozen in whichever language happened to rebuild it first — clearing
+	 *    the row does not fix that, it only re-runs the race. Reading the label from
+	 *    the post type object instead resolves it per request, so each language gets
+	 *    its own.
+	 *
+	 * Both values are read rather than assumed, and the home crumb is only touched when
+	 * its text still matches the option: an editor who renames it keeps their wording.
+	 *
+	 * @param mixed $crumbs Crumbs Yoast assembled; documented as an array, filtered by
+	 *                      other plugins too, so the shape is checked rather than trusted.
+	 * @return mixed
+	 */
+	public function translate_breadcrumbs( $crumbs ) {
+		if ( ! is_array( $crumbs ) ) {
+			return $crumbs;
+		}
+
+		$titles     = get_option( 'wpseo_titles' );
+		$configured = is_array( $titles ) && isset( $titles['breadcrumbs-home'] ) && is_string( $titles['breadcrumbs-home'] )
+			? $titles['breadcrumbs-home']
+			: '';
+		$home       = __( 'Strona główna', 'kzmielec' );
+
+		foreach ( $crumbs as $kz_i => $crumb ) {
+			if ( ! is_array( $crumb ) ) {
+				continue;
+			}
+
+			if ( '' !== $configured && isset( $crumb['text'] ) && $configured === $crumb['text'] ) {
+				$crumbs[ $kz_i ]['text'] = $home;
+				continue;
+			}
+
+			if ( empty( $crumb['ptarchive'] ) || ! is_string( $crumb['ptarchive'] ) ) {
+				continue;
+			}
+
+			$type = get_post_type_object( $crumb['ptarchive'] );
+
+			if ( ! $type instanceof \WP_Post_Type ) {
+				continue;
+			}
+
+			$label = $type->labels->name ?? '';
+
+			if ( is_string( $label ) && '' !== $label ) {
+				$crumbs[ $kz_i ]['text'] = $label;
+			}
+		}
+
+		return $crumbs;
 	}
 
 	/**
