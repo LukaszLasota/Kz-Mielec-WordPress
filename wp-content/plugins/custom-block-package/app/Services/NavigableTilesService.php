@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace CustomBlockPackage\Services;
 
 use CustomBlockPackage\Admin\MeetingMeta;
+use CustomBlockPackage\I18n\Locale;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,29 +51,9 @@ class NavigableTilesService {
 	 * @return string Language slug, or an empty string.
 	 */
 	private static function current_language(): string {
-		if ( ! function_exists( 'pll_get_post_language' ) ) {
-			return '';
-		}
-
-		$post = get_post();
-
-		if ( $post instanceof \WP_Post ) {
-			$lang = pll_get_post_language( $post->ID );
-
-			if ( is_string( $lang ) && '' !== $lang ) {
-				return $lang;
-			}
-		}
-
-		if ( function_exists( 'pll_current_language' ) ) {
-			$lang = pll_current_language( 'slug' );
-
-			if ( is_string( $lang ) && '' !== $lang ) {
-				return $lang;
-			}
-		}
-
-		return '';
+		// One implementation, shared with the feed's REST route, which needs the
+		// same answer for the same reason.
+		return Locale::current_slug();
 	}
 
 	/**

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace CustomBlockPackage\Services;
 
+use CustomBlockPackage\I18n\Locale;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -260,7 +262,7 @@ class MeetingSchedule {
 				? (string) pll_get_post_language( $translated_id, 'locale' )
 				: '';
 
-			$label = self::with_locale(
+			$label = Locale::with(
 				$locale,
 				static function () use ( $translated_id ): string {
 					return self::label( $translated_id );
@@ -269,63 +271,5 @@ class MeetingSchedule {
 
 			update_post_meta( $translated_id, \CustomBlockPackage\Admin\MeetingMeta::META_DAY_HOUR, $label );
 		}
-	}
-
-	/**
-	 * Run a callback with this plugin's catalogue loaded in another language.
-	 *
-	 * The theme carries the same helper for its own text domain; this is the
-	 * plugin's copy, and the comment there is worth repeating because the
-	 * detail is easy to lose: `unload_textdomain()` must be told the domain is
-	 * reloadable. Without the second argument WordPress remembers the domain as
-	 * unloaded and refuses to load it again, so only the FIRST switch in a
-	 * process has any effect — a save that walks four languages would then
-	 * write the Polish label into three of them and report success.
-	 *
-	 * @param string   $locale   Target locale, e.g. `en_GB`. Empty runs the callback untouched.
-	 * @param callable $callback Work to run.
-	 * @return string Whatever the callback returned.
-	 */
-	private static function with_locale( string $locale, callable $callback ): string {
-		if ( '' === $locale || determine_locale() === $locale ) {
-			return (string) $callback();
-		}
-
-		$force = static function () use ( $locale ): string {
-			return $locale;
-		};
-
-		add_filter( 'locale', $force, 99 );
-		add_filter( 'determine_locale', $force, 99 );
-
-		self::reload_textdomain();
-
-		try {
-			return (string) $callback();
-		} finally {
-			remove_filter( 'locale', $force, 99 );
-			remove_filter( 'determine_locale', $force, 99 );
-
-			self::reload_textdomain();
-		}
-	}
-
-	/**
-	 * Drop and re-read this plugin's catalogue for whatever locale now applies.
-	 *
-	 * @return void
-	 */
-	private static function reload_textdomain(): void {
-		unload_textdomain( 'custom-block-package', true );
-
-		if ( ! defined( 'UP_PLUGIN_FILE' ) ) {
-			return;
-		}
-
-		load_plugin_textdomain(
-			'custom-block-package',
-			false,
-			dirname( plugin_basename( UP_PLUGIN_FILE ) ) . '/languages'
-		);
 	}
 }

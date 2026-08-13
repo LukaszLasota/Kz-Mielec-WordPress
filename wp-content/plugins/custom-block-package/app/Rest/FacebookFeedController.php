@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace CustomBlockPackage\Rest;
 
+use CustomBlockPackage\I18n\Locale;
 use CustomBlockPackage\Services\FacebookFeedService;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -71,6 +72,23 @@ class FacebookFeedController {
 						'type'    => 'boolean',
 						'default' => true,
 					),
+
+					/*
+					 * The language of the page the request came from. It has to
+					 * be asked for, because it cannot be worked out here: the
+					 * route is `/wp-json/…` with no language prefix, so Polylang
+					 * answers with the default language whatever page the visitor
+					 * is on. Left to itself, the endpoint returned "Zobacz na
+					 * Facebooku" and "2 dni temu" to English, Ukrainian and
+					 * Spanish pages — the server-rendered posts above the fold
+					 * were translated and everything the visitor scrolled to was
+					 * not.
+					 */
+					'lang'       => array(
+						'type'              => 'string',
+						'default'           => '',
+						'sanitize_callback' => 'sanitize_key',
+					),
 				),
 			)
 		);
@@ -93,7 +111,13 @@ class FacebookFeedController {
 		$total    = $service->get_total_count();
 		$has_more = ( $offset + count( $posts ) ) < $total;
 
-		$html = $this->render_posts( $posts, $show_images, $show_date );
+		// Rendered in the language the page asked for; see the `lang` argument above.
+		$html = Locale::with(
+			Locale::for_slug( (string) $request->get_param( 'lang' ) ),
+			function () use ( $posts, $show_images, $show_date ): string {
+				return $this->render_posts( $posts, $show_images, $show_date );
+			}
+		);
 
 		return new \WP_REST_Response(
 			array(

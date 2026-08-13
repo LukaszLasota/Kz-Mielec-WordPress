@@ -18,6 +18,9 @@ function initFeed(wrapper) {
 	const showImages = wrapper.dataset.showImages === 'true';
 	const showDate = wrapper.dataset.showDate === 'true';
 	const batchSize = parseInt(wrapper.dataset.batchSize || '5', 10);
+	// The page's language. The endpoint has no language prefix, so without this
+	// the appended posts come back in the site's default language.
+	const lang = wrapper.dataset.lang || '';
 
 	let offset = parseInt(wrapper.dataset.offset || '0', 10);
 	let hasMore = wrapper.dataset.hasMore === 'true';
@@ -38,6 +41,10 @@ function initFeed(wrapper) {
 			url.searchParams.set('limit', String(batchSize));
 			url.searchParams.set('showImages', String(showImages));
 			url.searchParams.set('showDate', String(showDate));
+
+			if (lang) {
+				url.searchParams.set('lang', lang);
+			}
 
 			const response = await fetch(url.toString(), {
 				headers: { Accept: 'application/json' },

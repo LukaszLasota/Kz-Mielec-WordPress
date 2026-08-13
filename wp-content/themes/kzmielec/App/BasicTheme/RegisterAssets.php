@@ -116,9 +116,17 @@ JS;
 			return (string) filemtime( $file_path );
 		}
 
-		// Log missing file for debugging.
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional logging for missing asset files.
-		error_log( sprintf( 'Asset file not found: %s', $file_path ) );
+		/*
+		 * Only while debugging. This runs once per asset per request, so on a
+		 * production server a single missing file wrote a line to the error log
+		 * on every page view - noise that says the same thing a million times
+		 * and buries whatever else lands there.
+		 */
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Debug-only logging.
+			error_log( sprintf( 'Asset file not found: %s', $file_path ) );
+		}
+
 		return false;
 	}
 

@@ -8,6 +8,10 @@
  * @package CustomBlockPackage
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 // SVG sanitization helper function.
 if ( ! function_exists( 'sanitize_svg_content_custom' ) ) {
 	/**
@@ -164,18 +168,24 @@ if ( ! function_exists( 'sanitize_svg_content_custom' ) ) {
 			),
 			// Common reusable elements.
 			'defs'           => array( 'id' => true ),
-			'style'          => array( 'type' => true ),
 			'title'          => array( 'id' => true ),
 			'desc'           => array( 'id' => true ),
-			'use'            => array(
-				'href'       => true,
-				'xlink:href' => true,
-				'x'          => true,
-				'y'          => true,
-				'width'      => true,
-				'height'     => true,
-				'transform'  => true,
-			),
+
+			/*
+			 * Three elements are deliberately absent, and each was on this list
+			 * before. `wp_kses()` filters attributes; it does not look inside an
+			 * element's text, so a `<style>` element inside pasted SVG went
+			 * through with its CSS unread. `<use>` and `<image>` accept
+			 * `href`/`xlink:href`, which kses keeps as written - a remote address
+			 * there loads a file from somebody else's server when the page is
+			 * viewed, which is how a tracking pixel works.
+			 *
+			 * No published page uses this block at all, so nothing rendered
+			 * differently for removing them. If an SVG sprite ever needs `<use>`,
+			 * add it back with a check that the value is a `#fragment` and not a
+			 * URL - the block's own `<style>` element is injected after
+			 * sanitising and is unaffected either way.
+			 */
 			// Basic gradients.
 			'linearGradient' => array(
 				'id'            => true,
@@ -210,19 +220,6 @@ if ( ! function_exists( 'sanitize_svg_content_custom' ) ) {
 				'x'                   => true,
 				'y'                   => true,
 				'preserveAspectRatio' => true,
-				'class'               => true,
-				'style'               => true,
-			),
-			'image'          => array(
-				'id'                  => true,
-				'width'               => true,
-				'height'              => true,
-				'x'                   => true,
-				'y'                   => true,
-				'href'                => true,
-				'xlink:href'          => true,
-				'preserveAspectRatio' => true,
-				'transform'           => true,
 				'class'               => true,
 				'style'               => true,
 			),
@@ -270,7 +267,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 			$original_svg_tag = $svg_tag[0];
 			$new_svg_tag      = $original_svg_tag;
 
-			// Absolutely add aria-hidden=“true” to each SVG
+			// Always force aria-hidden="true" on the SVG itself.
 			if ( preg_match( '/\baria-hidden\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
 				$new_svg_tag = preg_replace( '/\baria-hidden\s*=\s*["\'][^"\']*["\']/i', 'aria-hidden="true"', $new_svg_tag );
 			} else {
@@ -394,20 +391,32 @@ if ( ! empty( $attributes['svgContent'] ) ) {
 	// Apply attributes to SVG.
 	$svg_content = apply_svg_attributes( $svg_content, $attributes );
 
-	// Extract link attributes.
+	/*
+	 * Link attributes stay raw here and are escaped where they are printed.
+	 * They used to be escaped on assignment, which is just as safe and reads as
+	 * if it were not: PHPCS cannot follow a value across statements, so it
+	 * reported three escaping errors on markup that was in fact escaped, and a
+	 * reader had to scroll up to find out. The decision to wrap still runs the
+	 * URL through esc_url() first, so an address it rejects produces no anchor
+	 * at all rather than an empty one.
+	 */
 	$wrap_with_link = ! empty( $attributes['wrapWithLink'] );
-	$link_url       = ! empty( $attributes['linkUrl'] ) ? esc_url( $attributes['linkUrl'] ) : '';
-	$link_target    = ! empty( $attributes['linkTarget'] ) ? esc_attr( $attributes['linkTarget'] ) : '_self';
-	$link_rel       = ! empty( $attributes['linkRel'] ) ? esc_attr( $attributes['linkRel'] ) : '';
+	$link_url       = ! empty( $attributes['linkUrl'] ) ? (string) $attributes['linkUrl'] : '';
+	$link_target    = ! empty( $attributes['linkTarget'] ) ? (string) $attributes['linkTarget'] : '_self';
+	$link_rel       = ! empty( $attributes['linkRel'] ) ? (string) $attributes['linkRel'] : '';
 
-	// Output just the SVG without additional wrappers.
-	if ( $wrap_with_link && $link_url ) {
-		// Output SVG wrapped in a link
-		echo '<a href="' . $link_url . '" target="' . $link_target . '" rel="' . $link_rel . '">';
+	if ( $wrap_with_link && '' !== esc_url( $link_url ) ) {
+		printf(
+			'<a href="%1$s" target="%2$s" rel="%3$s">',
+			esc_url( $link_url ),
+			esc_attr( $link_target ),
+			esc_attr( $link_rel )
+		);
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup already through wp_kses() in sanitize_svg_content_custom(); escaping again would print the SVG as text.
 		echo $svg_content;
 		echo '</a>';
 	} else {
-		// Output just the SVG without additional wrappers.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- sanitised SVG, as above.
 		echo $svg_content;
 	}
 }

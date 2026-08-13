@@ -91,6 +91,20 @@ class FacebookFeedService {
 	public const DEFAULT_TTL = 2 * HOUR_IN_SECONDS;
 
 	/**
+	 * Transient suffix for the "do not call the API again yet" marker.
+	 */
+	private const COOLDOWN_SUFFIX = 'cooldown';
+
+	/**
+	 * How long the page-render path leaves a failing API alone: 5 minutes.
+	 *
+	 * Long enough that an outage costs one attempt per window instead of one per
+	 * visitor, short enough that a page fixed at the Facebook end comes back
+	 * without anybody clearing a cache.
+	 */
+	public const FAILURE_COOLDOWN = 5 * MINUTE_IN_SECONDS;
+
+	/**
 	 * Get posts from cache, refresh if stale.
 	 *
 	 * @param int $limit Number of posts to return.
@@ -132,9 +146,28 @@ class FacebookFeedService {
 	 */
 	private function get_all_cached(): array {
 		$transient_key = BlockCache::FACEBOOK_FEED_PREFIX . 'all';
+		$cooldown_key  = BlockCache::FACEBOOK_FEED_PREFIX . self::COOLDOWN_SUFFIX;
 		$cached        = get_transient( $transient_key );
 
-		if ( false === $cached ) {
+		/*
+		 * The cooldown is what keeps a broken feed from becoming a broken site.
+		 * A failed refresh writes no transient, so without it every request with
+		 * a cold cache called the API again and waited out the 15-second timeout
+		 * - and the REST route this also serves needs no login, so one client
+		 * could hold a PHP worker per request for as long as it liked. The token
+		 * loses data access every 90 days unless somebody renews the Data Use
+		 * Checkup, which makes this the expected state, not the unlucky one.
+		 *
+		 * The marker is claimed BEFORE the call, so a burst of visitors arriving
+		 * on a cold cache sends one request to Facebook rather than one each.
+		 *
+		 * Only this path is gated. The cron and the "refresh now" button in the
+		 * settings screen call refresh() straight, because somebody asking for
+		 * fresh data should get an attempt, not a cached refusal.
+		 */
+		if ( false === $cached && false === get_transient( $cooldown_key ) ) {
+			set_transient( $cooldown_key, time(), self::FAILURE_COOLDOWN );
+
 			$this->refresh();
 			$cached = get_transient( $transient_key );
 		}
@@ -177,6 +210,7 @@ class FacebookFeedService {
 		update_option( self::OPTION_LAST_SYNC, time() );
 		update_option( self::OPTION_LAST_ERROR, '' );
 		update_option( self::OPTION_FAIL_COUNT, 0 );
+		delete_transient( BlockCache::FACEBOOK_FEED_PREFIX . self::COOLDOWN_SUFFIX );
 
 		// Mock page info for testing the header UI.
 		update_option(
@@ -230,6 +264,9 @@ class FacebookFeedService {
 		update_option( self::OPTION_LAST_ERROR, '' );
 		update_option( self::OPTION_FAIL_COUNT, 0 );
 
+		// The API answered, so stop holding the render path back.
+		delete_transient( BlockCache::FACEBOOK_FEED_PREFIX . self::COOLDOWN_SUFFIX );
+
 		// Also refresh page info (name, picture).
 		$this->refresh_page_info( $page_id, $token );
 
@@ -264,6 +301,14 @@ class FacebookFeedService {
 		if ( $count >= self::FAIL_THRESHOLD ) {
 			update_option( self::OPTION_LAST_ERROR, $message );
 		}
+
+		/*
+		 * Set here as well as in the render path, so a failure reached through
+		 * the cron or the settings button also spares visitors the next call.
+		 * The counter above decides when an administrator is told; this decides
+		 * how often anybody asks Facebook again.
+		 */
+		set_transient( BlockCache::FACEBOOK_FEED_PREFIX . self::COOLDOWN_SUFFIX, time(), self::FAILURE_COOLDOWN );
 	}
 
 	/**

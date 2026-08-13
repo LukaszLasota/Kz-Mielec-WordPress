@@ -10,6 +10,7 @@
  * @var array $attributes Block attributes.
  */
 
+use CustomBlockPackage\I18n\Locale;
 use CustomBlockPackage\Services\FacebookFeedService;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,6 +33,13 @@ $wrapper_extra = array(
 	'class'            => 'has-columns-' . $columns,
 	'style'            => '--cbp-fb-height: ' . (int) $container_height . 'px;',
 	'data-endpoint'    => rest_url( 'custom-block-package/v1/facebook-feed' ),
+	/*
+	 * Carried to the REST route by view.js. The route cannot work the language
+	 * out for itself — `/wp-json/…` has no language prefix, so Polylang answers
+	 * in the default language and the scrolled-in posts came back Polish on
+	 * every translated page.
+	 */
+	'data-lang'        => Locale::current_slug(),
 	'data-offset'      => (string) $initial_cnt,
 	'data-has-more'    => $has_more ? 'true' : 'false',
 	'data-show-images' => $show_images ? 'true' : 'false',

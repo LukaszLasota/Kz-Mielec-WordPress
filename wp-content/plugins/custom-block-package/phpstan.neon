@@ -9,13 +9,24 @@ parameters:
     # gone with it. While they were here PHPStan refused to start at all — "Path ... is
     # neither a directory, nor a file path" — so the plugin had a quality gate that could
     # not run, which reads exactly like a gate that passes.
+    # Every block template except one. `custom-svg/render.php` is missing on
+    # purpose: analysing it reports 22 errors — 21 of them the return of
+    # preg_replace()/preg_match() being passed straight on where a string is
+    # wanted, and one real defect, `$target_id` used on a path where it was
+    # never assigned. They are not fixed here because that file is being taken
+    # apart separately; adding it before then would leave a gate that cannot
+    # pass, which is worse than a gate with a hole somebody wrote down.
     paths:
         - index.php
         - app/
+        - src/blocks/accordion-item/render.php
+        - src/blocks/custom-accordion/render.php
         - src/blocks/dynamic-images/render.php
+        - src/blocks/facebook-feed/render.php
         - src/blocks/image-text/render.php
         - src/blocks/map-block/render.php
         - src/blocks/navigable-tiles/render.php
+        - src/blocks/scroll-arrow/render.php
         - src/blocks/section-block/render.php
     excludePaths:
         - vendor/
