@@ -32,9 +32,9 @@ if ( ! function_exists( 'sanitize_svg_content_custom' ) ) {
 		}
 
 		// Pre-kses sanitization for things kses doesn't catch.
-		$svg = preg_replace( '/<!DOCTYPE[^>]*>/i', '', $svg );
-		$svg = preg_replace( '/<!ENTITY[^>]*>/i', '', $svg );
-		$svg = preg_replace( '/<!--(.|\s)*?-->/', '', $svg );
+		$svg = (string) preg_replace( '/<!DOCTYPE[^>]*>/i', '', $svg );
+		$svg = (string) preg_replace( '/<!ENTITY[^>]*>/i', '', $svg );
+		$svg = (string) preg_replace( '/<!--(.|\s)*?-->/', '', $svg );
 
 		// Define allowed SVG elements and attributes - medium level.
 		$allowed_svg_tags = array(
@@ -262,6 +262,14 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 		// Generate unique ID for SVG if needed for styles.
 		$unique_id = 'svg-' . uniqid();
 
+		/*
+		 * Initialised here rather than inside the branch below, which is where it
+		 * used to live. The style block further down reads it OUTSIDE that
+		 * branch, so an SVG whose opening tag the regex failed to match produced
+		 * a selector of `# * {` and a PHP warning about an undefined variable.
+		 */
+		$target_id = $unique_id;
+
 		// Find the SVG tag using regular expression.
 		if ( preg_match( '/<svg[^>]*>/', $svg_content, $svg_tag ) ) {
 			$original_svg_tag = $svg_tag[0];
@@ -269,13 +277,12 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 
 			// Always force aria-hidden="true" on the SVG itself.
 			if ( preg_match( '/\baria-hidden\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
-				$new_svg_tag = preg_replace( '/\baria-hidden\s*=\s*["\'][^"\']*["\']/i', 'aria-hidden="true"', $new_svg_tag );
+				$new_svg_tag = (string) preg_replace( '/\baria-hidden\s*=\s*["\'][^"\']*["\']/i', 'aria-hidden="true"', $new_svg_tag );
 			} else {
 				$new_svg_tag = str_replace( '<svg', '<svg aria-hidden="true"', $new_svg_tag );
 			}
 
-			// Ensure we have a consistent ID to use in CSS selector.
-			$target_id = $unique_id;
+			// An id already in the markup wins over the generated one.
 			if ( $apply_color_to_all && ( $svg_fill || $svg_stroke ) ) {
 				if ( preg_match( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $new_svg_tag, $id_match ) ) {
 					// Use existing ID if found.
@@ -289,7 +296,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 			// Add dimensions as attributes if specified.
 			if ( $svg_width ) {
 				if ( preg_match( '/\bwidth\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
-					$new_svg_tag = preg_replace( '/\bwidth\s*=\s*["\'][^"\']*["\']/i', 'width="' . $svg_width . '"', $new_svg_tag );
+					$new_svg_tag = (string) preg_replace( '/\bwidth\s*=\s*["\'][^"\']*["\']/i', 'width="' . $svg_width . '"', $new_svg_tag );
 				} else {
 					$new_svg_tag = str_replace( '<svg', '<svg width="' . $svg_width . '"', $new_svg_tag );
 				}
@@ -297,7 +304,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 
 			if ( $svg_height ) {
 				if ( preg_match( '/\bheight\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
-					$new_svg_tag = preg_replace( '/\bheight\s*=\s*["\'][^"\']*["\']/i', 'height="' . $svg_height . '"', $new_svg_tag );
+					$new_svg_tag = (string) preg_replace( '/\bheight\s*=\s*["\'][^"\']*["\']/i', 'height="' . $svg_height . '"', $new_svg_tag );
 				} else {
 					$new_svg_tag = str_replace( '<svg', '<svg height="' . $svg_height . '"', $new_svg_tag );
 				}
@@ -307,7 +314,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 			if ( ! $apply_color_to_all ) {
 				if ( $svg_fill ) {
 					if ( preg_match( '/\bfill\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
-						$new_svg_tag = preg_replace( '/\bfill\s*=\s*["\'][^"\']*["\']/i', 'fill="' . $svg_fill . '"', $new_svg_tag );
+						$new_svg_tag = (string) preg_replace( '/\bfill\s*=\s*["\'][^"\']*["\']/i', 'fill="' . $svg_fill . '"', $new_svg_tag );
 					} else {
 						$new_svg_tag = str_replace( '<svg', '<svg fill="' . $svg_fill . '"', $new_svg_tag );
 					}
@@ -315,7 +322,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 
 				if ( $svg_stroke ) {
 					if ( preg_match( '/\bstroke\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
-						$new_svg_tag = preg_replace( '/\bstroke\s*=\s*["\'][^"\']*["\']/i', 'stroke="' . $svg_stroke . '"', $new_svg_tag );
+						$new_svg_tag = (string) preg_replace( '/\bstroke\s*=\s*["\'][^"\']*["\']/i', 'stroke="' . $svg_stroke . '"', $new_svg_tag );
 					} else {
 						$new_svg_tag = str_replace( '<svg', '<svg stroke="' . $svg_stroke . '"', $new_svg_tag );
 					}
@@ -326,7 +333,7 @@ if ( ! function_exists( 'apply_svg_attributes' ) ) {
 			if ( $extra_class ) {
 				if ( preg_match( '/\bclass\s*=\s*["\'][^"\']*["\']/i', $new_svg_tag ) ) {
 					// If SVG already has a class attribute, add our classes.
-					$new_svg_tag = preg_replace(
+					$new_svg_tag = (string) preg_replace(
 						'/\bclass\s*=\s*["\']([^"\']*)["\']/i',
 						'class="$1 ' . esc_attr( $extra_class ) . '"',
 						$new_svg_tag

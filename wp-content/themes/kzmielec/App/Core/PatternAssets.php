@@ -37,7 +37,21 @@ class PatternAssets implements ActionHookInterface {
 	 */
 	public function register_add_action(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_pattern_assets' ) );
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_pattern_assets' ) );
+
+		/*
+		 * `enqueue_block_assets` rather than `enqueue_block_editor_assets`, and
+		 * the difference is which document the CSS lands in. The editor canvas
+		 * is an iframe; the editor's own interface is not. `_editor_assets`
+		 * belongs to the interface, `_block_assets` runs inside the canvas.
+		 *
+		 * This was not visibly broken, and the measurement is worth recording so
+		 * nobody undoes it. WordPress copies the parent document's style queue
+		 * into the iframe as a compatibility path, so three of our four pattern
+		 * stylesheets did arrive — but `banner-hero-style.css` did not, and that
+		 * path has been on its way out of Gutenberg for a while. On the correct
+		 * hook all four are in the canvas because they belong there.
+		 */
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_editor_pattern_assets' ) );
 	}
 
 	/**
@@ -187,6 +201,12 @@ class PatternAssets implements ActionHookInterface {
 	 * @return void
 	 */
 	public function enqueue_editor_pattern_assets(): void {
+		// `enqueue_block_assets` fires on the front end too, where the selective
+		// path above already loads only the patterns a page actually uses.
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$theme_dir = get_template_directory();
 		$theme_uri = get_template_directory_uri();
 

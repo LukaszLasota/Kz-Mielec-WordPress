@@ -33,6 +33,7 @@ $wrapper_extra = array(
 	'class'            => 'has-columns-' . $columns,
 	'style'            => '--cbp-fb-height: ' . (int) $container_height . 'px;',
 	'data-endpoint'    => rest_url( 'custom-block-package/v1/facebook-feed' ),
+
 	/*
 	 * Carried to the REST route by view.js. The route cannot work the language
 	 * out for itself — `/wp-json/…` has no language prefix, so Polylang answers
