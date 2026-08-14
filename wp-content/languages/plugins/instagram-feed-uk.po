@@ -1,0 +1,47 @@
+# Ukrainian translation of the Instagram Feed plugin, made by hand.
+#
+# Why this file exists: translate.wordpress.org has no Ukrainian language pack
+# for `instagram-feed` at all (pl_PL, es_ES and en_GB are offered, uk is not),
+# so on /uk/ the feed fell back to English while the rest of the page was
+# Ukrainian.
+#
+# Only the strings a visitor can actually see are here. The plugin also carries
+# `aria-label="Play"` and `aria-label="Clone"` inside two inline SVG icons, but
+# both are hardcoded in PHP rather than passed through a translation function,
+# and both sit on elements marked `aria-hidden="true"` — nobody reads them.
+#
+# If WordPress ever ships an official Ukrainian pack it will overwrite this
+# file. That is the right outcome, and worth knowing before someone wonders
+# where their edits went.
+msgid ""
+msgstr ""
+"Project-Id-Version: Instagram Feed\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: kzmielec.pl\n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Domain: instagram-feed\n"
+
+#. The accessible name of the feed region, read by a screen reader.
+msgid "Instagram feed"
+msgstr "Стрічка Instagram"
+
+#. The button under the feed that loads the next batch of posts.
+msgid "Load More"
+msgstr "Завантажити ще"
+
+#. Same button, the variant with an ellipsis.
+msgid "Load More..."
+msgstr "Завантажити ще…"
+
+#. Link to the congregation's Instagram profile.
+msgid "Follow on Instagram"
+msgstr "Підписатися в Instagram"
+
+#. Opens a post in the lightbox.
+msgid "Open"
+msgstr "Відкрити"

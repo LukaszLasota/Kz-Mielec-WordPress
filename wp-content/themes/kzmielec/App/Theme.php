@@ -55,6 +55,9 @@ class Theme {
 		// The social feeds carry the congregation's Polish posts on every language
 		// version, so they have to declare `lang="pl"` — WCAG 3.1.2.
 		Core\SocialFeedLanguage::class,
+		// Smash Balloon's stylesheet never reaches the editor canvas, so the
+		// Instagram block rendered there as a full-width blue SVG. See the class.
+		Core\EditorFeedStyles::class,
 		// One source for the congregation's contact details, fed into block content
 		// through the core Block Bindings API. Before this, the address, phone number,
 		// tax number, e-mail and bank account existed in four independent copies — one

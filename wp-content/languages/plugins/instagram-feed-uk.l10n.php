@@ -1,0 +1,2 @@
+<?php
+return ['domain'=>'instagram-feed','plural-forms'=>'nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);','language'=>'uk','project-id-version'=>'Instagram Feed','pot-creation-date'=>'2026-08-14T14:27:25+02:00','po-revision-date'=>'2026-08-14T14:27:25+02:00','messages'=>['Instagram feed'=>'Стрічка Instagram','Load More'=>'Завантажити ще','Load More...'=>'Завантажити ще…','Follow on Instagram'=>'Підписатися в Instagram','Open'=>'Відкрити']];
