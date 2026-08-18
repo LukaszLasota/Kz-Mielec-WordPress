@@ -96,3 +96,20 @@ htaccess.htaccess
 # for the repository will be in English, and then this entry either goes away or
 # gains an exception for the chosen files.
 docs/
+
+# Translation packs that WordPress manages itself. It downloads and updates them
+# on its own schedule, so the repository only ever holds a stale copy: on
+# 2026-08-18 production had 1082 strings for the Instagram feed in en_GB where
+# the tracked file had 192. Restore on a fresh install with
+# `wp language core install pl_PL en_GB uk es_ES` and
+# `wp language plugin update --all`.
+#
+# One exception stays tracked, and it matters: the Ukrainian pack for the
+# Instagram feed is written by hand, because translate.wordpress.org has none.
+# Nothing would bring that file back.
+/wp-content/languages/*
+!/wp-content/languages/plugins/
+/wp-content/languages/plugins/*
+!/wp-content/languages/plugins/instagram-feed-uk.l10n.php
+!/wp-content/languages/plugins/instagram-feed-uk.mo
+!/wp-content/languages/plugins/instagram-feed-uk.po
