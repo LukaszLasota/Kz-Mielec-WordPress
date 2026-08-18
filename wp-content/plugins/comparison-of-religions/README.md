@@ -144,6 +144,81 @@ The importer creates Polish content. Translations are produced afterwards by
 translating topics without their terms leaves translated rows filed under Polish
 categories, which shows up as nine Polish headings above English content.
 
+## Shipped seed data
+
+`data/seed/{pl,en,uk,es}.json` carry the whole comparison — 37 topics and 9
+categories per language — so the plugin can be installed somewhere else and
+arrive with its content. The files are the starting point, not a live source:
+the import writes them into the database once and lets go, and everything after
+that is edited in the admin as usual.
+
+```bash
+wp comparison-of-religions seed status                 # what would happen here
+wp comparison-of-religions seed import --dry-run
+wp comparison-of-religions seed import
+wp comparison-of-religions seed import --lang=uk
+wp comparison-of-religions seed export                 # database -> files
+```
+
+### Polylang is optional
+
+The seed works with Polylang, without it, and across it being switched on later.
+The states, all of which are tested:
+
+| State | Import |
+|---|---|
+| No Polylang | only `pl.json`; nothing is given a language |
+| Polylang configured | every file whose language the site has, then the versions are linked |
+| Polylang added afterwards | the existing Polish records are given a language and the other languages are linked TO them, not duplicated beside them |
+| Site has fewer languages than there are files | the extra files are reported as unused, which is not an error |
+| Site language slug is not two letters | `en-gb` and `es-mx` are served by `en.json` and `es.json`; `de` and `pt_BR` are reported as having no file rather than served the wrong one |
+
+Two operations are refused when Polylang is inactive on a database that still
+holds several languages, because nothing can tell them apart: `export`, which
+would pour four languages into the source file, and `import --overwrite`, which
+would write Polish over whichever translation it found first. Plain `import`
+stays safe in that state.
+
+### What protects existing content
+
+Every record the import creates carries `_cor_seed_key` (its identity across
+languages) and `_cor_seed_hash` (the content as written). A second run creates
+nothing. `--overwrite` refreshes only records that this import made and nobody
+has edited since — anything else is counted as hand-edited and skipped, and that
+includes content the import never made, which is the safe reading of a record
+with no hash.
+
+A slug that is already taken by somebody else's topic is therefore adopted, not
+overwritten and not duplicated: it keeps its title and its churches, it is
+counted as hand-edited, and it becomes the source-language member of that
+topic's translation group. Tested. The consequence is worth knowing before it
+surprises anyone — the seed's own text for that one topic never arrives, and the
+site shows the existing post instead. Adopting was chosen over the alternative,
+which is a second topic with a `-2` slug and the same heading twice in the
+accordion.
+
+### Three defects these tests found
+
+Worth keeping, because each is the kind of thing that looks fine until a second
+site exists:
+
+- **Polylang assigns the default language to every newly inserted post.** A post
+  created for the English file therefore already claims to be Polish, and a
+  "never override an existing language" rule silently left it that way.
+- **Polylang's query filters do not run under WP-CLI**, and do not run at all for
+  a post type it has not been told to translate. Trusting `'lang' => $lang` in a
+  query linked all four languages to the same post, and made an export write 148
+  topics into each of four files instead of 37. Both sides now verify the
+  language of each record instead.
+- **`taxonomy_exists( 'language' )` is false while the terms are still there.**
+  Deactivating Polylang unregisters the taxonomy without deleting anything, so
+  the guard that refuses an export in that state has to ask the table directly.
+
+`app/Integrations/PolylangTypes.php` exists because of the second one: it
+declares the post type and taxonomy translatable through `pll_get_post_types`
+and `pll_get_taxonomies`, so the plugin behaves the same on a site where nobody
+ticked any box.
+
 ## Build
 
 ```bash

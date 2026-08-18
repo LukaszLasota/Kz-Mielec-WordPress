@@ -1,0 +1,774 @@
+{
+    "version": 1,
+    "language": "es",
+    "categories": [
+        {
+            "key": "bog",
+            "name": "Dios",
+            "slug": "dios-es",
+            "order": 1,
+            "parent": null
+        },
+        {
+            "key": "dar-zbawienia",
+            "name": "El don de la salvación",
+            "slug": "el-don-de-la-salvacion-es",
+            "order": 3,
+            "parent": null
+        },
+        {
+            "key": "eschatologia",
+            "name": "Escatología",
+            "slug": "escatologia-es",
+            "order": 8,
+            "parent": null
+        },
+        {
+            "key": "kanon-wiary",
+            "name": "El canon de la fe",
+            "slug": "el-canon-de-la-fe-es",
+            "order": 2,
+            "parent": null
+        },
+        {
+            "key": "kosciol",
+            "name": "Iglesia",
+            "slug": "iglesia-es",
+            "order": 6,
+            "parent": null
+        },
+        {
+            "key": "kult-i-swieta",
+            "name": "El culto y las fiestas",
+            "slug": "el-culto-y-las-fiestas-es",
+            "order": 7,
+            "parent": null
+        },
+        {
+            "key": "liturgia",
+            "name": "Liturgia",
+            "slug": "liturgia-es",
+            "order": 4,
+            "parent": null
+        },
+        {
+            "key": "sakramenty",
+            "name": "Los sacramentos",
+            "slug": "los-sacramentos-es",
+            "order": 5,
+            "parent": null
+        },
+        {
+            "key": "wychowanie-i-etyka",
+            "name": "Educación y ética",
+            "slug": "educacion-y-etica-es",
+            "order": 9,
+            "parent": null
+        }
+    ],
+    "topics": [
+        {
+            "key": "aborcja",
+            "title": "Aborto",
+            "slug": "aborto",
+            "sort_order": 2,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El aborto es un pecado.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El aborto es un pecado.</p>"
+                }
+            ]
+        },
+        {
+            "key": "bierzmowanie",
+            "title": "Confirmación",
+            "slug": "confirmacion",
+            "sort_order": 6,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El sacramento de la confirmación del fiel (unción con el crisma), que previamente había recibido el bautismo, se había reconciliado con Dios en el sacramento de la penitencia y había comulgado</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El fiel, tras su conversión (a menudo antes del bautismo), durante la oración comunitaria o individual, recibe la unción del Espíritu Santo (el bautismo en el Espíritu Santo), que se manifiesta en forma de dones de gracia (carismas).</p>"
+                }
+            ]
+        },
+        {
+            "key": "bog",
+            "title": "Dios",
+            "slug": "dios",
+            "sort_order": 1,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La Santísima Trinidad. El Dios Trino: Padre, Hijo y el Espíritu Santo</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La Santísima Trinidad. El Dios Trino: Padre, Hijo y el Espíritu Santo</p>"
+                }
+            ]
+        },
+        {
+            "key": "chrzest",
+            "title": "El bautismo",
+            "slug": "el-bautismo",
+            "sort_order": 3,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>En el nombre del Padre, del Hijo y del Espíritu Santo.</p><p>Perdona el pecado original y todos los pecados cometidos antes del bautismo.</p><p>Es necesario para la salvación</p><p>Se administra fundamentalmente a los niños (bebés)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>En el nombre del Padre, del Hijo y del Espíritu Santo.</p><p>El bautismo para la remisión de los pecados</p><p>El bautismo es un mandamiento del Señor, y su necesidad es indiscutible. El bautismo se considera el acto culminante del proceso del renacimiento.</p><p>El bautismo no solo señala la conversión y otras realidades espirituales (como: el lavado y la liberación de los pecados, la purificación de la conciencia de todas las culpas que la agobian, la resurrección a una nueva vida, etc.), sino que las atestigua y las hace realidad en el ámbito espiritual.</p><p>Se administra a quienes se han arrepentido, se han convertido y han creído en Jesús como Señor y Salvador personal (el papel esencial de la experiencia del encuentro con Dios). Puede administrarse a los niños, pero solo cuando son conscientes de su fe.</p>"
+                }
+            ]
+        },
+        {
+            "key": "czysciec-i-odpusty",
+            "title": "El purgatorio y las indulgencias",
+            "slug": "el-purgatorio-y-las-indulgencias",
+            "sort_order": 3,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El purgatorio (el proceso de purificación, no el lugar), el anteporche del cielo. El purgatorio está destinado a aquellos que fallecieron en estado de gracia santificante, pero que en el momento de la muerte no tenían una relación ordenada con las cosas creadas. Con el estado del Purgatorio están relacionadas las indulgencias, que contribuyen a reducir o a eliminar por completo el castigo purificador del Purgatorio.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El rechazo de la creencia en el purgatorio y en la función de las indulgencias. Dios, junto con el perdón de los pecados, concedió también al pecador el castigo que le correspondía por los pecados cometidos.</p>"
+                }
+            ]
+        },
+        {
+            "key": "duch-swiety",
+            "title": "el Espíritu Santo",
+            "slug": "el-espiritu-santo",
+            "sort_order": 4,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Persona divina, digna de veneración; Descenso del Espíritu Santo en Pentecostés (origen de la Iglesia)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Persona divina, digna de veneración; Descenso del Espíritu Santo en Pentecostés (origen de la Iglesia)</p>"
+                }
+            ]
+        },
+        {
+            "key": "eucharystia",
+            "title": "La Eucaristía",
+            "slug": "la-eucaristia",
+            "sort_order": 4,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Celebrada bajo las dos especies<br>Se administra a los fieles normalmente bajo una sola especie (pan/hostia)</p><p>La Eucaristía como sacrificio</p><p>La fe en la transubstanciación, por la que el pan y el vino se transforman en el Cuerpo y la Sangre</p><p>La adoración del Pan eucarístico se celebra mediante cultos especiales y la fiesta del Corpus Christi (fiesta del Cuerpo y la Sangre de Cristo)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Celebrada bajo las dos especies<br>Administrada a los fieles bajo las dos especies</p><p>La Cena del Señor como comunión (koinonia)</p><p>La fe en la presencia espiritual de Cristo en el pan y el vino, que para quienes los reciben constituyen la comunión con el Cuerpo y la Sangre de Cristo</p><p>El pan consagrado con la Palabra de Dios y la oración no se adora en ninguna de sus formas</p>"
+                }
+            ]
+        },
+        {
+            "key": "eutanazja",
+            "title": "Eutanasia",
+            "slug": "eutanasia",
+            "sort_order": 3,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La eutanasia es un pecado.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La eutanasia es un pecado.</p>"
+                }
+            ]
+        },
+        {
+            "key": "homoseksualizm",
+            "title": "Homosexualidad",
+            "slug": "homosexualidad",
+            "sort_order": 4,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La homosexualidad es un pecado.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La homosexualidad es un pecado.</p>"
+                }
+            ]
+        },
+        {
+            "key": "ilosc-sakramentow",
+            "title": "Número de sacramentos",
+            "slug": "numero-de-sacramentos",
+            "sort_order": 1,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Siete: el bautismo, la Eucaristía, la confirmación, la penitencia, el matrimonio, el sacerdocio y la unción de los enfermos</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Dos: el bautismo y la eucaristía</p>"
+                }
+            ]
+        },
+        {
+            "key": "istota-sakramentow",
+            "title": "La esencia de los sacramentos",
+            "slug": "la-esencia-de-los-sacramentos",
+            "sort_order": 2,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Actúan ex opere operato. Su eficacia radica en la concesión de la gracia por el mero hecho de la acción. La fe de quien recibe el sacramento, aunque se exige, no es necesaria, como ocurre en el caso del bautismo de los niños (en ese caso se habla de la fe de la Iglesia, de los padrinos...).</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La eficacia del sacramento depende de la fe de quien lo recibe. Por lo tanto, queda excluido el principio ex opere operato.</p>"
+                }
+            ]
+        },
+        {
+            "key": "jezus",
+            "title": "Jesús",
+            "slug": "jesus-2",
+            "sort_order": 3,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El Mesías, el Señor, el Salvador, el Hijo Unigénito de Dios. Como una sola persona, posee dos naturalezas que, sin embargo, no se mezclan. Es plenamente Dios y plenamente hombre.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El Mesías, el Señor, el Salvador, el Hijo Unigénito de Dios. Como una sola persona, posee dos naturalezas que, sin embargo, no se mezclan. Es plenamente Dios y plenamente hombre.</p>"
+                }
+            ]
+        },
+        {
+            "key": "kaplanstwo",
+            "title": "El sacerdocio",
+            "slug": "el-sacerdocio",
+            "sort_order": 8,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El sacerdocio universal. La distinción entre el clero y el pueblo</p><p>El celibato es obligatorio para todos los clérigos</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Los hombres ordenados para el ministerio (pastores) se encargan de oficiar el culto</p><p>El celibato no es obligatorio. Se recomienda que el pastor sea casado y padre de familia</p>"
+                }
+            ]
+        },
+        {
+            "key": "kult",
+            "title": "Culto",
+            "slug": "culto",
+            "sort_order": 1,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El sujeto central del culto es Dios, a quien se dirigen las oraciones y a quien los fieles adoran.</p><p>Es recomendable que se celebre la misa a diario, y se anima a los fieles a participar en ella. Además de la misa, los fieles tienen a su disposición muchas otras formas litúrgicas, que varían según el tiempo litúrgico (cultos en honor a los santos, especialmente a la Virgen María; el Vía Crucis, los «gorzki żale», los círculos del rosario, etc.). Los fieles disponen de numerosas posibilidades para expresar su devoción, adaptadas a sus necesidades y sensibilidades.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El sujeto central del culto es Dios, a quien se dirigen las oraciones y a quien adoran los fieles.</p><p>Los fieles se reúnen en los cultos principales los domingos y otros días de la semana. El resto de cultos consisten en encuentros de oración, alabanza, reflexión bíblica, enseñanza y grupos de apoyo. No es necesario que estas reuniones sean dirigidas por una persona ordenada (un clérigo).</p>"
+                }
+            ]
+        },
+        {
+            "key": "kult-zmarlych",
+            "title": "El culto a los difuntos",
+            "slug": "el-culto-a-los-difuntos",
+            "sort_order": 5,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Los difuntos son rodeados de oraciones, se implora a Dios que les conceda su gracia y se celebran misas con esta intención.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Los difuntos no necesitan oraciones, ya que su destino ya ha sido decidido por Dios y es irrevocable.</p>"
+                }
+            ]
+        },
+        {
+            "key": "liturgia-glowna",
+            "title": "Liturgia principal",
+            "slug": "liturgia-principal",
+            "sort_order": 1,
+            "categories": [
+                "liturgia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La misa como sacrificio incruento (estrechamente vinculado al único sacrificio ofrecido en la Cruz)</p><p>Celebrada por un sacerdote ordenado en la Iglesia</p><p>Liturgia elaborada. Es necesario respetar los ritos y las fórmulas de oración correspondientes</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La liturgia (el culto público a Dios), entendida como ofrenda de adoración y acción de gracias</p><p>La celebra la comunidad de fieles (sacerdocio universal) bajo la dirección de una persona ordenada</p><p>Gran espontaneidad y participación activa de los fieles. Entre las oraciones recitadas figuran, fundamentalmente: el «Padre Nuestro», los cánticos, los salmos y el «Credo». Oración comunitaria, improvisada y espontánea, con un papel destacado del canto (adoración). Además de la liturgia de la oración y de la Palabra, se celebra la Cena del Señor</p>"
+                }
+            ]
+        },
+        {
+            "key": "locum-kosciola",
+            "title": "La plaza de la iglesia",
+            "slug": "la-plaza-de-la-iglesia",
+            "sort_order": 4,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Las iglesias y capillas están decoradas</p><p>En ellas, las pinturas y las esculturas desempeñan un papel fundamental, al igual que los numerosos altares</p><p>El punto central lo constituyen el altar, el crucifijo y el sagrario, en el que se conserva el pan eucarístico.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>No hay indicaciones sobre la decoración de la capilla. Por lo general, son sencillas y austeras</p><p>Capillas sin imágenes de santos ni altares</p><p>El púlpito, la mesa de comunión y la cruz desempeñan una función importante. El presbiterio está abierto a los fieles. Las capillas disponen de calefacción; los fieles se quitan las prendas de abrigo (guardarropa)</p>"
+                }
+            ]
+        },
+        {
+            "key": "malzenstwo",
+            "title": "El matrimonio",
+            "slug": "el-matrimonio",
+            "sort_order": 9,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La unión entre un hombre y una mujer<br>Sacramento indisoluble. Existe una vía jurídica para declarar nulo un matrimonio, es decir, la sentencia de nulidad del sacramento del matrimonio.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Unión entre un hombre y una mujer<br>El divorcio está permitido en caso de que se demuestre el pecado de fornicación (infidelidad) de una de las partes.</p>"
+                }
+            ]
+        },
+        {
+            "key": "matka-chrystusa",
+            "title": "La Madre de Cristo",
+            "slug": "la-madre-de-cristo",
+            "sort_order": 3,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Es objeto de una devoción especial.</p><p>La Virgen María (Theotokos</p><p>Virgen Inmaculada (aparte de Jesús, no tuvo más hijos)</p><p>Abogada, Reina del Cielo, Consoladora. Se le dirigen oraciones (una de las más especiales es el rosario). La fe en su inmaculada concepción (nacimiento sin pecado original), su virginidad perpetua y su Asunción.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>María es un modelo de conducta y un ejemplo a seguir para el creyente. Los fieles solo rinden culto a Dios (Padre, Hijo y el Espíritu Santo), a quien dirigen sus oraciones. Por este motivo, la Madre del Señor no es objeto de ningún culto especial, y las formas de culto dirigidas a otras personas, aparte de Dios, se consideran idolatría.</p><p>Una parte de la comunidad acepta el título de Madre de Dios (Theotokos), aunque al mismo tiempo se hace en referencia a Jesucristo, como Dios encarnado.</p><p>Se reconoce su virginidad en el momento de la concepción y el nacimiento de Jesús. No se niega la posibilidad de que tuviera otros hijos además de Jesús</p><p>Se rechazan los títulos que no tienen confirmación en la Biblia y no se comparte la fe en la Inmaculada Concepción y la Asunción.</p>"
+                }
+            ]
+        },
+        {
+            "key": "namaszczenie-chorych",
+            "title": "Unción de los enfermos",
+            "slug": "uncion-de-los-enfermos",
+            "sort_order": 7,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Para la administración del sacramento se utiliza aceite consagrado</p><p>Sacramento administrado por el sacerdote a los enfermos, también conocido como «extremaunción»</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La oración por los enfermos suele ir acompañada de aceites para la unción, pero no es un requisito imprescindible para celebrar dicha oración.</p><p>La oración por los enfermos (y los necesitados) es un elemento habitual de la liturgia. Se organizan cultos especiales en los que la oración por esta intención ocupa un lugar central.</p>"
+                }
+            ]
+        },
+        {
+            "key": "ojciec",
+            "title": "Padre",
+            "slug": "padre",
+            "sort_order": 2,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Fuente de vida, Soberano, Misericordioso, Justo</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Fuente de vida, Soberano, Misericordioso, Justo</p>"
+                }
+            ]
+        },
+        {
+            "key": "pieklo-i-niebo",
+            "title": "El infierno y el cielo",
+            "slug": "el-infierno-y-el-cielo",
+            "sort_order": 2,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La fe en el cielo (la vida eterna) y el infierno (el estado de alejamiento de Dios).</p><p>El Juicio Final: el juicio universal</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La fe en el cielo (la vida eterna) y el infierno (el estado de alejamiento de Dios).</p><p>El Juicio Final, en el que serán juzgados todos los vivos y los muertos que, por diversas razones, no han conocido (ni han aceptado) a Jesús como Señor y Salvador.</p>"
+                }
+            ]
+        },
+        {
+            "key": "pismo-swiete",
+            "title": "la Escritura",
+            "slug": "la-escritura",
+            "sort_order": 1,
+            "categories": [
+                "kanon-wiary"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Nuevo Testamento: 27 libros<br>Antiguo Testamento: 39 libros<br>+ 7 libros deuterocanónicos<br>(canon alejandrino)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Nuevo Testamento: 27 libros<br>Antiguo Testamento: 39 libros<br>(canon palestino)</p>"
+                }
+            ]
+        },
+        {
+            "key": "poboznosc-indywidualna",
+            "title": "Devoción personal",
+            "slug": "devocion-personal",
+            "sort_order": 2,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El cultivo de la vida espiritual basado en los sacramentos. La oración basada en el rezo. En general, predominan las fórmulas aprendidas o leídas (el breviario). Esta devoción suele estar relacionada con el culto a los santos (por ejemplo, los patronos) y a la Madre de Cristo.</p><p>Observancia de los días de ayuno (miércoles y viernes).</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La lectura y la meditación de la Palabra de Dios, así como la oración, constituyen el centro de la vida espiritual del fiel. Predomina la oración improvisada, así como la oración basada en el Salterio (Salmos). Los dones del Espíritu Santo desempeñan un papel importante, especialmente el don de lenguas, recomendado para la oración individual. El ayuno se considera un ejercicio personal de piedad y, a menudo, implica la abstinencia total de alimentos (un día, varios o incluso más de una docena de días).</p><p>La Iglesia no impone el ayuno, aunque a veces lo recomienda con una intención concreta y común. Sin embargo, no hay consecuencias para quienes no lo practican.</p>"
+                }
+            ]
+        },
+        {
+            "key": "przystapienie-do-kosciola",
+            "title": "Incorporación a la Iglesia",
+            "slug": "incorporacion-a-la-iglesia",
+            "sort_order": 2,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La puerta de la Iglesia es el bautismo</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La puerta de acceso a la Iglesia es la experiencia de la conversión personal y la confianza en Jesús como Señor y Salvador. El acto culminante del renacimiento es el bautismo, que sella el perdón de los pecados e incorpora al fiel a la Iglesia.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-do-antykoncepcji",
+            "title": "Actitud ante la anticoncepción",
+            "slug": "actitud-ante-la-anticoncepcion",
+            "sort_order": 5,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Aceptación de los métodos naturales.</p><p>Rechazo de otros métodos</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Aceptación de los métodos naturales.</p><p>El uso de otros métodos y medios queda a la conciencia de los fieles (no están prohibidos), siempre y cuando los anticonceptivos no provoquen la muerte del embrión (ser humano) ni afecten negativamente al feto ni a la madre.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-do-sluzby-wojskowej",
+            "title": "Actitud ante el servicio militar",
+            "slug": "actitud-ante-el-servicio-militar",
+            "sort_order": 6,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El servicio militar no es algo malo. Hay que defender la patria y la propia vida, incluso a costa de matar a los enemigos agresores.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El cumplimiento del servicio militar se deja a la conciencia de los fieles.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-kosciola-do-panstwa",
+            "title": "La relación entre la Iglesia y el Estado",
+            "slug": "la-relacion-entre-la-iglesia-y-el-estado",
+            "sort_order": 5,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Anteriormente existía un estrecho vínculo entre la Iglesia y el Estado. En la actualidad, la Iglesia vela por la moral y también expresa su opinión en otros ámbitos importantes de la vida social.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Se hace hincapié en la separación entre la Iglesia y el Estado, señalando que la autoridad proviene de Dios, pero que la forma de gobernar es una creación del hombre.</p>"
+                }
+            ]
+        },
+        {
+            "key": "struktura",
+            "title": "Estructura",
+            "slug": "estructura",
+            "sort_order": 1,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La Iglesia es una realidad visible e invisible (mística). Al frente de la Iglesia está Jesucristo, Cabeza y fundamento de la Iglesia</p><p>En la estructura de la Iglesia visible, la cabeza es el obispo de Roma (el Papa), en su calidad de Vicarius Iesu Christi (sucesor de Jesucristo).</p><p>La estructura de la Iglesia es monárquica (feudal)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La Iglesia como realidad visible e invisible (mística). Al frente de la Iglesia está Jesucristo, Cabeza y fundamento de la Iglesia</p><p>En la estructura del movimiento pentecostal no existe ningún cargo que pueda compararse con la institución del papado. En cambio, se subraya que el Sucesor de Cristo en la tierra (Vicarius) es el Espíritu Santo.</p><p>Las congregaciones-parroquias gozan de gran autonomía en materia de personal (nombramientos de pastores y ancianos de la congregación, en cuestiones disciplinarias respecto a los miembros de la comunidad y en asuntos financieros)</p>"
+                }
+            ]
+        },
+        {
+            "key": "swieci",
+            "title": "Santos",
+            "slug": "santos",
+            "sort_order": 4,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>El término «santo» se utiliza para designar a una persona que, tras su muerte, ha sido reconocida como digna de la vida eterna y que ya se encuentra en el cielo (proceso de canonización).</p><p>Interceden por los fieles que viven en la tierra. Se puede, e incluso se debe, recurrir a su intercesión y ayuda, ya que, al vivir ya en la visión directa del Creador, pueden suplicarle que conceda gracias a la Iglesia.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El término «santos» se refiere al conjunto de los creyentes en Cristo. El concepto de «santo» no está reservado a los difuntos que vivieron con una fe irreprochable.</p><p>Se rechazan las oraciones de intercesión a los santos por considerarlas infundadas. El culto a los santos se considera una forma de idolatría.</p>"
+                }
+            ]
+        },
+        {
+            "key": "swieta",
+            "title": "Las fiestas",
+            "slug": "las-fiestas",
+            "sort_order": 6,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Domingo</p><p>El centro del año litúrgico lo constituye la Pascua, a la que precede un período de cuarenta días de Cuaresma, en el que el Triduo Pascual desempeña un papel especial. Durante el tiempo pascual, es obligación del fiel recibir el sacramento de la penitencia y la Eucaristía</p><p>Gran cantidad de fiestas y días festivos.</p><p>Con motivo de las fiestas, existe la posibilidad de obtener indulgencias.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Domingo</p><p>La fiesta más importante es la Pascua, lo que no significa que conllevara ninguna obligación especial para el fiel. A menudo se destaca el carácter anamnésico de la celebración. El culto de Pascua viene precedido por la liturgia del Viernes Santo (día festivo oficial), en la que los fieles se reúnen para rezar y meditar sobre el acontecimiento de la Cruz. Algunos fieles practican el ayuno ese día.</p><p>El número de fiestas es reducido. Las más importantes son: la Navidad (fiesta del Nacimiento del Señor) y la Pentecostés (fiesta del Espíritu Santo; día festivo oficial); suelen diferenciarse del resto de cultos principalmente por el sermón (ocasional). Además, las congregaciones celebran sus propias fiestas. La más común es el Día de Acción de Gracias (a finales de septiembre o principios de octubre), así como el aniversario de la fundación de la congregación y otras. Se hace mucho hincapié en que cada día es sagrado y festivo para un cristiano.</p><p>Las fiestas no guardan relación con la concesión de gracias divinas especiales.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wychowanie-religijne",
+            "title": "Educación religiosa",
+            "slug": "educacion-religiosa",
+            "sort_order": 1,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La responsabilidad de la educación religiosa recae, en primer lugar, en los padres y en la Iglesia.</p><p>Los niños que participan en las clases de religión ya han sido bautizados.</p><p>Las clases de religión son impartidas por catequistas en los colegios.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La responsabilidad de la educación religiosa recae en los padres y en la Iglesia.</p><p>Los niños que participan en la enseñanza religiosa suelen estar (en la mayoría de los casos) antes del bautismo; los bautismos antes de cumplir los 10 años son poco frecuentes; incluso tras completar la catequesis, parte de los jóvenes no se bautiza.</p><p>Las clases de religión (escuela dominical) las imparten los catequistas en los colegios, aunque, debido al escaso número de niños, es mucho más frecuente que se impartan en centros catequéticos adscritos a los colegios.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wykluczenie-z-kosciola",
+            "title": "Exclusión de la Iglesia",
+            "slug": "exclusion-de-la-iglesia",
+            "sort_order": 3,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La Iglesia tiene el derecho de excomulgar, del que pueden hacer uso, en determinadas circunstancias, el Papa y los obispos.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La congregación tiene derecho a excomulgar. Se expulsará de la congregación a toda persona que haya cometido faltas graves en materia de moral o de doctrina errónea, y cuyas amonestaciones previas no hayan surtido efecto.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wyznawanie-grzechow",
+            "title": "La confesión de los pecados",
+            "slug": "la-confesion-de-los-pecados",
+            "sort_order": 5,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Se lleva a cabo mediante el sacramento de la reconciliación (confesión); la absolución la concede el sacerdote.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>El fiel está obligado a confesar sus pecados ante Dios y a reconciliarse con el prójimo. Se practica la confesión general (durante el culto). Existe la posibilidad de recibir ayuda pastoral en caso de que se manifieste la voluntad de confesar las faltas. La conversación individual concluye con una oración o una petición de absolución.</p>"
+                }
+            ]
+        },
+        {
+            "key": "zbawienie",
+            "title": "La salvación",
+            "slug": "la-salvacion",
+            "sort_order": 1,
+            "categories": [
+                "dar-zbawienia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>Jesús, autor de la salvación. El don de la justificación otorgado por Dios por gracia</p><p>Para alcanzar la salvación, en el momento de la muerte hay que encontrarse en estado de gracia santificante</p><p>Hay que permanecer en unidad con la Iglesia</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>Jesús, autor de la salvación. El don de la justificación, otorgado por Dios por gracia</p><p>El don debe aceptarse por la fe y perseverar en ella (confiar en Dios). La base es reconocer la propia pecaminosidad y confesar los pecados ante Dios, así como confiar en Cristo, es decir, reconocer la suficiencia de la obra de salvación realizada por Jesús en la cruz.</p><p>El don de la salvación se concede independientemente de la pertenencia a una confesión religiosa concreta</p>"
+                }
+            ]
+        },
+        {
+            "key": "zrodla-objawienia",
+            "title": "Fuentes de la Revelación",
+            "slug": "fuentes-de-la-revelacion",
+            "sort_order": 2,
+            "categories": [
+                "kanon-wiary"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La Escritura<br>La Tradición<br>El Magisterio de la Iglesia<br>(la autoridad docente de la Iglesia)</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>la Escritura</p>"
+                }
+            ]
+        },
+        {
+            "key": "zycie-po-smierci",
+            "title": "La vida después de la muerte",
+            "slug": "la-vida-despues-de-la-muerte",
+            "sort_order": 1,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Iglesia Católica Romana",
+                    "description": "<p>La vida del alma tras la muerte del cuerpo. El juicio individual, que tiene lugar inmediatamente después de la muerte.</p><p>Según la creencia popular (aunque no según la teología), la vida eterna comienza en el momento de la muerte en el estado de gracia santificante.</p>"
+                },
+                {
+                    "church_name": "Iglesia Pentecostal",
+                    "description": "<p>La vida del alma tras la muerte del cuerpo. El juicio individual, que tiene lugar inmediatamente después de la muerte.</p><p>La vida eterna comienza en el momento en que se acepta el don de la salvación. Los creyentes en Cristo ya han sido juzgados al arrepentirse, convertirse y aceptar el don de la salvación. Sus obras deben ser juzgadas para que se pueda determinar la recompensa o imponer el castigo, lo cual, sin embargo, no implica el rechazo (la condenación).</p>"
+                }
+            ]
+        }
+    ]
+}

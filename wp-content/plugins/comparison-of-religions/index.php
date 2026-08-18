@@ -57,6 +57,8 @@ use ComparisonOfReligions\MetaBoxes\ChurchesMetaBox;
 use ComparisonOfReligions\Blocks\RegisterBlocks;
 use ComparisonOfReligions\Admin\AdminColumns;
 use ComparisonOfReligions\Cache\AccordionCache;
+use ComparisonOfReligions\Cli\SeedCommand;
+use ComparisonOfReligions\Integrations\PolylangTypes;
 
 // Load plugin translations from the /languages directory.
 add_action(
@@ -77,6 +79,7 @@ new ChurchesMeta();          // Registers post meta (churches, sort_order) and t
 new ChurchesMetaBox();       // Admin repeater meta box for editing church data per topic.
 new RegisterBlocks();        // Auto-scans build/blocks/ and registers all Gutenberg blocks.
 new AdminColumns();          // Adds custom columns (church count, sort order) to CPT admin list.
+new PolylangTypes();      // Declares the CPT and taxonomy translatable, so Polylang filters them.
 
 // Register admin submenu page under the CPT menu for data import/export.
 add_action(
@@ -219,6 +222,12 @@ register_activation_hook(
 		flush_rewrite_rules();
 	}
 );
+
+// WP-CLI access to the shipped seed files: `wp comparison-of-religions seed status|export|import`.
+// Not run on activation on purpose - see the command class for why.
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command( 'comparison-of-religions seed', SeedCommand::class );
+}
 
 // On deactivation: clean up rewrite rules.
 register_deactivation_hook(

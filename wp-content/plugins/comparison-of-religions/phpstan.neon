@@ -5,6 +5,11 @@ parameters:
     level: 8
     bootstrapFiles:
         - phpstan-bootstrap.php
+    # WP-CLI is not part of the WordPress stubs, and the seed command is real code
+    # that has to be analysed like the rest. Scanned rather than excluded: a gate
+    # that skips a file is a gate that reports success it did not earn.
+    scanFiles:
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
     paths:
         - index.php
         - uninstall.php

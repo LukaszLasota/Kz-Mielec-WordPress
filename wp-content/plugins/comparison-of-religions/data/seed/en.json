@@ -1,0 +1,774 @@
+{
+    "version": 1,
+    "language": "en",
+    "categories": [
+        {
+            "key": "bog",
+            "name": "God",
+            "slug": "god-en",
+            "order": 1,
+            "parent": null
+        },
+        {
+            "key": "dar-zbawienia",
+            "name": "The gift of salvation",
+            "slug": "the-gift-of-salvation-en",
+            "order": 3,
+            "parent": null
+        },
+        {
+            "key": "eschatologia",
+            "name": "Eschatology",
+            "slug": "eschatology-en",
+            "order": 8,
+            "parent": null
+        },
+        {
+            "key": "kanon-wiary",
+            "name": "The Canon of Faith",
+            "slug": "the-canon-of-faith-en",
+            "order": 2,
+            "parent": null
+        },
+        {
+            "key": "kosciol",
+            "name": "Church",
+            "slug": "church-en",
+            "order": 6,
+            "parent": null
+        },
+        {
+            "key": "kult-i-swieta",
+            "name": "Religion and festivals",
+            "slug": "religion-and-festivals-en",
+            "order": 7,
+            "parent": null
+        },
+        {
+            "key": "liturgia",
+            "name": "Liturgy",
+            "slug": "liturgy-en",
+            "order": 4,
+            "parent": null
+        },
+        {
+            "key": "sakramenty",
+            "name": "The Sacraments",
+            "slug": "the-sacraments-en",
+            "order": 5,
+            "parent": null
+        },
+        {
+            "key": "wychowanie-i-etyka",
+            "name": "Education and Ethics",
+            "slug": "education-and-ethics-en",
+            "order": 9,
+            "parent": null
+        }
+    ],
+    "topics": [
+        {
+            "key": "aborcja",
+            "title": "Abortion",
+            "slug": "abortion",
+            "sort_order": 2,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Abortion is a sin.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Abortion is a sin.</p>"
+                }
+            ]
+        },
+        {
+            "key": "bierzmowanie",
+            "title": "Confirmation",
+            "slug": "confirmation",
+            "sort_order": 6,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The sacrament of confirmation for a believer (anointing with chrism) who has previously been baptised, has been reconciled with God through the sacrament of penance, and has received the Eucharist</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>After their conversion (often before baptism), believers receive the anointing of the Holy Spirit (baptism in the Holy Spirit) during communal or individual prayer, which manifests itself in the form of gifts of grace (charisms)</p>"
+                }
+            ]
+        },
+        {
+            "key": "bog",
+            "title": "God",
+            "slug": "god",
+            "sort_order": 1,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The Trinity. The Triune God: the Father, the Son and the Holy Spirit</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The Trinity. The Triune God: the Father, the Son and the Holy Spirit</p>"
+                }
+            ]
+        },
+        {
+            "key": "chrzest",
+            "title": "Baptism",
+            "slug": "baptism",
+            "sort_order": 3,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>In the name of the Father, and of the Son, and of the Holy Spirit.</p><p>It absolves original sin and all sins committed before baptism.</p><p>Essential for salvation</p><p>Generally administered to children (infants)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>In the name of the Father, and of the Son, and of the Holy Spirit.</p><p>Baptism for the forgiveness of sins</p><p>Baptism is a commandment of the Lord, and its necessity is beyond dispute. Baptism is regarded as the final act in the process of being born again.</p><p>Baptism not only points to conversion and other spiritual realities (such as: washing away and deliverance from sins, the cleansing of the conscience from all burdensome guilt, resurrection to new life, etc.), but it also attests to them and brings them to fruition in the spiritual realm.</p><p>It is administered to those who have repented, been converted and believed in Jesus as their personal Lord and Saviour (the experience of an encounter with God plays a vital role). It may be administered to children, but only once they are conscious of their faith.</p>"
+                }
+            ]
+        },
+        {
+            "key": "czysciec-i-odpusty",
+            "title": "Purgatory and indulgences",
+            "slug": "purgatory-and-indulgences",
+            "sort_order": 3,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Purgatory (the process of purification, not a place), the antechamber of heaven. Purgatory is intended for those who died in a state of sanctifying grace but, at the moment of death, had not put their relationship with created things in order. Indulgences are associated with the state of Purgatory; they contribute to the reduction or complete remission of the purifying punishment of Purgatory.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Rejection of the belief in purgatory and the role of indulgences. Along with the sins, God also bestowed upon the sinner the punishment he deserved for the sins he had committed.</p>"
+                }
+            ]
+        },
+        {
+            "key": "duch-swiety",
+            "title": "the Holy Spirit",
+            "slug": "the-holy-spirit",
+            "sort_order": 4,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>A divine, venerable person; the Descent of the Holy Spirit on the day of Pentecost (the beginning of the Church)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>A divine, venerable person; the Descent of the Holy Spirit on the day of Pentecost (the beginning of the Church)</p>"
+                }
+            ]
+        },
+        {
+            "key": "eucharystia",
+            "title": "The Eucharist",
+            "slug": "the-eucharist",
+            "sort_order": 4,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Celebrated in both forms<br>usually administered to the faithful in one form (bread/wafer)</p><p>The Eucharist as a sacrifice</p><p>Belief in transubstantiation, whereby bread and wine are transformed into the Body and Blood</p><p>Adoration of the Eucharistic Bread is marked by special services and the Feast of Corpus Christi (Feast of the Body and Blood of Christ)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Celebrated in the two forms<br>administered to the faithful in the two forms</p><p>The Lord&#x27;s Supper as fellowship (koinonia)</p><p>Belief in the spiritual presence of Christ in the bread and wine, which for those who receive them constitute communion with the Body and Blood of Christ</p><p>Bread consecrated by the Word of God and prayer is not adored in any form</p>"
+                }
+            ]
+        },
+        {
+            "key": "eutanazja",
+            "title": "Euthanasia",
+            "slug": "euthanasia",
+            "sort_order": 3,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Euthanasia is a sin.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Euthanasia is a sin.</p>"
+                }
+            ]
+        },
+        {
+            "key": "homoseksualizm",
+            "title": "Homosexuality",
+            "slug": "homosexuality",
+            "sort_order": 4,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Homosexuality is a sin.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Homosexuality is a sin.</p>"
+                }
+            ]
+        },
+        {
+            "key": "ilosc-sakramentow",
+            "title": "Number of sacraments",
+            "slug": "number-of-sacraments",
+            "sort_order": 1,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Seven: Baptism, the Eucharist, Confirmation, Penance, Matrimony, Holy Orders, Anointing of the Sick</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Two: Baptism and the Eucharist</p>"
+                }
+            ]
+        },
+        {
+            "key": "istota-sakramentow",
+            "title": "The Nature of the Sacraments",
+            "slug": "the-nature-of-the-sacraments",
+            "sort_order": 2,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>They operate ex opere operato. Their efficacy lies in the bestowal of grace by virtue of the act itself. The faith of the person receiving the sacrament, whilst required, is not essential, as is the case with the baptism of infants (in which case one speaks of the faith of the Church, the godparents, etc.)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The efficacy of the sacrament depends on the faith of the recipient. The principle of ex opere operato is therefore ruled out.</p>"
+                }
+            ]
+        },
+        {
+            "key": "jezus",
+            "title": "Jesus",
+            "slug": "jesus",
+            "sort_order": 3,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The Messiah, the Lord, the Saviour, the Only-Begotten Son of God. As a single person, He possesses two natures, which, however, do not mix. He is fully God and fully Man.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The Messiah, the Lord, the Saviour, the Only-Begotten Son of God. As a single person, He possesses two natures, which, however, do not mix. He is fully God and fully Man.</p>"
+                }
+            ]
+        },
+        {
+            "key": "kaplanstwo",
+            "title": "The Priesthood",
+            "slug": "the-priesthood",
+            "sort_order": 8,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The universal priesthood. The division between the clergy and the laity</p><p>Celibacy is compulsory for all clergy</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Men ordained to the ministry (pastors) are responsible for conducting services</p><p>Celibacy is not required. It is recommended that a pastor be a husband and a father</p>"
+                }
+            ]
+        },
+        {
+            "key": "kult",
+            "title": "Cult",
+            "slug": "cult",
+            "sort_order": 1,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The central focus of worship is God, to whom prayers are addressed and whom the faithful adore.</p><p>It is recommended that Mass be celebrated daily, and the faithful are called upon to take part in it. In addition to Mass, the faithful have access to many other liturgical forms, which vary according to the liturgical season (services in honour of the saints, particularly the Blessed Virgin Mary; the Stations of the Cross, Lamentations, Rosary groups, etc.). The faithful have many opportunities to express their piety, tailored to their needs and sensibilities.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>God is the central focus of worship; prayers are directed towards him and the faithful worship him.</p><p>The faithful gather for main services on Sundays and on other days of the week. Other services take the form of prayer meetings, worship sessions, Bible study sessions, teaching sessions and support groups. It is not necessary for these gatherings to be led by an ordained minister.</p>"
+                }
+            ]
+        },
+        {
+            "key": "kult-zmarlych",
+            "title": "The cult of the dead",
+            "slug": "the-cult-of-the-dead",
+            "sort_order": 5,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The deceased are surrounded by prayer; people implore God to grant them grace, and Masses are celebrated for this intention.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The dead do not need our prayers, because their fate has already been decided by God and is irrevocable.</p>"
+                }
+            ]
+        },
+        {
+            "key": "liturgia-glowna",
+            "title": "Main liturgy",
+            "slug": "main-liturgy",
+            "sort_order": 1,
+            "categories": [
+                "liturgia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The Mass as a bloodless sacrifice (closely linked to the single sacrifice offered on the Cross)</p><p>Celebrated by a priest ordained within the Church</p><p>An elaborate liturgy. It is essential to observe the appropriate rites and prayer formulas</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The Liturgy (public worship of God), understood as a sacrifice of worship and thanksgiving</p><p>It is celebrated by the whole community of the faithful (the universal priesthood) under the leadership of an ordained minister</p><p>A high degree of spontaneity, with active participation by the faithful. The prayers recited generally include: the Lord’s Prayer, hymns, Psalms and the Creed. Communal prayer, improvised and spontaneous, with singing playing a major role (worship). In addition to the Liturgy of the Word and Prayer, the Lord&#x27;s Supper is celebrated</p>"
+                }
+            ]
+        },
+        {
+            "key": "locum-kosciola",
+            "title": "The church’s location",
+            "slug": "the-churchs-location",
+            "sort_order": 4,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Churches and chapels are decorated</p><p>Paintings and sculptures, as well as numerous altars, play an important role in them</p><p>The focal point is the altar, the crucifix and the tabernacle, in which the Eucharistic Bread is kept.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>There are no specific guidelines regarding the interior design of the chapels. They are usually simple and austere</p><p>Chapels devoid of images of saints and altars</p><p>The pulpit, communion table and cross play an important role. The chancel is accessible to the congregation. The chapels are heated; the congregation remove their outer garments (cloakroom)</p>"
+                }
+            ]
+        },
+        {
+            "key": "malzenstwo",
+            "title": "Marriage",
+            "slug": "marriage",
+            "sort_order": 9,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The union of a man and a woman<br>An indissoluble sacrament. There is a legal procedure for declaring a marriage to be invalid, that is, a declaration of the nullity of the sacrament of marriage.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Marriage between a man and a woman<br>Divorce is permitted where there is evidence of adultery (infidelity) on the part of one of the parties</p>"
+                }
+            ]
+        },
+        {
+            "key": "matka-chrystusa",
+            "title": "The Mother of Christ",
+            "slug": "the-mother-of-christ",
+            "sort_order": 3,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>She is the object of a special devotion.</p><p>The Mother of God (Theotokos</p><p>Immaculate Virgin (she had no other children apart from Jesus)</p><p>Advocate, Queen of Heaven, Comforter. Prayers are addressed to her (the Rosary is a special form of such prayer). Belief in her Immaculate Conception (birth without original sin), perpetual virginity and Assumption.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Mary is a model of conduct and an example for the faithful to follow. The faithful direct their worship exclusively towards God (the Father, the Son and the Holy Spirit), to whom they address their prayers. For this reason, the Mother of the Lord is not the object of any special worship, and any form of worship directed at anyone other than God is described as idolatry.</p><p>Some accept the title ‘Mother of God’ (Theotokos), though this is done in reference to Jesus Christ as God Incarnate.</p><p>Her virginity at the time of Jesus’ conception and birth is recognised. The possibility of her having other children besides Jesus is not denied</p><p>Titles not confirmed in the Bible are rejected, and the beliefs in the Immaculate Conception and the Assumption are not shared.</p>"
+                }
+            ]
+        },
+        {
+            "key": "namaszczenie-chorych",
+            "title": "The Anointing of the Sick",
+            "slug": "the-anointing-of-the-sick",
+            "sort_order": 7,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Consecrated oil is used to administer the sacrament</p><p>The sacrament administered by a priest to the sick, also known as ‘the last rites’</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Prayers for the sick are often accompanied by oils used for anointing, but this is not a prerequisite for offering such a prayer.</p><p>Prayer for the sick (and those in need) is a common feature of the liturgy. Special services are organised in which prayer for this intention is the central focus.</p>"
+                }
+            ]
+        },
+        {
+            "key": "ojciec",
+            "title": "Father",
+            "slug": "father",
+            "sort_order": 2,
+            "categories": [
+                "bog"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Source of Life, Sovereign, Merciful, Just</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Source of Life, Sovereign, Merciful, Just</p>"
+                }
+            ]
+        },
+        {
+            "key": "pieklo-i-niebo",
+            "title": "Hell and Heaven",
+            "slug": "hell-and-heaven",
+            "sort_order": 2,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Belief in heaven (eternal life) and hell (a state of separation from God).</p><p>The Last Judgement: the universal dimension</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Belief in heaven (eternal life) and hell (a state of separation from God).</p><p>The Last Judgement, at which all the living and the dead who, for various reasons, have not come to know (or accepted) Jesus as Lord and Saviour will be judged.</p>"
+                }
+            ]
+        },
+        {
+            "key": "pismo-swiete",
+            "title": "Scripture",
+            "slug": "scripture",
+            "sort_order": 1,
+            "categories": [
+                "kanon-wiary"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>New Testament: 27 books<br>Old Testament: 39 books<br>+ 7 deuterocanonical books<br>(Alexandrian canon)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>New Testament: 27 books<br>Old Testament: 39 books<br>(Palestinian canon)</p>"
+                }
+            ]
+        },
+        {
+            "key": "poboznosc-indywidualna",
+            "title": "Personal piety",
+            "slug": "personal-piety",
+            "sort_order": 2,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Nurturing spiritual life through the sacraments. Prayer based on the rosary. Generally, memorised or recited formulas (the breviary) predominate. This form of piety is often linked to the veneration of saints (e.g. patron saints) and the Mother of Christ.</p><p>Observing days of fasting (Wednesdays, Fridays)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The reading and meditation on the Word of God, together with prayer, form the centre of the believer’s spiritual life. Spontaneous prayer predominates, as does prayer based on the Psalter (Psalms). The gifts of the Holy Spirit play a significant role, particularly the gift of tongues, which is recommended for individual prayer. Fasting is regarded as a personal exercise in piety, often involving complete abstinence from food (for a day, several days or even over a dozen days).</p><p>The Church does not impose fasting, although it sometimes recommends it for a specific, common intention. However, there are no consequences for those who do not observe it.</p>"
+                }
+            ]
+        },
+        {
+            "key": "przystapienie-do-kosciola",
+            "title": "Joining the church",
+            "slug": "joining-the-church",
+            "sort_order": 2,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Baptism is the gateway to the Church</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The gateway to the Church is the experience of personal conversion and placing one’s trust in Jesus as one’s Lord and Saviour. The final act of being born again is baptism, which seals the forgiveness of sins and incorporates the believer into the Church.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-do-antykoncepcji",
+            "title": "Attitudes towards contraception",
+            "slug": "attitudes-towards-contraception",
+            "sort_order": 5,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Acceptance of natural methods.</p><p>Rejection of other methods</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Acceptance of natural methods.</p><p>The use of other methods and means is left to the conscience of the faithful (they are not prohibited), provided, however, that contraceptive methods do not result in the death of the embryo (a human being) and do not adversely affect the foetus or the mother.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-do-sluzby-wojskowej",
+            "title": "Attitudes towards military service",
+            "slug": "attitudes-towards-military-service",
+            "sort_order": 6,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Military service is not a bad thing. One must defend one’s homeland and one’s life, even if it means killing aggressor enemies.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The decision to perform military service is left to the conscience of the faithful.</p>"
+                }
+            ]
+        },
+        {
+            "key": "stosunek-kosciola-do-panstwa",
+            "title": "The Church’s relationship with the state",
+            "slug": "the-churchs-relationship-with-the-state",
+            "sort_order": 5,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>In the past, there was a close link between the Church and the state. Today, the Church acts as a guardian of morality and also expresses its views on other important aspects of social life.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The separation of Church and State is emphasised, drawing attention to the fact that authority comes from God, but the way in which it is exercised is a human invention</p>"
+                }
+            ]
+        },
+        {
+            "key": "struktura",
+            "title": "Structure",
+            "slug": "structure",
+            "sort_order": 1,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The Church is both a visible and an invisible (mystical) reality. Jesus Christ, the Head and Foundation of the Church, stands at the head of the Church</p><p>Within the structure of the visible Church, the head is the Bishop of Rome (the Pope), as Vicarius Iesu Christi (the successor of Jesus Christ).</p><p>The structure of the Church is monarchical (feudal)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The Church as a visible and invisible (mystical) reality. Jesus Christ, the Head and Foundation of the Church, stands at the head of the Church</p><p>Within the structure of the Pentecostal movement, there is no office comparable to the institution of the papacy. Instead, it is emphasised that the Holy Spirit is Christ’s Vicar on earth.</p><p>Congregations enjoy a high degree of autonomy in personnel matters (appointments to the office of pastor and church elders, disciplinary matters concerning members of the congregation, and financial matters)</p>"
+                }
+            ]
+        },
+        {
+            "key": "swieci",
+            "title": "Saints",
+            "slug": "saints",
+            "sort_order": 4,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The term ‘saint’ is used to refer to a person who, after death, has been recognised as worthy of eternal life and is now in heaven (the canonisation process).</p><p>They intercede on behalf of the faithful living on earth. One may, and indeed should, seek their intercession and assistance, for, living now in the direct presence of the Creator, they can implore Him to grant graces to the Church.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The term ‘saints’ refers to all those who believe in Christ. The concept of a ‘saint’ is not reserved for the deceased who lived a life of impeccable faith.</p><p>Intercessory prayers to the saints are rejected as pointless. The veneration of saints is regarded as a form of idolatry.</p>"
+                }
+            ]
+        },
+        {
+            "key": "swieta",
+            "title": "Christmas",
+            "slug": "christmas",
+            "sort_order": 6,
+            "categories": [
+                "kult-i-swieta"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Sunday</p><p>Easter forms the centre of the liturgical year, preceded by a forty-day period of Lent, during which the Easter Triduum plays a special role. During the Easter season, it is the duty of the faithful to receive the sacrament of penance and the Eucharist</p><p>There are a large number of feast days and public holidays.</p><p>On the occasion of these feasts, it is possible to receive indulgences.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Sunday</p><p>Easter is the most important festival, though this does not imply that the faithful have any particular obligations associated with it. The commemorative nature of the celebration is often emphasised. The Easter service is preceded by the Good Friday liturgy (a statutory public holiday), during which the faithful gather for prayer and reflection on the events of the Cross. Some of the faithful fast on this day.</p><p>There are few public holidays. The most important are: Christmas (the Feast of the Nativity of the Lord) and Pentecost (Whitsun; a statutory public holiday); these services usually differ from other services in that they feature a special sermon (occasional). In addition, congregations celebrate their own festivals. The most common is Thanksgiving (late September/early October), as well as the anniversary of the congregation’s founding and others. It is strongly emphasised that every day is holy and a festival for a Christian.</p><p>These holidays are not associated with the bestowal of special divine grace.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wychowanie-religijne",
+            "title": "Religious education",
+            "slug": "religious-education",
+            "sort_order": 1,
+            "categories": [
+                "wychowanie-i-etyka"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The responsibility for religious education rests primarily with parents and the Church.</p><p>Children attending religious education classes have been baptised.</p><p>Religious education lessons are taught by catechists in schools</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The responsibility for religious education lies with parents and the Church.</p><p>Children attending religious instruction are (in most cases) not yet baptised; baptisms before the age of 10 are rare; even after completing their catechism classes, some young people do not go forward for baptism.</p><p>Religious education classes (Sunday School) are run by catechists in schools, though far more often, due to the small number of children, at catechism centres affiliated with schools.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wykluczenie-z-kosciola",
+            "title": "Excommunication",
+            "slug": "excommunication",
+            "sort_order": 3,
+            "categories": [
+                "kosciol"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The Church has the power of excommunication, which may be exercised by the Pope and the bishops in specific circumstances</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The congregation has the right to excommunication. A person who has committed gross moral offences or held erroneous doctrines, and for whom previous admonitions have proved ineffective, shall be expelled from the congregation.</p>"
+                }
+            ]
+        },
+        {
+            "key": "wyznawanie-grzechow",
+            "title": "Confession of sins",
+            "slug": "confession-of-sins",
+            "sort_order": 5,
+            "categories": [
+                "sakramenty"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>It is carried out through the sacrament of reconciliation (confession); absolution is granted by a priest</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The faithful are obliged to confess their sins to God and to seek reconciliation with their neighbours. General confession is practised (during the service). Pastoral assistance is available for those who wish to confess their sins. The individual conversation concludes with a prayer or a request for absolution.</p>"
+                }
+            ]
+        },
+        {
+            "key": "zbawienie",
+            "title": "Salvation",
+            "slug": "salvation",
+            "sort_order": 1,
+            "categories": [
+                "dar-zbawienia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Jesus, the author of salvation. The gift of justification bestowed by God through grace</p><p>To receive salvation, one must be in a state of sanctifying grace at the moment of death</p><p>One must remain in communion with the Church</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Jesus, the author of salvation. The gift of justification bestowed by God through grace</p><p>The gift must be accepted by faith and one must remain in that faith (trust in God). The foundation lies in recognising one’s own sinfulness, confessing one’s sins to God, and trusting in Christ – that is, recognising the sufficiency of the work of salvation accomplished by Jesus on the cross.</p><p>The gift of salvation is granted regardless of one’s affiliation with a particular denomination</p>"
+                }
+            ]
+        },
+        {
+            "key": "zrodla-objawienia",
+            "title": "Sources of Revelation",
+            "slug": "sources-of-revelation",
+            "sort_order": 2,
+            "categories": [
+                "kanon-wiary"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>Scripture<br>Tradition<br>the Magisterium of the Church<br>(the Church’s Teaching Authority)</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>Scripture</p>"
+                }
+            ]
+        },
+        {
+            "key": "zycie-po-smierci",
+            "title": "Life after death",
+            "slug": "life-after-death",
+            "sort_order": 1,
+            "categories": [
+                "eschatologia"
+            ],
+            "churches": [
+                {
+                    "church_name": "Roman Catholic Church",
+                    "description": "<p>The life of the soul after the death of the body. The particular judgement, which takes place immediately after death.</p><p>According to popular belief (though not in theology), eternal life begins at the moment of death whilst in a state of sanctifying grace.</p>"
+                },
+                {
+                    "church_name": "Pentecostal Church",
+                    "description": "<p>The life of the soul after the death of the body. The individual judgement that takes place immediately after death.</p><p>Eternal life begins at the moment one accepts the gift of salvation. Believers in Christ were judged when they repented, were converted and accepted the gift of salvation. Their deeds must be judged so that a reward may be bestowed or a punishment meted out; this, however, does not imply rejection (condemnation).</p>"
+                }
+            ]
+        }
+    ]
+}
