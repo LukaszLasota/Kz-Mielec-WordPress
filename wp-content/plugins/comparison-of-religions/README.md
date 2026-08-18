@@ -197,6 +197,24 @@ site shows the existing post instead. Adopting was chosen over the alternative,
 which is a second topic with a `-2` slug and the same heading twice in the
 accordion.
 
+### Verified against
+
+- Polylang **free 3.8.7** on WordPress 7.0.4, PHP 8.3 - the full matrix.
+- Polylang **Pro 3.7.3** (which bundles its own core 3.7.3, so an older core came
+  with it) - same matrix, same result, no code change needed. Every Polylang
+  function this plugin calls lives in the free plugin's `src/api.php`, which Pro
+  ships inside its `vendor/`, so Pro is a superset rather than a different
+  implementation.
+- Pro's two features that could plausibly interfere, both tested with the feature
+  switched **on**: *duplicate content* changes nothing, because that module hooks
+  the block editor (`use_block_editor_for_post`) and never `wp_insert_post`; and
+  *share slug* leaves the four versions distinct, correctly languaged and
+  correctly linked, since identity here is the seed key and never the slug. Worth
+  knowing from that run: WordPress still appends `-2`, `-3`, `-4` when several
+  languages ask for one slug, and that is harmless for the same reason.
+
+Not verified: multisite, and Polylang versions other than those two.
+
 ### Three defects these tests found
 
 Worth keeping, because each is the kind of thing that looks fine until a second
