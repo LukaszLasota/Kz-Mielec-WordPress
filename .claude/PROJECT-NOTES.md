@@ -96,6 +96,16 @@ some other stylesheets do arrive, by a compatibility path rather than by design.
 **A database import bypasses WordPress**, so no cache is invalidated. After one, purge
 explicitly.
 
+**There are two caches in front of the denominations accordion, and purging the wrong one
+looks like a change that did not take.** The block caches its rendered output in transients,
+invalidated by `save_post_comparison_topic` and the matching term hooks. `update_post_meta()`
+fires none of them, so content written from WP-CLI is correct in the database and invisible
+on the page. Measured on 2026-08-18 while filling a missing Ukrainian translation: the meta
+read back exactly as intended, `wp litespeed-purge all` changed nothing, and the page kept
+serving the old markup until `ComparisonOfReligions\Cache\AccordionCache::flush()` was
+called. Editing through the admin never shows this, because that path goes through
+`save_post`.
+
 **Domain search-replace after pulling production: only with the `https://` prefix.** A bare
 `kzmielec.pl → kzmielec.ddev.site` also rewrites `zbor@kzmielec.pl` into a dead address, and
 a wrong e-mail looks exactly like a right one.
