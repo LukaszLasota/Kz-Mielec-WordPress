@@ -8,6 +8,51 @@ import markerShadowUrl from './images/marker-shadow.png';
 import { TILE_PROVIDERS, getTileProvider } from './tile-providers';
 import './index.scss';
 
+/*
+ * Make Leaflet's dragging work inside the editor's canvas iframe.
+ *
+ * This script runs in the editor window, but the map lives in the canvas
+ * iframe. Leaflet's Draggable binds its mousemove/mouseup listeners to the
+ * global `document` - the editor window's - so it saw moves only while the
+ * pointer was over the sidebar (and a click never ended, because the mouseup
+ * fired in the iframe). Gutenberg also re-dispatches some iframe events to the
+ * window with shifted coordinates, and the two sources disagreeing is what made
+ * the map jump while panning.
+ *
+ * So once a drag starts, its listeners are moved to the document the dragged
+ * element actually belongs to. Only the editor bundle is patched; the front end
+ * has one document and keeps stock Leaflet.
+ */
+const MOVE_EVENTS = 'mousemove touchmove';
+const END_EVENTS = 'mouseup touchend touchcancel';
+if (!L.Draggable.prototype._cbpOwnDocument) {
+    const onDown = L.Draggable.prototype._onDown;
+    const finishDrag = L.Draggable.prototype.finishDrag;
+
+    L.Draggable.prototype._onDown = function (e) {
+        onDown.call(this, e);
+        const doc = this._element.ownerDocument;
+        if (L.Draggable._dragging !== this || !doc || doc === document) {
+            return;
+        }
+        L.DomEvent.off(document, MOVE_EVENTS, this._onMove, this);
+        L.DomEvent.off(document, END_EVENTS, this._onUp, this);
+        L.DomEvent.on(doc, MOVE_EVENTS, this._onMove, this);
+        L.DomEvent.on(doc, END_EVENTS, this._onUp, this);
+    };
+
+    L.Draggable.prototype.finishDrag = function (noInertia) {
+        const doc = this._element.ownerDocument;
+        if (doc && doc !== document) {
+            L.DomEvent.off(doc, MOVE_EVENTS, this._onMove, this);
+            L.DomEvent.off(doc, END_EVENTS, this._onUp, this);
+        }
+        finishDrag.call(this, noInertia);
+    };
+
+    L.Draggable.prototype._cbpOwnDocument = true;
+}
+
 // Same values as MapLocation::PLACEHOLDER_* in PHP, and block.json's defaults.
 const PLACEHOLDER_LAT = 50.299071;
 const PLACEHOLDER_LNG = 21.4483254;
@@ -79,12 +124,9 @@ const Edit = ({ attributes, setAttributes }) => {
             shadowSize: [41, 41],
         });
 
-        // No panning in the editor: the published map is always centred on the
-        // pin, so a panned preview saved nothing and only misled. Panning was
-        // also where the preview jumped - Leaflet takes mouse moves from both the
-        // canvas iframe and the editor window, which measure from different
-        // origins. The pin stays draggable, and zooming writes the Zoom setting.
-        const map = L.map(mapContainer.current, { dragging: false, scrollWheelZoom: false }).setView([latitude, longitude], zoom);
+        // The wheel scrolls the editor, not the map; the +/- buttons zoom it and
+        // write the Zoom setting, so what the preview shows is what gets saved.
+        const map = L.map(mapContainer.current, { scrollWheelZoom: false }).setView([latitude, longitude], zoom);
         mapInstance.current = map;
         map.on('zoomend', () => setAttributes({ zoom: map.getZoom() }));
         applyTiles(map, tileStyle);
@@ -105,13 +147,10 @@ const Edit = ({ attributes, setAttributes }) => {
             setAttributes({ latitude: lat, longitude: lng });
         });
 
-        // Fix drag getting "stuck" in the block editor. Leaflet listens for the
-        // end of a drag on the editor's own `document`, but the map lives in the
-        // canvas iframe, so the mouseup never arrives. A plain click on the map
-        // left a drag armed, and the next mouse move over the sidebar dragged the
-        // map by hundreds of pixels - the "jump". So any release or leaving the
-        // map ends whichever of this map's drags is armed, moving or not.
-        // finishDrag() fires `dragend`, so a dragged pin still saves its spot.
+        // Backstop for the patch at the top of this file: a release outside the
+        // canvas (over the sidebar) or leaving the map ends whichever of this
+        // map's drags is armed, so none is ever left running. finishDrag() fires
+        // `dragend`, so a dragged pin still saves its spot.
         const abortDrag = () => {
             const active = L.Draggable._dragging;
             const ours = [map.dragging?._draggable, marker.current?.dragging?._draggable];
@@ -122,6 +161,10 @@ const Edit = ({ attributes, setAttributes }) => {
         const container = map.getContainer();
         const docs = [container.ownerDocument, window.document];
         container.addEventListener('mouseleave', abortDrag);
+        // A release outside the browser window reaches no document at all, so a
+        // drag can still be left armed; the next press on the map ends it first
+        // (capture phase, before Leaflet's own mousedown handler).
+        container.addEventListener('mousedown', abortDrag, true);
 
 
         docs.forEach((doc) => {
@@ -140,6 +183,7 @@ const Edit = ({ attributes, setAttributes }) => {
 
         cleanupDragFix.current = () => {
             container.removeEventListener('mouseleave', abortDrag);
+            container.removeEventListener('mousedown', abortDrag, true);
             docs.forEach((doc) => {
                 doc.removeEventListener('mouseup', abortDrag);
                 doc.removeEventListener('pointerup', abortDrag);
