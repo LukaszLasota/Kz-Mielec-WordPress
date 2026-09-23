@@ -49,9 +49,9 @@
 	/*
 	 * Say where the text is edited. A bound paragraph looks like any other, and a
 	 * read-only one that ignores typing reads as a broken editor. So every block
-	 * bound to this source gets a dashed outline with a label in the canvas
-	 * (styles in ContactBindings::canvas_styles()) and a sidebar panel with a
-	 * button to the settings screen.
+	 * bound to this source gets a dashed outline in the canvas (styles in
+	 * ContactBindings::canvas_styles()) and a sidebar panel with a button to the
+	 * settings screen.
 	 */
 	var hooks = wp.hooks;
 	var compose = wp.compose;

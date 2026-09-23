@@ -378,7 +378,7 @@ class ContactBindings implements ActionHookInterface {
 	}
 
 	/**
-	 * Outline and label for bound blocks, inside the editor canvas only.
+	 * Dashed outline for bound blocks, inside the editor canvas only.
 	 *
 	 * On `enqueue_block_assets`, the one hook whose styles reach the canvas iframe
 	 * (see PROJECT-NOTES), and only in the admin, so the front end never gets it.
@@ -395,9 +395,10 @@ class ContactBindings implements ActionHookInterface {
 		wp_enqueue_style( $handle );
 		wp_add_inline_style(
 			$handle,
-			'.kzmielec-bound-contact{outline:0.0625rem dashed #7a00df;outline-offset:0.25rem;position:relative}'
-			. '.kzmielec-bound-contact::after{content:"' . esc_attr__( 'Dane kontaktowe', 'kzmielec' ) . '";position:absolute;top:-1.1rem;right:0;'
-			. 'font:600 0.6875rem/1.4 sans-serif;color:#fff;background:#7a00df;padding:0 0.375rem;border-radius:0.125rem;pointer-events:none}'
+			// Outline only. A label drawn with ::after was tried: the editor paints the
+			// selected block's frame with ::after too, inset 0, so on a click the label's
+			// background covered the whole paragraph.
+			'.kzmielec-bound-contact{outline:0.0625rem dashed #7a00df;outline-offset:0.25rem}'
 		);
 	}
 
