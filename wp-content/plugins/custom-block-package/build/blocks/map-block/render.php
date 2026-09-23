@@ -25,7 +25,7 @@ $containerHeight = isset( $attributes['containerHeight'] ) ? (int) $attributes['
 $popupText       = isset( $attributes['popupText'] ) ? $attributes['popupText'] : __( 'Nasza lokalizacja', 'custom-block-package' );
 
 // Keep in step with TILE_PROVIDERS in tile-providers.js.
-$allowed_styles = array( 'standard', 'satellite', 'terrain', 'esriStreet', 'esriTopo', 'esriGray', 'humanitarian' );
+$allowed_styles = array( 'standard', 'satellite', 'satelliteLabels', 'terrain', 'esriStreet', 'esriTopo', 'esriGray', 'humanitarian' );
 $tile_style     = isset( $attributes['tileStyle'] ) && in_array( $attributes['tileStyle'], $allowed_styles, true )
 	? $attributes['tileStyle']
 	: 'esriStreet';

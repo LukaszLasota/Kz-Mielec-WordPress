@@ -5,9 +5,9 @@
  * so the available map styles stay in one place. All providers are free and
  * require no API key.
  *
- * CARTO's styles (Voyager, Positron, Dark and the street-name overlay on the
- * satellite view) were removed on 2026-09-23: loaded from a website they now draw
- * "API KEY REQUIRED" across every tile. A block still saved with one of those keys
+ * CARTO's styles (Voyager, Positron, Dark) were removed on 2026-09-23: loaded
+ * from a website they now draw "API KEY REQUIRED" across every tile. The street
+ * names on the satellite view moved from CARTO to Esri the same day. A block still saved with one of those keys
  * falls back to DEFAULT_TILE_STYLE. Check a new provider from a browser on the
  * site, not with curl - CARTO answered curl with real tiles.
  */
@@ -26,6 +26,18 @@ export const TILE_PROVIDERS = {
 		label: 'Satelita (zdjęcia terenu)',
 		url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
 		options: { attribution: ESRI_ATTR, maxZoom: 19 },
+	},
+	satelliteLabels: {
+		label: 'Satelita + nazwy ulic',
+		url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+		options: { attribution: ESRI_ATTR, maxZoom: 19 },
+		// Esri's transportation reference layer: roads and street names on a
+		// transparent background. Replaces CARTO's label overlay, which now needs
+		// an API key; keyless like the imagery under it.
+		overlay: {
+			url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
+			options: { attribution: ESRI_ATTR, maxZoom: 19, pane: 'overlayPane' },
+		},
 	},
 	terrain: {
 		label: 'Teren / Topo',

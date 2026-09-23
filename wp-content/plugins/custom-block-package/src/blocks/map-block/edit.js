@@ -86,6 +86,14 @@ const Edit = ({ attributes, setAttributes }) => {
         marker.current = L.marker([latitude, longitude], { draggable: !fromContact }).addTo(map);
         marker.current.bindPopup(popupText);
 
+        // The editor's content CSS has `.wp-block img:not([draggable])
+        // { pointer-events: none }`, which outranks Leaflet's own rule and made the
+        // pin unclickable: grabbing it panned the map instead. An explicit
+        // draggable="false" takes the icon out of that selector and also stops
+        // the browser's native image drag, which Leaflet only blocks in its own
+        // window, not in the canvas iframe.
+        marker.current.getElement().setAttribute('draggable', 'false');
+
         marker.current.on('dragend', (e) => {
             const { lat, lng } = e.target.getLatLng();
             setAttributes({ latitude: lat, longitude: lng });
@@ -108,6 +116,8 @@ const Edit = ({ attributes, setAttributes }) => {
         const container = map.getContainer();
         const docs = [container.ownerDocument, window.document];
         container.addEventListener('mouseleave', abortDrag);
+
+
         docs.forEach((doc) => {
             doc.addEventListener('mouseup', abortDrag);
             doc.addEventListener('pointerup', abortDrag);
@@ -140,7 +150,11 @@ const Edit = ({ attributes, setAttributes }) => {
             return;
         }
         marker.current.setLatLng([latitude, longitude]);
-        mapInstance.current.panTo([latitude, longitude], { animate: false });
+        // Follow the pin only when it leaves the view: after dragging it a few
+        // streets the map should stay put, after typing a new town it should not.
+        if (!mapInstance.current.getBounds().contains([latitude, longitude])) {
+            mapInstance.current.panTo([latitude, longitude], { animate: false });
+        }
     }, [latitude, longitude]);
 
     useEffect(() => {

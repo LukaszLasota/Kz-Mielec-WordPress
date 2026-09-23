@@ -57,6 +57,7 @@
       "enum": [
         "standard",
         "satellite",
+        "satelliteLabels",
         "terrain",
         "esriStreet",
         "esriTopo",
