@@ -31,6 +31,7 @@ require_once UP_PLUGIN_DIR . 'app/Autoloader.php';
 use CustomBlockPackage\Admin\FacebookSettings;
 use CustomBlockPackage\Admin\MeetingMeta;
 use CustomBlockPackage\Assets\AssetsManager;
+use CustomBlockPackage\Blocks\MapEditorData;
 use CustomBlockPackage\Blocks\RegisterBlocks;
 use CustomBlockPackage\Cache\BlockCache;
 use CustomBlockPackage\Cron\FacebookFeedCron;
@@ -46,6 +47,7 @@ add_action(
 );
 
 new RegisterBlocks();
+new MapEditorData();
 new AssetsManager();
 new FacebookFeedCron();
 new FacebookFeedController();

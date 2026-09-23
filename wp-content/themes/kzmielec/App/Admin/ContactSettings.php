@@ -141,6 +141,17 @@ class ContactSettings implements ActionHookInterface {
 
 		update_option( ContactData::OPTION, $clean );
 
+		/*
+		 * The data is printed on every page - the four front pages through Block
+		 * Bindings and the maps, every page through the structured data - and a
+		 * page can stay in LiteSpeed's cache for seven days. Saving an option fires
+		 * none of its purge rules, so without this the site kept showing the old
+		 * address. A full purge, unlike FeedCachePurge's per-URL one, because every
+		 * URL is affected; it also re-versions the combined CSS, which is acceptable
+		 * for a change made a few times a year. A no-op without LiteSpeed.
+		 */
+		do_action( 'litespeed_purge_all' );
+
 		add_settings_error(
 			'kzmielec_contact',
 			'contact_saved',
