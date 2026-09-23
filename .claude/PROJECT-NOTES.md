@@ -175,6 +175,13 @@ The map block's location follows the contact settings through `MapLocation`, sha
 `render.php` and the editor (`MapEditorData` prints the settings' coordinates for it).
 Saving the contact settings purges LiteSpeed, because the data is on every page.
 
+**The text around the phone number is a setting, not a translation** (2026-09-23): the
+"Tekst przy telefonie" textarea in Dane kontaktowe, `{telefon}` = the number, one line per
+line, empty = the number alone. Other languages read it from Languages -> Translations
+("Kontakt: tekst przy telefonie"), keyed by the Polish text, so rewording it drops the
+translations and the foreign pages fall back to "Tel.: number" until they are re-entered.
+`scripts/translate-phone-text.php go` wrote the current en/uk/es versions.
+
 **Smash Balloon publishes expiring image URLs by default.** With `disable_js_image_loading`
 off, `src` holds Instagram's signed CDN address and the plugin's own resized copies are
 swapped in by JavaScript. Those signatures expire — verified 403 on a live page — and a
