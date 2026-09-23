@@ -7,7 +7,9 @@
  *
  * CARTO's styles (Voyager, Positron, Dark) were removed on 2026-09-23: loaded
  * from a website they now draw "API KEY REQUIRED" across every tile. The street
- * names on the satellite view moved from CARTO to Esri the same day. A block still saved with one of those keys
+ * names on the satellite view moved from CARTO to Esri the same day. OSM's own
+ * "Standard" went too: its servers answer a request without a Referer with an
+ * "Access blocked" tile, and the editor canvas iframe sends none. A block still saved with one of those keys
  * falls back to DEFAULT_TILE_STYLE. Check a new provider from a browser on the
  * site, not with curl - CARTO answered curl with real tiles.
  */
@@ -17,11 +19,6 @@ const ESRI_ATTR = 'Tiles &copy; <a href="https://www.esri.com/">Esri</a>, Maxar,
 const TOPO_ATTR = `${OSM_ATTR}, <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)`;
 
 export const TILE_PROVIDERS = {
-	standard: {
-		label: 'Standardowa (OSM)',
-		url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-		options: { attribution: OSM_ATTR, maxZoom: 19 },
-	},
 	satellite: {
 		label: 'Satelita (zdjęcia terenu)',
 		url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',

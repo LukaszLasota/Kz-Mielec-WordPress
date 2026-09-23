@@ -52,7 +52,6 @@
 			"type": "string",
 			"default": "esriStreet",
 			"enum": [
-				"standard",
 				"satellite",
 				"satelliteLabels",
 				"terrain",
