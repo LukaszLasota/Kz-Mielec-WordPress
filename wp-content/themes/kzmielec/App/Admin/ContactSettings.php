@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Kzmielec\Admin;
 
+use Kzmielec\Contact\ContactBindings;
 use Kzmielec\Contact\ContactData;
 use Kzmielec\Interfaces\ActionHookInterface;
 
@@ -123,7 +124,8 @@ class ContactSettings implements ActionHookInterface {
 			wp_die( esc_html__( 'Weryfikacja bezpieczeństwa nie powiodła się. Spróbuj ponownie.', 'kzmielec' ) );
 		}
 
-		$clean = array();
+		$old_phone_text = ContactData::get( 'phone_text' );
+		$clean          = array();
 
 		foreach ( array_keys( self::FIELDS ) as $key ) {
 			$field = 'kzmielec_contact_' . $key;
@@ -159,12 +161,56 @@ class ContactSettings implements ActionHookInterface {
 		 */
 		do_action( 'litespeed_purge_all' );
 
+		// A reworded phone text leaves the translations behind: Polylang keys them by the
+		// Polish text. Say so right away, with the way to fix it.
+		if ( ContactData::get( 'phone_text' ) !== $old_phone_text && '' !== ContactData::get( 'phone_text' ) ) {
+			add_settings_error(
+				'kzmielec_contact',
+				'phone_text_changed',
+				sprintf(
+					/* translators: %s: link to the string translations screen. */
+					__( 'Zmieniłeś tekst przy telefonie. Wersje en, uk i es pokazują teraz sam numer, dopóki nie wpiszesz tłumaczeń: %s', 'kzmielec' ),
+					'<a href="' . esc_url( ContactBindings::phone_text_translations_url() ) . '">' . esc_html__( 'Języki → Tłumaczenia napisów', 'kzmielec' ) . '</a>'
+				),
+				'warning'
+			);
+		}
+
 		add_settings_error(
 			'kzmielec_contact',
 			'contact_saved',
 			__( 'Dane kontaktowe zostały zapisane. Zmiana obowiązuje na wszystkich wersjach językowych.', 'kzmielec' ),
 			'updated'
 		);
+	}
+
+	/**
+	 * Translation status of the phone text, one mark per language, and the link.
+	 *
+	 * @return void
+	 */
+	private function phone_text_status(): void {
+		$status = ContactBindings::phone_text_translations();
+		if ( ! $status ) {
+			return;
+		}
+
+		$parts = array();
+		foreach ( $status as $language ) {
+			$parts[] = sprintf(
+				'<span style="color:%1$s">%2$s %3$s</span>',
+				$language['done'] ? '#1a7f37' : '#b32d2e',
+				$language['done'] ? '&#10003;' : '&#10007;',
+				esc_html( $language['name'] )
+			);
+		}
+		?>
+		<p>
+			<strong><?php esc_html_e( 'Tłumaczenia:', 'kzmielec' ); ?></strong>
+			<?php echo wp_kses( implode( ' &nbsp; ', $parts ), array( 'span' => array( 'style' => true ) ) ); ?>
+			&nbsp; <a href="<?php echo esc_url( ContactBindings::phone_text_translations_url() ); ?>"><?php esc_html_e( 'Przetłumacz w: Języki → Tłumaczenia napisów', 'kzmielec' ); ?></a>
+		</p>
+		<?php
 	}
 
 	/**
@@ -210,8 +256,9 @@ class ContactSettings implements ActionHookInterface {
 										<?php esc_html_e( '{telefon} zamienia się na numer z pola „Telefon”. Każda linia to osobna linia na stronie. Puste pole = sam numer („tel.: …”).', 'kzmielec' ); ?>
 									</p>
 									<p class="description">
-										<?php esc_html_e( 'Wersje en, uk i es biorą tłumaczenie z Języki → Tłumaczenia napisów („Kontakt: tekst przy telefonie”). Po zmianie tekstu tutaj trzeba tam wpisać tłumaczenia od nowa — do tego czasu obce wersje pokazują sam numer.', 'kzmielec' ); ?>
+										<?php esc_html_e( 'Po każdej zmianie tego tekstu trzeba go przetłumaczyć na nowo — do tego czasu wersje en, uk i es pokazują sam numer.', 'kzmielec' ); ?>
 									</p>
+									<?php $this->phone_text_status(); ?>
 								<?php else : ?>
 									<input type="<?php echo 'email' === $key ? 'email' : 'text'; ?>"
 											id="kzmielec_contact_<?php echo esc_attr( $key ); ?>"

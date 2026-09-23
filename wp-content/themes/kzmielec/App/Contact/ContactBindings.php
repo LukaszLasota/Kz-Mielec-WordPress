@@ -238,6 +238,56 @@ class ContactBindings implements ActionHookInterface {
 	}
 
 	/**
+	 * Whether each non-default language has a translation of the current phone text.
+	 *
+	 * For the settings screen, which has to say plainly when a reworded text left the
+	 * other languages showing only the number.
+	 *
+	 * @return array<string, array{name: string, done: bool}> Keyed by language slug.
+	 */
+	public static function phone_text_translations(): array {
+		$source = ContactData::get( 'phone_text' );
+		if ( '' === $source || ! function_exists( 'pll_languages_list' ) || ! function_exists( 'pll_translate_string' ) ) {
+			return array();
+		}
+
+		$default = function_exists( 'pll_default_language' ) ? pll_default_language( 'slug' ) : 'pl';
+		$slugs   = (array) pll_languages_list( array( 'fields' => 'slug' ) );
+		$names   = (array) pll_languages_list( array( 'fields' => 'name' ) );
+		$status  = array();
+
+		foreach ( $slugs as $i => $slug ) {
+			$slug = (string) $slug;
+			if ( $slug === $default ) {
+				continue;
+			}
+			$translated      = (string) pll_translate_string( $source, $slug );
+			$status[ $slug ] = array(
+				'name' => (string) ( $names[ $i ] ?? $slug ),
+				'done' => '' !== trim( $translated ) && $translated !== $source,
+			);
+		}
+
+		return $status;
+	}
+
+	/**
+	 * Admin address of Polylang's string translations, filtered to this text.
+	 *
+	 * @return string
+	 */
+	public static function phone_text_translations_url(): string {
+		return add_query_arg(
+			array(
+				'page'  => 'mlang_strings',
+				'group' => self::PHONE_TEXT_GROUP,
+				's'     => 'telefon',
+			),
+			admin_url( 'admin.php' )
+		);
+	}
+
+	/**
 	 * The phone text in the language being rendered, or null when there is none.
 	 *
 	 * The language comes from the locale, not from Polylang's current language, so it
