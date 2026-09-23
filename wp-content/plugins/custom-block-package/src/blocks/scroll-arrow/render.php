@@ -46,6 +46,8 @@ if ( ! empty( $attributes['anchor'] ) ) {
 		<figure>
 			<img
 				src="<?php echo esc_url( $arrow_url ); ?>"
+				width="120"
+				height="120"
 				alt=""
 				loading="lazy"
 				aria-hidden="true"

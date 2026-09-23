@@ -32,34 +32,46 @@ get_template_part( 'template-parts/accessibility-bar' );
 ?>
 <div class="wrapper">
 <?php
-$logo_id     = get_option( 'my_custom_logo_setting_id' );
-$logo_url    = '';
-$logo_width  = '';
-$logo_height = '';
-if ( $logo_id ) {
-	$logo_size = 'thumbnail';
-	$logo_data = wp_get_attachment_image_src( $logo_id, $logo_size );
-	if ( $logo_data ) {
-		$logo_url    = $logo_data[0];
-		$logo_width  = $logo_data[1];
-		$logo_height = $logo_data[2];
-	}
-} else {
-	$logo_url = get_option( 'my_custom_logo_setting' );
-}
+$logo_id = (int) get_option( 'my_custom_logo_setting_id' );
 // Logo is branding, not the page heading — keep it a <p> everywhere so each page
 // has exactly one h1 (page title on subpages; the visually-hidden site-name h1 on
 // the front page). Making the logo an h1 on the front page produced a second h1.
 $logo_tag = 'p';
-$logo_img = '<img src="' . esc_url( $logo_url ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="site-logo__image" fetchpriority="high" decoding="async"';
-if ( $logo_width && $logo_height ) {
-	$logo_img .= ' width="' . esc_attr( (string) $logo_width ) . '" height="' . esc_attr( (string) $logo_height ) . '"';
+$logo_img = '';
+if ( $logo_id ) {
+	// Through wp_get_attachment_image() so ModernImages can offer the AVIF/WebP
+	// siblings and the browser can pick from srcset. `sizes` mirrors the logo
+	// heights in main-menu.scss (the logo is square): 4.0625rem up to $bp-mobile,
+	// 5rem up to $bp-tablet, 5.625rem up to $bp-desktop, 7.5rem above.
+	$logo_img = wp_get_attachment_image(
+		$logo_id,
+		'thumbnail',
+		false,
+		array(
+			'class'         => 'site-logo__image',
+			'alt'           => get_bloginfo( 'name' ),
+			'sizes'         => '(max-width: 480px) 65px, (max-width: 800px) 80px, (max-width: 1400px) 90px, 120px',
+			'fetchpriority' => 'high',
+			'decoding'      => 'async',
+			'loading'       => false,
+		)
+	);
 }
-$logo_img .= '>';
+if ( '' === $logo_img ) {
+	$logo_img = '<img src="' . esc_url( (string) get_option( 'my_custom_logo_setting' ) ) . '" alt="' . esc_attr( get_bloginfo( 'name' ) ) . '" class="site-logo__image" fetchpriority="high" decoding="async">';
+}
 
 $allowed_img = array(
-	'img' => array(
+	'picture' => array(),
+	'source'  => array(
+		'type'   => true,
+		'srcset' => true,
+		'sizes'  => true,
+	),
+	'img'     => array(
 		'src'           => true,
+		'srcset'        => true,
+		'sizes'         => true,
 		'alt'           => true,
 		'class'         => true,
 		'width'         => true,
