@@ -79,8 +79,14 @@ const Edit = ({ attributes, setAttributes }) => {
             shadowSize: [41, 41],
         });
 
-        const map = L.map(mapContainer.current).setView([latitude, longitude], zoom);
+        // No panning in the editor: the published map is always centred on the
+        // pin, so a panned preview saved nothing and only misled. Panning was
+        // also where the preview jumped - Leaflet takes mouse moves from both the
+        // canvas iframe and the editor window, which measure from different
+        // origins. The pin stays draggable, and zooming writes the Zoom setting.
+        const map = L.map(mapContainer.current, { dragging: false, scrollWheelZoom: false }).setView([latitude, longitude], zoom);
         mapInstance.current = map;
+        map.on('zoomend', () => setAttributes({ zoom: map.getZoom() }));
         applyTiles(map, tileStyle);
 
         marker.current = L.marker([latitude, longitude], { draggable: !fromContact }).addTo(map);
@@ -150,11 +156,9 @@ const Edit = ({ attributes, setAttributes }) => {
             return;
         }
         marker.current.setLatLng([latitude, longitude]);
-        // Follow the pin only when it leaves the view: after dragging it a few
-        // streets the map should stay put, after typing a new town it should not.
-        if (!mapInstance.current.getBounds().contains([latitude, longitude])) {
-            mapInstance.current.panTo([latitude, longitude], { animate: false });
-        }
+        // Keep the pin centred, as the published map is. A gentle pan rather than
+        // a snap, so moving the pin reads as the map following it.
+        mapInstance.current.panTo([latitude, longitude], { animate: true, duration: 0.3 });
     }, [latitude, longitude]);
 
     useEffect(() => {
