@@ -24,10 +24,11 @@ $zoom            = isset( $attributes['zoom'] ) ? (int) $attributes['zoom'] : 16
 $containerHeight = isset( $attributes['containerHeight'] ) ? (int) $attributes['containerHeight'] : 400;
 $popupText       = isset( $attributes['popupText'] ) ? $attributes['popupText'] : __( 'Nasza lokalizacja', 'custom-block-package' );
 
-$allowed_styles = array( 'standard', 'voyager', 'positron', 'dark', 'satellite', 'satelliteLabels', 'terrain', 'esriStreet', 'esriTopo', 'esriGray', 'humanitarian' );
+// Keep in step with TILE_PROVIDERS in tile-providers.js.
+$allowed_styles = array( 'standard', 'satellite', 'terrain', 'esriStreet', 'esriTopo', 'esriGray', 'humanitarian' );
 $tile_style     = isset( $attributes['tileStyle'] ) && in_array( $attributes['tileStyle'], $allowed_styles, true )
 	? $attributes['tileStyle']
-	: 'voyager';
+	: 'esriStreet';
 
 // Unique ID for multiple instances.
 $map_id = 'map-' . wp_unique_id();

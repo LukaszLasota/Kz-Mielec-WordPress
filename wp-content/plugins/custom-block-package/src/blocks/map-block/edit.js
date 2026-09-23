@@ -43,8 +43,28 @@ const Edit = ({ attributes, setAttributes }) => {
 
     const blockProps = useBlockProps();
 
+    // Swap the tile layer (and its overlay, if the style has one) in place.
+    const applyTiles = (map, style) => {
+        if (tileLayer.current) {
+            map.removeLayer(tileLayer.current);
+        }
+        if (overlayLayer.current) {
+            map.removeLayer(overlayLayer.current);
+            overlayLayer.current = null;
+        }
+        const provider = getTileProvider(style);
+        tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(map);
+        tileLayer.current.getContainer().style.filter = provider.filter || '';
+        if (provider.overlay) {
+            overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(map);
+        }
+    };
+
+    // Create the map once. Each attribute below has its own effect: one shared
+    // effect rebuilt the tile layer and re-centred the map on every change -
+    // typing the popup text included - which is what made the preview jump.
     useEffect(() => {
-        if (!mapContainer.current) {
+        if (!mapContainer.current || mapInstance.current) {
             return;
         }
 
@@ -59,79 +79,100 @@ const Edit = ({ attributes, setAttributes }) => {
             shadowSize: [41, 41],
         });
 
-        if (!mapInstance.current) {
-            mapInstance.current = L.map(mapContainer.current).setView([latitude, longitude], zoom);
+        const map = L.map(mapContainer.current).setView([latitude, longitude], zoom);
+        mapInstance.current = map;
+        applyTiles(map, tileStyle);
 
-            const provider = getTileProvider(tileStyle);
-            tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
-            tileLayer.current.getContainer().style.filter = provider.filter || '';
-            if (provider.overlay) {
-                overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
-            }
+        marker.current = L.marker([latitude, longitude], { draggable: !fromContact }).addTo(map);
+        marker.current.bindPopup(popupText);
 
-            marker.current = L.marker([latitude, longitude], { draggable: !fromContact }).addTo(mapInstance.current);
-            marker.current.bindPopup(popupText);
+        marker.current.on('dragend', (e) => {
+            const { lat, lng } = e.target.getLatLng();
+            setAttributes({ latitude: lat, longitude: lng });
+        });
 
-            marker.current.on('dragend', (e) => {
-                const { lat, lng } = e.target.getLatLng();
-                setAttributes({ latitude: lat, longitude: lng });
-            });
+        // Fix drag getting "stuck" in the block editor. Leaflet listens for the
+        // end of a drag on the editor's own `document`, but the map lives in the
+        // canvas iframe, so the mouseup never arrives. A plain click on the map
+        // left a drag armed, and the next mouse move over the sidebar dragged the
+        // map by hundreds of pixels - the "jump". So any release or leaving the
+        // map ends whichever of this map's drags is armed, moving or not.
+        // finishDrag() fires `dragend`, so a dragged pin still saves its spot.
+        const abortDrag = () => {
+            const active = L.Draggable._dragging;
+            const ours = [map.dragging?._draggable, marker.current?.dragging?._draggable];
+            if (active && ours.includes(active)) {
+                active.finishDrag();
+            }
+        };
+        const container = map.getContainer();
+        const docs = [container.ownerDocument, window.document];
+        container.addEventListener('mouseleave', abortDrag);
+        docs.forEach((doc) => {
+            doc.addEventListener('mouseup', abortDrag);
+            doc.addEventListener('pointerup', abortDrag);
+        });
 
-            // Fix drag getting "stuck" in the block editor: the editor canvas
-            // (iframed / Gutenberg pointer handling) can swallow the mouseup that
-            // ends a Leaflet drag, so the map keeps panning after the button is
-            // released or the pointer has left the map. Abort any in-progress
-            // drag on pointer release or when leaving the map — public API only,
-            // so panning still works normally (pan while held, stop on release).
-            const map = mapInstance.current;
-            const abortDrag = () => {
-                const draggable = map.dragging?._draggable;
-                if (draggable?._moving) {
-                    map.dragging.disable();
-                    map.dragging.enable();
-                }
-            };
-            const container = map.getContainer();
-            const docs = [container.ownerDocument, window.document];
-            container.addEventListener('mouseleave', abortDrag);
-            docs.forEach((doc) => {
-                doc.addEventListener('mouseup', abortDrag);
-                doc.addEventListener('pointerup', abortDrag);
-            });
-            cleanupDragFix.current = () => {
-                container.removeEventListener('mouseleave', abortDrag);
-                docs.forEach((doc) => {
-                    doc.removeEventListener('mouseup', abortDrag);
-                    doc.removeEventListener('pointerup', abortDrag);
-                });
-            };
-        } else {
-            mapInstance.current.setView([latitude, longitude]);
-            mapInstance.current.setZoom(zoom);
-            marker.current.setLatLng([latitude, longitude]);
-            if (fromContact) {
-                marker.current.dragging.disable();
-            } else {
-                marker.current.dragging.enable();
-            }
-            marker.current.setPopupContent(popupText);
-
-            // Swap tile + overlay layers when the style changes.
-            const provider = getTileProvider(tileStyle);
-            if (tileLayer.current) {
-                mapInstance.current.removeLayer(tileLayer.current);
-            }
-            if (overlayLayer.current) {
-                mapInstance.current.removeLayer(overlayLayer.current);
-                overlayLayer.current = null;
-            }
-            tileLayer.current = L.tileLayer(provider.url, provider.options).addTo(mapInstance.current);
-            tileLayer.current.getContainer().style.filter = provider.filter || '';
-            if (provider.overlay) {
-                overlayLayer.current = L.tileLayer(provider.overlay.url, provider.overlay.options).addTo(mapInstance.current);
-            }
+        // Leaflet measures its container once. The editor resizes it - the
+        // height control, the sidebar opening, the canvas settling - and a map
+        // that does not know shifts its tiles and marker off-centre.
+        const view = container.ownerDocument.defaultView || window;
+        const resize = view.ResizeObserver ? new view.ResizeObserver(() => map.invalidateSize()) : null;
+        if (resize) {
+            resize.observe(container);
         }
-    }, [latitude, longitude, zoom, popupText, tileStyle, fromContact]);
+
+        cleanupDragFix.current = () => {
+            container.removeEventListener('mouseleave', abortDrag);
+            docs.forEach((doc) => {
+                doc.removeEventListener('mouseup', abortDrag);
+                doc.removeEventListener('pointerup', abortDrag);
+            });
+            if (resize) {
+                resize.disconnect();
+            }
+        };
+    }, []);
+
+    // Move the marker and the view only when the location itself changes.
+    useEffect(() => {
+        if (!mapInstance.current) {
+            return;
+        }
+        marker.current.setLatLng([latitude, longitude]);
+        mapInstance.current.panTo([latitude, longitude], { animate: false });
+    }, [latitude, longitude]);
+
+    useEffect(() => {
+        if (mapInstance.current && mapInstance.current.getZoom() !== zoom) {
+            mapInstance.current.setZoom(zoom, { animate: false });
+        }
+    }, [zoom]);
+
+    useEffect(() => {
+        if (marker.current) {
+            marker.current.setPopupContent(popupText);
+        }
+    }, [popupText]);
+
+    useEffect(() => {
+        if (mapInstance.current) {
+            applyTiles(mapInstance.current, tileStyle);
+        }
+    }, [tileStyle]);
+
+    // A map on the contact-settings location is moved from that screen, not by
+    // dragging the pin, so dragging is off.
+    useEffect(() => {
+        if (!marker.current) {
+            return;
+        }
+        if (fromContact) {
+            marker.current.dragging.disable();
+        } else {
+            marker.current.dragging.enable();
+        }
+    }, [fromContact]);
 
     // Cleanup map instance on unmount
     useEffect(() => {

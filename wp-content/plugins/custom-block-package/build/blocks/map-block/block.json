@@ -53,14 +53,10 @@
     },
     "tileStyle": {
       "type": "string",
-      "default": "voyager",
+      "default": "esriStreet",
       "enum": [
         "standard",
-        "voyager",
-        "positron",
-        "dark",
         "satellite",
-        "satelliteLabels",
         "terrain",
         "esriStreet",
         "esriTopo",
