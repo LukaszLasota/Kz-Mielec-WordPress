@@ -165,6 +165,13 @@ leaves an unlabelled button; the key has to be **absent** for the plugin's own t
 string. And translate.wordpress.org has no Ukrainian pack for that plugin at all, so
 `wp-content/languages/plugins/instagram-feed-uk.*` is ours, written by hand.
 
+The same goes for the **custom bio** above the feed ("Instagram zboru"), and the plugin
+has no filter for it. `Core\InstagramBio` swaps the rendered `<p class="sbi_bio">` on the
+en/uk/es pages for its entry in Languages -> Translations (group "Motyw kzmielec") and
+adds the page's `lang`, since the whole feed is marked `lang="pl"`. No entry, no change.
+The entries were written by `scripts/translate-instagram-bio.php go` on 2026-09-23; a new
+bio shows up as a new row there and needs translating by hand.
+
 **The host runs a WAF in front of WordPress, and verifying a deployment trips it.**
 ModSecurity answers before PHP runs, so its signature is a 403 with nothing in the PHP
 error log - and it looks exactly like the site breaking: `/wp-json/` and `admin-ajax.php`
@@ -220,10 +227,15 @@ pages. What was worth keeping is the reasoning, and only where it still matches 
 - Content changes are reproduced on the server by the 23 scripts in `scripts/`. Eighteen are
   a dry run by default and write only after `go` (`convert-uploads.php` takes `--dry-run`
   instead); the remaining five are one-off setup steps that write straight away.
-- **Four things live only in the production database and cannot be in git**, so a fresh
+- **Some settings live only in the production database and cannot be in git**, so a fresh
   deployment does not carry them and a database pulled from production does:
   `sb_instagram_settings['disable_js_image_loading'] = true`,
   `sb_instagram_settings['sb_instagram_image_res'] = 'full'`, the absent `buttontext` key in
   the `wp_sbi_feeds` row, and `litespeed.conf.optm-js_comb` switched off. All four were set
   on 2026-08-14 and all four have a reason written above. The local copy was aligned the
   same day; `optm-js_defer` and `optm-css_comb` stay on in both.
+  Added 2026-09-23: in the `wp_sbi_feeds` row `imageres = 'medium'` (320px local copies,
+  was `auto` which resolves to 640px; never `auto` again, see above), `showheader = true`
+  and `custombio = 'Instagram zboru'`; the bio's Polylang string translations; and
+  `cbp_fb_image_width` (absent = 600). The local copy has the feed row aligned, not
+  `imageres`.
