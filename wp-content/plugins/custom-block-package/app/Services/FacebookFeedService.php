@@ -252,6 +252,9 @@ class FacebookFeedService {
 			return false;
 		}
 
+		$images = new FacebookImageStore();
+		$posts  = $images->localize_posts( $posts );
+
 		$ttl = (int) get_option( self::OPTION_CACHE_TTL, self::DEFAULT_TTL );
 		if ( $ttl < MINUTE_IN_SECONDS ) {
 			$ttl = self::DEFAULT_TTL;
@@ -268,7 +271,7 @@ class FacebookFeedService {
 		delete_transient( BlockCache::FACEBOOK_FEED_PREFIX . self::COOLDOWN_SUFFIX );
 
 		// Also refresh page info (name, picture).
-		$this->refresh_page_info( $page_id, $token );
+		$this->refresh_page_info( $page_id, $token, $images );
 
 		/**
 		 * Fires once the stored feed data has been replaced with a fresh answer
@@ -314,11 +317,12 @@ class FacebookFeedService {
 	/**
 	 * Fetch and cache page info (name, picture URL).
 	 *
-	 * @param string $page_id Facebook page ID or username.
-	 * @param string $token   Page access token.
+	 * @param string             $page_id Facebook page ID or username.
+	 * @param string             $token   Page access token.
+	 * @param FacebookImageStore $images  Store for the local avatar copy.
 	 * @return void
 	 */
-	private function refresh_page_info( string $page_id, string $token ): void {
+	private function refresh_page_info( string $page_id, string $token, FacebookImageStore $images ): void {
 		$url = sprintf(
 			'https://graph.facebook.com/%s/%s',
 			self::API_VERSION,
@@ -347,7 +351,7 @@ class FacebookFeedService {
 
 		$info = array(
 			'name'    => isset( $data['name'] ) ? (string) $data['name'] : '',
-			'picture' => isset( $data['picture']['data']['url'] ) ? (string) $data['picture']['data']['url'] : '',
+			'picture' => $images->localize_avatar( isset( $data['picture']['data']['url'] ) ? (string) $data['picture']['data']['url'] : '' ),
 		);
 
 		update_option( self::OPTION_PAGE_INFO, $info );

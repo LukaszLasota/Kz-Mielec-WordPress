@@ -208,6 +208,7 @@ pages. What was worth keeping is the reasoning, and only where it still matches 
 | Six dates per meeting in the schema, not one | production can serve the same HTML for seven days, so one "next Sunday" computed at render time is a past date for part of the audience |
 | An address in the search result needs a Google Business Profile | there is no rich result for a church's address and hours; no amount of markup produces that box, and this was checked against Google's documentation rather than guessed |
 | Instagram images are served from our own server | the plugin already stored resized copies; it just did not reference them. Signed CDN links expire, and a page cached for seven days keeps the dead one |
+| Facebook images are served from our own server too | `full_picture` was a ~150KB, 720px JPEG on a ~300px card, from a signed fbcdn address that expires. Each refresh stores a 16:9 WebP copy (width from the settings screen, default 600) under `uploads/cbp-facebook-feed/`; the crop is tied to `aspect-ratio: 16 / 9` in the block's style.scss. A refresh downloads for at most 5 s, so the first run after deploying takes a few refreshes to convert all 50 |
 | LiteSpeed combines CSS but no longer JavaScript | measured 2026-08-14: combining saved **nothing** — 7 files at 284 858 B against 2 files at 285 437 B — and only turned seven requests into two on an HTTP/2 host. What it bought instead was one hash for everything, so a single stale bundle takes down every script on the page. Minification per file stays on, deferring stays on |
 
 ## Where things live

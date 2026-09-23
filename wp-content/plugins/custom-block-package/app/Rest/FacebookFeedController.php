@@ -150,6 +150,8 @@ class FacebookFeedController {
 		foreach ( $posts as $fb_post ) {
 			$message   = isset( $fb_post['message'] ) ? (string) $fb_post['message'] : '';
 			$image     = isset( $fb_post['image'] ) ? (string) $fb_post['image'] : '';
+			$image_w   = isset( $fb_post['image_width'] ) ? (int) $fb_post['image_width'] : 0;
+			$image_h   = isset( $fb_post['image_height'] ) ? (int) $fb_post['image_height'] : 0;
 			$permalink = isset( $fb_post['permalink_url'] ) ? (string) $fb_post['permalink_url'] : '';
 			$created   = isset( $fb_post['created_time'] ) ? (string) $fb_post['created_time'] : '';
 
@@ -184,6 +186,10 @@ class FacebookFeedController {
 					>
 						<img
 							src="<?php echo esc_url( $image ); ?>"
+							<?php if ( $image_w && $image_h ) : ?>
+							width="<?php echo esc_attr( (string) $image_w ); ?>"
+							height="<?php echo esc_attr( (string) $image_h ); ?>"
+							<?php endif; ?>
 							alt=""
 							loading="lazy"
 							class="facebook-feed__image"

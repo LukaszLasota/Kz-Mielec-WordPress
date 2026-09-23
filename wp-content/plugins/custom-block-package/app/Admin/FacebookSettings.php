@@ -14,6 +14,7 @@ namespace CustomBlockPackage\Admin;
 use CustomBlockPackage\Cache\BlockCache;
 use CustomBlockPackage\Cron\FacebookFeedCron;
 use CustomBlockPackage\Services\FacebookFeedService;
+use CustomBlockPackage\Services\FacebookImageStore;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -218,6 +219,7 @@ class FacebookSettings {
 		$page_id   = (string) get_option( FacebookFeedService::OPTION_PAGE_ID, '' );
 		$token     = (string) get_option( FacebookFeedService::OPTION_ACCESS_TOKEN, '' );
 		$ttl       = (int) get_option( FacebookFeedService::OPTION_CACHE_TTL, FacebookFeedService::DEFAULT_TTL );
+		$img_width = FacebookImageStore::get_width();
 		$last_sync = (int) get_option( FacebookFeedService::OPTION_LAST_SYNC, 0 );
 		$last_err  = (string) get_option( FacebookFeedService::OPTION_LAST_ERROR, '' );
 		?>
@@ -270,6 +272,28 @@ class FacebookSettings {
 									</option>
 								<?php endforeach; ?>
 							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label for="cbp_fb_image_width"><?php esc_html_e( 'Image size', 'custom-block-package' ); ?></label>
+						</th>
+						<td>
+							<select id="cbp_fb_image_width" name="cbp_fb_image_width">
+								<?php foreach ( FacebookImageStore::WIDTHS as $width ) : ?>
+									<option value="<?php echo esc_attr( (string) $width ); ?>" <?php selected( $img_width, $width ); ?>>
+										<?php
+										echo esc_html(
+											0 === $width
+												? __( 'Original from Facebook', 'custom-block-package' )
+												/* translators: %d: image width in pixels */
+												: sprintf( __( '%d px wide (WebP, stored on this site)', 'custom-block-package' ), $width )
+										);
+										?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<p class="description"><?php esc_html_e( 'Post images are downloaded on each refresh, scaled down and served from this site. The card is about 300 px wide on a phone, so 600 px stays sharp on high-density screens.', 'custom-block-package' ); ?></p>
 						</td>
 					</tr>
 				</table>
@@ -368,6 +392,20 @@ class FacebookSettings {
 		update_option( FacebookFeedService::OPTION_PAGE_ID, $page_id );
 		update_option( FacebookFeedService::OPTION_ACCESS_TOKEN, $token );
 		update_option( FacebookFeedService::OPTION_CACHE_TTL, $ttl );
+
+		$old_width = FacebookImageStore::get_width();
+		$new_width = isset( $_POST['cbp_fb_image_width'] )
+			? absint( wp_unslash( $_POST['cbp_fb_image_width'] ) )
+			: FacebookImageStore::DEFAULT_WIDTH;
+		if ( in_array( $new_width, FacebookImageStore::WIDTHS, true ) ) {
+			update_option( FacebookImageStore::OPTION_WIDTH, $new_width );
+		}
+
+		// A new size only shows once the images are rebuilt, which a refresh does.
+		if ( FacebookImageStore::get_width() !== $old_width ) {
+			BlockCache::flush( BlockCache::FACEBOOK_FEED_PREFIX );
+			( new FacebookFeedService() )->refresh();
+		}
 
 		// Reschedule cron with new TTL.
 		FacebookFeedCron::reschedule();
