@@ -10,7 +10,8 @@
  * The text is the "Tekst przy telefonie" field of the contact settings; the other
  * languages read it from Languages -> Translations, and this fills those entries.
  * The sentences are the hand-checked translations the theme catalogue held before the
- * text became a setting, plus "prezb." (presbyter). Polylang keys a translation by
+ * text became a setting, plus "prezb." (presbyter). The name stays in Latin script in
+ * Ukrainian too, at the congregation's request. Polylang keys a translation by
  * its source, so this only helps while the field holds exactly the text below.
  *
  * @package Kzmielec
@@ -32,7 +33,7 @@ $kz_source = "tel.: {telefon} – pastor Zboru, prezb. Dariusz R. Hapoń\nUwaga:
  */
 $kz_translations = array(
 	'en' => "Tel.: {telefon} – Congregation Pastor, Presbyter Dariusz R. Hapoń\nPlease note: we do not read text messages sent to this number.\nTo contact us in writing, please use email or contact the Congregation via Messenger (Facebook).",
-	'uk' => "тел.: {telefon} — пастор громади, пресвітер Даріуш Р. Гапонь\nУвага: з цього номера ми не читаємо SMS-повідомлення.\nДля письмового зв’язку просимо скористатися електронною поштою або зв’язатися з громадою через месенджер (Facebook).",
+	'uk' => "тел.: {telefon} — пастор громади, пресвітер Dariusz R. Hapoń\nУвага: з цього номера ми не читаємо SMS-повідомлення.\nДля письмового зв’язку просимо скористатися електронною поштою або зв’язатися з громадою через месенджер (Facebook).",
 	'es' => "Tel.: {telefon} – pastor de la congregación, presbítero Dariusz R. Hapoń\nNota: no leemos los mensajes de texto en este número.\nPara ponerse en contacto por escrito, utilice el correo electrónico o póngase en contacto con la congregación a través de Messenger (Facebook).",
 );
 

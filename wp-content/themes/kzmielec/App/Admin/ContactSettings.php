@@ -198,14 +198,14 @@ class ContactSettings implements ActionHookInterface {
 		$parts = array();
 		foreach ( $status as $language ) {
 			$parts[] = sprintf(
-				'<span style="color:%1$s">%2$s %3$s</span>',
+				'<span style="color:%1$s; font-weight:600;">%2$s %3$s</span>',
 				$language['done'] ? '#1a7f37' : '#b32d2e',
 				$language['done'] ? '&#10003;' : '&#10007;',
 				esc_html( $language['name'] )
 			);
 		}
 		?>
-		<p>
+		<p style="font-size: 1rem; margin-top: 0.75rem;">
 			<strong><?php esc_html_e( 'Tłumaczenia:', 'kzmielec' ); ?></strong>
 			<?php echo wp_kses( implode( ' &nbsp; ', $parts ), array( 'span' => array( 'style' => true ) ) ); ?>
 			&nbsp; <a href="<?php echo esc_url( ContactBindings::phone_text_translations_url() ); ?>"><?php esc_html_e( 'Przetłumacz w: Języki → Tłumaczenia napisów', 'kzmielec' ); ?></a>
