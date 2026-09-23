@@ -55,6 +55,8 @@ class Theme {
 		// The social feeds carry the congregation's Polish posts on every language
 		// version, so they have to declare `lang="pl"` — WCAG 3.1.2.
 		Core\SocialFeedLanguage::class,
+		// Smash Balloon's one-per-site bio, translated through Languages → Translations.
+		Core\InstagramBio::class,
 		// Smash Balloon's stylesheet never reaches the editor canvas, so the
 		// Instagram block rendered there as a full-width blue SVG. See the class.
 		Core\EditorFeedStyles::class,
