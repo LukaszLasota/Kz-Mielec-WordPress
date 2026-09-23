@@ -120,8 +120,8 @@ if ( ! class_exists( $cb ) ) {
 	}
 
 	$kz_nip = (string) $cb::line( 'nip' );
-	if ( false === strpos( $kz_nip, '000-00-00-000 [0000000000]' ) ) {
-		$fails[] = 'the tax-number line does not carry the number and its digits: "' . $kz_nip . '"';
+	if ( false === strpos( $kz_nip, 'NIP: 000-00-00-000<br>' ) ) {
+		$fails[] = 'the tax-number line does not carry the stored number as written: "' . $kz_nip . '"';
 	}
 	if ( false === strpos( $kz_nip, 'REGON: 830 433 446' ) ) {
 		$fails[] = 'no stored REGON: the line does not fall back to the default REGON: "' . $kz_nip . '"';
