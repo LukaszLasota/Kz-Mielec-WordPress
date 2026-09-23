@@ -56,26 +56,42 @@ class ContactData {
 	 * @var array<string, string>
 	 */
 	public const DEFAULTS = array(
-		'street'    => 'Przemysłowa 2',
-		'postcode'  => '39-300',
-		'city'      => 'Mielec',
-		'phone'     => '669 189 992',
-		'nip'       => '817-18-40-461',
-		'email'     => 'zbor@kzmielec.pl',
-		'iban'      => '63 8642 1168 2016 6812 9206 0001',
+		'street'     => 'Przemysłowa 2',
+		'postcode'   => '39-300',
+		'city'       => 'Mielec',
+		'phone'      => '669 189 992',
+		// The text around the number, one line per line on the page; `{telefon}` is
+		// replaced with the number above. Data rather than a translation since
+		// 2026-09-23, so the congregation can reword it without a code change; the
+		// other languages take it from Languages -> Translations (see ContactBindings).
+		'phone_text' => "tel.: {telefon} – pastor Zboru, prezb. Dariusz R. Hapoń\nUwaga: z tego numeru nie odczytujemy smsów.\nW celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook).",
+		'nip'        => '817-18-40-461',
+		'email'      => 'zbor@kzmielec.pl',
+		'iban'       => '63 8642 1168 2016 6812 9206 0001',
 		// The map's coordinates belong here for the same reason as the street: they are
 		// the same in every language and were stored four times over, once per version of
 		// the front page. The map block reads them from this option directly rather than
 		// through this class, so the plugin stays independent of the theme.
-		'latitude'  => '50.299071',
-		'longitude' => '21.4483254',
+		'latitude'   => '50.299071',
+		'longitude'  => '21.4483254',
 	);
+
+	/**
+	 * Fields where an empty value is a choice, not an accident.
+	 *
+	 * Clearing the phone text means "just the number", so it is kept empty instead of
+	 * falling back to the default.
+	 *
+	 * @var array<int, string>
+	 */
+	private const MAY_BE_EMPTY = array( 'phone_text' );
 
 	/**
 	 * Every field, stored values on top of the defaults.
 	 *
 	 * A field stored empty or as whitespace counts as absent, because an administrator
-	 * clearing a box by accident should not blank the address on four pages at once.
+	 * clearing a box by accident should not blank the address on four pages at once -
+	 * except the fields in MAY_BE_EMPTY, once they have been saved at all.
 	 *
 	 * @return array<string, string>
 	 */
@@ -91,7 +107,7 @@ class ContactData {
 		foreach ( array_keys( self::DEFAULTS ) as $key ) {
 			$value = isset( $stored[ $key ] ) ? trim( (string) $stored[ $key ] ) : '';
 
-			if ( '' !== $value ) {
+			if ( '' !== $value || ( array_key_exists( $key, $stored ) && in_array( $key, self::MAY_BE_EMPTY, true ) ) ) {
 				$data[ $key ] = $value;
 			}
 		}

@@ -47,15 +47,16 @@ class ContactSettings implements ActionHookInterface {
 	 * @var array<string, string>
 	 */
 	private const FIELDS = array(
-		'street'    => 'Ulica i numer',
-		'postcode'  => 'Kod pocztowy',
-		'city'      => 'Miasto',
-		'phone'     => 'Telefon',
-		'nip'       => 'NIP',
-		'email'     => 'E-mail',
-		'iban'      => 'Numer konta',
-		'latitude'  => 'Mapa — szerokość',
-		'longitude' => 'Mapa — długość',
+		'street'     => 'Ulica i numer',
+		'postcode'   => 'Kod pocztowy',
+		'city'       => 'Miasto',
+		'phone'      => 'Telefon',
+		'phone_text' => 'Tekst przy telefonie',
+		'nip'        => 'NIP',
+		'email'      => 'E-mail',
+		'iban'       => 'Numer konta',
+		'latitude'   => 'Mapa — szerokość',
+		'longitude'  => 'Mapa — długość',
 	);
 
 	/**
@@ -134,9 +135,14 @@ class ContactSettings implements ActionHookInterface {
 			// The e-mail gets its own sanitiser: `sanitize_text_field()` would happily
 			// keep an address that is not one, and this value ends up in a `mailto:`
 			// link on four pages and in the structured data.
-			$clean[ $key ] = 'email' === $key
-				? sanitize_email( wp_unslash( $_POST[ $field ] ) )
-				: sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
+			if ( 'email' === $key ) {
+				$clean[ $key ] = sanitize_email( wp_unslash( $_POST[ $field ] ) );
+			} elseif ( 'phone_text' === $key ) {
+				// Keeps the line breaks: each line is a line on the page.
+				$clean[ $key ] = sanitize_textarea_field( wp_unslash( $_POST[ $field ] ) );
+			} else {
+				$clean[ $key ] = sanitize_text_field( wp_unslash( $_POST[ $field ] ) );
+			}
 		}
 
 		update_option( ContactData::OPTION, $clean );
@@ -177,7 +183,7 @@ class ContactSettings implements ActionHookInterface {
 				<?php esc_html_e( 'Te dane pokazują się w sekcji „Znajdź nas” na wszystkich czterech wersjach językowych strony głównej, w danych strukturalnych dla wyszukiwarek oraz w opisie archiwum spotkań. Wpisujesz je tutaj raz.', 'kzmielec' ); ?>
 			</p>
 			<p>
-				<?php esc_html_e( 'Słowa obok danych — „tel.:”, „konto:”, uwaga o SMS-ach — są tłumaczeniami, nie danymi. Zmienia się je w Języki → Tłumaczenia napisów, w grupie „Motyw kzmielec”.', 'kzmielec' ); ?>
+				<?php esc_html_e( 'Słowa obok danych — „ul.”, „konto:”, „NIP:” — są tłumaczeniami, nie danymi. Zmienia się je w Języki → Tłumaczenia napisów, w grupie „Motyw kzmielec”. Wyjątkiem jest tekst przy telefonie, który wpisujesz tutaj.', 'kzmielec' ); ?>
 			</p>
 
 			<form method="post" action="">
@@ -193,12 +199,26 @@ class ContactSettings implements ActionHookInterface {
 								</label>
 							</th>
 							<td>
-								<input type="<?php echo 'email' === $key ? 'email' : 'text'; ?>"
-										id="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
-										name="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
-										value="<?php echo esc_attr( $data[ $key ] ?? '' ); ?>"
-										class="regular-text"
-								/>
+								<?php if ( 'phone_text' === $key ) : ?>
+									<textarea id="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
+											name="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
+											rows="4"
+											class="large-text"
+									><?php echo esc_textarea( $data[ $key ] ?? '' ); ?></textarea>
+									<p class="description">
+										<?php esc_html_e( '{telefon} zamienia się na numer z pola „Telefon”. Każda linia to osobna linia na stronie. Puste pole = sam numer („tel.: …”).', 'kzmielec' ); ?>
+									</p>
+									<p class="description">
+										<?php esc_html_e( 'Wersje en, uk i es biorą tłumaczenie z Języki → Tłumaczenia napisów („Kontakt: tekst przy telefonie”). Po zmianie tekstu tutaj trzeba tam wpisać tłumaczenia od nowa — do tego czasu obce wersje pokazują sam numer.', 'kzmielec' ); ?>
+									</p>
+								<?php else : ?>
+									<input type="<?php echo 'email' === $key ? 'email' : 'text'; ?>"
+											id="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
+											name="kzmielec_contact_<?php echo esc_attr( $key ); ?>"
+											value="<?php echo esc_attr( $data[ $key ] ?? '' ); ?>"
+											class="regular-text"
+									/>
+								<?php endif; ?>
 								<?php if ( 'street' === $key ) : ?>
 									<p class="description">
 										<?php esc_html_e( 'Bez słowa „ul.” — ono jest tłumaczone. Nazwa ulicy zostaje po polsku we wszystkich językach, bo w innej formie nie istnieje na kopercie ani w mapach.', 'kzmielec' ); ?>

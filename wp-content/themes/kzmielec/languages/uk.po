@@ -180,3 +180,9 @@ msgstr "Результати пошуку"
 #. has to be translated in the theme rather than in the plugin settings.
 msgid "Archiwum dla"
 msgstr "Архів для"
+
+#. translators: %s: phone number. Used when there is no text around the number, or no translation of it yet.
+#: App/Contact/ContactBindings.php
+#, php-format
+msgid "tel.: %s"
+msgstr "тел.: %s"

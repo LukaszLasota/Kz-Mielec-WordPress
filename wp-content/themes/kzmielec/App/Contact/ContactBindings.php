@@ -58,6 +58,7 @@ class ContactBindings implements ActionHookInterface {
 	 */
 	public function register_add_action(): void {
 		add_action( 'init', array( $this, 'register_source' ) );
+		add_action( 'init', array( $this, 'register_phone_text' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_script' ) );
 	}
 
@@ -129,24 +130,7 @@ class ContactBindings implements ActionHookInterface {
 				);
 
 			case 'phone':
-				/*
-				 * The `<br>` tags are joined here, in code. While these three sentences
-				 * lived inside translated content, the machine translator moved the tags
-				 * around and added punctuation next to them; markup that never reaches a
-				 * translator cannot be damaged by one.
-				 */
-				return implode(
-					'<br>',
-					array(
-						sprintf(
-							/* translators: %s: phone number. The pastor's name stays inside this string because Ukrainian transliterates personal names. */
-							__( 'tel.: %s – pastor Zboru, Dariusz R. Hapoń', 'kzmielec' ),
-							esc_html( $data['phone'] )
-						),
-						__( 'Uwaga: z tego numeru nie odczytujemy smsów.', 'kzmielec' ),
-						__( 'W celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook).', 'kzmielec' ),
-					)
-				);
+				return self::phone_block( $data );
 
 			case 'nip':
 				return sprintf(
@@ -177,6 +161,103 @@ class ContactBindings implements ActionHookInterface {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Label of the phone text in Languages -> Translations.
+	 */
+	private const PHONE_TEXT_LABEL = 'Kontakt: tekst przy telefonie ({telefon} = numer)';
+
+	/**
+	 * Group it appears under, next to the theme's other strings.
+	 */
+	private const PHONE_TEXT_GROUP = 'Motyw kzmielec';
+
+	/**
+	 * Expose the current phone text in Languages -> Translations.
+	 *
+	 * Registered from the stored value, so the row always holds what the settings
+	 * screen holds; a reworded text becomes a new row to translate.
+	 *
+	 * @return void
+	 */
+	public function register_phone_text(): void {
+		if ( ! is_admin() || ! function_exists( 'pll_register_string' ) ) {
+			return;
+		}
+
+		$text = ContactData::get( 'phone_text' );
+		if ( '' !== $text ) {
+			pll_register_string( self::PHONE_TEXT_LABEL, $text, self::PHONE_TEXT_GROUP, true );
+		}
+	}
+
+	/**
+	 * The phone number with the text around it, as set on the settings screen.
+	 *
+	 * The text is data since 2026-09-23 (it used to be three gettext strings), so it
+	 * can be reworded without a code change. `{telefon}` stands for the number, each
+	 * line becomes a line. The `<br>` tags are joined here, in code: while these
+	 * sentences lived inside translated content, the machine translator moved the tags
+	 * around, and markup that never reaches a translator cannot be damaged by one.
+	 *
+	 * Another language takes its version from Languages -> Translations. Without an
+	 * entry there - the text was reworded and nobody translated it yet - it shows just
+	 * the number rather than Polish sentences on an English page: degrade to correct.
+	 *
+	 * @param array<string, string> $data Contact data.
+	 * @return string
+	 */
+	private static function phone_block( array $data ): string {
+		$number = esc_html( $data['phone'] );
+		/* translators: %s: phone number. Used when there is no text around the number, or no translation of it yet. */
+		$minimal = sprintf( __( 'tel.: %s', 'kzmielec' ), $number );
+
+		$text = self::phone_text_in_language( $data['phone_text'] );
+		if ( null === $text ) {
+			return $minimal;
+		}
+
+		$split = preg_split( '/\R/u', $text );
+		$lines = array();
+		foreach ( is_array( $split ) ? $split : array() as $line ) {
+			$line = trim( $line );
+			if ( '' !== $line ) {
+				$lines[] = str_replace( '{telefon}', $number, esc_html( $line ) );
+			}
+		}
+
+		return $lines ? implode( '<br>', $lines ) : $minimal;
+	}
+
+	/**
+	 * The phone text in the language being rendered, or null when there is none.
+	 *
+	 * The language comes from the locale, not from Polylang's current language, so it
+	 * follows with_locale() when the editor or a script renders another language.
+	 *
+	 * @param string $source Polish text from the settings.
+	 * @return string|null
+	 */
+	private static function phone_text_in_language( string $source ): ?string {
+		if ( '' === $source ) {
+			return null;
+		}
+
+		if ( ! function_exists( 'PLL' ) || ! function_exists( 'pll_translate_string' ) || ! isset( PLL()->model ) ) {
+			return $source;
+		}
+
+		$language = PLL()->model->get_language( determine_locale() );
+		$default  = function_exists( 'pll_default_language' ) ? pll_default_language( 'slug' ) : 'pl';
+
+		if ( ! $language || $language->slug === $default ) {
+			return $source;
+		}
+
+		$translated = (string) pll_translate_string( $source, $language->slug );
+
+		return ( '' !== trim( $translated ) && $translated !== $source ) ? $translated : null;
 	}
 
 	/**

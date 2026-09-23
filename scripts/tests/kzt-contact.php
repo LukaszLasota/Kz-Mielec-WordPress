@@ -22,8 +22,11 @@ if ( 'Przemysłowa 2' !== $cd::get( 'street' ) ) {
 if ( 'zbor@kzmielec.pl' !== $cd::get( 'email' ) ) {
 	$fails[] = 'no option: email does not fall back to its default, got "' . $cd::get( 'email' ) . '"';
 }
-if ( 9 !== count( $cd::all() ) ) {
-	$fails[] = 'all() returns ' . count( $cd::all() ) . ' fields, expected 9';
+if ( 10 !== count( $cd::all() ) ) {
+	$fails[] = 'all() returns ' . count( $cd::all() ) . ' fields, expected 10';
+}
+if ( false === strpos( $cd::get( 'phone_text' ), '{telefon}' ) ) {
+	$fails[] = 'no option: phone_text does not fall back to its default';
 }
 if ( '50.299071' !== $cd::get( 'latitude' ) || '21.4483254' !== $cd::get( 'longitude' ) ) {
 	$fails[] = 'the map coordinates do not fall back to their defaults: ' . $cd::get( 'latitude' ) . ', ' . $cd::get( 'longitude' );
@@ -99,6 +102,21 @@ if ( ! class_exists( $cb ) ) {
 	$tel = (string) $cb::line( 'phone' );
 	if ( false === strpos( $tel, '111 222 333' ) || 2 !== substr_count( $tel, '<br>' ) ) {
 		$fails[] = 'phone line: expected the number and two <br>, got "' . $tel . '"';
+	}
+
+	// An emptied phone text means "just the number", not the default text.
+	$kz_opt               = get_option( $cd::OPTION );
+	$kz_opt['phone_text'] = '';
+	update_option( $cd::OPTION, $kz_opt );
+	$tel = (string) $cb::line( 'phone' );
+	if ( false === strpos( $tel, '111 222 333' ) || false !== strpos( $tel, '<br>' ) ) {
+		$fails[] = 'empty phone text: expected the number alone, got "' . $tel . '"';
+	}
+	$kz_opt['phone_text'] = "A {telefon} <b>\nB";
+	update_option( $cd::OPTION, $kz_opt );
+	$tel = (string) $cb::line( 'phone' );
+	if ( 'A 111 222 333 &lt;b&gt;<br>B' !== $tel ) {
+		$fails[] = 'custom phone text: expected the placeholder filled and markup escaped, got "' . $tel . '"';
 	}
 
 	if ( false === strpos( (string) $cb::line( 'nip' ), '000-00-00-000' ) ) {
