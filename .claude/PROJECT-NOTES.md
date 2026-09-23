@@ -151,6 +151,30 @@ than completely. Measured on 2026-08-14, three of our four pattern stylesheets a
 the canvas that way and `banner-hero-style.css` did not. Both `PatternAssets` and
 `Core\EditorFeedStyles` are on the correct hook now.
 
+**The iframe also breaks libraries that listen on `document`, and Leaflet is one.** Found
+on the map block on 2026-09-23. The editor script runs in the editor window, the map in the
+canvas iframe, and Leaflet's `Draggable` binds a drag's mousemove/mouseup to the global
+`document` - the window's. So a click never ended (the mouseup fired in the iframe), the
+map followed the mouse across the sidebar, and panning jumped, because Gutenberg also
+re-dispatches some iframe events to the window with shifted coordinates. The fix, in
+`map-block/edit.js` only: patch `L.Draggable` to move a drag's listeners to
+`this._element.ownerDocument`, plus a backstop that ends an armed drag on any release,
+on leaving the map and on the next press. The front end keeps stock Leaflet. Two more
+traps from the same session:
+
+- The editor's content CSS has `.wp-block img:not([draggable]) { pointer-events: none }`.
+  It outranks Leaflet's rule, so the marker could not be grabbed and pressing it panned
+  the map. The icon gets `draggable="false"`.
+- Test tile providers **from a browser on the site, not with curl.** CARTO (Voyager,
+  Positron, Dark, its label overlay) answers curl with real tiles but a website with
+  "API KEY REQUIRED" drawn on each one; OSM Standard answers a request without a Referer,
+  which is what the canvas iframe sends, with an "Access blocked" tile. Both were removed;
+  "Satellite + street names" now uses Esri's `Reference/World_Transportation`.
+
+The map block's location follows the contact settings through `MapLocation`, shared by
+`render.php` and the editor (`MapEditorData` prints the settings' coordinates for it).
+Saving the contact settings purges LiteSpeed, because the data is on every page.
+
 **Smash Balloon publishes expiring image URLs by default.** With `disable_js_image_loading`
 off, `src` holds Instagram's signed CDN address and the plugin's own resized copies are
 swapped in by JavaScript. Those signatures expire — verified 403 on a live page — and a

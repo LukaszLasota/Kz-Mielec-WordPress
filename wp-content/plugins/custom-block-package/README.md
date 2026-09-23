@@ -54,7 +54,7 @@ so their markup does not depend on theme code; only `pdf-block` is static.
 | `section-block` | Section container with grid/flex layout options |
 | `custom-accordion` + `accordion-item` | Accordion with animations and keyboard navigation |
 | `dynamic-images` | Responsive `<picture>` (desktop/tablet/mobile) |
-| `map-block` | Leaflet.js map, lazy-loaded via IntersectionObserver; coordinates come from the theme's shared contact option |
+| `map-block` | Leaflet.js map, lazy-loaded via IntersectionObserver; coordinates come from the theme's shared contact option unless the block's "location from contact data" toggle is off (`MapLocation`). The editor bundle patches Leaflet's dragging for the canvas iframe; see the comment at the top of `edit.js`. Tile styles are keyless only (`tile-providers.js`) |
 | `image-text` | Image with text overlay and optional link |
 | `navigable-tiles` | Tiles built from the `meetings` CPT or the belief pages, narrowed to the language of the post being rendered |
 | `facebook-feed` | Page feed, cached, in the language of the post |
