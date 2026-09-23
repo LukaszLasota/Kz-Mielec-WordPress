@@ -60,6 +60,7 @@ class ContactBindings implements ActionHookInterface {
 		add_action( 'init', array( $this, 'register_source' ) );
 		add_action( 'init', array( $this, 'register_phone_text' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_script' ) );
+		add_action( 'enqueue_block_assets', array( $this, 'canvas_styles' ) );
 	}
 
 	/**
@@ -377,6 +378,30 @@ class ContactBindings implements ActionHookInterface {
 	}
 
 	/**
+	 * Outline and label for bound blocks, inside the editor canvas only.
+	 *
+	 * On `enqueue_block_assets`, the one hook whose styles reach the canvas iframe
+	 * (see PROJECT-NOTES), and only in the admin, so the front end never gets it.
+	 *
+	 * @return void
+	 */
+	public function canvas_styles(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$handle = 'kzmielec-contact-bindings-canvas';
+		wp_register_style( $handle, false, array(), '1' );
+		wp_enqueue_style( $handle );
+		wp_add_inline_style(
+			$handle,
+			'.kzmielec-bound-contact{outline:0.0625rem dashed #7a00df;outline-offset:0.25rem;position:relative}'
+			. '.kzmielec-bound-contact::after{content:"' . esc_attr__( 'Dane kontaktowe', 'kzmielec' ) . '";position:absolute;top:-1.1rem;right:0;'
+			. 'font:600 0.6875rem/1.4 sans-serif;color:#fff;background:#7a00df;padding:0 0.375rem;border-radius:0.125rem;pointer-events:none}'
+		);
+	}
+
+	/**
 	 * Load the editor-side registration of the same source, with resolved values.
 	 *
 	 * A source registered only in PHP renders correctly on the front end but leaves the
@@ -398,14 +423,19 @@ class ContactBindings implements ActionHookInterface {
 		wp_enqueue_script(
 			$handle,
 			get_theme_file_uri( $relative ),
-			array( 'wp-blocks', 'wp-i18n' ),
+			array( 'wp-blocks', 'wp-i18n', 'wp-hooks', 'wp-compose', 'wp-element', 'wp-block-editor', 'wp-components' ),
 			(string) filemtime( $path ),
 			true
 		);
 
 		wp_add_inline_script(
 			$handle,
-			'window.kzmielecContact = ' . wp_json_encode( $this->editor_values() ) . ';',
+			'window.kzmielecContact = ' . wp_json_encode( $this->editor_values() ) . ';'
+			. 'window.kzmielecContactMeta = ' . wp_json_encode(
+				array(
+					'settingsUrl' => current_user_can( 'manage_options' ) ? admin_url( 'admin.php?page=kzmielec-contact' ) : '',
+				)
+			) . ';',
 			'before'
 		);
 	}
