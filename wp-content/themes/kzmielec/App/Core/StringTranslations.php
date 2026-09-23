@@ -109,6 +109,7 @@ class StringTranslations {
 		// The text around the phone number is a setting now, registered by ContactBindings.
 		'tel.: %s'                                  => 'Kontakt: sam numer, gdy nie ma tekstu przy telefonie (%s = numer)',
 		'NIP: %s'                                   => 'Kontakt: linia NIP (%s = numer)',
+		'REGON: %s'                                 => 'Kontakt: linia REGON (%s = numer)',
 		'email: %s'                                 => 'Kontakt: linia e-mail (%s = adres z odnośnikiem)',
 		'konto: %s'                                 => 'Kontakt: linia konta (%s = numer)',
 

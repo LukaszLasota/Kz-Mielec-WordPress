@@ -22,8 +22,8 @@ if ( 'Przemysłowa 2' !== $cd::get( 'street' ) ) {
 if ( 'zbor@kzmielec.pl' !== $cd::get( 'email' ) ) {
 	$fails[] = 'no option: email does not fall back to its default, got "' . $cd::get( 'email' ) . '"';
 }
-if ( 10 !== count( $cd::all() ) ) {
-	$fails[] = 'all() returns ' . count( $cd::all() ) . ' fields, expected 10';
+if ( 11 !== count( $cd::all() ) ) {
+	$fails[] = 'all() returns ' . count( $cd::all() ) . ' fields, expected 11';
 }
 if ( false === strpos( $cd::get( 'phone_text' ), '{telefon}' ) ) {
 	$fails[] = 'no option: phone_text does not fall back to its default';
@@ -119,8 +119,12 @@ if ( ! class_exists( $cb ) ) {
 		$fails[] = 'custom phone text: expected the placeholder filled and markup escaped, got "' . $tel . '"';
 	}
 
-	if ( false === strpos( (string) $cb::line( 'nip' ), '000-00-00-000' ) ) {
-		$fails[] = 'the tax-number line does not carry the stored data';
+	$kz_nip = (string) $cb::line( 'nip' );
+	if ( false === strpos( $kz_nip, '000-00-00-000 [0000000000]' ) ) {
+		$fails[] = 'the tax-number line does not carry the number and its digits: "' . $kz_nip . '"';
+	}
+	if ( false === strpos( $kz_nip, 'REGON: 830 433 446' ) ) {
+		$fails[] = 'no stored REGON: the line does not fall back to the default REGON: "' . $kz_nip . '"';
 	}
 	if ( false === strpos( (string) $cb::line( 'iban' ), '11 2222 3333 4444 5555 6666 7777' ) ) {
 		$fails[] = 'the account line does not carry the stored data';

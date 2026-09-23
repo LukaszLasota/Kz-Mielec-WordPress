@@ -66,6 +66,8 @@ class ContactData {
 		// other languages take it from Languages -> Translations (see ContactBindings).
 		'phone_text' => "tel.: {telefon} – pastor Zboru, prezb. Dariusz R. Hapoń\nUwaga: z tego numeru nie odczytujemy smsów.\nW celu kontaktu pisemnego prosimy użyć poczty email lub kontaktu ze Zborem poprzez messenger (facebook).",
 		'nip'        => '817-18-40-461',
+		// Empty hides the REGON line (see MAY_BE_EMPTY).
+		'regon'      => '830 433 446',
 		'email'      => 'zbor@kzmielec.pl',
 		'iban'       => '63 8642 1168 2016 6812 9206 0001',
 		// The map's coordinates belong here for the same reason as the street: they are
@@ -79,12 +81,12 @@ class ContactData {
 	/**
 	 * Fields where an empty value is a choice, not an accident.
 	 *
-	 * Clearing the phone text means "just the number", so it is kept empty instead of
-	 * falling back to the default.
+	 * Clearing the phone text means "just the number" and clearing REGON hides its
+	 * line, so both are kept empty instead of falling back to the default.
 	 *
 	 * @var array<int, string>
 	 */
-	private const MAY_BE_EMPTY = array( 'phone_text' );
+	private const MAY_BE_EMPTY = array( 'phone_text', 'regon' );
 
 	/**
 	 * Every field, stored values on top of the defaults.

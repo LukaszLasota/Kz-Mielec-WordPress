@@ -133,11 +133,25 @@ class ContactBindings implements ActionHookInterface {
 				return self::phone_block( $data );
 
 			case 'nip':
-				return sprintf(
+				// The number as written, then digits only in brackets - the form
+				// official forms and bank transfers ask for. REGON goes on the same
+				// paragraph, so no page content had to change to add it.
+				$digits = (string) preg_replace( '/\D+/', '', $data['nip'] );
+				$nip    = esc_html( $data['nip'] );
+				if ( '' !== $digits && $digits !== $data['nip'] ) {
+					$nip .= ' [' . esc_html( $digits ) . ']';
+				}
+
+				$lines = array(
 					/* translators: %s: tax identification number. */
-					__( 'NIP: %s', 'kzmielec' ),
-					esc_html( $data['nip'] )
+					sprintf( __( 'NIP: %s', 'kzmielec' ), $nip ),
 				);
+				if ( '' !== $data['regon'] ) {
+					/* translators: %s: REGON, the Polish business register number. */
+					$lines[] = sprintf( __( 'REGON: %s', 'kzmielec' ), esc_html( $data['regon'] ) );
+				}
+
+				return implode( '<br>', $lines );
 
 			case 'email':
 				$link = sprintf(

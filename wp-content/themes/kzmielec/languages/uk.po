@@ -186,3 +186,9 @@ msgstr "Архів для"
 #, php-format
 msgid "tel.: %s"
 msgstr "тел.: %s"
+
+#. translators: %s: REGON, the Polish business register number.
+#: App/Contact/ContactBindings.php
+#, php-format
+msgid "REGON: %s"
+msgstr "REGON: %s"

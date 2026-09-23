@@ -181,6 +181,8 @@ line, empty = the number alone. Other languages read it from Languages -> Transl
 ("Kontakt: tekst przy telefonie"), keyed by the Polish text, so rewording it drops the
 translations and the foreign pages fall back to "Tel.: number" until they are re-entered.
 `scripts/translate-phone-text.php go` wrote the current en/uk/es versions.
+The NIP paragraph also prints the digits-only form in brackets and a REGON line (new
+field; empty hides it), on the same bound paragraph, so no page content changed.
 
 **Smash Balloon publishes expiring image URLs by default.** With `disable_js_image_loading`
 off, `src` holds Instagram's signed CDN address and the plugin's own resized copies are

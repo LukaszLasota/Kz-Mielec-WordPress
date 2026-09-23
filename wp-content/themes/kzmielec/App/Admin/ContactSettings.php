@@ -53,6 +53,7 @@ class ContactSettings implements ActionHookInterface {
 		'phone'      => 'Telefon',
 		'phone_text' => 'Tekst przy telefonie',
 		'nip'        => 'NIP',
+		'regon'      => 'REGON',
 		'email'      => 'E-mail',
 		'iban'       => 'Numer konta',
 		'latitude'   => 'Mapa — szerokość',
